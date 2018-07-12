@@ -1,0 +1,20 @@
+{
+  "name": "kommonitor-script-execution-engine-api",
+  "version": "0.0.1",
+  "description": "erster Entwurf einer Script Execution Engine API, die Script COde ausführen kann.",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
+  "dependencies": {
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "swagger-tools": "0.10.1"
+  }
+}
