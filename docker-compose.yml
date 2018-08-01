@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  kommonitor-processing-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+     - "8086:8086"
+    volumes:
+     - .:/code
+     - /code/node_modules
+    depends_on:
+     - redis
+  redis:
+    image: redis:alpine
