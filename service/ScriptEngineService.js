@@ -1,5 +1,8 @@
 'use strict';
 
+const Queue = require('bee-queue');
+const defaultComputationQueue = new Queue('defaultComputation');
+const customizedComputationQueue = new Queue('customizedComputation');
 
 /**
  * retrieve status information and/or results about executing customizable indicator computation.
@@ -41,27 +44,51 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
  * returns List
  **/
 exports.getDefaultIndicatorComputation = function(jobId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "jobId" : "jobId",
-  "result_url" : "result_url",
-  "progress" : 0.80082819046101150206595775671303272247314453125,
-  "error" : "error",
-  "status" : "ACCEPTED"
-}, {
-  "jobId" : "jobId",
-  "result_url" : "result_url",
-  "progress" : 0.80082819046101150206595775671303272247314453125,
-  "error" : "error",
-  "status" : "ACCEPTED"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+
+  queue.getJob(jobId, function (err, job) {
+    console.log(`Job has status ${job.status}`);
+
+    // response model
+    //
+    // {
+    //  "jobId": "string",
+    //  "status": "ACCEPTED",
+    //  "progress": 0,
+    //  "result_url": "string",
+    //  "error": "string"
+    // }
+
+    var response = {};
+    response.jobId = jobId;
+    response.status = job.status;
+    response.progress = 42;
+    response.result_url = undefined;
+    response.error = undefined;
+
+    return response;
   });
+
+//   return new Promise(function(resolve, reject) {
+//     var examples = {};
+//     examples['application/json'] = [ {
+//   "jobId" : "jobId",
+//   "result_url" : "result_url",
+//   "progress" : 0.80082819046101150206595775671303272247314453125,
+//   "error" : "error",
+//   "status" : "ACCEPTED"
+// }, {
+//   "jobId" : "jobId",
+//   "result_url" : "result_url",
+//   "progress" : 0.80082819046101150206595775671303272247314453125,
+//   "error" : "error",
+//   "status" : "ACCEPTED"
+// } ];
+//     if (Object.keys(examples).length > 0) {
+//       resolve(examples[Object.keys(examples)[0]]);
+//     } else {
+//       resolve();
+//     }
+//   });
 }
 
 
@@ -87,8 +114,32 @@ exports.postCustomizableIndicatorComputation = function(scriptInput) {
  * no response value expected for this operation
  **/
 exports.postDefaultIndicatorComputation = function(scriptInput) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
-}
+  // use bee-queue to create a new queue and new job to execute the script
+  var jobId = "";
+  const job = defaultComputationQueue.createJob(scriptInput);
 
+  //job.timeout(10000).retries(2).save().then((job) => {
+    // job enqueued, job.id populated
+  //});
+
+  job.save().then((job) => {
+    jobId = job.id;
+  });
+
+  // initiate job execution
+  defaultComputationQueue.process(function (job, done) {
+    console.log(`Processing job ${job.id}`);
+
+    // here perform default computation
+    var scriptId = job.data.scriptId;
+    var targetDate = job.data.targetDate;
+    var baseIndicatorIds = job.data.baseIndicatorIds;
+    var georesourceIds = job.data.georesourceIds;
+
+    var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
+
+    return done(null, simpleTestResult);
+  });
+
+  return jobId;
+}
