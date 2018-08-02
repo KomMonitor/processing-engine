@@ -1,8 +1,21 @@
 'use strict';
 
-const Queue = require('bee-queue');
-const defaultComputationQueue = new Queue('defaultComputation');
-const customizedComputationQueue = new Queue('customizedComputation');
+
+  const Queue = require('bee-queue');
+  const defaultComputationQueue = new Queue('defaultComputation', {
+    redis: {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT
+    },
+    isWorker: true
+  });
+  const customizedComputationQueue = new Queue('customizedComputation', {
+    redis: {
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT
+    },
+    isWorker: true
+  });
 
 /**
  * retrieve status information and/or results about executing customizable indicator computation.
@@ -44,29 +57,33 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
  * returns List
  **/
 exports.getDefaultIndicatorComputation = function(jobId) {
+  return new Promise(function(resolve, reject) {
 
-  queue.getJob(jobId, function (err, job) {
-    console.log(`Job has status ${job.status}`);
+    defaultComputationQueue.getJob(jobId, function (err, job) {
+      console.log(`Job has status ${job.status}`);
 
-    // response model
-    //
-    // {
-    //  "jobId": "string",
-    //  "status": "ACCEPTED",
-    //  "progress": 0,
-    //  "result_url": "string",
-    //  "error": "string"
-    // }
+      // response model
+      //
+      // {
+      //  "jobId": "string",
+      //  "status": "ACCEPTED",
+      //  "progress": 0,
+      //  "result_url": "string",
+      //  "error": "string"
+      // }
 
-    var response = {};
-    response.jobId = jobId;
-    response.status = job.status;
-    response.progress = 42;
-    response.result_url = undefined;
-    response.error = undefined;
+      var response = {};
+      response.jobId = jobId;
+      response.status = job.status;
+      response.progress = 42;
+      response.result_url = undefined;
+      response.error = undefined;
 
-    return response;
+      resolve(response);
   });
+
+  resolve();
+});
 
 //   return new Promise(function(resolve, reject) {
 //     var examples = {};
@@ -115,31 +132,33 @@ exports.postCustomizableIndicatorComputation = function(scriptInput) {
  **/
 exports.postDefaultIndicatorComputation = function(scriptInput) {
   // use bee-queue to create a new queue and new job to execute the script
-  var jobId = "";
-  const job = defaultComputationQueue.createJob(scriptInput);
+  return new Promise(function(resolve, reject) {
+    var jobId = "";
+    const job = defaultComputationQueue.createJob(scriptInput);
 
-  //job.timeout(10000).retries(2).save().then((job) => {
-    // job enqueued, job.id populated
-  //});
+    //job.timeout(10000).retries(2).save().then((job) => {
+      // job enqueued, job.id populated
+    //});
 
-  job.save().then((job) => {
-    jobId = job.id;
+    job.save().then((job) => {
+      jobId = job.id;
+    });
+
+    // initiate job execution
+    defaultComputationQueue.process(function (job, done) {
+      console.log(`Processing job ${job.id}`);
+
+      // here perform default computation
+      var scriptId = job.data.scriptId;
+      var targetDate = job.data.targetDate;
+      var baseIndicatorIds = job.data.baseIndicatorIds;
+      var georesourceIds = job.data.georesourceIds;
+
+      var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
+
+      return done(null, simpleTestResult);
+    });
+
+    resolve(jobId);
   });
-
-  // initiate job execution
-  defaultComputationQueue.process(function (job, done) {
-    console.log(`Processing job ${job.id}`);
-
-    // here perform default computation
-    var scriptId = job.data.scriptId;
-    var targetDate = job.data.targetDate;
-    var baseIndicatorIds = job.data.baseIndicatorIds;
-    var georesourceIds = job.data.georesourceIds;
-
-    var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
-
-    return done(null, simpleTestResult);
-  });
-
-  return jobId;
 }
