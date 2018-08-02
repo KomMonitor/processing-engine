@@ -18,6 +18,9 @@ module.exports.getDefaultIndicatorComputation = function getDefaultIndicatorComp
   var jobId = req.swagger.params['jobId'].value;
   ScriptEngine.getDefaultIndicatorComputation(jobId)
     .then(function (response) {
+
+      console.log("response object: " + response);
+
       utils.writeJson(res, response);
     })
     .catch(function (response) {
@@ -40,9 +43,21 @@ module.exports.postDefaultIndicatorComputation = function postDefaultIndicatorCo
   var scriptInput = req.swagger.params['script-input'].value;
   ScriptEngine.postDefaultIndicatorComputation(scriptInput)
     .then(function (response) {
-      utils.writeJson(res, response);
+
+      console.log("response object: " + response);
+
+      // response is jobId
+      // hence create ResponsePayload with HTTP status code 201 and jobId for LocationHeader and submit that
+
+      var responseWithLocationHeader = utils.respondWithLocationHeader(201, response);
+
+      utils.writeLocationHeader(res, responseWithLocationHeader);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+
+      console.log("ERROR: response object: " + response);
+
+      var errorResponseWithLocationHeader = utils.respondWithLocationHeader(500, response);
+      utils.writeLocationHeader(res, errorResponseWithLocationHeader);
     });
 };

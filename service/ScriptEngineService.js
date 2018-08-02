@@ -57,6 +57,9 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
  * returns List
  **/
 exports.getDefaultIndicatorComputation = function(jobId) {
+
+  console.log("getDefaultIndicatorComputation was called for jobId " + jobId);
+
   return new Promise(function(resolve, reject) {
 
     defaultComputationQueue.getJob(jobId, function (err, job) {
@@ -79,10 +82,11 @@ exports.getDefaultIndicatorComputation = function(jobId) {
       response.result_url = undefined;
       response.error = undefined;
 
+      console.log("created following response object: ");
+      console.log(response);
+
       resolve(response);
   });
-
-  resolve();
 });
 
 //   return new Promise(function(resolve, reject) {
@@ -131,9 +135,12 @@ exports.postCustomizableIndicatorComputation = function(scriptInput) {
  * no response value expected for this operation
  **/
 exports.postDefaultIndicatorComputation = function(scriptInput) {
+
+  console.log("postDefaultIndicatorComputation was called");
+
   // use bee-queue to create a new queue and new job to execute the script
   return new Promise(function(resolve, reject) {
-    var jobId = "";
+    var jobId = undefined;
     const job = defaultComputationQueue.createJob(scriptInput);
 
     //job.timeout(10000).retries(2).save().then((job) => {
@@ -142,23 +149,29 @@ exports.postDefaultIndicatorComputation = function(scriptInput) {
 
     job.save().then((job) => {
       jobId = job.id;
+      console.log("Created new job with jobId " + jobId);
+
+      // initiate job execution
+      defaultComputationQueue.process(function (job, done) {
+        console.log(`Processing job ${job.id}`);
+
+        // here perform default computation
+        var scriptId = job.data.scriptId;
+        var targetDate = job.data.targetDate;
+        var baseIndicatorIds = job.data.baseIndicatorIds;
+        var georesourceIds = job.data.georesourceIds;
+
+        var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
+
+        var responsePayload = new ResponsePayload(201, simpleTestResult);
+
+        console.log("processing finished. ResultObject is: " + responsePayload);
+
+        return done(null, responsePayload);
+      });
+
+      console.log("Resovling promise with a value for jobId of " + jobId);
+      resolve(jobId);
     });
-
-    // initiate job execution
-    defaultComputationQueue.process(function (job, done) {
-      console.log(`Processing job ${job.id}`);
-
-      // here perform default computation
-      var scriptId = job.data.scriptId;
-      var targetDate = job.data.targetDate;
-      var baseIndicatorIds = job.data.baseIndicatorIds;
-      var georesourceIds = job.data.georesourceIds;
-
-      var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
-
-      return done(null, simpleTestResult);
-    });
-
-    resolve(jobId);
   });
 }
