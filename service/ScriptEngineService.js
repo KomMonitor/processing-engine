@@ -17,6 +17,42 @@
     isWorker: true
   });
 
+  defaultComputationQueue.process(function (job, done) {
+    console.log(`Processing job ${job.id}`);
+
+    console.log(`job object: ` + job);
+    console.log(`job data: ` + job.data);
+
+    console.log(`job data scriptId: ` + job.data.scriptId);
+    // here perform default computation
+    var scriptId = job.data.scriptId;
+    var targetDate = job.data.targetDate;
+    var baseIndicatorIds = job.data.baseIndicatorIds;
+    var georesourceIds = job.data.georesourceIds;
+
+    var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
+
+    console.log("attaching result to job");
+    job.data.result = simpleTestResult;
+
+    console.log("Saving job, which was enriched with result: " + job.data.result);
+    job.progress = 100;
+    job.save();
+    // .then((job) => {
+    //   console.log("Inserted result to job with id " + job.id);
+    //
+    //   console.log("Result is " + job.data.result);
+    //   resolve();
+    // });
+
+    // var responsePayload = new ResponsePayload(201, simpleTestResult);
+    //
+    // console.log("processing finished. ResultObject is: " + responsePayload);
+
+    console.log(`Job execution successful. Job with ID ${job.id} finished`);
+    return done();
+  });
+
 /**
  * retrieve status information and/or results about executing customizable indicator computation.
  * retrieve status information and/or results about executing customizable indicator computation.
@@ -78,8 +114,8 @@ exports.getDefaultIndicatorComputation = function(jobId) {
       var response = {};
       response.jobId = jobId;
       response.status = job.status;
-      response.progress = 42;
-      response.result_url = undefined;
+      response.progress = job.progress;
+      response.result_url = job.data.result;
       response.error = undefined;
 
       console.log("created following response object: ");
@@ -140,7 +176,6 @@ exports.postDefaultIndicatorComputation = function(scriptInput) {
 
   // use bee-queue to create a new queue and new job to execute the script
   return new Promise(function(resolve, reject) {
-    var jobId = undefined;
     const job = defaultComputationQueue.createJob(scriptInput);
 
     //job.timeout(10000).retries(2).save().then((job) => {
@@ -148,30 +183,10 @@ exports.postDefaultIndicatorComputation = function(scriptInput) {
     //});
 
     job.save().then((job) => {
-      jobId = job.id;
-      console.log("Created new job with jobId " + jobId);
+      console.log("Created new job with jobId " + job.id);
 
-      // initiate job execution
-      defaultComputationQueue.process(function (job, done) {
-        console.log(`Processing job ${job.id}`);
-
-        // here perform default computation
-        var scriptId = job.data.scriptId;
-        var targetDate = job.data.targetDate;
-        var baseIndicatorIds = job.data.baseIndicatorIds;
-        var georesourceIds = job.data.georesourceIds;
-
-        var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
-
-        var responsePayload = new ResponsePayload(201, simpleTestResult);
-
-        console.log("processing finished. ResultObject is: " + responsePayload);
-
-        return done(null, responsePayload);
-      });
-
-      console.log("Resovling promise with a value for jobId of " + jobId);
-      resolve(jobId);
+      console.log("Resovling promise with a value for jobId of " + job.id);
+      resolve(job.id);
     });
   });
 }
