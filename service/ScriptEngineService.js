@@ -20,9 +20,6 @@
   defaultComputationQueue.process(function (job, done) {
     console.log(`Processing job ${job.id}`);
 
-    console.log(`job object: ` + job);
-    console.log(`job data: ` + job.data);
-
     console.log(`job data scriptId: ` + job.data.scriptId);
     // here perform default computation
     var scriptId = job.data.scriptId;
@@ -30,13 +27,17 @@
     var baseIndicatorIds = job.data.baseIndicatorIds;
     var georesourceIds = job.data.georesourceIds;
 
+    job.data.progress = 10;
+    job.save();
+    console.log("Successfully parsed request input parameters");
+
     var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
 
     console.log("attaching result to job");
     job.data.result = simpleTestResult;
 
     console.log("Saving job, which was enriched with result: " + job.data.result);
-    job.progress = 100;
+    job.data.progress = 100;
     job.save();
     // .then((job) => {
     //   console.log("Inserted result to job with id " + job.id);
@@ -114,7 +115,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
       var response = {};
       response.jobId = jobId;
       response.status = job.status;
-      response.progress = job.progress;
+      response.progress = job.data.progress;
       response.result_url = job.data.result;
       response.error = undefined;
 
