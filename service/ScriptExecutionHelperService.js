@@ -1,6 +1,8 @@
 'use strict';
 
 var KomMonitorDataFetcher = require('./KomMonitorDataFetcherService');
+// module for reading/writing from/to hard drive
+var fs = require("fs");
 
 // aquire connection details to KomMonitor data management api instance from environment variables
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
@@ -38,20 +40,24 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
 }
 
 async function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
-  // TODO for the target spatial unit perform script execution, receive response GeoJSON and return it
   return new Promise(function(resolve, reject) {
 
     try {
-      // var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-      // var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, "Stadtteilebene");
-      // var georesourcesMap = null;
-      //
-      // var lowestSpatialUnit_geoJSON = "";
-      // //map of objects
-      // var superiorSpatialUnits = "";
-      // var defaultProcesParameters = "";
+      var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, spatialUnitId);
+      var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+      var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, spatialUnitId, targetDate);
 
-      var responseGeoJson = "";
+      // require the script code as new NodeJS module
+      fs.writeFileSync('./temporaryNodeModule.js', scriptCode);
+      var nodeModuleForIndicator = require("./temporaryNodeModule.js");
+
+      //execute script to compute indicator
+      var responseGeoJson = nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
+
+      // delete temporarily stored nodeModule file synchronously
+      fs.unlinkSync("./temporaryNodeModule.js");
+
       resolve(responseGeoJson);
     }
     catch(err) {
