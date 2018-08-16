@@ -74,9 +74,7 @@ paths:
         200:
           description: "OK"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/CustomizableIndicatorComputationStatusResultType"
+            $ref: "#/definitions/CustomizableIndicatorComputationStatusResultType"
         400:
           description: "Invalid status value"
       x-swagger-router-controller: "ScriptEngine"
@@ -132,9 +130,7 @@ paths:
         200:
           description: "OK"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/DefaultIndicatorComputationStatusResultType"
+            $ref: "#/definitions/DefaultIndicatorComputationStatusResultType"
         400:
           description: "Invalid status value"
       x-swagger-router-controller: "ScriptEngine"
