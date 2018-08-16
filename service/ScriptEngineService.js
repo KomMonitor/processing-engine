@@ -108,7 +108,7 @@
     console.log(`Number of submitted job data customProcessProperties: ` + customProcessProperties.length);
 
     customProcessProperties.forEach(function(property) {
-      console.log("Submitted process property: " + property);
+      console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and value '" + property.value + "'");
     });
 
 
