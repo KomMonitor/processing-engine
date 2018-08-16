@@ -33,7 +33,7 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
       resolve(urlToCreatedResource);
     }
     catch(err) {
-        consol.log("Error during execution of defaultIndicatorComputation with error: " + err);
+        console.log("Error during execution of defaultIndicatorComputation with error: " + err);
         resolve(err);
     }
   });
@@ -61,7 +61,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       resolve(responseGeoJson);
     }
     catch(err) {
-        consol.log("Error during execution of customizedIndicatorComputation with error: " + err);
+        console.log("Error during execution of customizedIndicatorComputation with error: " + err);
         resolve(err);
     }
   });
