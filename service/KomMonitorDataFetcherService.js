@@ -1,5 +1,10 @@
 'use strict';
 
+ // axios os used to execute HTTP requests in a Promise-based manner
+ const axios = require("axios");
+
+ const targetDateHelper = require("./TargetDateHelperService");
+
 /**
  * send request against KomMonitor DataManagement API to fetch scriptCode acording to id
  *
@@ -11,9 +16,15 @@
 exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
   console.log("fetching script code from KomMonitor data management API for id " + scriptId);
 
-  //TODO implment
-  var scriptCodeAsString = "";
-  return scriptCodeAsString;
+  //GET /process-scripts/{scriptId}/scriptCode
+  axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode")
+    .then(response => {
+      // response.data should be the script as String
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching script code. Error was: " + error);
+    });
 }
 
 /**
@@ -21,15 +32,26 @@ exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to fetch spatial unit
  * spatialUnitId String unique identifier of the spatial unit
+ * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
  *
  * returns spatial unit as GeoJSON string
  **/
-exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId) {
-  console.log("fetching spatial unit from KomMonitor data management API for id " + spatialUnitId);
+exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) {
+  console.log("fetching spatial unit from KomMonitor data management API for id " + spatialUnitId + " and targetDate " + targetDate);
 
-  //TODO implment
-  var spatialUnit_geojsonString = "";
-  return spatialUnit_geojsonString;
+  var year = targetDateHelper.getYearFromTargetDate(targetDate);
+  var month = targetDateHelper.getMonthFromTargetDate(targetDate);
+  var day = targetDateHelper.getDayFromTargetDate(targetDate);
+
+  //GET /spatial-units/{spatialUnitId}/{year}/{month}/{day}
+  axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day)
+    .then(response => {
+      // response.data should be the respective GeoJSON as String
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching spatial unit. Error was: " + error);
+    });
 }
 
 /**
@@ -44,9 +66,19 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId) {
 exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) {
   console.log("fetching georesource from KomMonitor data management API for id " + georesourceId + " and targetDate " + targetDate);
 
-  //TODO implment
-  var georesource_geojsonString = "";
-  return georesource_geojsonString;
+  var year = targetDateHelper.getYearFromTargetDate(targetDate);
+  var month = targetDateHelper.getMonthFromTargetDate(targetDate);
+  var day = targetDateHelper.getDayFromTargetDate(targetDate);
+
+  //GET /georesources/{georesouceId}/{year}/{month}/{day}
+  axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day)
+    .then(response => {
+      // response.data should be the respective GeoJSON as String
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching georesource. Error was: " + error);
+    });
 }
 
 /**
@@ -60,9 +92,15 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
 exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
   console.log("fetching georesource metadata from KomMonitor data management API for id " + georesourceId);
 
-  //TODO implment
-  var georesource_metadata = "";
-  return georesource_metadata;
+  //GET /georesources/{georesouceId}
+  axios.get(baseUrlPath + "/georesources/" + georesourceId)
+    .then(response => {
+      // response.data should be the respective georesource metadata JSON object
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching georesource metadata. Error was: " + error);
+    });
 }
 
 /**
@@ -77,7 +115,6 @@ exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
 exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDate) {
   console.log("fetching georesources from KomMonitor data management API as a map object");
 
-  //TODO implment
   var georesourcesMap = new Map();
 
   georesourceIds.forEach(function(georesourceId) {
@@ -103,9 +140,19 @@ exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDat
 exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId) {
   console.log("fetching indicator from KomMonitor data management API for id " + indicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
 
-  //TODO implment
-  var indicator_geojsonString = "";
-  return indicator_geojsonString;
+  var year = targetDateHelper.getYearFromTargetDate(targetDate);
+  var month = targetDateHelper.getMonthFromTargetDate(targetDate);
+  var day = targetDateHelper.getDayFromTargetDate(targetDate);
+
+  //GET /indicators/{indicatorId}/{year}/{month}/{day}
+  axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + year + "/" + month + "/" + day)
+    .then(response => {
+      // response.data should be the respective GeoJSON as String
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching indicator. Error was: " + error);
+    });
 }
 
 /**
@@ -119,9 +166,15 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
 exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
   console.log("fetching indicator metadata from KomMonitor data management API for id " + indicatorId);
 
-  //TODO implment
-  var indicator_metadata = "";
-  return indicator_metadata;
+  //GET /indicators/{indicatorId}
+  axios.get(baseUrlPath + "/indicators/" + indicatorId)
+    .then(response => {
+      // response.data should be the respective indicator metadata JSON object
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching georesource metadata. Error was: " + error);
+    });
 }
 
 /**
@@ -137,7 +190,6 @@ exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
 exports.fetchIndicatorsByIds = function(baseUrlPath, indicatorIds, targetDate, targetSpatialUnitId) {
   console.log("fetching indicators from KomMonitor data management API as a map object");
 
-  //TODO implment
   var indicatorsMap = new Map();
 
   indicatorIds.forEach(function(indicatorId) {
