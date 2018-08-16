@@ -1,6 +1,9 @@
 'use strict';
 
-
+  // instantiate Bee-Queue worker queues, which can execute jobs
+  // one for defaultIndicatorComputation
+  // another for customizedIndicatorComputation
+  // use environment variables to establish required connection to redis
   const Queue = require('bee-queue');
   const defaultComputationQueue = new Queue('defaultComputation', {
     redis: {
@@ -17,26 +20,34 @@
     isWorker: true
   });
 
+  // register process function to execute defaultIndicatorComputation jobs
+  // this code will be executed when such a job is started
   defaultComputationQueue.process(function (job, done) {
-    console.log(`Processing job ${job.id}`);
+    console.log(`Processing job with id ${job.id}`);
 
-    console.log(`job data scriptId: ` + job.data.scriptId);
     // here perform default computation
     var scriptId = job.data.scriptId;
     var targetDate = job.data.targetDate;
     var baseIndicatorIds = job.data.baseIndicatorIds;
     var georesourceIds = job.data.georesourceIds;
 
-    job.data.progress = 10;
+    console.log(`Submitted job data scriptId: ` + scriptId);
+    console.log(`Submitted job data targetDate: ` + targetDate);
+    console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
+    console.log(`Submitted job data georesourceIds: ` + georesourceIds);
+
+    job.data.progress = 5;
     job.save();
     console.log("Successfully parsed request input parameters");
+
+    // now fetch the resources from KomMonitor data management api
 
     var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
 
     console.log("attaching result to job");
     job.data.result = simpleTestResult;
 
-    console.log("Saving job, which was enriched with result: " + job.data.result);
+    console.log("saving job, which was enriched with result: " + job.data.result);
     job.data.progress = 100;
     job.save();
 
@@ -109,7 +120,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
       response.result_url = job.data.result;
       response.error = undefined;
 
-      console.log("created following response object: ");
+      console.log("returning following response object for job with id ${job.id}");
       console.log(response);
 
       resolve(response);
@@ -148,9 +159,7 @@ exports.postDefaultIndicatorComputation = function(scriptInput) {
     const job = defaultComputationQueue.createJob(scriptInput);
 
     job.save().then((job) => {
-      console.log("Created new job with jobId " + job.id);
-
-      console.log("Resovling promise with a value for jobId of " + job.id);
+      console.log("Created new job to execute defaultIndicatorComputation with jobId " + job.id);
       resolve(job.id);
     });
   });
