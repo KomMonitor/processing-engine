@@ -23,7 +23,7 @@
   // register process function to execute defaultIndicatorComputation jobs
   // this code will be executed when such a job is started
   defaultComputationQueue.process(function (job, done) {
-    console.log(`Processing job with id ${job.id}`);
+    console.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
 
     // here perform default computation
     var scriptId = job.data.scriptId;
@@ -41,6 +41,10 @@
     console.log("Successfully parsed request input parameters");
 
     // now fetch the resources from KomMonitor data management api
+    // TODO implement fetching of resources and executing of script
+
+
+
 
     var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
 
@@ -51,7 +55,83 @@
     job.data.progress = 100;
     job.save();
 
-    console.log(`Job execution successful. Job with ID ${job.id} finished`);
+    console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
+    return done();
+  });
+
+  // register process function to execute customizableIndicatorComputation jobs
+  // this code will be executed when such a job is started
+  customizedComputationQueue.process(function (job, done) {
+    console.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
+
+    // here perform customized computation
+
+    // example input model
+    // {
+    //   "targetSpatialUnitId": "targetSpatialUnitId",
+    //   "scriptId": "scriptId",
+    //   "customProcessProperties": [
+    //     {
+    //       "dataType": "string",
+    //       "name": "name",
+    //       "value": "{}"
+    //     },
+    //     {
+    //       "dataType": "string",
+    //       "name": "name",
+    //       "value": "{}"
+    //     }
+    //   ],
+    //   "targetDate": "2000-01-23",
+    //   "georesourceIds": [
+    //     "georesourceId",
+    //     "georesourceId"
+    //   ],
+    //   "baseIndicatorIds": [
+    //     "baseIndicatorIds",
+    //     "baseIndicatorIds"
+    //   ]
+    // }
+
+    var scriptId = job.data.scriptId;
+    var targetDate = job.data.targetDate;
+    var baseIndicatorIds = job.data.baseIndicatorIds;
+    var georesourceIds = job.data.georesourceIds;
+    var targetSpatialUnitId = job.data.targetSpatialUnitId;
+    var customProcessProperties = job.data.customProcessProperties;
+
+    console.log(`Submitted job data scriptId: ` + scriptId);
+    console.log(`Submitted job data targetDate: ` + targetDate);
+    console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
+    console.log(`Submitted job data georesourceIds: ` + georesourceIds);
+    console.log(`Submitted job data targetSpatialUnitId: ` + targetSpatialUnitId);
+    console.log(`Number of submitted job data customProcessProperties: ` + customProcessProperties.length);
+
+    customProcessProperties.forEach(function(property) {
+      console.log("Submitted process property: " + property);
+    });
+
+
+    job.data.progress = 5;
+    job.save();
+    console.log("Successfully parsed request input parameters");
+
+    // now fetch the resources from KomMonitor data management api
+    // TODO implement fetching of resources and executing of script
+
+
+
+
+    var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
+
+    console.log("attaching result to job");
+    job.data.result = simpleTestResult;
+
+    console.log("saving job, which was enriched with result: " + job.data.result);
+    job.data.progress = 100;
+    job.save();
+
+    console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
     return done();
   });
 
@@ -63,26 +143,35 @@
  * returns List
  **/
 exports.getCustomizableIndicatorComputation = function(jobId) {
+  console.log("getCustomizableIndicatorComputation was called for jobId " + jobId);
+
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "jobId" : "jobId",
-  "result_geoJSON" : "result_geoJSON",
-  "progress" : 0.80082819046101150206595775671303272247314453125,
-  "error" : "error",
-  "status" : "ACCEPTED"
-}, {
-  "jobId" : "jobId",
-  "result_geoJSON" : "result_geoJSON",
-  "progress" : 0.80082819046101150206595775671303272247314453125,
-  "error" : "error",
-  "status" : "ACCEPTED"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+
+    customizedComputationQueue.getJob(jobId, function (err, job) {
+      console.log(`Job has status ${job.status}`);
+
+      // response model
+      //
+      //{
+      //    "jobId": "jobId",
+      //    "result_geoJSON": "result_geoJSON",
+      //    "progress": 0.8008281904610115,
+      //    "error": "error",
+      //    "status": "ACCEPTED"
+      //  }
+
+      var response = {};
+      response.jobId = jobId;
+      response.status = job.status;
+      response.progress = job.data.progress;
+      response.result_geoJSON = job.data.result;
+      response.error = undefined;
+
+      console.log("returning following response object for job with id ${job.id}");
+      console.log(response);
+
+      resolve(response);
+    });
   });
 }
 
@@ -137,8 +226,16 @@ exports.getDefaultIndicatorComputation = function(jobId) {
  * no response value expected for this operation
  **/
 exports.postCustomizableIndicatorComputation = function(scriptInput) {
+  console.log("postCustomizableIndicatorComputation was called");
+
+  // use bee-queue to create a new queue and new job to execute the script
   return new Promise(function(resolve, reject) {
-    resolve();
+    const job = customizedComputationQueue.createJob(scriptInput);
+
+    job.save().then((job) => {
+      console.log("Created new job to execute customizableIndicatorComputation with jobId " + job.id);
+      resolve(job.id);
+    });
   });
 }
 
