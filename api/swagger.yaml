@@ -216,10 +216,9 @@ definitions:
         - "integer"
         - "double"
       value:
-        type: "object"
+        type: "string"
         description: "the value of the process parameter according to the specified\
-          \ data type."
-        properties: {}
+          \ data type as string value."
     example:
       dataType: "string"
       name: "name"
