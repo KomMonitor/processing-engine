@@ -14,5 +14,8 @@ services:
     environment:
      - REDIS_HOST=redis
      - REDIS_PORT=6379
+     - KOMMONITOR_DATA_MANAGEMENT_HOST=localhost
+     - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
+     - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/rest/v1
   redis:
     image: redis:alpine
