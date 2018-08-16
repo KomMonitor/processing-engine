@@ -1,12 +1,6 @@
 'use strict';
 
-  // aquire connection details to KomMonitor data management api instance from environment variables
-  const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
-  const kommonitorDataManagementPort = process.env.KOMMONITOR_DATA_MANAGEMENT_PORT;
-  const kommonitorDataManagementBasepath = process.env.KOMMONITOR_DATA_MANAGEMENT_BASEPATH;
-
-  // construct fixed starting URL to make requests against running KomMonitor data management api
-  const kommonitorDataManagementURL = kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
+  var ScriptExecutionHelper = require('./ScriptExecutionHelperService');
 
   // instantiate Bee-Queue worker queues, which can execute jobs
   // one for defaultIndicatorComputation
@@ -51,20 +45,23 @@
     // now fetch the resources from KomMonitor data management api
     // TODO implement fetching of resources and executing of script
 
+    ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds)
+    .then(function (urlToCreatedResource) {
 
+      console.log("attaching result to job");
+      job.data.result = urlToCreatedResource;
 
+      console.log("saving job, which was enriched with result: " + job.data.result);
+      job.data.progress = 100;
+      job.save();
 
-    var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
+      console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
+      return done();
+    })
+    .catch(function (response) {
+      consol.log("Error while executing defaultIndicatorComputation. " + response);
+    });
 
-    console.log("attaching result to job");
-    job.data.result = simpleTestResult;
-
-    console.log("saving job, which was enriched with result: " + job.data.result);
-    job.data.progress = 100;
-    job.save();
-
-    console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
-    return done();
   });
 
   // register process function to execute customizableIndicatorComputation jobs
@@ -126,21 +123,23 @@
 
     // now fetch the resources from KomMonitor data management api
     // TODO implement fetching of resources and executing of script
+    ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties)
+    .then(function (responseGeoJson) {
 
+      // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
+      console.log("attaching result to job");
+      job.data.result = responseGeoJson;
 
+      console.log("saving job, which was enriched with result: " + job.data.result);
+      job.data.progress = 100;
+      job.save();
 
-
-    var simpleTestResult = "My Test Result is the parsed script ID: " + scriptId;
-
-    console.log("attaching result to job");
-    job.data.result = simpleTestResult;
-
-    console.log("saving job, which was enriched with result: " + job.data.result);
-    job.data.progress = 100;
-    job.save();
-
-    console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
-    return done();
+      console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
+      return done();
+    })
+    .catch(function (response) {
+      consol.log("Error while executing defaultIndicatorComputation. " + response);
+    });
   });
 
 /**
