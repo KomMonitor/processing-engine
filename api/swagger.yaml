@@ -170,7 +170,7 @@ definitions:
           \ may be empty if no other indicator is required for the computation."
         items:
           type: "string"
-      georesourceId:
+      georesourceIds:
         type: "array"
         description: "a list of identifiers of georesources that are required to compute\
           \ the target indicator. While the parameter is required, the list may be\
@@ -195,9 +195,9 @@ definitions:
         name: "name"
         value: "{}"
       targetDate: "2000-01-23"
-      georesourceId:
-      - "georesourceId"
-      - "georesourceId"
+      georesourceIds:
+      - "georesourceIds"
+      - "georesourceIds"
       baseIndicatorIds:
       - "baseIndicatorIds"
       - "baseIndicatorIds"
@@ -291,7 +291,7 @@ definitions:
           \ may be empty if no other indicator is required for the computation."
         items:
           type: "string"
-      georesourceId:
+      georesourceIds:
         type: "array"
         description: "a list of identifiers of georesources that are required to compute\
           \ the target indicator. While the parameter is required, the list may be\
@@ -304,9 +304,9 @@ definitions:
     example:
       scriptId: "scriptId"
       targetDate: "2000-01-23"
-      georesourceId:
-      - "georesourceId"
-      - "georesourceId"
+      georesourceIds:
+      - "georesourceIds"
+      - "georesourceIds"
       baseIndicatorIds:
       - "baseIndicatorIds"
       - "baseIndicatorIds"
