@@ -6,7 +6,7 @@
   const kommonitorDataManagementBasepath = process.env.KOMMONITOR_DATA_MANAGEMENT_BASEPATH;
 
   // construct fixed starting URL to make requests against running KomMonitor data management api
-  const kommonitorDataManagementURL =Port + kommonitorDataManagementHostBasepath;Host + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
+  const kommonitorDataManagementURL = kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
 
   // instantiate Bee-Queue worker queues, which can execute jobs
   // one for defaultIndicatorComputation
