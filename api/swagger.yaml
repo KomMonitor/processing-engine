@@ -186,10 +186,10 @@ definitions:
       customProcessProperties:
       - dataType: "string"
         name: "name"
-        value: "{}"
+        value: "customValue"
       - dataType: "string"
         name: "name"
-        value: "{}"
+        value: "customValue"
       targetDate: "2000-01-23"
       georesourceIds:
       - "georesourceIds"
@@ -222,7 +222,7 @@ definitions:
     example:
       dataType: "string"
       name: "name"
-      value: "{}"
+      value: "value"
   CustomizableIndicatorComputationStatusResultType:
     type: "object"
     required:
@@ -293,6 +293,11 @@ definitions:
           \ empty if no georesource is required for the computation."
         items:
           type: "string"
+      defaultProcessProperties:
+        type: array
+        description: "a list of process parameters utilizing their default values."
+        items:
+          $ref: "#/definitions/ProcessPropertyType"
     description: "required input parameters to execute a default indicator computation.\
       \ Default means that the process parameters/properties that infect the indicator\
       \ computation are set to default values."
@@ -305,6 +310,13 @@ definitions:
       baseIndicatorIds:
       - "baseIndicatorIds"
       - "baseIndicatorIds"
+      defaultProcessProperties:
+      - dataType: "string"
+        name: "name"
+        value: "defaultValue"
+      - dataType: "string"
+        name: "name"
+        value: "defaultValue"
   DefaultIndicatorComputationStatusResultType:
     type: "object"
     required:

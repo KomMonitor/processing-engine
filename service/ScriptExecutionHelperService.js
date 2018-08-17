@@ -12,7 +12,50 @@ const kommonitorDataManagementBasepath = process.env.KOMMONITOR_DATA_MANAGEMENT_
 // construct fixed starting URL to make requests against running KomMonitor data management api
 const kommonitorDataManagementURL = kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
 
-async function executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds){
+function identifyLowestSpatialUnit(allSpatialUnits){
+  var lowestSpatialUnit = null;
+
+  //iterator syntax exmple
+  // var iterator1 = map1[Symbol.iterator]();
+  //
+  // for (let item of iterator1) {
+  //   console.log(item);
+  //   // expected output: Array ["0", "foo"]
+  //   // expected output: Array [1, "bar"]
+  // }
+
+  var iterator = allSpatialUnits[Symbol.iterator]();
+  for (let spatialUnitCandidate of iterator) {
+    // check if units propertyValue "nextLowerHierarchyLevel" is == null || undefined
+    // then this is the searched lowest spatial unit
+    var nextLowerHierarchyLevelPropertyValue = spatialUnitCandidate[0].nextLowerHierarchyLevel;
+    if(nextLowerHierarchyLevelPropertyValue == null || nextLowerHierarchyLevelPropertyValue == undefined)
+      return spatialUnitCandidate;
+  }
+}
+
+function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator){
+  // first entry of resultingIndicatorsMap contains the computed indicator for the lowest spatial unit
+  var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(idOfLowestSpatialUnit);
+
+  // elements of remainingSpatialUnits are map items where key='metadata object holding all metadata properties' and value='features as GeoJSON string'
+  var spatialUnitIterator = remainingSpatialUnits[Symbol.iterator]();
+
+  for (let spatialUnitEntry of spatialUnitIterator) {
+    // looks like Array [key, value]
+    var targetSpatialUnitId = spatialUnitEntry[0].spatialUnitId;
+
+    var targetSpatialUnitGeoJson = KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+
+    var indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
+
+    resultingIndicatorsMap.set(targetSpatialUnitId, indicatorGeoJSONForSpatialUnit);
+  }
+
+  return resultingIndicatorsMap;
+}
+
+async function executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
   // TODO for each spatial unit perform script execution, receive response GeoJSON and make POST call to data management API
   // TODO for that compute for the lowest spatial unit and after that aggregate to all superior units!
   // TODO also receive default parameter values for script execution from data management API, should not be part of the script itself
@@ -20,14 +63,43 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
 
     try {
       var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-      var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, "Stadtteilebene");
       var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
       var allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
 
-      var lowestSpatialUnit_geoJSON = "";
-      //map of objects
-      var superiorSpatialUnits = "";
-      var defaultProcesParameters = "";
+      // will look like Array [metadataObject, geoJSON]
+      var lowestSpatialUnit = identifyLowestSpatialUnit(allSpatialUnits);
+
+      // delete lowestSpatialUnit from map object and create a new var holding the remaining entries
+      allSpatialUnits.delete(lowestSpatialUnit[0]);
+      var remainingSpatialUnits = allSpatialUnits;
+
+      // retrieve baseIndicators for initial (lowest) spatial unit
+      var baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
+
+      // require the script code as new NodeJS module
+      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsString);
+      var nodeModuleForIndicator = require("./temporaryNodeModule.js");
+
+      //execute script to compute indicator
+      var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
+
+      // result map containing entries where key="spatialUnitId" and value="computed indicator GeoJSON"
+      var resultingIndicatorsMap = new Map();
+      resultingIndicatorsMap.set(lowestSpatialUnit[0].spatialUnitId, indicatorGeoJson_lowestSpatialUnit);
+
+      // after computing the indicator for the lowest spatial unit
+      // we can now aggregate the result to all remaining superior units!
+      // TODO implement
+      resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator);
+
+      // delete temporarily stored nodeModule file synchronously
+      fs.unlinkSync("./temporaryNodeModule.js");
+
+      // after computing the indicator for every spatial unit
+      // send PUT requests against KomMonitor data management API to persist results permanently
+      // TODO implement
+
+
 
       // TODO best as map/array of URLs since for each spatial unit a different indicator dataset is computed.
       var urlToCreatedResource = "";
@@ -52,7 +124,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, spatialUnitId, targetDate);
 
       // require the script code as new NodeJS module
-      fs.writeFileSync('./temporaryNodeModule.js', scriptCode);
+      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsString);
       var nodeModuleForIndicator = require("./temporaryNodeModule.js");
 
       //execute script to compute indicator

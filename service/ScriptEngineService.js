@@ -32,20 +32,24 @@
     var targetDate = job.data.targetDate;
     var baseIndicatorIds = job.data.baseIndicatorIds;
     var georesourceIds = job.data.georesourceIds;
+    var defaultProcessParameters = job.data.defaultProcessParameters;
 
     console.log(`Submitted job data scriptId: ` + scriptId);
     console.log(`Submitted job data targetDate: ` + targetDate);
     console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
     console.log(`Submitted job data georesourceIds: ` + georesourceIds);
+    console.log(`Number of submitted job data defaultProcessProperties: ` + defaultProcessProperties.length);
+
+    defaultProcessProperties.forEach(function(property) {
+      console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
+    });
 
     job.data.progress = 5;
     job.save();
     console.log("Successfully parsed request input parameters");
 
     // now fetch the resources from KomMonitor data management api
-    // TODO implement fetching of resources and executing of script
-
-    ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds)
+    ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties)
     .then(function (urlToCreatedResource) {
 
       console.log("attaching result to job");
