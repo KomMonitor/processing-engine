@@ -18,19 +18,21 @@ exports.computeIndicator = function(targetDate, targetSpatialUnit_geoJSON, baseI
 };
 
 /**
+@targetDate string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
 @targetSpatialUnit_geoJSON GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 @indicator_geoJSON GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter targetSpatialUnitFeatures
 */
-exports.aggregateIndicator = function(targetSpatialUnit_geoJSON, indicator_geoJSON){
+exports.aggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // aggregate indicator
 
 };
 
 /**
+@targetDate string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
 @targetSpatialUnit_geoJSON GeoJSON features of the target spatial unit, for which the indicator shall be disaggregated to
 @indicator_geoJSON GeoJSON features containing the indicator values for a spatial unit that can be disaggregated to the features of parameter targetSpatialUnitFeatures
 */
-exports.disaggregateIndicator = function(targetSpatialUnit_geoJSON, indicator_geoJSON){
+exports.disaggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // disaggregate indicator
 
 };

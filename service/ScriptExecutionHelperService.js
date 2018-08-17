@@ -48,7 +48,7 @@ function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, 
 
     var targetSpatialUnitGeoJson = KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
 
-    var indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
+    var indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
 
     resultingIndicatorsMap.set(targetSpatialUnitId, indicatorGeoJSONForSpatialUnit);
   }
