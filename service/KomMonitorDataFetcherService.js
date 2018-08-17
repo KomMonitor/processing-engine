@@ -210,8 +210,8 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
-  //GET /indicators/{indicatorId}/{year}/{month}/{day}
-  axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + year + "/" + month + "/" + day)
+  //GET /indicators/{indicatorId}/{targetSpatialUnitId}/{year}/{month}/{day}
+  axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
