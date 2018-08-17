@@ -19,14 +19,15 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
   return new Promise(function(resolve, reject) {
 
     try {
-      // var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-      // var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, "Stadtteilebene");
-      // var georesourcesMap = null;
-      //
-      // var lowestSpatialUnit_geoJSON = "";
-      // //map of objects
-      // var superiorSpatialUnits = "";
-      // var defaultProcesParameters = "";
+      var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, "Stadtteilebene");
+      var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+      var allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
+
+      var lowestSpatialUnit_geoJSON = "";
+      //map of objects
+      var superiorSpatialUnits = "";
+      var defaultProcesParameters = "";
 
       // TODO best as map/array of URLs since for each spatial unit a different indicator dataset is computed.
       var urlToCreatedResource = "";
@@ -38,6 +39,8 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
     }
   });
 }
+
+exports.executeDefaultComputation = executeDefaultComputation;
 
 async function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
   return new Promise(function(resolve, reject) {
@@ -66,3 +69,5 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
     }
   });
 }
+
+exports.executeCustomizedComputation = executeCustomizedComputation;
