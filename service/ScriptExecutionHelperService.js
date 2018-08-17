@@ -1,6 +1,7 @@
 'use strict';
 
 var KomMonitorDataFetcher = require('./KomMonitorDataFetcherService');
+var KomMonitorIndicatorPersister = require('./KomMonitorIndicatorPersistanceService');
 // module for reading/writing from/to hard drive
 var fs = require("fs");
 
@@ -89,7 +90,6 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
 
       // after computing the indicator for the lowest spatial unit
       // we can now aggregate the result to all remaining superior units!
-      // TODO implement
       resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator);
 
       // delete temporarily stored nodeModule file synchronously
@@ -98,12 +98,9 @@ async function executeDefaultComputation(job, scriptId, targetDate, baseIndicato
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
       // TODO implement
+      var urlsToPersistedResources = KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetDate, resultingIndicatorsMap);
 
-
-
-      // TODO best as map/array of URLs since for each spatial unit a different indicator dataset is computed.
-      var urlToCreatedResource = "";
-      resolve(urlToCreatedResource);
+      resolve(urlsToPersistedResources);
     }
     catch(err) {
         console.log("Error during execution of defaultIndicatorComputation with error: " + err);
