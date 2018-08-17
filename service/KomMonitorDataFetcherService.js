@@ -55,6 +55,73 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) 
 }
 
 /**
+ * send request against KomMonitor DataManagement API to fetch all available spatial unit metadata entries as array
+ *
+ * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to fetch spatial unit
+ * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
+ *
+ * returns spatial units metadata entries as an array
+ **/
+exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
+  console.log("fetching available spatial units metadata from KomMonitor data management API for targetDate " + targetDate);
+
+  var year = targetDateHelper.getYearFromTargetDate(targetDate);
+  var month = targetDateHelper.getMonthFromTargetDate(targetDate);
+  var day = targetDateHelper.getDayFromTargetDate(targetDate);
+
+  //GET /spatial-units
+  axios.get(baseUrlPath + "/spatial-units")
+    .then(response => {
+      // response.data should be the respective array of metadata entries as JSON
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error when fetching spatial units metadata. Error was: " + error);
+    });
+}
+
+/**
+ * send request against KomMonitor DataManagement API to fetch all available spatial units as a map
+ *
+ * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to fetch spatial unit
+ * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
+ *
+ * returns spatial units as a map containing all units, wheres key='meaningful name of the spatial unit' and value='features as GeoJSON string'
+ **/
+  async function fetchAvailableSpatialUnits(baseUrlPath, targetDate) {
+    console.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
+
+    var year = targetDateHelper.getYearFromTargetDate(targetDate);
+    var month = targetDateHelper.getMonthFromTargetDate(targetDate);
+    var day = targetDateHelper.getDayFromTargetDate(targetDate);
+
+    // get spatial units metadata to aquire knowledge of existing units
+    var spatialUnitsMetadata = await fetchSpatialUnitsMetadata(targetDate);
+
+    var spatialUnitsMap = new Map();
+    //iterate over all entries and fill map
+    spatialUnitsMetadata.forEach(function(element) {
+
+      var spatialUnitId = spatialUnitsMetadata.spatialUnitId;
+      var spatialunitName = spatialUnitsMetadata.spatialUnitLevel;
+      var spatialUnit_geoJSON = await fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
+
+      spatialUnitsMap.set(spatialunitName, spatialUnit_geoJSON);
+    });
+    return spatialUnitsMap;
+  }
+
+/**
+ * send request against KomMonitor DataManagement API to fetch all available spatial units as a map
+ *
+ * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to fetch spatial unit
+ * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
+ *
+ * returns spatial units as a map containing all units, wheres key='meaningful name of the spatial unit' and value='features as GeoJSON string'
+ **/
+exports.fetchAvailableSpatialUnits = fetchAvailableSpatialUnits;
+
+/**
  * send request against KomMonitor DataManagement API to fetch georesource according to id
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to fetch georesource
