@@ -56,11 +56,11 @@ function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, 
   return resultingIndicatorsMap;
 }
 
-async function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
+function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
   // TODO for each spatial unit perform script execution, receive response GeoJSON and make POST call to data management API
   // TODO for that compute for the lowest spatial unit and after that aggregate to all superior units!
   // TODO also receive default parameter values for script execution from data management API, should not be part of the script itself
-  return new Promise(function(resolve, reject) {
+  return new Promise(async function(resolve, reject) {
 
     try {
       var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
@@ -111,8 +111,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
 
 exports.executeDefaultComputation = executeDefaultComputation;
 
-async function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
-  return new Promise(function(resolve, reject) {
+function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
+  return new Promise(async function(resolve, reject) {
 
     try {
       var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
