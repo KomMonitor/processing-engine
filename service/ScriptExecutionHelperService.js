@@ -56,7 +56,7 @@ function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, 
   return resultingIndicatorsMap;
 }
 
-async function executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
+async function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
   // TODO for each spatial unit perform script execution, receive response GeoJSON and make POST call to data management API
   // TODO for that compute for the lowest spatial unit and after that aggregate to all superior units!
   // TODO also receive default parameter values for script execution from data management API, should not be part of the script itself

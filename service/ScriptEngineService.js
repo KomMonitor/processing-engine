@@ -29,12 +29,14 @@
 
     // here perform default computation
     var scriptId = job.data.scriptId;
+    var targetIndicatorId = job.data.targetIndicatorId;
     var targetDate = job.data.targetDate;
     var baseIndicatorIds = job.data.baseIndicatorIds;
     var georesourceIds = job.data.georesourceIds;
     var defaultProcessParameters = job.data.defaultProcessParameters;
 
     console.log(`Submitted job data scriptId: ` + scriptId);
+    console.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
     console.log(`Submitted job data targetDate: ` + targetDate);
     console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
     console.log(`Submitted job data georesourceIds: ` + georesourceIds);
@@ -49,11 +51,11 @@
     console.log("Successfully parsed request input parameters");
 
     // now fetch the resources from KomMonitor data management api
-    ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties)
-    .then(function (urlToCreatedResource) {
+    ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties)
+    .then(function (urlsToCreatedResources) {
 
       console.log("attaching result to job");
-      job.data.result = urlToCreatedResource;
+      job.data.result = urlsToCreatedResources;
 
       console.log("saving job, which was enriched with result: " + job.data.result);
       job.data.progress = 100;

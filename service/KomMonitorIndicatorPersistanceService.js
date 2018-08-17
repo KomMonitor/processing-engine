@@ -9,14 +9,14 @@
  * send PUT request against KomMonitor DataManagement API to update indicator for targetDate. This persists the submitted indicator values permanently.
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to update indicator
- * indicatorId String unique identifier of the indicator
+ * targetIndicatorId String unique identifier of the indicator
  * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
  * targetSpatialUnitId String unique identifier of the target spatial unit
  * indicatorGeoJson Object GeoJson object of the indicator spatial features.
  *
  * returns true, if operation was successful; false otherwise
  **/
-exports.putIndicatorById = function(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId, indicatorGeoJson) {
+exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetDate, targetSpatialUnitId, indicatorGeoJson) {
   // console.log("fetching indicator from KomMonitor data management API for id " + indicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
   //
   // var year = targetDateHelper.getYearFromTargetDate(targetDate);

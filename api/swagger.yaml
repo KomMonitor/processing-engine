@@ -268,12 +268,16 @@ definitions:
     type: "object"
     required:
     - "scriptId"
+    - "targetIndicatorId"
     - "targetDate"
     properties:
       scriptId:
         type: "string"
         description: "the identifier of the script that contains the code to perform\
           \ the target indicator computation."
+      targetIndicatorId:
+        type: "string"
+        description: "the identifier of the target indicator that can be computed by the associated script."
       targetDate:
         type: "string"
         format: "date"
