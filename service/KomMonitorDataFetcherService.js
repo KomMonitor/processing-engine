@@ -24,6 +24,7 @@ exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
     })
     .catch(error => {
       console.log("Error when fetching script code. Error was: " + error);
+      throw error;
     });
 }
 
@@ -51,6 +52,7 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) 
     })
     .catch(error => {
       console.log("Error when fetching spatial unit. Error was: " + error);
+      throw error;
     });
 }
 
@@ -77,6 +79,7 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
     })
     .catch(error => {
       console.log("Error when fetching spatial units metadata. Error was: " + error);
+      throw error;
     });
 }
 
@@ -144,6 +147,7 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
     })
     .catch(error => {
       console.log("Error when fetching georesource. Error was: " + error);
+      throw error;
     });
 }
 
@@ -166,6 +170,7 @@ exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
     })
     .catch(error => {
       console.log("Error when fetching georesource metadata. Error was: " + error);
+      throw error;
     });
 }
 
@@ -218,6 +223,7 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
     })
     .catch(error => {
       console.log("Error when fetching indicator. Error was: " + error);
+      throw error;
     });
 }
 
@@ -240,6 +246,7 @@ exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
     })
     .catch(error => {
       console.log("Error when fetching georesource metadata. Error was: " + error);
+      throw error;
     });
 }
 
