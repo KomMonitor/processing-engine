@@ -65,7 +65,8 @@
       return done();
     })
     .catch(function (response) {
-      consol.log("Error while executing defaultIndicatorComputation. " + response);
+      console.log("Error while executing defaultIndicatorComputation. " + response);
+      throw response;
     });
 
   });
@@ -144,7 +145,8 @@
       return done();
     })
     .catch(function (response) {
-      consol.log("Error while executing defaultIndicatorComputation. " + response);
+      console.log("Error while executing defaultIndicatorComputation. " + response);
+      throw response;
     });
   });
 
