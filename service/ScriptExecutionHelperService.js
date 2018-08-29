@@ -116,9 +116,9 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
 
     try {
       var scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-      var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, spatialUnitId);
+      var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, targetSpatialUnitId);
       var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
-      var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, spatialUnitId, targetDate);
+      var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
 
       // require the script code as new NodeJS module
       fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsByteArray);
