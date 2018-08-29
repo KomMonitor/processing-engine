@@ -104,7 +104,7 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
     }
     catch(err) {
         console.log("Error during execution of defaultIndicatorComputation with error: " + err);
-        throw err;
+        reject(err);
     }
   });
 }
@@ -134,7 +134,7 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
     }
     catch(err) {
         console.log("Error during execution of customizedIndicatorComputation with error: " + err);
-        throw err;
+        reject(err);
     }
   });
 }
