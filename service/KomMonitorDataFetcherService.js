@@ -99,14 +99,14 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
     var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
     // get spatial units metadata to aquire knowledge of existing units
-    var spatialUnitsMetadata = await fetchSpatialUnitsMetadata(targetDate);
+    var spatialUnitsMetadata = await exports.fetchSpatialUnitsMetadata(targetDate);
 
     var spatialUnitsMap = new Map();
     //iterate over all entries and fill map
     spatialUnitsMetadata.forEach(async function(element) {
 
       var spatialUnitId = spatialUnitsMetadata.spatialUnitId;
-      var spatialUnit_geoJSON = await fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
+      var spatialUnit_geoJSON = await exports.fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
 
       spatialUnitsMap.set(spatialUnitsMetadata, spatialUnit_geoJSON);
     });
@@ -189,9 +189,9 @@ exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDat
   var georesourcesMap = new Map();
 
   georesourceIds.forEach(async function(georesourceId) {
-    var georesourceMetadata = await fetchGeoresourceMetadataById(baseUrlPath, georesourceId);
+    var georesourceMetadata = await exports.fetchGeoresourceMetadataById(baseUrlPath, georesourceId);
     var georesourceName = georesourceMetadata.datasetName;
-    var georesource_geojsonString = await fetchGeoresourceById(baseUrlPath, georesourceId, targetDate);
+    var georesource_geojsonString = await exports.fetchGeoresourceById(baseUrlPath, georesourceId, targetDate);
     georesourcesMap.set(georesourceName, georesource_geojsonString);
   });
 
@@ -245,7 +245,7 @@ exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching georesource metadata. Error was: " + error);
+      console.log("Error when fetching indicator metadata. Error was: " + error);
       throw error;
     });
 }
@@ -266,9 +266,9 @@ exports.fetchIndicatorsByIds = function(baseUrlPath, indicatorIds, targetDate, t
   var indicatorsMap = new Map();
 
   indicatorIds.forEach(async function(indicatorId) {
-    var indicatorMetadata = await fetchIndicatorMetadataById(baseUrlPath, indicatorId);
-    var indicatorName = indicatorMetadata.datasetName;
-    var indicator_geojsonString = await fetchIndicatorById(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId);
+    var indicatorMetadata = await exports.fetchIndicatorMetadataById(baseUrlPath, indicatorId);
+    var indicatorName = indicatorMetadata.indicatorName;
+    var indicator_geojsonString = await exports.fetchIndicatorById(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId);
     indicatorsMap.set(indicatorName, indicator_geojsonString);
   });
 
