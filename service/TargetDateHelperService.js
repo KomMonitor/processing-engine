@@ -7,7 +7,7 @@
  *
  * returns array of split components; i.e. array[0]=YEAR, array[1]=MONTH, array[2]=DAY
  **/
-exports.getTargetDateComponentsArray = function(targetDate){
+var getTargetDateComponentsArray = function(targetDate){
   return targetDate.split("-");
 }
 
