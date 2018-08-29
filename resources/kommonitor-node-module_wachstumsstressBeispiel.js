@@ -16,31 +16,31 @@ exports.computeIndicator = function(targetDate, targetSpatialUnit_geoJSON, baseI
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var ewzGeoJSON = baseIndicatorsMap.get("Einwohnerzahl");
+  var ewzGeoJSON = baseIndicatorsMap.get('Einwohnerzahl');
 
   // parse targetYear from input parameter
-  var targetDateArray = targetDate.split("-");
+  var targetDateArray = targetDate.split('-');
   var specifiedYear = targetDateArray[0];
 
   // if (! Number.isSafeInteger(specifiedYear)){
-  //   console.log("failed at parsing year from targetDate. targetDate is: " + targetDate);
-  //   throw new Error("failed at parsing year from targetDate. targetDate is: " + targetDate);
+  //   console.log('failed at parsing year from targetDate. targetDate is: ' + targetDate);
+  //   throw new Error('failed at parsing year from targetDate. targetDate is: ' + targetDate);
   // }
 
   var year_fiveBefore = specifiedYear - 5;
-  var date_fiveBefore = year_fiveBefore + "-" + targetDateArray[1] + "-" + targetDateArray[2];
+  var date_fiveBefore = year_fiveBefore + '-' + targetDateArray[1] + '-' + targetDateArray[2];
 
-  console.log("Target Date: " + targetDate);
-  console.log("Required Date before 5 years: " + date_fiveBefore);
+  console.log('Target Date: ' + targetDate);
+  console.log('Required Date before 5 years: ' + date_fiveBefore);
 
-  // now we compute the new indicator "wachstumsstress"
+  // now we compute the new indicator 'wachstumsstress'
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
     ewzGeoJSON.features.forEach(function(ewzFeature){
 
       if (targetSpatialUnitFeature.properties.spatialUnitId === ewzFeature.properties.spatialUnitId){
 
-        console.log("computing indicators for feature with id: " + targetSpatialUnitFeature.properties.Stadtt_Nr);
+        console.log('computing indicators for feature with id: ' + targetSpatialUnitFeature.properties.Stadtt_Nr);
 
         targetSpatialUnitFeature.properties[targetDate] = Math.abs(( ewzFeature.properties[targetDate] - ewzFeature.properties[date_fiveBefore] ) / ewzFeature.properties[date_fiveBefore]).toFixed(4);
       }
