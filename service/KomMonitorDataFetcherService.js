@@ -19,7 +19,7 @@ exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
   //GET /process-scripts/{scriptId}/scriptCode
   axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode")
     .then(response => {
-      // response.data should be the script as String
+      // response.data should be the script as byte[]
       return response.data;
     })
     .catch(error => {

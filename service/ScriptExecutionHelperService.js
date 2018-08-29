@@ -63,7 +63,7 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
   return new Promise(async function(resolve, reject) {
 
     try {
-      var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      var scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
       var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
       var allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
 
@@ -78,7 +78,7 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       var baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
 
       // require the script code as new NodeJS module
-      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsString);
+      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("./temporaryNodeModule.js");
 
       //execute script to compute indicator
@@ -115,13 +115,13 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
   return new Promise(async function(resolve, reject) {
 
     try {
-      var scriptCodeAsString = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      var scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
       var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, spatialUnitId);
       var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
       var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, spatialUnitId, targetDate);
 
       // require the script code as new NodeJS module
-      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsString);
+      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("./temporaryNodeModule.js");
 
       //execute script to compute indicator
