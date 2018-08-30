@@ -307,6 +307,7 @@ definitions:
       \ computation are set to default values."
     example:
       scriptId: "scriptId"
+      targetIndicatorId: "targetIndicatorId"
       targetDate: "2000-01-23"
       georesourceIds:
       - "georesourceIds"
