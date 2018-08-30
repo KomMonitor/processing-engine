@@ -5,6 +5,7 @@ var KomMonitorIndicatorPersister = require('./KomMonitorIndicatorPersistanceServ
 // module for reading/writing from/to hard drive
 var fs = require("fs");
 var dns = require("dns");
+var tmp = require("temporary");
 
 // aquire connection details to KomMonitor data management api instance from environment variables
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
@@ -82,9 +83,12 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       // retrieve baseIndicators for initial (lowest) spatial unit
       var baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
 
+      var tmpFile = new tmp.File();
+      var tmpFilePath = tmpFile.path;
+
       // require the script code as new NodeJS module
-      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require("./temporaryNodeModule.js");
+      fs.writeFileSync(tmpFilePath, scriptCodeAsByteArray);
+      var nodeModuleForIndicator = require(tmpFilePath);
 
       //execute script to compute indicator
       var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
@@ -98,7 +102,8 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator);
 
       // delete temporarily stored nodeModule file synchronously
-      fs.unlinkSync("./temporaryNodeModule.js");
+      // fs.unlinkSync("./temporaryNodeModule.js");
+      tmpFile.unlink();
 
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
@@ -125,15 +130,19 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
       var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
       var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
 
+      var tmpFile = new tmp.File();
+      var tmpFilePath = tmpFile.path;
+
       // require the script code as new NodeJS module
-      fs.writeFileSync('./temporaryNodeModule.js', scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require("./temporaryNodeModule.js");
+      fs.writeFileSync(tmpFilePath, scriptCodeAsByteArray);
+      var nodeModuleForIndicator = require(tmpFilePath);
 
       //execute script to compute indicator
       var responseGeoJson = nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
 
       // delete temporarily stored nodeModule file synchronously
-      fs.unlinkSync("./temporaryNodeModule.js");
+      // fs.unlinkSync(tmpFilePath);
+      tmpFile.unlink();
 
       resolve(responseGeoJson);
     }
