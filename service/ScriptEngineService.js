@@ -145,7 +145,7 @@
       return done();
     })
     .catch(function (response) {
-      console.log("Error while executing defaultIndicatorComputation. " + response);
+      console.log("Error while executing customizedIndicatorComputation. " + response);
       throw response;
     });
   });
