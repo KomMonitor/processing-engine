@@ -3,7 +3,7 @@ RUN mkdir -p /code
 COPY . /code
 WORKDIR /code
 VOLUME /tmp
-TMPDIR /tmp
+#TMPDIR /tmp
 RUN npm install
 
 EXPOSE 8086

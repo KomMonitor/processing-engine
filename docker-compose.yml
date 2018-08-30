@@ -1,4 +1,9 @@
-version: '3.1'
+version: '2.1'
+
+networks:
+  kommonitor:
+      name: kommonitor-network
+
 services:
   kommonitor-processing-engine:
     build:
@@ -6,6 +11,8 @@ services:
       dockerfile: Dockerfile
     ports:
      - "8086:8086"
+    networks:
+     - kommonitor
     volumes:
      - .:/code
      - /code/node_modules
@@ -14,8 +21,10 @@ services:
     environment:
      - REDIS_HOST=redis
      - REDIS_PORT=6379
-     - KOMMONITOR_DATA_MANAGEMENT_HOST=http://localhost
+     - KOMMONITOR_DATA_MANAGEMENT_HOST=kommonitor-data-management-api
      - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
      - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/rest/v1
   redis:
     image: redis:alpine
+    networks:
+     - kommonitor
