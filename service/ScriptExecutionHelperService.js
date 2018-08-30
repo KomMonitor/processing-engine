@@ -4,14 +4,19 @@ var KomMonitorDataFetcher = require('./KomMonitorDataFetcherService');
 var KomMonitorIndicatorPersister = require('./KomMonitorIndicatorPersistanceService');
 // module for reading/writing from/to hard drive
 var fs = require("fs");
+var dns = require("dns");
 
 // aquire connection details to KomMonitor data management api instance from environment variables
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
 const kommonitorDataManagementPort = process.env.KOMMONITOR_DATA_MANAGEMENT_PORT;
 const kommonitorDataManagementBasepath = process.env.KOMMONITOR_DATA_MANAGEMENT_BASEPATH;
 
+dns.lookup(kommonitorDataManagementHost, console.log);
+
 // construct fixed starting URL to make requests against running KomMonitor data management api
-const kommonitorDataManagementURL = kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
+const kommonitorDataManagementURL = "http://" + kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
+
+console.log("created the following base URL path to connect to KomMonitor Data Management API: " + kommonitorDataManagementURL);
 
 function identifyLowestSpatialUnit(allSpatialUnits){
   var lowestSpatialUnit = null;
