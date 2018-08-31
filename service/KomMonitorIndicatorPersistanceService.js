@@ -82,7 +82,7 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetDate, 
   var putRequestBody = buildPutRequestBody(targetDate, targetSpatialUnitId, indicatorGeoJson);
 
   //PUT /indicators/{indicatorId}
-  axios.put(baseUrlPath + "/indicators/" + targetIndicatorId,
+  return axios.put(baseUrlPath + "/indicators/" + targetIndicatorId,
         putRequestBody,
         {headers: {"Content-Type": "application/json"}})
     .then(response => {
@@ -114,10 +114,12 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
 
   var urlResponseArray = new Array();
 
-  var iterator = indicatorSpatialUnitsMap[Symbol.iterator]();
+  // var iterator = indicatorSpatialUnitsMap[Symbol.iterator]();
 
-  for (let indicatorSpatialUnitsEntry of iterator) {
-    await urlResponseArray.push(putIndicatorById(baseUrlPath, targetIndicatorId, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]));
+  // for (let indicatorSpatialUnitsEntry of iterator) {
+  for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
+    var resultUrl = await putIndicatorById(baseUrlPath, targetIndicatorId, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
+    urlResponseArray.push(resultUrl);
   }
 
   return urlResponseArray;
