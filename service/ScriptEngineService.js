@@ -66,6 +66,8 @@
     })
     .catch(function (response) {
       console.log("Error while executing defaultIndicatorComputation. " + response);
+      job.remove()
+        .then(() => console.log('Job was removed'));
       throw response;
     });
 
@@ -146,6 +148,8 @@
     })
     .catch(function (response) {
       console.log("Error while executing customizedIndicatorComputation. " + response);
+      job.remove()
+        .then(() => console.log('Job was removed'));
       throw response;
     });
   });
