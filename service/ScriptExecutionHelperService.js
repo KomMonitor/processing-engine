@@ -58,7 +58,7 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
     }
     catch(error){
       console.error("Error while fetching spatialUnit with id $(targetSpatialUnitId) within dataManagement API for defaultIndicatorComputation. Error is: " + error);
-      throw(error);
+      throw error;
     }
 
     var indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
