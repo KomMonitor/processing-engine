@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();    
+
 var fs = require('fs'),
     path = require('path'),
     http = require('http');

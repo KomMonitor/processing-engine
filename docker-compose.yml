@@ -18,12 +18,8 @@ services:
      - /code/node_modules
     depends_on:
      - redis
-    environment:
-     - REDIS_HOST=redis
-     - REDIS_PORT=6379
-     - KOMMONITOR_DATA_MANAGEMENT_HOST=kommonitor-data-management-api
-     - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
-     - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/rest/v1
+    env_file:
+    - processing-engine.env
   redis:
     image: redis:alpine
     networks:
