@@ -111,9 +111,9 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
     var spatialUnitsMap = new Map();
     //iterate over all entries and fill map
     try{
-      spatialUnitsMetadata.forEach(async function(element) {
+      for (const spatialUnitMetadata of spatialUnitsMetadata){
 
-        var spatialUnitId = spatialUnitsMetadata.spatialUnitId;
+        var spatialUnitId = spatialUnitMetadata.spatialUnitId;
         var spatialUnit_geoJSON;
         try{
           spatialUnit_geoJSON = await exports.fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
@@ -122,8 +122,8 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
           throw error;
         }
 
-        spatialUnitsMap.set(spatialUnitsMetadata, spatialUnit_geoJSON);
-      });
+        spatialUnitsMap.set(spatialUnitMetadata, spatialUnit_geoJSON);
+      };
     }
     catch(error){
       throw error;
@@ -201,13 +201,13 @@ exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
  *
  * returns georesources as a map containing all georesources, wheres key='meaningful name of the georesource' and value='georesource as GeoJSON string'
  **/
-exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDate) {
+exports.fetchGeoresourcesByIds = async function(baseUrlPath, georesourceIds, targetDate) {
   console.log("fetching georesources from KomMonitor data management API as a map object");
 
   var georesourcesMap = new Map();
 
   try{
-    georesourceIds.forEach(async function(georesourceId) {
+    for (const georesourceId of georesourceIds){
       var georesourceMetadata;
       var georesource_geojsonString;
       try{
@@ -220,7 +220,7 @@ exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDat
 
       var georesourceName = georesourceMetadata.datasetName;
       georesourcesMap.set(georesourceName, georesource_geojsonString);
-    });
+    };
   }
   catch(error){
     throw error;
@@ -296,13 +296,13 @@ exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
  *
  * returns indicators as a map containing all indicators, wheres key='meaningful name of the indicator' and value='indicator as GeoJSON string'
  **/
-exports.fetchIndicatorsByIds = function(baseUrlPath, indicatorIds, targetDate, targetSpatialUnitId) {
+exports.fetchIndicatorsByIds = async function(baseUrlPath, indicatorIds, targetDate, targetSpatialUnitId) {
   console.log("fetching indicators from KomMonitor data management API as a map object");
 
   var indicatorsMap = new Map();
 
   try{
-    indicatorIds.forEach(async function(indicatorId) {
+    for (const indicatorId of indicatorIds){
       var indicatorMetadata;
       var indicator_geojsonString;
       try{
@@ -317,7 +317,7 @@ exports.fetchIndicatorsByIds = function(baseUrlPath, indicatorIds, targetDate, t
       var indicatorName = indicatorMetadata.indicatorName;
       indicatorsMap.set(indicatorName, indicator_geojsonString);
 
-    });
+    };
   }
   catch(error){
       throw error;
