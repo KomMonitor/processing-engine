@@ -285,10 +285,15 @@ exports.postCustomizableIndicatorComputation = function(scriptInput) {
   return new Promise(function(resolve, reject) {
     const job = customizedComputationQueue.createJob(scriptInput);
 
-    job.save().then((job) => {
-      console.log("Created new job to execute customizableIndicatorComputation with jobId " + job.id);
-      resolve(job.id);
-    });
+    job.save()
+      .then((job) => {
+        console.log("Created new job to execute customizableIndicatorComputation with jobId " + job.id);
+        resolve(job.id);
+      })
+      .catch((error) => {
+        console.error("Error while creating customizableIndicatorComputation job.");
+        reject(error);
+      });
   });
 }
 
@@ -308,9 +313,14 @@ exports.postDefaultIndicatorComputation = function(scriptInput) {
   return new Promise(function(resolve, reject) {
     const job = defaultComputationQueue.createJob(scriptInput);
 
-    job.save().then((job) => {
-      console.log("Created new job to execute defaultIndicatorComputation with jobId " + job.id);
-      resolve(job.id);
-    });
+    job.save()
+      .then((job) => {
+        console.log("Created new job to execute defaultIndicatorComputation with jobId " + job.id);
+        resolve(job.id);
+      })
+      .catch((error) => {
+        console.error("Error while creating defaultIndicatorComputation job.");
+        reject(error);
+      });
   });
 }
