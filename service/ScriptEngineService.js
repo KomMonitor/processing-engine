@@ -65,9 +65,10 @@
       return done();
     })
     .catch(function (response) {
-      console.log("Error while executing defaultIndicatorComputation. " + response);
+      console.error("Error while executing defaultIndicatorComputation. " + response);
       job.remove()
-        .then(() => console.log('Job was removed'));
+        .then(() => console.log('Job was removed'))
+        .catch((error) => console.error("job could not be removed from defaultComputationQueue"));
       throw response;
     });
 
@@ -147,9 +148,10 @@
       return done();
     })
     .catch(function (response) {
-      console.log("Error while executing customizedIndicatorComputation. " + response);
+      console.error("Error while executing customizedIndicatorComputation. " + response);
       job.remove()
-        .then(() => console.log('Job was removed'));
+        .then(() => console.log('Job was removed'))
+        .catch((error) => console.error("job could not be removed from customizedComputationQueue"));
       throw response;
     });
   });
