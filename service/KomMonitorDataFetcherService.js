@@ -17,7 +17,7 @@ exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
   console.log("fetching script code from KomMonitor data management API for id " + scriptId);
 
   //GET /process-scripts/{scriptId}/scriptCode
-  axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode")
+  return axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode")
     .then(response => {
       // response.data should be the script as byte[]
       return response.data;
@@ -45,7 +45,7 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) 
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /spatial-units/{spatialUnitId}/{year}/{month}/{day}
-  axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day)
+  return axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
@@ -72,7 +72,7 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /spatial-units
-  axios.get(baseUrlPath + "/spatial-units")
+  return axios.get(baseUrlPath + "/spatial-units")
     .then(response => {
       // response.data should be the respective array of metadata entries as JSON
       return response.data;
@@ -158,7 +158,7 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /georesources/{georesouceId}/{year}/{month}/{day}
-  axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day)
+  return axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
@@ -181,7 +181,7 @@ exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
   console.log("fetching georesource metadata from KomMonitor data management API for id " + georesourceId);
 
   //GET /georesources/{georesouceId}
-  axios.get(baseUrlPath + "/georesources/" + georesourceId)
+  return axios.get(baseUrlPath + "/georesources/" + georesourceId)
     .then(response => {
       // response.data should be the respective georesource metadata JSON object
       return response.data;
@@ -226,7 +226,6 @@ exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDat
     throw error;
   }
 
-
   return georesourcesMap;
 }
 
@@ -248,7 +247,7 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /indicators/{indicatorId}/{targetSpatialUnitId}/{year}/{month}/{day}
-  axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day)
+  return axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
@@ -273,7 +272,7 @@ exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
   console.log("Perform GET request against: " + baseUrlPath + "/indicators/" + indicatorId);
 
   //GET /indicators/{indicatorId}
-  axios.get(baseUrlPath + "/indicators/" + indicatorId)
+  return axios.get(baseUrlPath + "/indicators/" + indicatorId)
     .then(response => {
       // response.data should be the respective indicator metadata JSON object
       console.log("got indicatorMetadata response object: " + response);
