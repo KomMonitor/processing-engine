@@ -41,7 +41,7 @@ function identifyLowestSpatialUnit(allSpatialUnits){
   }
 }
 
-function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator){
+async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator){
   // first entry of resultingIndicatorsMap contains the computed indicator for the lowest spatial unit
   var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(idOfLowestSpatialUnit);
 
@@ -52,7 +52,14 @@ function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, 
     // looks like Array [key, value]
     var targetSpatialUnitId = spatialUnitEntry[0].spatialUnitId;
 
-    var targetSpatialUnitGeoJson = KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+    var targetSpatialUnitGeoJson;
+    try{
+      targetSpatialUnitGeoJson = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+    }
+    catch(error){
+      console.error("Error while fetching spatialUnit with id $(targetSpatialUnitId) within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      throw(error);
+    }
 
     var indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
 
@@ -69,9 +76,18 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
   return new Promise(async function(resolve, reject) {
 
     try {
-      var scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-      var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
-      var allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
+      var scriptCodeAsByteArray;
+      var georesourcesMap;
+      var allSpatialUnits;
+      try{
+        scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+        allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
+      }
+      catch(error){
+        console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+        reject(error);
+      }
 
       // will look like Array [metadataObject, geoJSON]
       var lowestSpatialUnit = identifyLowestSpatialUnit(allSpatialUnits);
@@ -81,7 +97,14 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       var remainingSpatialUnits = allSpatialUnits;
 
       // retrieve baseIndicators for initial (lowest) spatial unit
-      var baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
+      var baseIndicatorsMap_lowestSpatialUnit;
+      try{
+        baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
+      }
+      catch(error){
+        console.error("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+        reject(error);
+      }
 
       var tmpFile = new tmp.File();
       var tmpFilePath = tmpFile.path;
@@ -99,7 +122,13 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
 
       // after computing the indicator for the lowest spatial unit
       // we can now aggregate the result to all remaining superior units!
-      resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator);
+      try{
+        resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator);
+      }
+      catch(error){
+        console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
+        reject(error);
+      }
 
       // delete temporarily stored nodeModule file synchronously
       // fs.unlinkSync("./temporaryNodeModule.js");
@@ -107,8 +136,15 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
 
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
-      // TODO implement
-      var urlsToPersistedResources = KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetDate, resultingIndicatorsMap);
+      var urlsToPersistedResources ;
+      try{
+        urlsToPersistedResources = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetDate, resultingIndicatorsMap);
+
+      }
+      catch(error){
+        console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+        reject(error);
+      }
 
       resolve(urlsToPersistedResources);
     }
@@ -125,10 +161,21 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
   return new Promise(async function(resolve, reject) {
 
     try {
-      var scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-      var baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, targetSpatialUnitId);
-      var georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
-      var targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+      var scriptCodeAsByteArray;
+      var baseIndicatorsMap;
+      var georesourcesMap;
+      var targetSpatialUnit_geoJSON;
+
+      try{
+        scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+        baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, targetSpatialUnitId);
+        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+        targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+      }
+      catch(error){
+        console.log("Error while fetching resources from dataManagement API for customizedIndicatorComputation. Error is: " + error);
+        reject(error);
+      }
 
       var tmpFile = new tmp.File();
       var tmpFilePath = tmpFile.path;
