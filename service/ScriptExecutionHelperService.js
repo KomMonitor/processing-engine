@@ -177,19 +177,20 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
         reject(error);
       }
 
-      var tmpFile = new tmp.File();
-      var tmpFilePath = tmpFile.path;
+      // var tmpFile = new tmp.File();
+      // var tmpFilePath = "./tmp.js";
+      // console.log("created temp file at: " + tmpFilePath);
 
       // require the script code as new NodeJS module
-      fs.writeFileSync(tmpFilePath, scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require(tmpFilePath);
+      fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
+      var nodeModuleForIndicator = require("../tmp.js");
 
       //execute script to compute indicator
       var responseGeoJson = nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
 
       // delete temporarily stored nodeModule file synchronously
-      // fs.unlinkSync(tmpFilePath);
-      tmpFile.unlink();
+      fs.unlinkSync("./tmp.js");
+      // tmpFile.unlink();
 
       resolve(responseGeoJson);
     }
