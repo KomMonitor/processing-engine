@@ -166,31 +166,48 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
 
   return new Promise(function(resolve, reject) {
 
-    customizedComputationQueue.getJob(jobId, function (err, job) {
-      console.log(`Job has status ${job.status}`);
+    customizedComputationQueue.getJob(jobId)
+      .then((job) => {
+        console.log(`Job has status ${job.status}`);
 
-      // response model
-      //
-      //{
-      //    "jobId": "jobId",
-      //    "result_geoJSON": "result_geoJSON",
-      //    "progress": 0.8008281904610115,
-      //    "error": "error",
-      //    "status": "ACCEPTED"
-      //  }
+        // response model
+        //
+        //{
+        //    "jobId": "jobId",
+        //    "result_geoJSON": "result_geoJSON",
+        //    "progress": 0.8008281904610115,
+        //    "error": "error",
+        //    "status": "ACCEPTED"
+        //  }
 
-      var response = {};
-      response.jobId = jobId;
-      response.status = job.status;
-      response.progress = job.data.progress;
-      response.result_geoJSON = job.data.result;
-      response.error = undefined;
+        var response = {};
+        response.jobId = job.id;
+        response.status = job.status;
+        response.progress = job.data.progress;
+        response.result_geoJSON = job.data.result;
+        response.error = undefined;
 
-      console.log("returning following response object for job with id ${job.id}");
-      console.log(response);
+        console.log("returning following response object for job with id ${job.id}");
+        console.log(response);
 
-      resolve(response);
-    });
+        resolve(response);
+      })
+      .catch((error) => {
+
+        console.error("Job not found. Will respond with error object");
+
+        var response = {};
+        response.jobId = jobId;
+        response.status = undefined;
+        response.progress = undefined;
+        response.result_geoJSON = undefined;
+        response.error = "No Job with id " + jobId + " could be found. Error message: " + error.message;
+
+        console.log("returning following response object for job with id " + jobId);
+        console.log(response);
+
+        reject(response);
+      });
   });
 }
 
@@ -208,31 +225,48 @@ exports.getDefaultIndicatorComputation = function(jobId) {
 
   return new Promise(function(resolve, reject) {
 
-    defaultComputationQueue.getJob(jobId, function (err, job) {
-      console.log(`Job has status ${job.status}`);
+    defaultComputationQueue.getJob(jobId)
+      .then((job) => {
+        console.log(`Job has status ${job.status}`);
 
-      // response model
-      //
-      // {
-      //  "jobId": "string",
-      //  "status": "ACCEPTED",
-      //  "progress": 0,
-      //  "result_url": "string",
-      //  "error": "string"
-      // }
+        // response model
+        //
+        // {
+        //  "jobId": "string",
+        //  "status": "ACCEPTED",
+        //  "progress": 0,
+        //  "result_url": "string",
+        //  "error": "string"
+        // }
 
-      var response = {};
-      response.jobId = jobId;
-      response.status = job.status;
-      response.progress = job.data.progress;
-      response.result_url = job.data.result;
-      response.error = undefined;
+        var response = {};
+        response.jobId = jobId;
+        response.status = job.status;
+        response.progress = job.data.progress;
+        response.result_url = job.data.result;
+        response.error = undefined;
 
-      console.log("returning following response object for job with id ${job.id}");
-      console.log(response);
+        console.log("returning following response object for job with id ${job.id}");
+        console.log(response);
 
-      resolve(response);
-    });
+        resolve(response);
+      })
+      .catch((error) => {
+
+        console.error("Job not found. Will respond with error object");
+
+        var response = {};
+        response.jobId = jobId;
+        response.status = undefined;
+        response.progress = undefined;
+        response.result_url = undefined;
+        response.error = "No Job with id " + jobId + " could be found. Error message: " + error.message;
+
+        console.log("returning following response object for job with id " + jobId);
+        console.log(response);
+
+        reject(response);
+      });
   });
 }
 
