@@ -99,17 +99,35 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
     var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
     // get spatial units metadata to aquire knowledge of existing units
-    var spatialUnitsMetadata = await exports.fetchSpatialUnitsMetadata(targetDate);
+    var spatialUnitsMetadata;
+    try{
+      spatialUnitsMetadata = await exports.fetchSpatialUnitsMetadata(targetDate);
+    }
+    catch(error){
+      throw error;
+    }
+
 
     var spatialUnitsMap = new Map();
     //iterate over all entries and fill map
-    spatialUnitsMetadata.forEach(async function(element) {
+    try{
+      spatialUnitsMetadata.forEach(async function(element) {
 
-      var spatialUnitId = spatialUnitsMetadata.spatialUnitId;
-      var spatialUnit_geoJSON = await exports.fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
+        var spatialUnitId = spatialUnitsMetadata.spatialUnitId;
+        var spatialUnit_geoJSON;
+        try{
+          spatialUnit_geoJSON = await exports.fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
+        }
+        catch(error){
+          throw error;
+        }
 
-      spatialUnitsMap.set(spatialUnitsMetadata, spatialUnit_geoJSON);
-    });
+        spatialUnitsMap.set(spatialUnitsMetadata, spatialUnit_geoJSON);
+      });
+    }
+    catch(error){
+      throw error;
+    }
     return spatialUnitsMap;
   }
 
@@ -188,12 +206,26 @@ exports.fetchGeoresourcesByIds = function(baseUrlPath, georesourceIds, targetDat
 
   var georesourcesMap = new Map();
 
-  georesourceIds.forEach(async function(georesourceId) {
-    var georesourceMetadata = await exports.fetchGeoresourceMetadataById(baseUrlPath, georesourceId);
-    var georesourceName = georesourceMetadata.datasetName;
-    var georesource_geojsonString = await exports.fetchGeoresourceById(baseUrlPath, georesourceId, targetDate);
-    georesourcesMap.set(georesourceName, georesource_geojsonString);
-  });
+  try{
+    georesourceIds.forEach(async function(georesourceId) {
+      var georesourceMetadata;
+      var georesource_geojsonString;
+      try{
+        georesourceMetadata = await exports.fetchGeoresourceMetadataById(baseUrlPath, georesourceId);
+        georesource_geojsonString = await exports.fetchGeoresourceById(baseUrlPath, georesourceId, targetDate);
+      }
+      catch(error){
+        throw error;
+      }
+
+      var georesourceName = georesourceMetadata.datasetName;
+      georesourcesMap.set(georesourceName, georesource_geojsonString);
+    });
+  }
+  catch(error){
+    throw error;
+  }
+
 
   return georesourcesMap;
 }
@@ -238,10 +270,15 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
 exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
   console.log("fetching indicator metadata from KomMonitor data management API for id " + indicatorId);
 
+  console.log("Perform GET request against: " + baseUrlPath + "/indicators/" + indicatorId);
+
   //GET /indicators/{indicatorId}
   axios.get(baseUrlPath + "/indicators/" + indicatorId)
     .then(response => {
       // response.data should be the respective indicator metadata JSON object
+      console.log("got indicatorMetadata response object: " + response);
+      console.log("Response has status: " + response.status);
+      console.log("Response has data: " + response.data);
       return response.data;
     })
     .catch(error => {
@@ -265,12 +302,27 @@ exports.fetchIndicatorsByIds = function(baseUrlPath, indicatorIds, targetDate, t
 
   var indicatorsMap = new Map();
 
-  indicatorIds.forEach(async function(indicatorId) {
-    var indicatorMetadata = await exports.fetchIndicatorMetadataById(baseUrlPath, indicatorId);
-    var indicatorName = indicatorMetadata.indicatorName;
-    var indicator_geojsonString = await exports.fetchIndicatorById(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId);
-    indicatorsMap.set(indicatorName, indicator_geojsonString);
-  });
+  try{
+    indicatorIds.forEach(async function(indicatorId) {
+      var indicatorMetadata;
+      var indicator_geojsonString;
+      try{
+        indicatorMetadata = await exports.fetchIndicatorMetadataById(baseUrlPath, indicatorId);
+        console.log("Fetched indicatorMetadata: " + indicatorMetadata);
+        indicator_geojsonString = await exports.fetchIndicatorById(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId);
+      }
+      catch (error){
+        console.log("Something went wrong when featching indicators by Ids. Error message: " + error.message);
+        throw error;
+      }
+      var indicatorName = indicatorMetadata.indicatorName;
+      indicatorsMap.set(indicatorName, indicator_geojsonString);
+
+    });
+  }
+  catch(error){
+      throw error;
+  }
 
   return indicatorsMap;
 }
