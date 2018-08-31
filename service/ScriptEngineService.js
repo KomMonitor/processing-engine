@@ -22,6 +22,18 @@
     isWorker: true
   });
 
+  customizedComputationQueue.on('succeeded', (job, result) => {
+  console.log(`Job ${job.id} succeeded with result: ${result}`);
+});
+
+customizedComputationQueue.on('retrying', (job, err) => {
+  console.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
+});
+
+customizedComputationQueue.on('failed', (job, err) => {
+  console.log(`Job ${job.id} failed with error ${err.message}`);
+});
+
   // register process function to execute defaultIndicatorComputation jobs
   // this code will be executed when such a job is started
   defaultComputationQueue.process(function (job, done) {
@@ -51,7 +63,7 @@
     console.log("Successfully parsed request input parameters");
 
     // now fetch the resources from KomMonitor data management api
-    ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties)
+    return ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties)
     .then(function (urlsToCreatedResources) {
 
       console.log("attaching result to job");
@@ -78,6 +90,9 @@
   // this code will be executed when such a job is started
   customizedComputationQueue.process(function (job, done) {
     console.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
+
+    done(null, "simple result for testing");
+    return;
 
     // here perform customized computation
 
@@ -133,7 +148,7 @@
 
     // now fetch the resources from KomMonitor data management api
     // TODO implement fetching of resources and executing of script
-    ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties)
+    return ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties)
     .then(function (responseGeoJson) {
 
       // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
@@ -145,13 +160,15 @@
       job.save();
 
       console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
-      return done();
+      return done(null, responseGeoJson);
     })
     .catch(function (response) {
       console.error("Error while executing customizedIndicatorComputation. " + response);
-      job.remove()
-        .then(() => console.log('Job was removed'))
-        .catch((error) => console.error("job could not be removed from customizedComputationQueue"));
+      // job.remove()
+      //   .then(() => console.log('Job was removed'))
+      //   .catch((error) => console.error("job could not be removed from customizedComputationQueue"));
+      // done();
+      done(null, response);
       throw response;
     });
   });
