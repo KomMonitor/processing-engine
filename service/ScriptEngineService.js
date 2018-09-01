@@ -88,11 +88,11 @@ customizedComputationQueue.on('failed', (job, err) => {
 
   // register process function to execute customizableIndicatorComputation jobs
   // this code will be executed when such a job is started
-  customizedComputationQueue.process(function (job, done) {
+  customizedComputationQueue.process(async (job) => {
     console.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
 
-    done(null, "simple result for testing");
-    return;
+    // done(null, "simple result for testing");
+    // return;
 
     // here perform customized computation
 
@@ -148,29 +148,53 @@ customizedComputationQueue.on('failed', (job, err) => {
 
     // now fetch the resources from KomMonitor data management api
     // TODO implement fetching of resources and executing of script
-    return ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties)
-    .then(function (responseGeoJson) {
-
-      // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
-      console.log("attaching result to job");
-      job.data.result = responseGeoJson;
-
-      console.log("saving job, which was enriched with result: " + job.data.result);
-      job.data.progress = 100;
-      job.save();
-
-      console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
-      return done(null, responseGeoJson);
-    })
-    .catch(function (response) {
-      console.error("Error while executing customizedIndicatorComputation. " + response);
+    var result;
+    try{
+      result = await ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties);
+    }
+    catch(error){
+      console.error("Error while executing customizedIndicatorComputation. " + error);
       // job.remove()
       //   .then(() => console.log('Job was removed'))
       //   .catch((error) => console.error("job could not be removed from customizedComputationQueue"));
       // done();
-      done(null, response);
-      throw response;
-    });
+      return Promise.reject(error);
+    }
+
+    // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
+    console.log("attaching result to job");
+    job.data.result = result;
+
+    console.log("saving job, which was enriched with result: " + job.data.result);
+    job.data.progress = 100;
+    job.save();
+
+    console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
+    return Promise.resolve(result);
+
+    // .then(function (responseGeoJson) {
+    //
+    //   // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
+    //   console.log("attaching result to job");
+    //   job.data.result = responseGeoJson;
+    //
+    //   console.log("saving job, which was enriched with result: " + job.data.result);
+    //   job.data.progress = 100;
+    //   job.save();
+    //
+    //   console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ${job.id} finished`);
+    //
+    //   // return done(null, responseGeoJson);
+    // })
+    // .catch(function (response) {
+    //   console.error("Error while executing customizedIndicatorComputation. " + response);
+    //   // job.remove()
+    //   //   .then(() => console.log('Job was removed'))
+    //   //   .catch((error) => console.error("job could not be removed from customizedComputationQueue"));
+    //   // done();
+    //   done(null, response);
+    //   throw response;
+    // });
   });
 
 /**
