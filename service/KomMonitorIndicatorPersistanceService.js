@@ -42,14 +42,14 @@
   var indicatorFeatures = indicatorGeoJson.features;
   var putRequestBody = {};
   putRequestBody.applicableSpatialUnit = targetSpatialUnitId;
-  putRequestBody.indicatorValues = new Array(indicatorFeatures.length);
+  putRequestBody.indicatorValues = new Array();
 
   // now for each element of inputFeatures create object and append to array
   indicatorFeatures.forEach(function(indicatorFeature){
     var indicatorValueObject = {};
-    indicatorValueObject.spatialReferenceKey = indicatorFeature.properties.spatialUnitId;
+    indicatorValueObject.spatialReferenceKey = indicatorFeature.properties.spatialUnitFeatureId;
 
-    indicatorValueObject.valueMapping = new Array(1);
+    indicatorValueObject.valueMapping = new Array();
     var valueMappingObject = {};
     valueMappingObject.indicatorValue = indicatorFeature.properties[targetDate];
     valueMappingObject.timestamp = targetDate;
@@ -132,7 +132,7 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
   // for (let indicatorSpatialUnitsEntry of iterator) {
   for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
     try{
-      var resultUrl = await putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
+      var resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
       responseArray.push(resultUrl);
     }
     catch(error){
