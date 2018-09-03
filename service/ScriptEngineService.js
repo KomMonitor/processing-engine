@@ -48,7 +48,7 @@
 
   // register process function to execute defaultIndicatorComputation jobs
   // this code will be executed when such a job is started
-  defaultComputationQueue.process(function (job, done) {
+  defaultComputationQueue.process(async (job) => {
     console.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
 
     return new Promise(async function(resolve, reject) {
@@ -91,6 +91,8 @@
       }
       catch(error){
         console.error("Error while executing defaultIndicatorComputation. " + error);
+        console.error(error.stack);
+        job.data.error = error.message;
         reject(error);
       }
 
@@ -177,6 +179,8 @@
       }
       catch(error){
         console.error("Error while executing customizedIndicatorComputation. " + error);
+        console.error(error.stack);
+        job.data.error = error.message;
         reject(error);
       }
 
@@ -214,7 +218,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.status = job.status;
         response.progress = job.data.progress;
         response.result_geoJSON_base64 = job.data.result;
-        response.error = undefined;
+        response.error = job.data.error;
 
         console.log("returning following response object for job with id ${job.id}");
         console.log(response);
@@ -224,13 +228,14 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
       .catch((error) => {
 
         console.error("Job not found. Will respond with error object");
+        console.error(error.stack);
 
         var response = {};
         response.jobId = jobId;
         response.status = undefined;
         response.progress = undefined;
         response.result_geoJSON_base64 = undefined;
-        response.error = "No Job with id " + jobId + " could be found. Error message: " + error.message;
+        response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";
 
         console.log("returning following response object for job with id " + jobId);
         console.log(response);
@@ -273,7 +278,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.status = job.status;
         response.progress = job.data.progress;
         response.result_urls = job.data.result;
-        response.error = undefined;
+        response.error = job.data.error;
 
         console.log("returning following response object for job with id ${job.id}");
         console.log(response);
@@ -283,13 +288,14 @@ exports.getDefaultIndicatorComputation = function(jobId) {
       .catch((error) => {
 
         console.error("Job not found. Will respond with error object");
+        console.error(error.stack);
 
         var response = {};
         response.jobId = jobId;
         response.status = undefined;
         response.progress = undefined;
         response.result_urls = undefined;
-        response.error = "No Job with id " + jobId + " could be found. Error message: " + error.message;
+        response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";
 
         console.log("returning following response object for job with id " + jobId);
         console.log(response);
