@@ -157,8 +157,7 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
 
 exports.executeDefaultComputation = executeDefaultComputation;
 
-function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
-  return new Promise(async function(resolve, reject) {
+async function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
 
     try {
       var scriptCodeAsByteArray;
@@ -168,13 +167,17 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
 
       try{
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+        job.data.progress = 20;
         baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, targetSpatialUnitId);
+        job.data.progress = 30;
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+        job.data.progress = 40;
         targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+        job.data.progress = 50;
       }
       catch(error){
         console.log("Error while fetching resources from dataManagement API for customizedIndicatorComputation. Error is: " + error);
-        reject(error);
+        throw error;
       }
 
       // var tmpFile = new tmp.File();
@@ -185,20 +188,23 @@ function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorId
       fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("../tmp.js");
 
+      job.data.progress = 60;
+
       //execute script to compute indicator
       var responseGeoJson = nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
+
+      job.data.progress = 90;
 
       // delete temporarily stored nodeModule file synchronously
       fs.unlinkSync("./tmp.js");
       // tmpFile.unlink();
 
-      resolve(responseGeoJson);
+      return responseGeoJson;
     }
     catch(err) {
         console.log("Error during execution of customizedIndicatorComputation with error: " + err);
-        reject(err);
+        throw err;
     }
-  });
 }
 
 exports.executeCustomizedComputation = executeCustomizedComputation;
