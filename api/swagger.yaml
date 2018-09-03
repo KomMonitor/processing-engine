@@ -327,7 +327,7 @@ definitions:
     required:
     - "jobId"
     - "progress"
-    - "result_urls"
+    - "result"
     - "status"
     properties:
       jobId:
@@ -347,10 +347,11 @@ definitions:
         type: "number"
         format: "int32"
         description: "the progress of indicator computation in percent."
-      result_urls:
+      result:
         type: "array"
-        description: "the full URLs to the freshly computed and persisted indicator for all spatialUnits as array of Strings."
+        description: "an array of objects containing information about indicator resources persisted within KomMonitor data management service."
         items:
+          $ref: "#/definitions/PersistedIndicatorResultType"
           type: "string"
       error:
         type: "string"
@@ -359,10 +360,39 @@ definitions:
     description: "status information about the default execution of the target indicator."
     example:
       jobId: "jobId"
-      result_urls: "['result_url_1', 'result_url_2', 'result_url_3']"
+      result: "[{'indicatorId':'indicatorId1','indicatorName':'Wachstumsstress', 'spatialUnitId':'spatialUnitId1','spatialUnitName':'Stadtteilebene', 'targetDate': '2018-01-01', 'urlToPersistedResource': 'URLtoResource'}, {'indicatorId':'indicatorId1','indicatorName':'Wachstumsstress', 'spatialUnitId':'spatialUnitId2','spatialUnitName':'Stadtbezirksebene', 'targetDate': '2018-01-01', 'urlToPersistedResource': 'URLtoResource'}]"
       progress: 5
       error: "error"
       status: "Created"
+  PersistedIndicatorResultType:
+    type: "object"
+    required:
+    - "indicatorId"
+    - "indicatorName"
+    - "spatialUnitId"
+    - "spatialUnitName"
+    - "targetDate"
+    - "urlToPersistedResource"
+    properties:
+      indicatorId:
+        type: "string"
+        description: "the identifier of the indicator"
+      indicatorName:
+        type: "string"
+        description: "the name of the indicator"
+      spatialUnitId:
+        type: "string"
+        description: "the identifier of the associated spatialUnit"
+      spatialUnitName:
+        type: "string"
+        description: "the name of the associated spatialUnit"
+      targetDate:
+        type: "string"
+        description: "the target date according to the pattern 'YYY-MM-DD'"
+      urlToPersistedResource:
+        type: "string"
+        description: "the URL pointing to the persisted indicator within the KomMonitor data management API."        
+
 responses:
   UnauthorizedError:
     description: "API key is missing or invalid"

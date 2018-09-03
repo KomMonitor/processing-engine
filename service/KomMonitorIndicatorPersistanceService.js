@@ -66,13 +66,15 @@
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to update indicator
  * targetIndicatorId String unique identifier of the indicator
+ * targetIndicatorName String name of the indicator
  * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
- * targetSpatialUnitId String unique identifier of the target spatial unit
+ * targetSpatialUnitMetadata Object target spatial unit metadata object
  * indicatorGeoJson Object GeoJson object of the indicator spatial features.
  *
  * returns URL pointing to created resource
  **/
-exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetDate, targetSpatialUnitId, indicatorGeoJson) {
+exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, targetSpatialUnitMetadata, indicatorGeoJson) {
+  var targetSpatialUnitId = targetSpatialUnitMetadata.spatialUnitId;
   console.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
@@ -88,8 +90,18 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetDate, 
     .then(response => {
       // response.data should be the respective GeoJSON as String
       console.log("Received response code " + response.status);
-      if (response.status == 200)
-        return baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day;
+      if (response.status == 200){
+        var resultObject = {};
+        resultObject.indicatorId = targetIndicatorId;
+        resultObject.indicatorName = targetIndicatorName;
+        resultObject.spatialUnitId = targetSpatialUnitId;
+        resultObject.spatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
+        resultObject.targetDate = targetDate;
+        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day;
+
+        return resultObject;
+      }
+
       else
         throw Error("Error when persisting indicator. Response code " + response.status + ". Status text: " + response.statusText);
     })
@@ -104,28 +116,29 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetDate, 
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance.
  * targetIndicatorId String unique identifier of the indicator
+ * targetIndicatorName String name of the indicator
  * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
- * indicatorSpatialUnitsMap Map map of indicator entries, where key="targetSpatialUnitId" and value="indicatorGeoJson"
+ * indicatorSpatialUnitsMap Map map of indicator entries, where key="targetSpatialUnitMetadataObject" and value="indicatorGeoJson"
  *
  * returns array of URLs pointing to created resources
  **/
-exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetDate, indicatorSpatialUnitsMap) {
+exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, indicatorSpatialUnitsMap) {
   console.log("Sending PUT requests to persist indicators within KomMonitor data management API");
 
-  var urlResponseArray = new Array();
+  var responseArray = new Array();
 
   // var iterator = indicatorSpatialUnitsMap[Symbol.iterator]();
 
   // for (let indicatorSpatialUnitsEntry of iterator) {
   for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
     try{
-      var resultUrl = await putIndicatorById(baseUrlPath, targetIndicatorId, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
-      urlResponseArray.push(resultUrl);
+      var resultUrl = await putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
+      responseArray.push(resultUrl);
     }
     catch(error){
       throw error;
     }
   }
 
-  return urlResponseArray;
+  return responseArray;
 }

@@ -74,7 +74,7 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
       throw error;
     }
 
-    resultingIndicatorsMap.set(targetSpatialUnitId, indicatorGeoJSONForSpatialUnit);
+    resultingIndicatorsMap.set(spatialUnitEntry[0], indicatorGeoJSONForSpatialUnit);
   }
 
   return resultingIndicatorsMap;
@@ -89,10 +89,12 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       var scriptCodeAsByteArray;
       var georesourcesMap;
       var allSpatialUnits;
+      var targetIndicatorMetadata;
       try{
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
         allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
+        targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorById(kommonitorDataManagementURL, targetIndicatorId);
       }
       catch(error){
         console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
@@ -123,9 +125,9 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       //execute script to compute indicator
       var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
 
-      // result map containing entries where key="spatialUnitId" and value="computed indicator GeoJSON"
+      // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
       var resultingIndicatorsMap = new Map();
-      resultingIndicatorsMap.set(lowestSpatialUnit[0].spatialUnitId, indicatorGeoJson_lowestSpatialUnit);
+      resultingIndicatorsMap.set(lowestSpatialUnit[0], indicatorGeoJson_lowestSpatialUnit);
 
       // after computing the indicator for the lowest spatial unit
       // we can now aggregate the result to all remaining superior units!
@@ -143,9 +145,9 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
 
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
-      var urlsToPersistedResources;
+      var resultArray;
       try{
-        urlsToPersistedResources = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetDate, resultingIndicatorsMap);
+        resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDate, resultingIndicatorsMap);
 
       }
       catch(error){
@@ -153,7 +155,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         throw error;
       }
 
-      return urlsToPersistedResources;
+      return resultArray;
     }
     catch(err) {
         console.log("Error during execution of defaultIndicatorComputation with error: " + err);

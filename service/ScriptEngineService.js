@@ -77,17 +77,17 @@
         console.log("Successfully parsed request input parameters");
 
         console.log("Start indicator computation to persit the results within KomMonitor data management service.");
-        var urlsToCreatedResources = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
+        var resultArray = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
 
         console.log("attaching result to job");
-        job.data.result = urlsToCreatedResources;
+        job.data.result = resultArray;
 
         console.log("saving job, which was enriched with resulting URLs: " + job.data.result);
         job.data.progress = 100;
 
         console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
 
-        resolve(urlsToCreatedResources);
+        resolve(resultArray);
       }
       catch(error){
         console.error("Error while executing defaultIndicatorComputation. " + error);
