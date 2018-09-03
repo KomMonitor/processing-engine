@@ -34,18 +34,19 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
   console.log('Required Date before 5 years: ' + date_fiveBefore);
 
   // now we compute the new indicator 'wachstumsstress'
+  console.log("Compute indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " features");
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
     ewzGeoJSON.features.forEach(function(ewzFeature){
 
       if (targetSpatialUnitFeature.properties.spatialUnitId === ewzFeature.properties.spatialUnitId){
 
-        console.log('computing indicators for feature with id: ' + targetSpatialUnitFeature.properties.Stadtt_Nr);
-
         targetSpatialUnitFeature.properties[targetDate] = Math.abs(( ewzFeature.properties[targetDate] - ewzFeature.properties[date_fiveBefore] ) / ewzFeature.properties[date_fiveBefore]).toFixed(4);
       }
     });
   });
+
+  console.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
 };
@@ -59,6 +60,9 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   // aggregate indicator
 
   var indicatorFeatures = indicator_geoJSON.features;
+
+  console.log("Aggregate indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features");
+  console.log("Aggregating by checking spatial WITHIN for " + indicatorFeatures.length + " base features against the target features");
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
@@ -84,7 +88,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   	targetFeature.properties[targetDate] = targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature;
   });
 
-  return targetSpatialUnitFeatures;
+  return targetSpatialUnit_geoJSON;
 
 };
 
