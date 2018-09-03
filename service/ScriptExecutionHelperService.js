@@ -31,8 +31,7 @@ function identifyLowestSpatialUnit(allSpatialUnits){
   //   // expected output: Array [1, "bar"]
   // }
 
-  var iterator = allSpatialUnits[Symbol.iterator]();
-  for (let spatialUnitCandidate of iterator) {
+  for (const spatialUnitCandidate of allSpatialUnits) {
     // check if units propertyValue "nextLowerHierarchyLevel" is == null || undefined
     // then this is the searched lowest spatial unit
     var nextLowerHierarchyLevelPropertyValue = spatialUnitCandidate[0].nextLowerHierarchyLevel;
@@ -46,22 +45,34 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
   var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(idOfLowestSpatialUnit);
 
   // elements of remainingSpatialUnits are map items where key='metadata object holding all metadata properties' and value='features as GeoJSON string'
-  var spatialUnitIterator = remainingSpatialUnits[Symbol.iterator]();
+  console.log("start to aggregate indicators for upper spatial unit hierarchy levels.");
 
-  for (let spatialUnitEntry of spatialUnitIterator) {
+  for (const spatialUnitEntry of remainingSpatialUnits) {
     // looks like Array [key, value]
     var targetSpatialUnitId = spatialUnitEntry[0].spatialUnitId;
 
     var targetSpatialUnitGeoJson;
+    console.log("fetch spatialUnit as geoJSON with id " + targetSpatialUnitId + " for targetDate " + targetDate + " from dataManagement API for defaultIndicatorComputation.");
+
     try{
       targetSpatialUnitGeoJson = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
     }
     catch(error){
-      console.error("Error while fetching spatialUnit with id $(targetSpatialUnitId) within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      console.error("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " within dataManagement API for defaultIndicatorComputation. Error is: " + error);
       throw error;
     }
 
-    var indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
+    //TODO FIXME use direct lower spatial unit instead of lowest for better performance?
+    console.log("Aggregating indicator on targetSpatialUnit with id " + targetSpatialUnitId);
+
+    var indicatorGeoJSONForSpatialUnit;
+    try{
+      indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
+    }
+    catch(error){
+      console.error("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
+      throw error;
+    }
 
     resultingIndicatorsMap.set(targetSpatialUnitId, indicatorGeoJSONForSpatialUnit);
   }
@@ -69,11 +80,10 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
   return resultingIndicatorsMap;
 }
 
-function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
+async function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
   // TODO for each spatial unit perform script execution, receive response GeoJSON and make POST call to data management API
   // TODO for that compute for the lowest spatial unit and after that aggregate to all superior units!
   // TODO also receive default parameter values for script execution from data management API, should not be part of the script itself
-  return new Promise(async function(resolve, reject) {
 
     try {
       var scriptCodeAsByteArray;
@@ -86,7 +96,7 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       }
       catch(error){
         console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
-        reject(error);
+        throw error;
       }
 
       // will look like Array [metadataObject, geoJSON]
@@ -103,15 +113,12 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       }
       catch(error){
         console.error("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
-        reject(error);
+        throw error;
       }
 
-      var tmpFile = new tmp.File();
-      var tmpFilePath = tmpFile.path;
-
       // require the script code as new NodeJS module
-      fs.writeFileSync(tmpFilePath, scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require(tmpFilePath);
+      fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
+      var nodeModuleForIndicator = require("../tmp.js");
 
       //execute script to compute indicator
       var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
@@ -127,32 +134,31 @@ function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate,
       }
       catch(error){
         console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
-        reject(error);
+        throw error;
       }
 
       // delete temporarily stored nodeModule file synchronously
       // fs.unlinkSync("./temporaryNodeModule.js");
-      tmpFile.unlink();
+      fs.unlinkSync("./tmp.js");
 
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
-      var urlsToPersistedResources ;
+      var urlsToPersistedResources;
       try{
         urlsToPersistedResources = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetDate, resultingIndicatorsMap);
 
       }
       catch(error){
         console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
-        reject(error);
+        throw error;
       }
 
-      resolve(urlsToPersistedResources);
+      return urlsToPersistedResources;
     }
     catch(err) {
         console.log("Error during execution of defaultIndicatorComputation with error: " + err);
-        reject(err);
+        throw err;
     }
-  });
 }
 
 exports.executeDefaultComputation = executeDefaultComputation;

@@ -118,8 +118,13 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
 
   // for (let indicatorSpatialUnitsEntry of iterator) {
   for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
-    var resultUrl = await putIndicatorById(baseUrlPath, targetIndicatorId, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
-    urlResponseArray.push(resultUrl);
+    try{
+      var resultUrl = await putIndicatorById(baseUrlPath, targetIndicatorId, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
+      urlResponseArray.push(resultUrl);
+    }
+    catch(error){
+      throw error;
+    }
   }
 
   return urlResponseArray;

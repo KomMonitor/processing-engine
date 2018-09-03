@@ -23,65 +23,77 @@
   });
 
   customizedComputationQueue.on('succeeded', (job, result) => {
-  console.log(`Job ${job.id} succeeded.`);
-});
+    console.log(`Job ${job.id} succeeded.`);
+  });
 
-customizedComputationQueue.on('retrying', (job, err) => {
-  console.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
-});
+  customizedComputationQueue.on('retrying', (job, err) => {
+    console.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
+  });
 
-customizedComputationQueue.on('failed', (job, err) => {
-  console.log(`Job ${job.id} failed with error ${err.message}`);
-});
+  customizedComputationQueue.on('failed', (job, err) => {
+    console.log(`Job ${job.id} failed with error ${err.message}`);
+  });
+
+  defaultComputationQueue.on('succeeded', (job, result) => {
+    console.log(`Job ${job.id} succeeded.`);
+  });
+
+  defaultComputationQueue.on('retrying', (job, err) => {
+    console.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
+  });
+
+  defaultComputationQueue.on('failed', (job, err) => {
+    console.log(`Job ${job.id} failed with error ${err.message}`);
+  });
 
   // register process function to execute defaultIndicatorComputation jobs
   // this code will be executed when such a job is started
   defaultComputationQueue.process(function (job, done) {
     console.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
 
-    // here perform default computation
-    var scriptId = job.data.scriptId;
-    var targetIndicatorId = job.data.targetIndicatorId;
-    var targetDate = job.data.targetDate;
-    var baseIndicatorIds = job.data.baseIndicatorIds;
-    var georesourceIds = job.data.georesourceIds;
-    var defaultProcessParameters = job.data.defaultProcessParameters;
+    return new Promise(async function(resolve, reject) {
+      try{
 
-    console.log(`Submitted job data scriptId: ` + scriptId);
-    console.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
-    console.log(`Submitted job data targetDate: ` + targetDate);
-    console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
-    console.log(`Submitted job data georesourceIds: ` + georesourceIds);
-    console.log(`Number of submitted job data defaultProcessProperties: ` + defaultProcessProperties.length);
+        // here perform default computation
+        var scriptId = job.data.scriptId;
+        var targetIndicatorId = job.data.targetIndicatorId;
+        var targetDate = job.data.targetDate;
+        var baseIndicatorIds = job.data.baseIndicatorIds;
+        var georesourceIds = job.data.georesourceIds;
+        var defaultProcessParameters = job.data.defaultProcessParameters;
 
-    defaultProcessProperties.forEach(function(property) {
-      console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
-    });
+        console.log(`Submitted job data scriptId: ` + scriptId);
+        console.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
+        console.log(`Submitted job data targetDate: ` + targetDate);
+        console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
+        console.log(`Submitted job data georesourceIds: ` + georesourceIds);
+        console.log(`Number of submitted job data defaultProcessProperties: ` + defaultProcessProperties.length);
 
-    job.data.progress = 5;
-    job.save();
-    console.log("Successfully parsed request input parameters");
+        defaultProcessProperties.forEach(function(property) {
+          console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
+        });
 
-    // now fetch the resources from KomMonitor data management api
-    return ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties)
-    .then(function (urlsToCreatedResources) {
+        job.data.progress = 5;
+        console.log("Successfully parsed request input parameters");
 
-      console.log("attaching result to job");
-      job.data.result = urlsToCreatedResources;
+        console.log("Start indicator computation to persit the results within KomMonitor data management service.");
+        var urlsToCreatedResources = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
 
-      console.log("saving job, which was enriched with result: " + job.data.result);
-      job.data.progress = 100;
-      job.save();
+        console.log("attaching result to job");
+        job.data.result = urlsToCreatedResources;
 
-      console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
-      return done();
-    })
-    .catch(function (response) {
-      console.error("Error while executing defaultIndicatorComputation. " + response);
-      job.remove()
-        .then(() => console.log('Job was removed'))
-        .catch((error) => console.error("job could not be removed from defaultComputationQueue"));
-      throw response;
+        console.log("saving job, which was enriched with resulting URLs: " + job.data.result);
+        job.data.progress = 100;
+
+        console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
+
+        resolve(urlsToCreatedResources);
+      }
+      catch(error){
+        console.error("Error while executing defaultIndicatorComputation. " + error);
+        reject(error);
+      }
+
     });
 
   });
