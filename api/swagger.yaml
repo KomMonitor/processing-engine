@@ -360,7 +360,19 @@ definitions:
     description: "status information about the default execution of the target indicator."
     example:
       jobId: "jobId"
-      result: "[{'indicatorId':'indicatorId1','indicatorName':'Wachstumsstress', 'spatialUnitId':'spatialUnitId1','spatialUnitName':'Stadtteilebene', 'targetDate': '2018-01-01', 'urlToPersistedResource': 'URLtoResource'}, {'indicatorId':'indicatorId1','indicatorName':'Wachstumsstress', 'spatialUnitId':'spatialUnitId2','spatialUnitName':'Stadtbezirksebene', 'targetDate': '2018-01-01', 'urlToPersistedResource': 'URLtoResource'}]"
+      result:
+        - indicatorId: "indicatorId1"
+          indicatorName: "indicatorName"
+          spatialUnitId: "spatialUnitId1"
+          spatialUnitName: "spatialUnitName"
+          targetDate: "2018-01-01"
+          urlToPersistedResource: "UrlToResource"
+        - indicatorId: "indicatorId1"
+          indicatorName: "indicatorName"
+          spatialUnitId: "spatialUnitId2"
+          spatialUnitName: "spatialUnitName"
+          targetDate: "2018-01-01"
+          urlToPersistedResource: "UrlToResource"
       progress: 5
       error: "error"
       status: "Created"
@@ -391,7 +403,14 @@ definitions:
         description: "the target date according to the pattern 'YYY-MM-DD'"
       urlToPersistedResource:
         type: "string"
-        description: "the URL pointing to the persisted indicator within the KomMonitor data management API."        
+        description: "the URL pointing to the persisted indicator within the KomMonitor data management API."
+    example:
+      indicatorId: "indicatorId1"
+      indicatorName: "indicatorName"
+      spatialUnitId: "spatialUnitId1"
+      spatialUnitName: "spatialUnitName"
+      targetDate: "2018-01-01"
+      urlToPersistedResource: "UrlToResource"
 
 responses:
   UnauthorizedError:
