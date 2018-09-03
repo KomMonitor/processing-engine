@@ -228,7 +228,7 @@ definitions:
     required:
     - "jobId"
     - "progress"
-    - "result_geoJSON"
+    - "result_geoJSON_base64"
     - "status"
     properties:
       jobId:
@@ -248,10 +248,10 @@ definitions:
         type: "number"
         format: "int32"
         description: "the progress of indicator computation in percent."
-      result_geoJSON:
+      result_geoJSON_base64:
         type: "string"
         description: "the computed target indicator for the target spatial unit as\
-          \ valid GeoJSON string."
+          \ valid GeoJSON string encoded via Base64."
       error:
         type: "string"
         description: "an error message if an error occured during indicator computation.\
@@ -260,10 +260,10 @@ definitions:
       \ If the result was computed then it is also included within the response object."
     example:
       jobId: "jobId"
-      result_geoJSON: "result_geoJSON"
-      progress: 0.80082819046101150206595775671303272247314453125
+      result_geoJSON_base64: "result_geoJSON_base64"
+      progress: 100
       error: "error"
-      status: "ACCEPTED"
+      status: "Succeeded"
   DefaultIndicatorComputationInputType:
     type: "object"
     required:
@@ -327,7 +327,7 @@ definitions:
     required:
     - "jobId"
     - "progress"
-    - "result_url"
+    - "result_urls"
     - "status"
     properties:
       jobId:
@@ -347,9 +347,11 @@ definitions:
         type: "number"
         format: "int32"
         description: "the progress of indicator computation in percent."
-      result_url:
-        type: "string"
-        description: "the full URL to the freshly computed and persisted indicator."
+      result_urls:
+        type: "array"
+        description: "the full URLs to the freshly computed and persisted indicator for all spatialUnits as array of Strings."
+        items:
+          type: "string"
       error:
         type: "string"
         description: "an error message if an error occured during indicator computation.\
@@ -357,10 +359,10 @@ definitions:
     description: "status information about the default execution of the target indicator."
     example:
       jobId: "jobId"
-      result_url: "result_url"
-      progress: 0.80082819046101150206595775671303272247314453125
+      result_urls: "['result_url_1', 'result_url_2', 'result_url_3']"
+      progress: 5
       error: "error"
-      status: "ACCEPTED"
+      status: "Created"
 responses:
   UnauthorizedError:
     description: "API key is missing or invalid"

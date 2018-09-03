@@ -23,7 +23,7 @@
   });
 
   customizedComputationQueue.on('succeeded', (job, result) => {
-  console.log(`Job ${job.id} succeeded with result: ${result}`);
+  console.log(`Job ${job.id} succeeded.`);
 });
 
 customizedComputationQueue.on('retrying', (job, err) => {
@@ -126,8 +126,6 @@ customizedComputationQueue.on('failed', (job, err) => {
 
 
     return new Promise(async function(resolve, reject) {
-
-      var result;
       try{
 
         var scriptId = job.data.scriptId;
@@ -152,17 +150,18 @@ customizedComputationQueue.on('failed', (job, err) => {
         console.log("Successfully parsed request input parameters.");
         console.log("Start indicator computation.");
 
-        result = await ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties);
+        var geoJSON = await ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties);
 
         // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
-        console.log("attaching result to job");
-        job.data.result = result;
-
-        console.log("saving job, which was enriched with result: " + job.data.result);
+        console.log("encode result as Base64 String and attach it to job");
+        let buff = new Buffer(JSON.stringify(geoJSON));
+        let base64data = buff.toString('base64');
+        // let base64data = btoa(JSON.stringify(geoJSON));
+        job.data.result = base64data;
         job.data.progress = 100;
 
         console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ` + job.id + ` finished`);
-        resolve(result);
+        resolve(base64data);
       }
       catch(error){
         console.error("Error while executing customizedIndicatorComputation. " + error);
@@ -192,7 +191,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         //
         //{
         //    "jobId": "jobId",
-        //    "result_geoJSON": "result_geoJSON",
+        //    "result_geoJSON_base64": "result_geoJSON",
         //    "progress": 0.8008281904610115,
         //    "error": "error",
         //    "status": "ACCEPTED"
@@ -202,7 +201,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.jobId = job.id;
         response.status = job.status;
         response.progress = job.data.progress;
-        response.result_geoJSON = job.data.result;
+        response.result_geoJSON_base64 = job.data.result;
         response.error = undefined;
 
         console.log("returning following response object for job with id ${job.id}");
@@ -218,7 +217,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.jobId = jobId;
         response.status = undefined;
         response.progress = undefined;
-        response.result_geoJSON = undefined;
+        response.result_geoJSON_base64 = undefined;
         response.error = "No Job with id " + jobId + " could be found. Error message: " + error.message;
 
         console.log("returning following response object for job with id " + jobId);
@@ -253,7 +252,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         //  "jobId": "string",
         //  "status": "ACCEPTED",
         //  "progress": 0,
-        //  "result_url": "string",
+        //  "result_urls": ["string", "string", "string"],
         //  "error": "string"
         // }
 
@@ -261,7 +260,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.jobId = jobId;
         response.status = job.status;
         response.progress = job.data.progress;
-        response.result_url = job.data.result;
+        response.result_urls = job.data.result;
         response.error = undefined;
 
         console.log("returning following response object for job with id ${job.id}");
@@ -277,7 +276,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.jobId = jobId;
         response.status = undefined;
         response.progress = undefined;
-        response.result_url = undefined;
+        response.result_urls = undefined;
         response.error = "No Job with id " + jobId + " could be found. Error message: " + error.message;
 
         console.log("returning following response object for job with id " + jobId);
