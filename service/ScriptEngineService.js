@@ -60,7 +60,7 @@
         var targetDate = job.data.targetDate;
         var baseIndicatorIds = job.data.baseIndicatorIds;
         var georesourceIds = job.data.georesourceIds;
-        var defaultProcessParameters = job.data.defaultProcessParameters;
+        var defaultProcessProperties = job.data.defaultProcessProperties;
 
         console.log(`Submitted job data scriptId: ` + scriptId);
         console.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
