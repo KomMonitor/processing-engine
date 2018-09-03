@@ -94,7 +94,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
         allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
-        targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorById(kommonitorDataManagementURL, targetIndicatorId);
+        targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
       }
       catch(error){
         console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
