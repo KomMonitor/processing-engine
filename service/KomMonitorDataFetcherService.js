@@ -101,7 +101,7 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
     // get spatial units metadata to aquire knowledge of existing units
     var spatialUnitsMetadata;
     try{
-      spatialUnitsMetadata = await exports.fetchSpatialUnitsMetadata(targetDate);
+      spatialUnitsMetadata = await exports.fetchSpatialUnitsMetadata(baseUrlPath, targetDate);
     }
     catch(error){
       throw error;
