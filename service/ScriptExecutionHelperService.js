@@ -132,7 +132,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       // after computing the indicator for the lowest spatial unit
       // we can now aggregate the result to all remaining superior units!
       try{
-        resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator);
+        resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnit[0], targetDate, nodeModuleForIndicator);
       }
       catch(error){
         console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
