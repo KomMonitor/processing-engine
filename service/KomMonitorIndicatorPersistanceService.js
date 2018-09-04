@@ -40,6 +40,7 @@
 // }
 
   var indicatorFeatures = indicatorGeoJson.features;
+  console.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
   var putRequestBody = {};
   putRequestBody.applicableSpatialUnit = targetSpatialUnitId;
   putRequestBody.indicatorValues = new Array();
@@ -57,6 +58,8 @@
 
     putRequestBody.indicatorValues.push(indicatorValueObject);
   });
+
+  console.log("Number of produced PUT request body features: " + putRequestBody.indicatorValues.length);
 
   return putRequestBody;
  }
