@@ -75,13 +75,14 @@
  **/
 exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, targetSpatialUnitMetadata, indicatorGeoJson) {
   var targetSpatialUnitId = targetSpatialUnitMetadata.spatialUnitId;
+  var targetSpatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
   console.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
-  var putRequestBody = buildPutRequestBody(targetDate, targetSpatialUnitId, indicatorGeoJson);
+  var putRequestBody = buildPutRequestBody(targetDate, targetSpatialUnitName, indicatorGeoJson);
 
   //PUT /indicators/{indicatorId}
   return axios.put(baseUrlPath + "/indicators/" + targetIndicatorId,
@@ -97,7 +98,7 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndica
         resultObject.spatialUnitId = targetSpatialUnitId;
         resultObject.spatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
         resultObject.targetDate = targetDate;
-        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day;
+        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + targetIndicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day;
 
         return resultObject;
       }
