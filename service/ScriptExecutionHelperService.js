@@ -48,6 +48,11 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
   console.log("start to aggregate indicators for upper spatial unit hierarchy levels.");
 
   for (const spatialUnitEntry of remainingSpatialUnits) {
+
+    // create a deep copy of the javascript object. it will have no refererences to the original Object
+    // this is necessary as we intend to remove content within the computation script --> hence we need only a copy!!!
+    let indicatorOnLowestSpatialUnit_geoJson_copy = JSON.parse(JSON.stringify(indicatorOnLowestSpatialUnit_geoJson));
+
     // looks like Array [key, value]
     var targetSpatialUnitId = spatialUnitEntry[0].spatialUnitId;
 
@@ -67,7 +72,7 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
 
     var indicatorGeoJSONForSpatialUnit;
     try{
-      indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson);
+      indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson_copy);
     }
     catch(error){
       console.error("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
@@ -120,7 +125,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
 
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require("../tmp.js");
+      // var nodeModuleForIndicator = require("../tmp.js");
+      var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
       //execute script to compute indicator
       var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
