@@ -39,9 +39,14 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
   targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
     ewzGeoJSON.features.forEach(function(ewzFeature){
 
-      if (targetSpatialUnitFeature.properties.spatialUnitId === ewzFeature.properties.spatialUnitId){
+      if (String(targetSpatialUnitFeature.properties.spatialUnitFeatureId) === String(ewzFeature.properties.spatialUnitFeatureId)){
 
-        targetSpatialUnitFeature.properties[targetDate] = Math.abs(( ewzFeature.properties[targetDate] - ewzFeature.properties[date_fiveBefore] ) / ewzFeature.properties[date_fiveBefore]).toFixed(4);
+        // console.log("properties of ewz: " + ewzFeature.properties);
+        // console.log(JSON.stringify(ewzFeature.properties));
+        // console.log("ewz[targetDate]: " + ewzFeature.properties[targetDate] + "; ewz[targetDate-5years]: " + ewzFeature.properties[date_fiveBefore]);
+
+        targetSpatialUnitFeature.properties[targetDate] = Math.abs(( ewzFeature.properties[targetDate] - ewzFeature.properties[date_fiveBefore] ) / ewzFeature.properties[date_fiveBefore]);
+        // console.log("computed indicator value: " + targetSpatialUnitFeature.properties[targetDate]);
       }
     });
   });
@@ -61,7 +66,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 
   var indicatorFeatures = indicator_geoJSON.features;
 
-  console.log("Aggregate indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features");
+  console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features");
   console.log("Aggregating by checking spatial WITHIN for " + indicatorFeatures.length + " base features against the target features");
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
@@ -80,13 +85,18 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   			numberOfIndicatorFeaturesWithinTargetFeature++;
 
   			// calculate percentage of covered inhabitants
+        // console.log("add " + indicatorFeature.properties[targetDate] + " to " + targetFeature.properties[targetDate]);
   			targetFeature.properties[targetDate] += indicatorFeature.properties[targetDate];
   		}
   	}
 
+    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
-  	targetFeature.properties[targetDate] = targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature;
+  	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
+    // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
+
+  console.log("Aggregation finished");
 
   return targetSpatialUnit_geoJSON;
 
