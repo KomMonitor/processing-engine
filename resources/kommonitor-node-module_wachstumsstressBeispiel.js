@@ -2,6 +2,12 @@
 //turf for geometric topologic operations
 var turf = require('@turf/turf');
 
+
+// CONSTANTS DEFINITION
+const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+
+
+
 /**
 This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
 as method parameters that can be used within the method body.
@@ -39,7 +45,7 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
   targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
     ewzGeoJSON.features.forEach(function(ewzFeature){
 
-      if (String(targetSpatialUnitFeature.properties.spatialUnitFeatureId) === String(ewzFeature.properties.spatialUnitFeatureId)){
+      if (String(targetSpatialUnitFeature.properties[spatialUnitFeatureIdPropertyName]) === String(ewzFeature.properties[spatialUnitFeatureIdPropertyName])){
 
         // console.log("properties of ewz: " + ewzFeature.properties);
         // console.log(JSON.stringify(ewzFeature.properties));
