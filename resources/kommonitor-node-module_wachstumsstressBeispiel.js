@@ -72,21 +72,46 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 
   var indicatorFeatures = indicator_geoJSON.features;
 
-  console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features");
-  console.log("Aggregating by checking spatial WITHIN for " + indicatorFeatures.length + " base features against the target features");
+  console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features.");
+  console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
+  console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
+
+  var totalAggregatedIndicatorFeatures = 0;
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
+    // console.log("Simplifying targetFeature");
+    // targetFeature = turf.simplify(targetFeature, {tolerance: 0.01, highQuality: false, mutate: false});
+
   	targetFeature.properties[targetDate] = 0;
+    var targetFeature_bbox = turf.bbox(targetFeature);
+    var targetFeature_bboxPolygon = turf.bboxPolygon(targetFeature_bbox);
 
   	var numberOfIndicatorFeaturesWithinTargetFeature = 0;
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
+
   		var indicatorFeature = indicatorFeatures[index];
 
-  		if(turf.booleanWithin(indicatorFeature, targetFeature)){
-  			// remove from array
+      var indicatorFeature_bbox = turf.bbox(indicatorFeature);
+      var indicatorFeature_bboxPolygon = turf.bboxPolygon(indicatorFeature_bbox);
+
+      var indicatorFeature_bboxPolygon_area = turf.area(indicatorFeature_bboxPolygon);
+
+      // console.log("compute intersection");
+      var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
+      // if there is no intersection (features are disjoint) then skip this loop turn for current indicatorFeature
+      if (intersection == null || intersection == undefined)
+        continue;
+
+      var intersectionArea = turf.area(intersection);
+      var overlapInPercent = Math.abs( intersectionArea / indicatorFeature_bboxPolygon_area) * 100;
+
+      // if indicaturFeature overlaps for at least 60% with targetFeature, the assign it for aggregation to targetFeature
+  		if(overlapInPercent >= 90.0){
+  			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
+        index--;
 
   			numberOfIndicatorFeaturesWithinTargetFeature++;
 
@@ -96,13 +121,20 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   		}
   	}
 
-    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
+    console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
   	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
-    // console.log("resulting average value is " + targetFeature.properties[targetDate]);
+    totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
+    console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
 
   console.log("Aggregation finished");
+  console.log(totalAggregatedIndicatorFeatures + " features were aggregated to " + targetSpatialUnit_geoJSON.features.length + " targetFeatures");
+
+  if(indicatorFeatures.length > 0){
+    console.error("Spatial Aggregation failed for a total number of " + indicatorFeatures.length);
+    throw Error("Spatial Aggregation operation failed for a total number of " + indicatorFeatures.length);
+  }
 
   return targetSpatialUnit_geoJSON;
 
