@@ -12,7 +12,7 @@ as method parameters that can be used within the method body.
 @georesourcesMap Map map containing all georesources, wheres key='meaningful name of the georesource' and value='georesource as GeoJSON string' (they are used to execute geometric/toptologic computations)
 @processProperties an object containing variable additional properties that are required to perform the indicator computation
 */
-exports.computeIndicator = function(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processProperties){
+function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processProperties){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
 };
@@ -22,7 +22,7 @@ exports.computeIndicator = function(targetDate, targetSpatialUnit_geoJSON, baseI
 @targetSpatialUnit_geoJSON GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 @indicator_geoJSON GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter targetSpatialUnitFeatures
 */
-exports.aggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
+function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // aggregate indicator
 
 };
@@ -35,4 +35,35 @@ exports.aggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, ind
 exports.disaggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // disaggregate indicator
 
+};
+
+module.exports.computeIndicator = computeIndicator;
+module.exports.aggregateIndicator = aggregateIndicator;
+module.exports.disaggregateIndicator = disaggregateIndicator;
+
+
+// THE FOLLWING CODE LINES OFFER FUNCTIONS THAT CAN BE UTILIZED IN THE UPPER METHODS.
+// E.G. SPATIAL FUNCTIONS COMMENLY REQUIRED BY GIS TASKS
+
+var bbox = function(feature){
+  var feature_bbox = turf.bbox(feature);
+  return turf.bboxPolygon(feature_bbox);
+};
+
+var within_usingBBOX = function(indicatorFeature_bboxPolygon, targetFeature_bboxPolygon){
+  var indicatorFeature_bboxPolygon_area = turf.area(indicatorFeature_bboxPolygon);
+
+  var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
+  // if there is no intersection (features are disjoint) then skip this loop turn for current indicatorFeature
+  if (intersection == null || intersection == undefined)
+    return false;
+
+  var intersectionArea = turf.area(intersection);
+  var overlapInPercent = Math.abs( intersectionArea / indicatorFeature_bboxPolygon_area) * 100;
+
+  // if indicaturFeature overlaps for at least 90% with targetFeature, the assign it for aggregation to targetFeature
+  if(overlapInPercent >= 90.0)
+    return true;
+
+  return false;
 };

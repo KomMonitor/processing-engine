@@ -28,11 +28,6 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
   var targetDateArray = targetDate.split('-');
   var specifiedYear = targetDateArray[0];
 
-  // if (! Number.isSafeInteger(specifiedYear)){
-  //   console.log('failed at parsing year from targetDate. targetDate is: ' + targetDate);
-  //   throw new Error('failed at parsing year from targetDate. targetDate is: ' + targetDate);
-  // }
-
   var year_fiveBefore = specifiedYear - 5;
   var date_fiveBefore = year_fiveBefore + '-' + targetDateArray[1] + '-' + targetDateArray[2];
 
@@ -46,10 +41,6 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
     ewzGeoJSON.features.forEach(function(ewzFeature){
 
       if (String(targetSpatialUnitFeature.properties[spatialUnitFeatureIdPropertyName]) === String(ewzFeature.properties[spatialUnitFeatureIdPropertyName])){
-
-        // console.log("properties of ewz: " + ewzFeature.properties);
-        // console.log(JSON.stringify(ewzFeature.properties));
-        // console.log("ewz[targetDate]: " + ewzFeature.properties[targetDate] + "; ewz[targetDate-5years]: " + ewzFeature.properties[date_fiveBefore]);
 
         targetSpatialUnitFeature.properties[targetDate] = Math.abs(( ewzFeature.properties[targetDate] - ewzFeature.properties[date_fiveBefore] ) / ewzFeature.properties[date_fiveBefore]);
         // console.log("computed indicator value: " + targetSpatialUnitFeature.properties[targetDate]);
@@ -80,52 +71,32 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
-    // console.log("Simplifying targetFeature");
-    // targetFeature = turf.simplify(targetFeature, {tolerance: 0.01, highQuality: false, mutate: false});
-
   	targetFeature.properties[targetDate] = 0;
-    var targetFeature_bbox = turf.bbox(targetFeature);
-    var targetFeature_bboxPolygon = turf.bboxPolygon(targetFeature_bbox);
+    var targetFeature_bboxPolygon = bbox(targetFeature);
 
   	var numberOfIndicatorFeaturesWithinTargetFeature = 0;
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
 
   		var indicatorFeature = indicatorFeatures[index];
+      var indicatorFeature_bboxPolygon = bbox(indicatorFeature);
 
-      var indicatorFeature_bbox = turf.bbox(indicatorFeature);
-      var indicatorFeature_bboxPolygon = turf.bboxPolygon(indicatorFeature_bbox);
-
-      var indicatorFeature_bboxPolygon_area = turf.area(indicatorFeature_bboxPolygon);
-
-      // console.log("compute intersection");
-      var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
-      // if there is no intersection (features are disjoint) then skip this loop turn for current indicatorFeature
-      if (intersection == null || intersection == undefined)
-        continue;
-
-      var intersectionArea = turf.area(intersection);
-      var overlapInPercent = Math.abs( intersectionArea / indicatorFeature_bboxPolygon_area) * 100;
-
-      // if indicaturFeature overlaps for at least 60% with targetFeature, the assign it for aggregation to targetFeature
-  		if(overlapInPercent >= 90.0){
+      if(within_usingBBOX(indicatorFeature_bboxPolygon, targetFeature_bboxPolygon)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
 
   			numberOfIndicatorFeaturesWithinTargetFeature++;
 
-  			// calculate percentage of covered inhabitants
-        // console.log("add " + indicatorFeature.properties[targetDate] + " to " + targetFeature.properties[targetDate]);
   			targetFeature.properties[targetDate] += indicatorFeature.properties[targetDate];
   		}
   	}
 
-    console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
+    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
   	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
-    console.log("resulting average value is " + targetFeature.properties[targetDate]);
+    // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
 
   console.log("Aggregation finished");
@@ -137,7 +108,6 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   }
 
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**
@@ -153,3 +123,31 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
 module.exports.computeIndicator = computeIndicator;
 module.exports.aggregateIndicator = aggregateIndicator;
 module.exports.disaggregateIndicator = disaggregateIndicator;
+
+
+
+// THE FOLLWING CODE LINES OFFER FUNCTIONS THAT CAN BE UTILIZED IN THE UPPER METHODS.
+// E.G. SPATIAL FUNCTIONS COMMENLY REQUIRED BY GIS TASKS
+
+var bbox = function(feature){
+  var feature_bbox = turf.bbox(feature);
+  return turf.bboxPolygon(feature_bbox);
+};
+
+var within_usingBBOX = function(indicatorFeature_bboxPolygon, targetFeature_bboxPolygon){
+  var indicatorFeature_bboxPolygon_area = turf.area(indicatorFeature_bboxPolygon);
+
+  var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
+  // if there is no intersection (features are disjoint) then skip this loop turn for current indicatorFeature
+  if (intersection == null || intersection == undefined)
+    return false;
+
+  var intersectionArea = turf.area(intersection);
+  var overlapInPercent = Math.abs( intersectionArea / indicatorFeature_bboxPolygon_area) * 100;
+
+  // if indicaturFeature overlaps for at least 90% with targetFeature, the assign it for aggregation to targetFeature
+  if(overlapInPercent >= 90.0)
+    return true;
+
+  return false;
+};
