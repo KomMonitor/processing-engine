@@ -6,6 +6,7 @@ var KomMonitorIndicatorPersister = require('./KomMonitorIndicatorPersistanceServ
 var fs = require("fs");
 var dns = require("dns");
 var tmp = require("temporary");
+var progressHelper = require("./progressHelperService");
 
 // aquire connection details to KomMonitor data management api instance from environment variables
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
@@ -94,9 +95,13 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       var targetIndicatorMetadata;
       try{
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+        progressHelper.persistProgress(job.id, "defaultComputation", 20);
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+        progressHelper.persistProgress(job.id, "defaultComputation", 30);
         allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
+        progressHelper.persistProgress(job.id, "defaultComputation", 40);
         targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
+        progressHelper.persistProgress(job.id, "defaultComputation", 50);
       }
       catch(error){
         console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
@@ -119,6 +124,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         console.error("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
         throw error;
       }
+      progressHelper.persistProgress(job.id, "defaultComputation", 60);
 
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
@@ -131,6 +137,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
       var resultingIndicatorsMap = new Map();
       resultingIndicatorsMap.set(lowestSpatialUnit[0], indicatorGeoJson_lowestSpatialUnit);
+
+      progressHelper.persistProgress(job.id, "defaultComputation", 70);
 
       // after computing the indicator for the lowest spatial unit
       // we can now aggregate the result to all remaining superior units!
@@ -145,6 +153,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       // delete temporarily stored nodeModule file synchronously
       fs.unlinkSync("./tmp/tmp.js");
 
+      progressHelper.persistProgress(job.id, "defaultComputation", 80);
+
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
       var resultArray;
@@ -156,6 +166,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
         throw error;
       }
+
+      progressHelper.persistProgress(job.id, "defaultComputation", 90);
 
       return resultArray;
     }
@@ -177,13 +189,17 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
 
       try{
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-        job.data.progress = 20;
+        // job.data.progress = 20;
+        progressHelper.persistProgress(job.id, "customizedComputation", 20);
         baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, targetSpatialUnitId);
-        job.data.progress = 30;
+        // job.data.progress = 30;
+        progressHelper.persistProgress(job.id, "customizedComputation", 30);
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
-        job.data.progress = 40;
+        // job.data.progress = 40;
+        progressHelper.persistProgress(job.id, "customizedComputation", 40);
         targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
-        job.data.progress = 50;
+        // job.data.progress = 50;
+        progressHelper.persistProgress(job.id, "customizedComputation", 50);
       }
       catch(error){
         console.log("Error while fetching resources from dataManagement API for customizedIndicatorComputation. Error is: " + error);
@@ -195,12 +211,14 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       var nodeModuleForIndicator = require("../tmp/tmp.js");
       // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
-      job.data.progress = 60;
+      // job.data.progress = 60;
+      progressHelper.persistProgress(job.id, "customizedComputation", 60);
 
       //execute script to compute indicator
       var responseGeoJson = nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
 
-      job.data.progress = 90;
+      // job.data.progress = 90;
+      progressHelper.persistProgress(job.id, "customizedComputation", 90);
 
       // delete temporarily stored nodeModule file synchronously
       fs.unlinkSync("./tmp/tmp.js");

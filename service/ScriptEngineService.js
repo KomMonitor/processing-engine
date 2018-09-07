@@ -2,6 +2,7 @@
 
   var ScriptExecutionHelper = require('./ScriptExecutionHelperService');
   var fs = require("fs");
+  var progressHelper = require("./progressHelperService");
 
   var FileCleaner = require('cron-file-cleaner').FileCleaner;
 
@@ -82,7 +83,8 @@
           console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
         });
 
-        job.data.progress = 5;
+        // job.data.progress = 5;
+        progressHelper.persistProgress(job.id, "defaultComputation", 5);
         console.log("Successfully parsed request input parameters");
 
         console.log("Start indicator computation to persit the results within KomMonitor data management service.");
@@ -92,7 +94,8 @@
         job.data.result = resultArray;
 
         console.log("saving job, which was enriched with resulting URLs: " + job.data.result);
-        job.data.progress = 100;
+        // job.data.progress = 100;
+        progressHelper.persistProgress(job.id, "defaultComputation", 100);
 
         console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
 
@@ -168,7 +171,8 @@
           console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and value '" + property.value + "'");
         });
 
-        job.data.progress = 5;
+        // job.data.progress = 5;
+        progressHelper.persistProgress(job.id, "customizedComputation", 5);
         console.log("Successfully parsed request input parameters.");
         console.log("Start indicator computation.");
 
@@ -185,7 +189,8 @@
 
         job.data.result = tmpFilePath;
         // job.data.result = geoJSON;
-        job.data.progress = 100;
+        // job.data.progress = 100;
+        progressHelper.persistProgress(job.id, "customizedComputation", 100);
 
         console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ` + job.id + ` finished`);
         resolve(job.data.result);
@@ -229,7 +234,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         var response = {};
         response.jobId = job.id;
         response.status = job.status;
-        response.progress = job.data.progress;
+        response.progress = progressHelper.readProgress(job.id, "customizedComputation");
 
         var tmpFilePath = job.data.result;
 
@@ -294,7 +299,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         var response = {};
         response.jobId = jobId;
         response.status = job.status;
-        response.progress = job.data.progress;
+        response.progress = progressHelper.readProgress(job.id, "defaultComputation");;
         response.result_urls = job.data.result;
         response.error = job.data.error;
 
