@@ -10,7 +10,7 @@ var cors = require('cors');
 var serveStatic = require('serve-static');
 var app = require('connect')();
 const corsOptions = {
-  exposedHeaders: 'Location',
+  exposedHeaders: 'Location,Connection,Content-Type,Date,Transfer-Encoding',
 };
 app.use(cors(corsOptions));
 app.use(serveStatic("public"));

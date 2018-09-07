@@ -1,6 +1,7 @@
 'use strict';
 
   var ScriptExecutionHelper = require('./ScriptExecutionHelperService');
+  var fs = require("fs");
 
   // instantiate Bee-Queue worker queues, which can execute jobs
   // one for defaultIndicatorComputation
@@ -105,8 +106,7 @@
   customizedComputationQueue.process(async (job) => {
     console.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
 
-    // done(null, "simple result for testing");
-    // return;
+    // throw Error("Error");
 
     // here perform customized computation
 
@@ -171,7 +171,10 @@
         let buff = new Buffer(JSON.stringify(geoJSON));
         let base64data = buff.toString('base64');
 
-        job.data.result = base64data;
+        var tmpFilePath = "./tmpGeoJSON_jobid_" + job.id + ".geojson";
+        fs.writeFileSync(tmpFilePath, base64data);
+
+        job.data.result = tmpFilePath;
         // job.data.result = geoJSON;
         job.data.progress = 100;
 
@@ -218,7 +221,10 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.jobId = job.id;
         response.status = job.status;
         response.progress = job.data.progress;
-        response.result_geoJSON_base64 = job.data.result;
+
+        var tmpFilePath = job.data.result;
+
+        response.result_geoJSON_base64 = fs.readFileSync(tmpFilePath, 'utf8');
         response.error = job.data.error;
 
         console.log("returning following response object for job with id ${job.id}");
