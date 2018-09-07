@@ -225,7 +225,9 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
 
         var tmpFilePath = job.data.result;
 
-        response.result_geoJSON_base64 = fs.readFileSync(tmpFilePath, 'utf8');
+        if (tmpFilePath)
+          response.result_geoJSON_base64 = fs.readFileSync(tmpFilePath, 'utf8');
+
         response.error = job.data.error;
 
         console.log("returning response object for job with id " + job.id + ". It has status " + job.status + "");
