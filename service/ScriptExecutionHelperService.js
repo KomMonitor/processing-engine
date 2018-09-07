@@ -121,7 +121,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       }
 
       // require the script code as new NodeJS module
-      fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
+      fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("../tmp.js");
       // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
@@ -143,7 +143,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       }
 
       // delete temporarily stored nodeModule file synchronously
-      fs.unlinkSync("./tmp.js");
+      fs.unlinkSync("./tmp/tmp.js");
 
       // after computing the indicator for every spatial unit
       // send PUT requests against KomMonitor data management API to persist results permanently
@@ -191,7 +191,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       }
 
       // require the script code as new NodeJS module
-      fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
+      fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("../tmp.js");
       // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
@@ -203,7 +203,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       job.data.progress = 90;
 
       // delete temporarily stored nodeModule file synchronously
-      fs.unlinkSync("./tmp.js");
+      fs.unlinkSync("./tmp/tmp.js");
 
       return responseGeoJson;
     }
