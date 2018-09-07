@@ -171,7 +171,8 @@
         let buff = new Buffer(JSON.stringify(geoJSON));
         let base64data = buff.toString('base64');
 
-        var tmpFilePath = "./tmpGeoJSON_jobid_" + job.id + ".geojson";
+        var tmpFilePath = "./tmp/tmpGeoJSON_jobid_" + job.id + ".geojson";
+        console.log("save GeoJSON to tmp file for later retrieval: " + tmpFilePath);
         fs.writeFileSync(tmpFilePath, base64data);
 
         job.data.result = tmpFilePath;
@@ -227,7 +228,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.result_geoJSON_base64 = fs.readFileSync(tmpFilePath, 'utf8');
         response.error = job.data.error;
 
-        console.log("returning response object for job with id ${job.id}. It has status ${job.status}");
+        console.log("returning response object for job with id " + job.id + ". It has status " + job.status + "");
         // console.log(response);
 
         resolve(response);
