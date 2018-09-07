@@ -170,12 +170,13 @@
         console.log("encode result as Base64 String and attach it to job");
         let buff = new Buffer(JSON.stringify(geoJSON));
         let base64data = buff.toString('base64');
-        // let base64data = btoa(JSON.stringify(geoJSON));
+
         job.data.result = base64data;
+        // job.data.result = geoJSON;
         job.data.progress = 100;
 
         console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ` + job.id + ` finished`);
-        resolve(base64data);
+        resolve(job.data.result);
       }
       catch(error){
         console.error("Error while executing customizedIndicatorComputation. " + error);

@@ -86,9 +86,6 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
 }
 
 async function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
-  // TODO for each spatial unit perform script execution, receive response GeoJSON and make POST call to data management API
-  // TODO for that compute for the lowest spatial unit and after that aggregate to all superior units!
-  // TODO also receive default parameter values for script execution from data management API, should not be part of the script itself
 
     try {
       var scriptCodeAsByteArray;
@@ -125,8 +122,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
 
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
-      // var nodeModuleForIndicator = require("../tmp.js");
-      var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
+      var nodeModuleForIndicator = require("../tmp.js");
+      // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
       //execute script to compute indicator
       var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
@@ -146,7 +143,6 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       }
 
       // delete temporarily stored nodeModule file synchronously
-      // fs.unlinkSync("./temporaryNodeModule.js");
       fs.unlinkSync("./tmp.js");
 
       // after computing the indicator for every spatial unit
@@ -194,13 +190,10 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
         throw error;
       }
 
-      // var tmpFile = new tmp.File();
-      // var tmpFilePath = "./tmp.js";
-      // console.log("created temp file at: " + tmpFilePath);
-
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp.js", scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("../tmp.js");
+      // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
       job.data.progress = 60;
 
@@ -211,7 +204,6 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
 
       // delete temporarily stored nodeModule file synchronously
       fs.unlinkSync("./tmp.js");
-      // tmpFile.unlink();
 
       return responseGeoJson;
     }
