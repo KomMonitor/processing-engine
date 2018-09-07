@@ -122,7 +122,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
 
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require("../tmp.js");
+      var nodeModuleForIndicator = require("../tmp/tmp.js");
       // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
       //execute script to compute indicator
@@ -192,7 +192,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
 
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require("../tmp.js");
+      var nodeModuleForIndicator = require("../tmp/tmp.js");
       // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
 
       job.data.progress = 60;
