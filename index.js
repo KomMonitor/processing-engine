@@ -6,7 +6,15 @@ var fs = require('fs'),
     path = require('path'),
     http = require('http');
 
+var cors = require('cors');
+var serveStatic = require('serve-static');
 var app = require('connect')();
+const corsOptions = {
+  exposedHeaders: 'Location',
+};
+app.use(cors(corsOptions));
+app.use(serveStatic("public"));
+
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8086;

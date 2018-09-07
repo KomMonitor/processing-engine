@@ -17,8 +17,10 @@
     "axios": "^0.18.0",
     "bee-queue": "^1.2.2",
     "connect": "^3.2.0",
+    "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "js-yaml": "^3.3.0",
+    "serve-static": "^1.13.2",
     "swagger-tools": "^0.10.4",
     "temporary": "0.0.8"
   }
