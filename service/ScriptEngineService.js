@@ -3,6 +3,14 @@
   var ScriptExecutionHelper = require('./ScriptExecutionHelperService');
   var fs = require("fs");
 
+  var FileCleaner = require('cron-file-cleaner').FileCleaner;
+
+  // scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)
+  console.log("scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)");
+  var fileWatcher = new FileCleaner('./tmp/', 3600000,  '* */15 * * * *', {
+    start: true
+  });
+
   // instantiate Bee-Queue worker queues, which can execute jobs
   // one for defaultIndicatorComputation
   // another for customizedIndicatorComputation
