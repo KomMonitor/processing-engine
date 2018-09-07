@@ -32,7 +32,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 @targetSpatialUnit_geoJSON GeoJSON features of the target spatial unit, for which the indicator shall be disaggregated to
 @indicator_geoJSON GeoJSON features containing the indicator values for a spatial unit that can be disaggregated to the features of parameter targetSpatialUnitFeatures
 */
-exports.disaggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
+function disaggregateIndicator = function(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // disaggregate indicator
 
 };
