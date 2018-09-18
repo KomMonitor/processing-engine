@@ -187,6 +187,8 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       var georesourcesMap;
       var targetSpatialUnit_geoJSON;
 
+      // throw Error();
+
       try{
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
         // job.data.progress = 20;
@@ -209,7 +211,9 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("../tmp/tmp.js");
-      // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
+      // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_freiraumflaechenBeispiel.js");
+
+
 
       // job.data.progress = 60;
       progressHelper.persistProgress(job.id, "customizedComputation", 60);
