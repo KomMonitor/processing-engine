@@ -4,6 +4,7 @@ var turf = require('@turf/turf');
 
 
 // CONSTANTS DEFINITION
+const indicator_date_prefix = "DATE_";
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
 const wohnflaecheAttributeName = "Geschossflaeche";
 const freiflaechenAttributeName = "FreiSV2015";
@@ -35,7 +36,8 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
   var mindestgroesse;
   var schwellwertFlaechen;
 
-
+  targetDate = indicator_date_prefix + targetDate;
+  console.log('Target Date with prefix: ' + targetDate);
 
   processProperties.forEach(function(property){
     if(property.name === "RadiusKleineFreiflaechen")
@@ -55,7 +57,6 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
 var freifl_gross = [];
 
 console.log("Calculate area in hectar for dissolved frfl");
-console.log("Test LOG !!!!!!!!!!!!");
 
 rvrFlaechen.features.forEach(function(feature) {
 
@@ -233,6 +234,9 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features.");
   console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
   console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
+
+  targetDate = indicator_date_prefix + targetDate;
+  console.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
 

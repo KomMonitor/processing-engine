@@ -2,6 +2,10 @@
 //turf for geometric topologic operations
 var turf = require('@turf/turf');
 
+// CONSTANTS DEFINITION
+const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+const indicator_date_prefix = "DATE_";
+
 /**
 This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
 as method parameters that can be used within the method body.

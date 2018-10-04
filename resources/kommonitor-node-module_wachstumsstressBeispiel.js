@@ -5,6 +5,7 @@ var turf = require('@turf/turf');
 
 // CONSTANTS DEFINITION
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+const indicator_date_prefix = "DATE_";
 
 
 
@@ -33,6 +34,10 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
 
   console.log('Target Date: ' + targetDate);
   console.log('Required Date before 5 years: ' + date_fiveBefore);
+  targetDate = indicator_date_prefix + targetDate;
+  date_fiveBefore = indicator_date_prefix + date_fiveBefore;
+  console.log('Target Date with prefix: ' + targetDate);
+  console.log('Required Date before 5 years with prefix: ' + date_fiveBefore);
 
   // now we compute the new indicator 'wachstumsstress'
   console.log("Compute indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " features");
@@ -66,6 +71,9 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features.");
   console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
   console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
+
+  targetDate = indicator_date_prefix + targetDate;
+  console.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
 
