@@ -5,6 +5,8 @@
 
  const targetDateHelper = require("./TargetDateHelperService");
 
+ const indicator_date_prefix = "DATE_";
+
  function buildPutRequestBody(targetDate, targetSpatialUnitId, indicatorGeoJson){
    // the request body has follwing structure:
 // {
@@ -39,6 +41,7 @@
 //   "applicableSpatialUnit": "applicableSpatialUnit"
 // }
 
+  var targetDateWithPrefix = indicator_date_prefix + targetDate;
   var indicatorFeatures = indicatorGeoJson.features;
   console.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
   var putRequestBody = {};
@@ -52,7 +55,7 @@
 
     indicatorValueObject.valueMapping = new Array();
     var valueMappingObject = {};
-    valueMappingObject.indicatorValue = indicatorFeature.properties[targetDate];
+    valueMappingObject.indicatorValue = indicatorFeature.properties[targetDateWithPrefix];
     valueMappingObject.timestamp = targetDate;
     indicatorValueObject.valueMapping.push(valueMappingObject);
 
