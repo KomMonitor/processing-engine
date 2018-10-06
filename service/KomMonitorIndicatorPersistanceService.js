@@ -50,6 +50,11 @@
 
   // now for each element of inputFeatures create object and append to array
   indicatorFeatures.forEach(function(indicatorFeature){
+
+    if(indicatorFeature.properties[targetDateWithPrefix] == null || indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
+      throw new Error("Input contains NULL or NAN values as indicator value. Thus aborting request to update indicator features.");
+    }
+
     var indicatorValueObject = {};
     indicatorValueObject.spatialReferenceKey = indicatorFeature.properties.spatialUnitFeatureId;
 
