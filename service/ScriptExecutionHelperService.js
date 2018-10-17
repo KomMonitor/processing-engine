@@ -150,7 +150,6 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         throw error;
       }
 
-      delete require.cache[require.resolve('./tmp/tmp.js')];
       delete require.cache[require.resolve('../tmp/tmp.js')];
 
       // delete temporarily stored nodeModule file synchronously
@@ -227,7 +226,6 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       // job.data.progress = 90;
       progressHelper.persistProgress(job.id, "customizedComputation", 90);
 
-      delete require.cache[require.resolve('./tmp/tmp.js')];
       delete require.cache[require.resolve('../tmp/tmp.js')];
 
       // delete temporarily stored nodeModule file synchronously
