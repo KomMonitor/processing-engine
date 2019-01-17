@@ -20,25 +20,15 @@ const kommonitorDataManagementURL = "http://" + kommonitorDataManagementHost + "
 
 console.log("created the following base URL path to connect to KomMonitor Data Management API: " + kommonitorDataManagementURL);
 
-function identifyLowestSpatialUnit(allSpatialUnits){
-  var lowestSpatialUnit = null;
-
-  //iterator syntax exmple
-  // var iterator1 = map1[Symbol.iterator]();
-  //
-  // for (let item of iterator1) {
-  //   console.log(item);
-  //   // expected output: Array ["0", "foo"]
-  //   // expected output: Array [1, "bar"]
-  // }
+function identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputationName){
 
   for (const spatialUnitCandidate of allSpatialUnits) {
     // check if units propertyValue "nextLowerHierarchyLevel" is == null || undefined
     // then this is the searched lowest spatial unit
-    var nextLowerHierarchyLevelPropertyValue = spatialUnitCandidate[0].nextLowerHierarchyLevel;
-    if(nextLowerHierarchyLevelPropertyValue == null || nextLowerHierarchyLevelPropertyValue == undefined)
+    if(spatialUnitCandidate[0].spatialUnitLevel === lowestSpatialUnitForComputationName)
       return spatialUnitCandidate;
   }
+
 }
 
 async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator){
@@ -98,9 +88,10 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         progressHelper.persistProgress(job.id, "defaultComputation", 20);
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
         progressHelper.persistProgress(job.id, "defaultComputation", 30);
-        allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
-        progressHelper.persistProgress(job.id, "defaultComputation", 40);
         targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
+        progressHelper.persistProgress(job.id, "defaultComputation", 40);
+        var lowestSpatialUnitForComputationName = targetIndicatorMetadata.lowestSpatialUnitForComputation;
+        allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, lowestSpatialUnitForComputationName);
         progressHelper.persistProgress(job.id, "defaultComputation", 50);
       }
       catch(error){
@@ -109,7 +100,7 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       }
 
       // will look like Array [metadataObject, geoJSON]
-      var lowestSpatialUnit = identifyLowestSpatialUnit(allSpatialUnits);
+      var lowestSpatialUnit = identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputationName);
 
       // delete lowestSpatialUnit from map object and create a new var holding the remaining entries
       allSpatialUnits.delete(lowestSpatialUnit[0]);

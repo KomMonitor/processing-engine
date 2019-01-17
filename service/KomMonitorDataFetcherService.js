@@ -131,6 +131,69 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
     return spatialUnitsMap;
   }
 
+  function findIndexByAttributeValue(array, attributeName, attributeValue) {
+    for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attributeName] === attributeValue) {
+            return i;
+        }
+    }
+    return -1;
+  }
+
+  /**
+   * send request against KomMonitor DataManagement API to fetch the submitted targetSpatialUnit and all higher spatial units as a map
+   *
+   * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to fetch spatial unit
+   * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
+   * targetSpatialUnitName String the name of the targetSpatialUnit level
+   *
+   * returns spatial units as a map containing all units, wheres key='metadata object holding all metadata properties' and value='features as GeoJSON string'
+   **/
+    async function fetchTargetSpatialUnitAndHigher(baseUrlPath, targetDate, targetSpatialUnitName) {
+      console.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
+
+      var year = targetDateHelper.getYearFromTargetDate(targetDate);
+      var month = targetDateHelper.getMonthFromTargetDate(targetDate);
+      var day = targetDateHelper.getDayFromTargetDate(targetDate);
+
+      // get spatial units metadata to aquire knowledge of existing units
+      var spatialUnitsMetadata;
+      try{
+        spatialUnitsMetadata = await exports.fetchSpatialUnitsMetadata(baseUrlPath, targetDate);
+      }
+      catch(error){
+        throw error;
+      }
+
+      // filter the returned list of spatialUnitsMetadata objects and remove those that do not fulfill the criteria "be the target spatial unit or be a higher level"
+      // make us of the fact that KomMonitor data API returns a sorted list, where spatial units are sorted in decreasing order (beginning with the highest less detailed level)
+      // hence we may inspect the index of the target unit and simply remove all units that come after that index
+      var indexOfTargetUnit = findIndexByAttributeValue(spatialUnitsMetadata, "spatialUnitLevel", targetSpatialUnitName);
+      spatialUnitsMetadata.length = indexOfTargetUnit + 1; // this will remove all trailing elements after index
+
+      var spatialUnitsMap = new Map();
+      //iterate over all entries and fill map
+      try{
+        for (const spatialUnitMetadata of spatialUnitsMetadata){
+
+          var spatialUnitId = spatialUnitMetadata.spatialUnitId;
+          var spatialUnit_geoJSON;
+          try{
+            spatialUnit_geoJSON = await exports.fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
+          }
+          catch(error){
+            throw error;
+          }
+
+          spatialUnitsMap.set(spatialUnitMetadata, spatialUnit_geoJSON);
+        };
+      }
+      catch(error){
+        throw error;
+      }
+      return spatialUnitsMap;
+    }
+
 /**
  * send request against KomMonitor DataManagement API to fetch all available spatial units as a map
  *
