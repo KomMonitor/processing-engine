@@ -2,7 +2,7 @@
 
   var ScriptExecutionHelper = require('./ScriptExecutionHelperService');
   var fs = require("fs");
-  var progressHelper = require("./progressHelperService");
+  var progressHelper = require("./ProgressHelperService");
 
   var FileCleaner = require('cron-file-cleaner').FileCleaner;
 

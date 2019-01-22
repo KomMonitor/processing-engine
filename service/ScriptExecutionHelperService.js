@@ -6,7 +6,7 @@ var KomMonitorIndicatorPersister = require('./KomMonitorIndicatorPersistanceServ
 var fs = require("fs");
 var dns = require("dns");
 var tmp = require("temporary");
-var progressHelper = require("./progressHelperService");
+var progressHelper = require("./ProgressHelperService");
 
 // aquire connection details to KomMonitor data management api instance from environment variables
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
