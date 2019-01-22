@@ -12,7 +12,7 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:8086"
-basePath: "/rest/v1"
+basePath: "/processing"
 tags:
 - name: "script-engine"
   description: "Execute scripts"
