@@ -1,9 +1,7 @@
 FROM node:alpine
-RUN mkdir -p /code
+RUN mkdir -p /code/tmp
 COPY . /code
 WORKDIR /code
-VOLUME /tmp
-#TMPDIR /tmp
 RUN npm install
 
 EXPOSE 8086
