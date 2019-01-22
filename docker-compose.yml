@@ -13,13 +13,14 @@ services:
      - "8086:8086"
     networks:
      - kommonitor
-    volumes:
-     - .:/code
-     - /code/node_modules
     depends_on:
      - redis
-    env_file:
-    - processing-engine.env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KOMMONITOR_DATA_MANAGEMENT_HOST=kommonitor-data-management-api
+      - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
+      - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/management
   redis:
     image: redis:alpine
     networks:
