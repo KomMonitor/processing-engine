@@ -149,7 +149,7 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
    *
    * returns spatial units as a map containing all units, wheres key='metadata object holding all metadata properties' and value='features as GeoJSON string'
    **/
-    async function fetchTargetSpatialUnitAndHigher(baseUrlPath, targetDate, targetSpatialUnitName) {
+     exports.fetchTargetSpatialUnitAndHigher = async function(baseUrlPath, targetDate, targetSpatialUnitName) {
       console.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
 
       var year = targetDateHelper.getYearFromTargetDate(targetDate);
