@@ -6,7 +6,7 @@ var turf = require('@turf/turf');
 // CONSTANTS DEFINITION
 const indicator_date_prefix = "DATE_";
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
-const wohnflaecheAttributeName = "Geschossflaeche";
+const wohnflaecheAttributeName = "GF";
 const freiflaechenAttributeName = "FreiSV2015";
 const freiflaechenAttributeValue = "Frei";
 
@@ -95,58 +95,6 @@ console.log(freifl_allBuffers_featuresArray.length);
 
 var buffers_freifl_featureCollection = turf.featureCollection(freifl_allBuffers_featuresArray);
 
-// for (var index=0; index < buffers_freifl_featureCollection.features.length; index++){
-//
-// 	var feat = buffers_freifl_featureCollection.features[index];
-//
-// 	var type = feat.type;
-//    var geom=feat.geometry;
-//    var props=feat.properties;
-//
-//    if(geom != undefined){
-// 	   if (geom.type === 'MultiPolygon'){
-//
-// 		   numberOfReplacements++;
-//
-// 		  // console.log(feat);
-//
-// 		   //remove multipolygon feature
-// 	//	   console.log("Length before removal: " + rvrFlaechen.features.length);
-// 		   buffers_freifl_featureCollection.features.splice(index, 1);
-// 	//	   console.log("Length after removal: " + rvrFlaechen.features.length);
-//
-// 		  for (var i=0; i < geom.coordinates.length; i++){
-// 			  var polygon = {
-// 					'type':'Feature',
-// 					'geometry':{
-// 					   'type':'Polygon',
-// 					   'coordinates':geom.coordinates[i]
-// 						},
-// 				    'properties': props};
-//
-//
-// 			 // console.log("----------------------------------");
-//
-// 			//  console.log(polygon);
-//
-// 			  // append polygon to features
-// 			  buffers_freifl_featureCollection.features.push(polygon);
-// 		  }
-// 		}
-//    }
-//    else{
-// 		 console.log("WEIRD FEATURE !!!");
-// 		 console.log(feat);
-// 		buffers_freifl_featureCollection.features.splice(index, 1);
-//    }
-//  };
-
- // buffers_freifl_featureCollection.features.forEach(function(feature){
- // 	feature.properties.geomType = feature.geometry.type;
- // });
-
- // fs.writeFileSync('./buffers_freifl_featureCollection.json', JSON.stringify(buffers_freifl_featureCollection));
-
 
 // now iterate over all baubloecke
 // find alls wohngeb_centroids within the spatialUnitFeature and // remove them from features array
@@ -162,47 +110,51 @@ var wohngeb_centroids = turf.featureCollection(centroidsArray).features;
 
 console.log("calculating intersections between wohngeb and target spatial unit.");
 
-var spatialUnitIndex = 0;
 targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
-	wohngebWithinspatialUnitFeature = [];
 	spatialUnitFeature.properties.wohnflTotal = 0;
 	spatialUnitFeature.properties.wohnflCovered = 0;
+});
 
-	for (var pointIndex=0; pointIndex < wohngeb_centroids.length; pointIndex++){
+
+var wohngebLength = wohngeb_centroids.length;
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+    console.log("Processing: " + pointIndex + " / " + wohngebLength);
 
 		wohngebFeature = wohngeb_centroids[pointIndex];
-		if (turf.booleanWithin(wohngebFeature, spatialUnitFeature)){
-			wohngeb_centroids.splice(pointIndex, 1);
-      pointIndex--;
-			spatialUnitFeature.properties.wohnflTotal += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
 
-			// for each buffer_frfl feature check if wohngebFeature lies within it
-			for (var bufferIndex = 0; bufferIndex < buffers_freifl_featureCollection.features.length; bufferIndex++){
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
 
-				var buffer_frfl_feature = buffers_freifl_featureCollection.features[bufferIndex];
+      if (turf.booleanWithin(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
 
-				if(turf.booleanWithin(wohngebFeature, buffer_frfl_feature)){
-					// add wohnflaeche to wohnflCovered
-					spatialUnitFeature.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+  			// for each buffer_frfl feature check if wohngebFeature lies within it
+  			for (var bufferIndex = 0; bufferIndex < buffers_freifl_featureCollection.features.length; bufferIndex++){
 
-					break;
-				}
-			};
+  				var buffer_frfl_feature = buffers_freifl_featureCollection.features[bufferIndex];
 
-		}
+  				if(turf.booleanWithin(wohngebFeature, buffer_frfl_feature)){
+  					// add wohnflaeche to wohnflCovered
+  					spatialUnitFeat.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+
+  					break;
+  				}
+  			}
+
+        break;
+  		}
+    }
 	}
 
-	// calculate percentage of covered inhabitants
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+    spatialUnitFeature.properties[targetDate] = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal || 0;
 
-	spatialUnitFeature.properties[targetDate] = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal || 0;
-
-  delete spatialUnitFeature.properties.wohnflCovered;
-  delete spatialUnitFeature.properties.wohnflTotal;
-	// spatialUnitFeature.properties.inhabitantsCovered_absolute = Math.round(spatialUnitFeature.properties["2016_ins"] * spatialUnitFeature.properties.inhabitantsCovered_share);
-
-	spatialUnitIndex ++;
-	console.log("Computed spatialUnitFeature number " + spatialUnitIndex);
-});
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
+  });
 
   console.log("Computation of indicator finished");
 

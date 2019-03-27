@@ -6,9 +6,7 @@ var turf = require('@turf/turf');
 // CONSTANTS DEFINITION
 const indicator_date_prefix = "DATE_";
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
-const wohnflaecheAttributeName = "Geschossflaeche";
-const freiflaechenAttributeName = "FreiSV2015";
-const freiflaechenAttributeValue = "Frei";
+const wohnflaecheAttributeName = "GF";
 
 
 
@@ -27,133 +25,31 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
 
   // retrieve required baseIndicator using its meaningful name
   var wohngeb = georesourcesMap.get('Wohngebäude');
-  var rvrFlaechen = georesourcesMap.get('Realnutzungskartierung');
+  var supermaerkte = georesourcesMap.get('Lebensmittelnahversorgung');
 
   // divide by 1000 for meters-->kilometers
-  var radius_kleineFlaechen;
-  var radius_grosseFlaechen;
-  var mindestgroesse;
-  var schwellwertFlaechen;
+  var maxDistance;
 
   targetDate = indicator_date_prefix + targetDate;
   console.log('Target Date with prefix: ' + targetDate);
 
   processProperties.forEach(function(property){
-    if(property.name === "RadiusKleineFreiflaechen")
-      radius_kleineFlaechen = Number(property.value / 1000);
-    else if(property.name === "RadiusGrosseFreiflaechen")
-      radius_grosseFlaechen = Number(property.value / 1000);
-    else if(property.name === "FreiflaechenMindestgroesse")
-      mindestgroesse = property.value;
-    else if(property.name === "FreiflaechenSchwellwert")
-      schwellwertFlaechen = property.value;
+    if(property.name === "MaxDistance")
+      maxDistance = Number(property.value / 1000);
   });
 
-  console.log("radius small in km: " + radius_kleineFlaechen);
-  console.log("radius big in km: " + radius_grosseFlaechen);
+  console.log("max distance parameter in km: " + maxDistance);
 
-  var freifl_klein = [];
-var freifl_gross = [];
-
-console.log("Calculate area in hectar for dissolved frfl");
-
-rvrFlaechen.features.forEach(function(feature) {
-
-  if(feature.properties[freiflaechenAttributeName] === freiflaechenAttributeValue){
-    // area in squareMeters
-    var area_squareMeters = turf.area(feature);
-
-    var area_hectar = area_squareMeters / 10000;
-
-    // append area as new property
-    feature.properties.area_hectar = area_hectar;
-
-    // filter freiflaechen using area
-    if (area_hectar > mindestgroesse && area_hectar < schwellwertFlaechen){
-  	freifl_klein.push(feature);
-    }
-    else if (area_hectar >= schwellwertFlaechen){
-  	  freifl_gross.push(feature);
-    }
-  }
-
-});
-
-freifl_klein = turf.featureCollection(freifl_klein);
-freifl_gross = turf.featureCollection(freifl_gross);
-
-console.log("create buffers and filter freiflaechen");
+console.log("create buffers");
 
 // create buffers around freifl
-var buffer_kleineFreifl = turf.buffer(freifl_klein, radius_kleineFlaechen);
-var buffer_grosseFreifl = turf.buffer(freifl_gross, radius_grosseFlaechen);
+var buffer_supermaerkte = turf.buffer(supermaerkte, maxDistance);
 
-var freifl_allBuffers_featuresArray = buffer_grosseFreifl.features;
-console.log(freifl_allBuffers_featuresArray.length);
-freifl_allBuffers_featuresArray = freifl_allBuffers_featuresArray.concat(buffer_kleineFreifl.features);
-console.log(freifl_allBuffers_featuresArray.length);
+var buffer_supermaerkte_featuresArray = buffer_supermaerkte.features;
+console.log(buffer_supermaerkte_featuresArray.length);
 
-var buffers_freifl_featureCollection = turf.featureCollection(freifl_allBuffers_featuresArray);
+var buffers_supermaerkte_featureCollection = turf.featureCollection(buffer_supermaerkte_featuresArray);
 
-// for (var index=0; index < buffers_freifl_featureCollection.features.length; index++){
-//
-// 	var feat = buffers_freifl_featureCollection.features[index];
-//
-// 	var type = feat.type;
-//    var geom=feat.geometry;
-//    var props=feat.properties;
-//
-//    if(geom != undefined){
-// 	   if (geom.type === 'MultiPolygon'){
-//
-// 		   numberOfReplacements++;
-//
-// 		  // console.log(feat);
-//
-// 		   //remove multipolygon feature
-// 	//	   console.log("Length before removal: " + rvrFlaechen.features.length);
-// 		   buffers_freifl_featureCollection.features.splice(index, 1);
-// 	//	   console.log("Length after removal: " + rvrFlaechen.features.length);
-//
-// 		  for (var i=0; i < geom.coordinates.length; i++){
-// 			  var polygon = {
-// 					'type':'Feature',
-// 					'geometry':{
-// 					   'type':'Polygon',
-// 					   'coordinates':geom.coordinates[i]
-// 						},
-// 				    'properties': props};
-//
-//
-// 			 // console.log("----------------------------------");
-//
-// 			//  console.log(polygon);
-//
-// 			  // append polygon to features
-// 			  buffers_freifl_featureCollection.features.push(polygon);
-// 		  }
-// 		}
-//    }
-//    else{
-// 		 console.log("WEIRD FEATURE !!!");
-// 		 console.log(feat);
-// 		buffers_freifl_featureCollection.features.splice(index, 1);
-//    }
-//  };
-
- // buffers_freifl_featureCollection.features.forEach(function(feature){
- // 	feature.properties.geomType = feature.geometry.type;
- // });
-
- // fs.writeFileSync('./buffers_freifl_featureCollection.json', JSON.stringify(buffers_freifl_featureCollection));
-
-
-// now iterate over all baubloecke
-// find alls wohngeb_centroids within the spatialUnitFeature and // remove them from features array
-// summarize the total wohngeb_flaeche within spatialUnitFeature
-// for each wohngeb_centroid within spatialUnitFeature check if it intersects with frfl_buffers
-// if true then summarize to wohnflaeche_covered
-// compute the indicator values
 var centroidsArray = new Array();
 wohngeb.features.forEach(function(feature){
   centroidsArray.push(turf.centerOfMass(feature, feature.properties));
@@ -162,47 +58,59 @@ var wohngeb_centroids = turf.featureCollection(centroidsArray).features;
 
 console.log("calculating intersections between wohngeb and target spatial unit.");
 
-var spatialUnitIndex = 0;
 targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
-	wohngebWithinspatialUnitFeature = [];
 	spatialUnitFeature.properties.wohnflTotal = 0;
 	spatialUnitFeature.properties.wohnflCovered = 0;
+});
 
-	for (var pointIndex=0; pointIndex < wohngeb_centroids.length; pointIndex++){
+var numCoveredSupermaerkte = 0;
+var targetNumSupermaerkte = 3;
+
+var wohngebLength = wohngeb_centroids.length;
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+    console.log("Processing: " + pointIndex + " / " + wohngebLength);
+    //reset number of covered supermärkten
+    numCoveredSupermaerkte = 0;
 
 		wohngebFeature = wohngeb_centroids[pointIndex];
-		if (turf.booleanWithin(wohngebFeature, spatialUnitFeature)){
-			wohngeb_centroids.splice(pointIndex, 1);
-      pointIndex--;
-			spatialUnitFeature.properties.wohnflTotal += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
 
-			// for each buffer_frfl feature check if wohngebFeature lies within it
-			for (var bufferIndex = 0; bufferIndex < buffers_freifl_featureCollection.features.length; bufferIndex++){
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
 
-				var buffer_frfl_feature = buffers_freifl_featureCollection.features[bufferIndex];
+      if (turf.booleanWithin(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
 
-				if(turf.booleanWithin(wohngebFeature, buffer_frfl_feature)){
-					// add wohnflaeche to wohnflCovered
-					spatialUnitFeature.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+  			// for each buffer_frfl feature check if wohngebFeature lies within it
+  			for (var bufferIndex = 0; bufferIndex < buffers_supermaerkte_featureCollection.features.length; bufferIndex++){
 
-					break;
-				}
-			};
+  				var buffer_supermarkt_feature = buffers_supermaerkte_featureCollection.features[bufferIndex];
 
-		}
+  				if(turf.booleanWithin(wohngebFeature, buffer_supermarkt_feature)){
+
+            numCoveredSupermaerkte++;
+
+            if(numCoveredSupermaerkte === targetNumSupermaerkte){
+              // add wohnflaeche to wohnflCovered
+    					spatialUnitFeat.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+
+    					break;
+            }
+  				}
+  			}
+        break;
+  		}
+    }
 	}
 
-	// calculate percentage of covered inhabitants
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+    spatialUnitFeature.properties[targetDate] = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal || 0;
 
-	spatialUnitFeature.properties[targetDate] = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal || 0;
-
-  delete spatialUnitFeature.properties.wohnflCovered;
-  delete spatialUnitFeature.properties.wohnflTotal;
-	// spatialUnitFeature.properties.inhabitantsCovered_absolute = Math.round(spatialUnitFeature.properties["2016_ins"] * spatialUnitFeature.properties.inhabitantsCovered_share);
-
-	spatialUnitIndex ++;
-	console.log("Computed spatialUnitFeature number " + spatialUnitIndex);
-});
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
+  });
 
   console.log("Computation of indicator finished");
 
