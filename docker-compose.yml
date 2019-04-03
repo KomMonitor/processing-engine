@@ -21,6 +21,7 @@ services:
       - KOMMONITOR_DATA_MANAGEMENT_HOST=kommonitor-data-management-api
       - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
       - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/management
+      - OPEN_ROUTE_SERVICE_URL=openrouteservice
   redis:
     image: redis:alpine
     networks:
