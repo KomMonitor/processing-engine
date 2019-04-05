@@ -5,6 +5,10 @@
 
  const targetDateHelper = require("./TargetDateHelperService");
 
+ const simplifyGeometryParameterName = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_NAME;
+ const simplifyGeometryParameterValue = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE;
+ const simplifyGeometriesParameterQueryString = simplifyGeometryParameterName + "=" + simplifyGeometryParameterValue;
+
 /**
  * send request against KomMonitor DataManagement API to fetch scriptCode acording to id
  *
@@ -45,7 +49,7 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) 
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /spatial-units/{spatialUnitId}/{year}/{month}/{day}
-  return axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day)
+  return axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
@@ -221,7 +225,7 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /georesources/{georesouceId}/{year}/{month}/{day}
-  return axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day)
+  return axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
@@ -310,7 +314,7 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /indicators/{indicatorId}/{targetSpatialUnitId}/{year}/{month}/{day}
-  return axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day)
+  return axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       return response.data;
