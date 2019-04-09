@@ -264,6 +264,32 @@ function getTargetDateWithPropertyPrefix(targetDate){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#feature} to create a GeoJSON feature from a GeoJSON geometry.
+* @param {Object} geometry - a GeoJSON Geometry (consisting of attributes {@linkcode type} and {@linkcode coordinates}).
+* @returns {number} a GeoJSON feature wrapping the submitted GeoJSON geometry.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#feature}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function asFeature(geometry){
+  return turf.area(geoJSON);
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#featureCollection} to create a GeoJSON featureCollection from an array of GeoJSON features.
+* @param {Array<Object>} features - an array of GeoJSON features.
+* @returns {number} a GeoJSON FeatureCollection containing all the submitted features.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#featureCollection}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function asFeatureCollection(features){
+  return turf.area(geoJSON);
+};
+
+/**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
 * by computing the AVERAGE indicator value of all affected features. Internally this uses the function {@linkcode within_usingBBOX}
 * to determine which features of {@linkcode indicator_geoJSON} can be aggregated to which features of {@linkcode targetSpatialUnit_geoJSON}.
