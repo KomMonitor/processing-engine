@@ -171,6 +171,66 @@ module.exports.disaggregateIndicator = disaggregateIndicator;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+* Checks whether the submitted object is a valid GeoJSON feature.
+* The feature must contain a property {@linkcode "type"="Feature"} and a property named {@linkcode geometry}, which must have a {@linkcode coordinates} array and {@linkcode type} property.
+* The method does not check, if the feature contains a {@linkcode properties} attribute.
+* @param {Object} feature - a candidate for a GeoJSON feature.
+* @return returns {@linkcode true} if the object is a valid GeoJSON feature; {@linkcode false} otherwise
+* @function
+*/
+function isGeoJSONFeature(feature){
+  if (feature.type === "Feature" && feature.geometry && feature.geometry.coordinates && feature.geometry.type){
+    return true;
+  }
+  else{
+    return false;
+  }
+};
+
+/**
+* Checks whether the submitted object is a valid GeoJSON FeatureCollection.
+* The featureCollection must contain a property {@linkcode "type"="FeatureCollection"} and a property named {@linkcode features}, which must have an array of valid feature objects.
+* @param {Object} featureCollection - a candidate for a GeoJSON FeatureCollection.
+* @return returns {@linkcode true} if the object is a valid GeoJSON feature; {@linkcode false} otherwise
+* @see {@link isGeoJSONFeature}
+* @function
+*/
+function isGeoJSONFeatureCollection(featureCollection){
+
+  if(featureCollection.type === "FeatureCollection" && featureCollection.features){
+    // check all child features
+    var isValid = true;
+
+    for (var featureCandidate of featureCollection.features){
+      if (!isGeoJSONFeature(featureCandidate)){
+        isValid = false;
+        break;
+      }
+    }
+
+    if (isValid){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  else{
+    return false;
+  }
+};
+
+/**
+* Utility method to throw an {@linkcode Error} object with custom message.
+* @param {string} message - the message that the {@linkcode Error} object should contain
+* @throws {Error} throws an {@linkcode Error} object with custom error message
+* @function
+*/
+function throwError(message){
+  throw Error(message);
+};
+
+/**
 * Concatenates indicator date property prefix and submitted targetDate.
 * I.e, for exemplar targetDate="2018-01-01" it produces targetDateWithPrefix="DATE_2018-01-01".
 * This is necessary in order to query timeseries property values from an indicator feature.
@@ -323,6 +383,44 @@ function area(geoJSON){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted feature in square meters (m²) and append it as new property {@linkcode area_squareMeters}.
+* @param {Object} feature - A single GeoJSON feature with polygonal geometry.
+* @returns {Object} the GeoJSON feature containing its computed area in square meters (m²) within new property {@linkcode area_squareMeters}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#area}
+* @memberof API_HELPER_METHODS
+* @function
+*/
+function area_feature_asProperty(feature){
+  var isFeature = isGeoJSONFeature(feature);
+
+  if(! isFeature){
+    throwError("The submitted object is not a valid GeoJSON feature");
+  }
+  feature.properties.area_squareMeters = turf.area(feature);
+  return feature;
+};
+
+/**
+* Computes the area in square meters (m²) of each feature of the submitted {@linkcode featureCollection_geoJSON} as new property {@linkcode area_squareMeters}.
+* @param {Object} featureCollection_geoJSON - A GeoJSON FeatureCollection with polygonal geometries.
+* @returns {Object} the GeoJSON FeatureCollection containing the computed area of each feature in square meters (m²) within new property {@linkcode area_squareMeters} of each feature.
+* @see turf CONSTANT
+* @see {@link area_feature_asProperty}
+* @memberof API_HELPER_METHODS
+* @function
+*/
+function area_featureCollection_asProperty(featureCollection_geoJSON){
+
+  // replace all feature geometries with their bbox using turf.
+  for(var index=0; index < featureCollection_geoJSON.features.length; index++){
+    featureCollection_geoJSON.features[index] = area_feature_asProperty(featureCollection_geoJSON.features[index]);
+  };
+
+  return featureCollection_geoJSON;
+};
+
+/**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#bbox} and {@linkcode https://turfjs.org/docs/#bboxPolygon} to compute the bounding box of a single feature.
 * @param {Object} feature - a single GeoJSON feature consisting of geometry and properties, for whom the bounding box shall be computed
 * @returns {Object} the GeoJSON feature whose geometry has been replaced by the bounding box geometry of type {@linkcode Polygon}.
@@ -335,6 +433,8 @@ function area(geoJSON){
 */
 function bbox_feature(feature){
   var feature_bbox = turf.bbox(feature);
+  // make sure, that properties array will remain
+  feature_bbox.properties = feature.properties;
   return turf.bboxPolygon(feature_bbox);
 };
 
