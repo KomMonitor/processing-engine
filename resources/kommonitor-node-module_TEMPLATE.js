@@ -760,13 +760,13 @@ function within(feature_A, feature_B){
 /**
 * This method is an alternative implementation of a spatial {@linkcode within} function for spatial features.
 * First of all, it computes bounding boxes of the relevant features to speed up the spatial comparison.
-* Furthermore, instead of checking whether {@linkcode indicatorFeature} lies completely within {@linkcode targetFeature},
+* Furthermore, instead of checking whether {@linkcode feature_A} lies completely within {@linkcode feature_B},
 * it inspects whether the bounding boxes overlap for more than 90.0%. If the features's geometries might contain faulty coordinates for whatever reason that would
 * cause a strict spatial {@linkcode within} comparison to output {@linkcode false}, this alternative approach ensures that such small coordinate failures will still
 * result in a positive {@linkcode within} check.
-* @param {Object} indicatorFeature - a base indicator (input) feature as GeoJSON feature
-* @param {Object} targetFeature - a target feature as GeoJSON feature (for which indicator results shall be computed)
-* @returns {boolean} returns {@linkcode true} if the {@linkcode indicatorFeature} lies within {@linkcode targetFeature}
+* @param {Object} feature_A - a base indicator (input) feature as GeoJSON feature
+* @param {Object} feature_B - a target feature as GeoJSON feature (for which indicator results shall be computed)
+* @returns {boolean} returns {@linkcode true} if the {@linkcode feature_A} lies within {@linkcode feature_B}
 * (precisely, if their bounding boxes overlap for more than 90.0%); {@linkcode false} otherwise
 * @see {@link bbox_feature}
 * @see {@link area}
@@ -774,20 +774,20 @@ function within(feature_A, feature_B){
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-function within_usingBBOX(indicatorFeature, targetFeature){
-  var indicatorFeature_bboxPolygon = bbox_feature(indicatorFeature);
-  var targetFeature_bboxPolygon = bbox_feature(targetFeature);
-  var indicatorFeature_bboxPolygon_area = area(indicatorFeature_bboxPolygon);
+function within_usingBBOX(feature_A, feature_B){
+  var feature_A_bboxPolygon = bbox_feature(feature_A);
+  var feature_B_bboxPolygon = bbox_feature(feature_B);
+  var feature_A_bboxPolygon_area = area(feature_A_bboxPolygon);
 
-  var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
+  var intersection = turf.intersect(feature_B_bboxPolygon, feature_A_bboxPolygon);
   // if there is no intersection (features are disjoint) then skip this
   if (intersection == null || intersection == undefined)
     return false;
 
   var intersectionArea = area(intersection);
-  var overlapInPercent = Math.abs( intersectionArea / indicatorFeature_bboxPolygon_area) * 100;
+  var overlapInPercent = Math.abs( intersectionArea / feature_A_bboxPolygon_area) * 100;
 
-  // if indicaturFeature overlaps for at least 90% with targetFeature, the assign it for aggregation to targetFeature
+  // if indicaturFeature overlaps for at least 90% with feature_B, the assign it for aggregation to feature_B
   if(overlapInPercent >= 90.0)
     return true;
 
