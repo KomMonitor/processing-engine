@@ -27,6 +27,7 @@
     "temporary": "0.0.8"
   },
   "devDependencies": {
+    "docdash": "^1.1.0",
     "jsdoc": "^3.5.5"
   }
 }
