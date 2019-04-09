@@ -16,7 +16,15 @@
 */
 
 /**
-* @namespace API_HELPER_METHODS
+* @namespace API_HELPER_METHODS_UTILITY
+*/
+
+/**
+* @namespace API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+*/
+
+/**
+* @namespace API_HELPER_METHODS_STATISTICAL_OPERATIONS
 */
 
 /**
@@ -176,6 +184,7 @@ module.exports.disaggregateIndicator = disaggregateIndicator;
 * The method does not check, if the feature contains a {@linkcode properties} attribute.
 * @param {Object} feature - a candidate for a GeoJSON feature.
 * @return returns {@linkcode true} if the object is a valid GeoJSON feature; {@linkcode false} otherwise
+* @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
 function isGeoJSONFeature(feature){
@@ -193,6 +202,7 @@ function isGeoJSONFeature(feature){
 * @param {Object} featureCollection - a candidate for a GeoJSON FeatureCollection.
 * @return returns {@linkcode true} if the object is a valid GeoJSON feature; {@linkcode false} otherwise
 * @see {@link isGeoJSONFeature}
+* @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
 function isGeoJSONFeatureCollection(featureCollection){
@@ -224,6 +234,7 @@ function isGeoJSONFeatureCollection(featureCollection){
 * Utility method to throw an {@linkcode Error} object with custom message.
 * @param {string} message - the message that the {@linkcode Error} object should contain
 * @throws {Error} throws an {@linkcode Error} object with custom error message
+* @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
 function throwError(message){
@@ -239,7 +250,7 @@ function throwError(message){
 * indicatorFeature.properties[targetDateWithPrefix] --> indicator value, (if timestamp is present)
 * @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
 * @returns {string} the targetDate string with additional prefix from constant {@linkcode indicator_date_prefix} --> i.e. DATE_2018-01-01
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
 function getTargetDateWithPropertyPrefix(targetDate){
@@ -262,7 +273,7 @@ function getTargetDateWithPropertyPrefix(targetDate){
 * @returns {Object} a GeoJSON FeatureCollection of all features of the submitted {@linkcode targetSpatialUnit_geoJSON}
 * containing the resulting aggregated indicator values as new property according to the submitted {@linkcode targetDate}
 * @see {@link within_usingBBOX}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
@@ -323,7 +334,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 * @returns {Object} a GeoJSON FeatureCollection of all features of the submitted {@linkcode targetSpatialUnit_geoJSON}
 * containing the resulting aggregated indicator values as new property according to the submitted {@linkcode targetDate}
 * @see {@link within_usingBBOX}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
@@ -375,7 +386,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 * @returns {number} the area of the submitted features in square meters (m²)
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#area}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function area(geoJSON){
@@ -388,7 +399,7 @@ function area(geoJSON){
 * @returns {Object} the GeoJSON feature containing its computed area in square meters (m²) within new property {@linkcode area_squareMeters}.
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#area}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function area_feature_asProperty(feature){
@@ -407,7 +418,7 @@ function area_feature_asProperty(feature){
 * @returns {Object} the GeoJSON FeatureCollection containing the computed area of each feature in square meters (m²) within new property {@linkcode area_squareMeters} of each feature.
 * @see turf CONSTANT
 * @see {@link area_feature_asProperty}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function area_featureCollection_asProperty(featureCollection_geoJSON){
@@ -428,7 +439,7 @@ function area_featureCollection_asProperty(featureCollection_geoJSON){
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#bbox}
 * @see {@link https://turfjs.org/docs/#bboxPolygon}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function bbox_feature(feature){
@@ -445,7 +456,7 @@ function bbox_feature(feature){
 * The resulting features contain all properties of the original feature.
 * @see turf CONSTANT
 * @see {@link bbox_feature}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function bbox_featureCollection(featureCollection_geoJSON){
@@ -463,7 +474,7 @@ function bbox_featureCollection(featureCollection_geoJSON){
 * @returns {Object} the GeoJSON point feature representing the absolute geometric center of the submitted features.
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#center}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function center_geometric(geoJSON){
@@ -476,7 +487,7 @@ function center_geometric(geoJSON){
 * @returns {Object} the GeoJSON point feature representing the center of mass of the submitted features (using the mean of all vertices).
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#centerOfMass}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function center_geometric(geoJSON){
@@ -497,7 +508,7 @@ function center_geometric(geoJSON){
 * @see {@link bbox_feature}
 * @see {@link area}
 * @see {@link https://turfjs.org/docs/#intersect}
-* @memberof API_HELPER_METHODS
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function within_usingBBOX(indicatorFeature, targetFeature){
