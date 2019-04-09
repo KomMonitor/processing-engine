@@ -534,6 +534,109 @@ function center_mass(geoJSON){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#dissolve} to dissolve polygonal features.
+* @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be transformed to multiple polygons before dissolving).
+* @param {string} propertyName - OPTIONAL parameter that points to an existing attribute used by the features. If set, only features with the same attribute value will be dissolved.
+* @returns {Object} the GeoJSON FeatureCollection containing the dissolved features (Note that attributes are not merged/aggregated).
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#dissolve}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function dissolve(featureCollection_geoJSON, propertyName){
+
+  featureCollection_geoJSON = transformMultiPolygonsToPolygons(featureCollection_geoJSON);
+
+  if (propertyName){
+      return turf.dissolve(featureCollection_geoJSON, {propertyName: propertyName});
+  }
+  else{
+      return turf.dissolve(featureCollection_geoJSON);
+  }
+};
+
+/**
+* Inspects the submitted GeoJSON FeatureCollection for any features of type {@linkcode MultiPolygon}.
+* @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries
+* @returns {Object} returns {@linkcode true}, if the featureCollection contains any features of type {@linkcode MultiPolygon}; {@linkcode false} otherwise
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function hasMultiPolygon(featureCollection_geoJSON){
+  for (var feature of featureCollection_geoJSON){
+    if (feature.geometry.type === "MultiPolygon"){
+      return true;
+    }
+  }
+
+  return false;
+};
+
+/**
+* Inspects the submitted GeoJSON FeatureCollection for any features of type {@linkcode MultiPolygon} and replaces them by the individual features of type {@linkcode Polygon}.
+* @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be transformed to multiple polygons).
+* @returns {Object} the GeoJSON FeatureCollection without any features of type {@linkcode MultiPolygon}. It may have an increased number of total features,
+* if any {@linkcode MultiPolygon} was replaced by its individual features of type {@linkcode Polygon}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function transformMultiPolygonsToPolygons(featureCollection_geoJSON){
+
+  while(hasMultiPolygon(featureCollection_geoJSON)){
+    console.log("Replace MultiPolygon features by Polygons");
+    featureCollection_geoJSON = replaceMultiPolygonsByPolygons(featureCollection_geoJSON);
+  }
+
+  return featureCollection_geoJSON;
+};
+
+/**
+* Replces any feature of type {@linkcode MultiPolygon} of the submitted featureCollection by the individual features of type {@linkcode Polygon}.
+* @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be replaced by multiple polygons).
+* @returns {Object} the GeoJSON FeatureCollection where features of type {@linkcode MultiPolygon} have been replaced by multiple features of type {@linkcode Polygon}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function replaceMultiPolygonsByPolygons(featureCollection_geoJSON){
+  for (var index=0; index < featureCollection_geoJSON.features.length; index++){
+  	var feature = featureCollection_geoJSON.features[index];
+    var geom=feature.geometry;
+    var props=feature.properties;
+
+     if(geom != undefined){
+  	   if (geom.type === 'MultiPolygon'){
+  		   featureCollection_geoJSON.features.splice(index, 1);
+
+         // iterate over each Polygon wihin MultiPolygon
+  		  for (var i=0; i < geom.coordinates.length; i++){
+  			  var polygon = {
+  					'type':'Feature',
+  					'geometry':{
+  					   'type':'Polygon',
+  					   'coordinates':geom.coordinates[i]
+  						},
+  				    'properties': props}; // set properties from MultiPolygon as we do not know better
+
+  			  // append polygon to features
+  			  featureCollection_geoJSON.features.push(polygon);
+  		  }
+
+        // as we removed a feature, we must set the index back by 1
+        index --;
+  		}
+     }
+     else{
+       // simply remove the strange feature which contains no geometry
+  		featureCollection_geoJSON.features.splice(index, 1);
+      // as we removed a feature, we must set the index back by 1
+      index --;
+     }
+   };
+
+   return featureCollection_geoJSON;
+};
+
+/**
 * This method is an alternative implementation of a spatial {@linkcode within} function for spatial features.
 * First of all, it computes bounding boxes of the relevant features to speed up the spatial comparison.
 * Furthermore, instead of checking whether {@linkcode indicatorFeature} lies completely within {@linkcode targetFeature},
