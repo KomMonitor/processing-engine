@@ -529,7 +529,7 @@ function center_geometric(geoJSON){
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-function center_geometric(geoJSON){
+function center_mass(geoJSON){
   return turf.center(geoJSON);
 };
 
