@@ -534,10 +534,10 @@ function center_mass(geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#difference} to compute the {@linkcode difference} betwee two  polygonal GeoJSON features.
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#difference} to compute the {@linkcode difference} between two polygonal GeoJSON features.
 * @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
 * @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon} to difference from {@linkcode polygonFeature_A}
-* @returns {Object} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} showing the area of {@linkcode polygonFeature_A}
+* @returns {Object|null} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} showing the area of {@linkcode polygonFeature_A}
 * excluding the area of {@linkcode polygonFeature_B} (if empty returns {@linkcode null}).
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#difference}
@@ -567,6 +567,30 @@ function difference(polygonFeature_A, polygonFeature_B){
 * @function
 */
 function dissolve(featureCollection_geoJSON, propertyName){
+
+  featureCollection_geoJSON = transformMultiPolygonsToPolygons(featureCollection_geoJSON);
+
+  if (propertyName){
+      return turf.dissolve(featureCollection_geoJSON, {propertyName: propertyName});
+  }
+  else{
+      return turf.dissolve(featureCollection_geoJSON);
+  }
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#intersect} to compute the {@linkcode intersection} between two polygonal GeoJSON features.
+* @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
+* @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon}
+* @returns {Object|null} returns a GeoJSON feature representing the point(s) they share (in case of a {@linkcode Point} or {@linkcode MultiPoint} ),
+* the borders they share (in case of a {@linkcode LineString} or a {@linkcode MultiLineString} ), the area they share (in case of {@linkcode Polygon} or {@linkcode MultiPolygon} ).
+* If they do not share any point, returns {@linkcode null}
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#intersect}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function intersection(polygonFeature_A, polygonFeature_B){
 
   featureCollection_geoJSON = transformMultiPolygonsToPolygons(featureCollection_geoJSON);
 
@@ -662,7 +686,7 @@ function replaceMultiPolygonsByPolygons(featureCollection_geoJSON){
 /**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#union} to compute the {@linkcode union} of two or more polygonal GeoJSON features.
 * @param {Object} polygonFeatures - a variable number of GeoJSON features of type {@linkcode Polygon}, for whom the union shall be computed.
-* @returns {Object} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} representing the {@linkcode union} of the submitted features.
+* @returns {Object|null} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} representing the {@linkcode union} of the submitted features or {@linkcode null}.
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#union}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
