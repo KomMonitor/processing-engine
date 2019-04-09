@@ -371,7 +371,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
 /**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted features in square meters (m²).
-* @param {Object} geoJSON - any form of valid GeoJSON document (e.g. a single feature, or a FeatureCollection) with polygonal geometries.
+* @param {Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection) with polygonal geometries.
 * @returns {number} the area of the submitted features in square meters (m²)
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#area}
@@ -455,6 +455,32 @@ function bbox_featureCollection(featureCollection_geoJSON){
     featureCollection_geoJSON.features[index] = bbox_feature(featureCollection_geoJSON.features[index]);
   };
   return featureCollection_geoJSON;
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#center} to compute the geometric center point the submitted features.
+* @param {Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @returns {Object} the GeoJSON point feature representing the absolute geometric center of the submitted features.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#center}
+* @memberof API_HELPER_METHODS
+* @function
+*/
+function center_geometric(geoJSON){
+  return turf.center(geoJSON);
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#centerOfMass} to compute the center of mass of the submitted features.
+* @param {Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @returns {Object} the GeoJSON point feature representing the center of mass of the submitted features (using the mean of all vertices).
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#centerOfMass}
+* @memberof API_HELPER_METHODS
+* @function
+*/
+function center_geometric(geoJSON){
+  return turf.center(geoJSON);
 };
 
 /**
