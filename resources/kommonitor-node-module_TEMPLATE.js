@@ -450,16 +450,55 @@ function bbox_feature(feature){
 };
 
 /**
-* Computes the bounding boxes of all feature of the submitted {@linkcode featureCollection_geoJSON}.
+* Computes the bounding boxes of all features of the submitted {@linkcode featureCollection_geoJSON}.
 * @param {Object} featureCollection_geoJSON - a GeoJSON FeatureCollection consisting of multiple features, for whom the bounding box shall be computed
 * @returns {Object} the GeoJSON features whose geometry has been replaced by the bounding box geometry of type {@linkcode Polygon} as GeoJSON FeatureCollection.
-* The resulting features contain all properties of the original feature.
+* The resulting features contain all properties of the original features.
 * @see turf CONSTANT
 * @see {@link bbox_feature}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 function bbox_featureCollection(featureCollection_geoJSON){
+
+  // replace all feature geometries with their bbox using turf.
+  for(var index=0; index < featureCollection_geoJSON.features.length; index++){
+    featureCollection_geoJSON.features[index] = bbox_feature(featureCollection_geoJSON.features[index]);
+  };
+  return featureCollection_geoJSON;
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#buffer} to compute the buffered geometry a single feature.
+* @param {Object} feature - a single GeoJSON feature consisting of geometry and properties, for whom the buffer shall be computed
+* @param {number} radiusInMeters - the buffer radius in meters
+* @returns {Object} the GeoJSON feature whose geometry has been replaced by the buffered geometry of type {@linkcode Polygon}.
+* The resulting feature contains all properties of the original feature
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#buffer}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function buffer_feature(feature, radiusInMeters){
+  // turf.bbox uses kilometers as default radius unit
+  var feature_buffered = turf.buffer(feature, radiusInMeters/1000);
+  // make sure, that properties array will remain
+  feature_buffered.properties = feature.properties;
+  return feature_buffered;
+};
+
+/**
+* Computes the buffered geometries of all features of the submitted {@linkcode featureCollection_geoJSON}.
+* @param {Object} featureCollection_geoJSON - a GeoJSON FeatureCollection consisting of multiple features, for whom the buffers shall be computed
+* @param {number} radiusInMeters - the buffer radius in meters
+* @returns {Object} the GeoJSON features whose geometry has been replaced by the buffered geometry of type {@linkcode Polygon} as GeoJSON FeatureCollection.
+* The resulting features contain all properties of the original features.
+* @see turf CONSTANT
+* @see {@link buffer_feature}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function buffer_featureCollection(featureCollection_geoJSON, radiusInMeters){
 
   // replace all feature geometries with their bbox using turf.
   for(var index=0; index < featureCollection_geoJSON.features.length; index++){
