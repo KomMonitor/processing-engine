@@ -199,6 +199,8 @@ function getTargetDateWithPropertyPrefix(targetDate){
 * @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
 * @param {Object} targetSpatialUnit_geoJSON - GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 * @param {Object} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter {@linkcode targetSpatialUnitFeatures}
+* @returns {Object} a GeoJSON FeatureCollection of all features of the submitted {@linkcode targetSpatialUnit_geoJSON}
+* containing the resulting aggregated indicator values as new property according to the submitted {@linkcode targetDate}
 * @see {@link within_usingBBOX}
 * @memberof API_HELPER_METHODS
 * @function
@@ -258,6 +260,8 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 * @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
 * @param {Object} targetSpatialUnit_geoJSON - GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 * @param {Object} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter {@linkcode targetSpatialUnitFeatures}
+* @returns {Object} a GeoJSON FeatureCollection of all features of the submitted {@linkcode targetSpatialUnit_geoJSON}
+* containing the resulting aggregated indicator values as new property according to the submitted {@linkcode targetDate}
 * @see {@link within_usingBBOX}
 * @memberof API_HELPER_METHODS
 * @function
@@ -306,7 +310,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode bbox} and {@linkcode bboxPolygon} to compute the bounding box of a single feature.
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#bbox} and {@linkcode https://turfjs.org/docs/#bboxPolygon} to compute the bounding box of a single feature.
 * @param {Object} feature - a single GeoJSON feature consisting of geometry and properties, for whom the bounding box shall be computed
 * @returns {Object} the GeoJSON feature whose geometry has been replaced by the bounding box geometry of type {@linkcode Polygon}.
 * The resulting feature contains all properties of the original feature
@@ -316,9 +320,28 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 * @memberof API_HELPER_METHODS
 * @function
 */
-function bbox(feature){
+function bbox_feature(feature){
   var feature_bbox = turf.bbox(feature);
   return turf.bboxPolygon(feature_bbox);
+};
+
+/**
+* Computes the bounding boxes of all feature of the submitted {@linkcode featureCollection_geoJSON}.
+* @param {Object} featureCollection_geoJSON - a GeoJSON FeatureCollection consisting of multiple features, for whom the bounding box shall be computed
+* @returns {Object} the GeoJSON features whose geometry has been replaced by the bounding box geometry of type {@linkcode Polygon} as GeoJSON FeatureCollection.
+* The resulting features contain all properties of the original feature.
+* @see turf CONSTANT
+* @see {@link bbox_feature}
+* @memberof API_HELPER_METHODS
+* @function
+*/
+function bbox_featureCollection(featureCollection_geoJSON){
+
+  // replace all feature geometries with their bbox using turf.
+  for(var index=0; index < featureCollection_geoJSON.features.length; index++){
+    featureCollection_geoJSON.features[index] = bbox_feature(featureCollection_geoJSON.features[index]);
+  };
+  return featureCollection_geoJSON;
 };
 
 /**
@@ -332,15 +355,15 @@ function bbox(feature){
 * @param {Object} targetFeature - a target feature as GeoJSON feature (for which indicator results shall be computed)
 * @returns {boolean} returns {@linkcode true} if the {@linkcode indicatorFeature} lies within {@linkcode targetFeature}
 * (precisely, if their bounding boxes overlap for more than 90.0%); {@linkcode false} otherwise
-* @see {@link bbox}
+* @see {@link bbox_feature}
 * @see {@link https://turfjs.org/docs/#area}
 * @see {@link https://turfjs.org/docs/#intersect}
 * @memberof API_HELPER_METHODS
 * @function
 */
 function within_usingBBOX(indicatorFeature, targetFeature){
-  var indicatorFeature_bboxPolygon = bbox(indicatorFeature);
-  var targetFeature_bboxPolygon = bbox(targetFeature);
+  var indicatorFeature_bboxPolygon = bbox_feature(indicatorFeature);
+  var targetFeature_bboxPolygon = bbox_feature(targetFeature);
   var indicatorFeature_bboxPolygon_area = turf.area(indicatorFeature_bboxPolygon);
 
   var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
