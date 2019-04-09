@@ -534,6 +534,21 @@ function center_mass(geoJSON){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanContains} to check if the submitted GeoJSON feature {@linkcode feature_A} contains {@linkcode feature_B}.
+* @param {Object} feature_A - a GeoJSON feature of any type
+* @param {Object} feature_B - a GeoJSON feature of any type
+* @returns {boolean} returns {@linkcode true}, if {@linkcode feature_A} contains {@linkcode feature_B}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#booleanContains}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function contains(feature_A, feature_B){
+
+  return turf.booleanContains(feature_A, feature_B);
+};
+
+/**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#difference} to compute the {@linkcode difference} between two polygonal GeoJSON features.
 * @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
 * @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon} to difference from {@linkcode polygonFeature_A}
@@ -572,10 +587,25 @@ function dissolve(featureCollection_geoJSON, propertyName){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanDisjoint} to check if the submitted GeoJSON features are {@linkcode disjoint}.
+* @param {Object} feature_A - a GeoJSON feature of any type
+* @param {Object} feature_B - a GeoJSON feature of any type
+* @returns {boolean} returns {@linkcode true}, if both features are disjoint and thus do not intersect.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#booleanDisjoint}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function disjoint(feature_A, feature_B){
+
+  return turf.booleanDisjoint(feature_A, feature_B);
+};
+
+/**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanDisjoint} and negates the result to check if the submitted GeoJSON features {@linkcode intersect} each other.
 * @param {Object} feature_A - a GeoJSON feature of any type
 * @param {Object} feature_B - a GeoJSON feature of any type
-* @returns {Object|null} returns {@linkcode true}, if both features intersect each other.
+* @returns {boolean} returns {@linkcode true}, if both features intersect each other.
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#booleanDisjoint}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
@@ -604,9 +634,23 @@ function intersection(polygonFeature_A, polygonFeature_B){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanOverlap} to check if the submitted GeoJSON features overlaop each other.
+* @param {Object} feature_A - a GeoJSON feature of any type
+* @param {Object} feature_B - a GeoJSON feature of any type
+* @returns {boolean} returns {@linkcode true}, if {@linkcode feature_A} overlaps partially with {@linkcode feature_B}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#booleanOverlap}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function overlap(feature_A, feature_B){
+  return turf.booleanOverlap(feature_A, feature_B);
+};
+
+/**
 * Inspects the submitted GeoJSON FeatureCollection for any features of type {@linkcode MultiPolygon}.
 * @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries
-* @returns {Object} returns {@linkcode true}, if the featureCollection contains any features of type {@linkcode MultiPolygon}; {@linkcode false} otherwise
+* @returns {boolean} returns {@linkcode true}, if the featureCollection contains any features of type {@linkcode MultiPolygon}; {@linkcode false} otherwise
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
@@ -696,6 +740,21 @@ function replaceMultiPolygonsByPolygons(featureCollection_geoJSON){
 */
 function union(polygonFeature_A, polygonFeature_B){
   return turf.union(polygonFeature_A, polygonFeature_B);
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanWithin} to check if the submitted GeoJSON feature {@linkcode feature_A} lies within {@linkcode feature_B}.
+* @param {Object} feature_A - a GeoJSON feature of any type
+* @param {Object} feature_B - a GeoJSON feature of any type
+* @returns {boolean} returns {@linkcode true}, if {@linkcode feature_A} lies within {@linkcode feature_B}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#booleanWithin}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function within(feature_A, feature_B){
+
+  return turf.booleanWithin(feature_A, feature_B);
 };
 
 /**
