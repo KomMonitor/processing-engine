@@ -534,6 +534,29 @@ function center_mass(geoJSON){
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#difference} to compute the {@linkcode difference} betwee two  polygonal GeoJSON features.
+* @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
+* @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon} to difference from {@linkcode polygonFeature_A}
+* @returns {Object} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} showing the area of {@linkcode polygonFeature_A}
+* excluding the area of {@linkcode polygonFeature_B} (if empty returns {@linkcode null}).
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#difference}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function difference(polygonFeature_A, polygonFeature_B){
+
+  featureCollection_geoJSON = transformMultiPolygonsToPolygons(featureCollection_geoJSON);
+
+  if (propertyName){
+      return turf.dissolve(featureCollection_geoJSON, {propertyName: propertyName});
+  }
+  else{
+      return turf.dissolve(featureCollection_geoJSON);
+  }
+};
+
+/**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#dissolve} to dissolve polygonal features.
 * @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be transformed to multiple polygons before dissolving).
 * @param {string} propertyName - OPTIONAL parameter that points to an existing attribute used by the features. If set, only features with the same attribute value will be dissolved.
@@ -634,6 +657,27 @@ function replaceMultiPolygonsByPolygons(featureCollection_geoJSON){
    };
 
    return featureCollection_geoJSON;
+};
+
+/**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#union} to compute the {@linkcode union} of two or more polygonal GeoJSON features.
+* @param {Object} polygonFeatures - a variable number of GeoJSON features of type {@linkcode Polygon}, for whom the union shall be computed.
+* @returns {Object} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} representing the {@linkcode union} of the submitted features.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#union}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function union(...polygonFeatures: any[]){
+
+  featureCollection_geoJSON = transformMultiPolygonsToPolygons(featureCollection_geoJSON);
+
+  if (propertyName){
+      return turf.dissolve(featureCollection_geoJSON, {propertyName: propertyName});
+  }
+  else{
+      return turf.dissolve(featureCollection_geoJSON);
+  }
 };
 
 /**
