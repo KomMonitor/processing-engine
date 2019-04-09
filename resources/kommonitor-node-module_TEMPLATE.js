@@ -310,6 +310,19 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 };
 
 /**
+* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted features in square meters (m²).
+* @param {Object} geoJSON - any form of valid GeoJSON document (e.g. a single feature, or a FeatureCollection) with polygonal geometries.
+* @returns {number} the area of the submitted features in square meters (m²)
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#area}
+* @memberof API_HELPER_METHODS
+* @function
+*/
+function area(geoJSON){
+  return turf.area(geoJSON);
+};
+
+/**
 * encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#bbox} and {@linkcode https://turfjs.org/docs/#bboxPolygon} to compute the bounding box of a single feature.
 * @param {Object} feature - a single GeoJSON feature consisting of geometry and properties, for whom the bounding box shall be computed
 * @returns {Object} the GeoJSON feature whose geometry has been replaced by the bounding box geometry of type {@linkcode Polygon}.
@@ -356,7 +369,7 @@ function bbox_featureCollection(featureCollection_geoJSON){
 * @returns {boolean} returns {@linkcode true} if the {@linkcode indicatorFeature} lies within {@linkcode targetFeature}
 * (precisely, if their bounding boxes overlap for more than 90.0%); {@linkcode false} otherwise
 * @see {@link bbox_feature}
-* @see {@link https://turfjs.org/docs/#area}
+* @see {@link area}
 * @see {@link https://turfjs.org/docs/#intersect}
 * @memberof API_HELPER_METHODS
 * @function
@@ -364,14 +377,14 @@ function bbox_featureCollection(featureCollection_geoJSON){
 function within_usingBBOX(indicatorFeature, targetFeature){
   var indicatorFeature_bboxPolygon = bbox_feature(indicatorFeature);
   var targetFeature_bboxPolygon = bbox_feature(targetFeature);
-  var indicatorFeature_bboxPolygon_area = turf.area(indicatorFeature_bboxPolygon);
+  var indicatorFeature_bboxPolygon_area = area(indicatorFeature_bboxPolygon);
 
   var intersection = turf.intersect(targetFeature_bboxPolygon, indicatorFeature_bboxPolygon);
   // if there is no intersection (features are disjoint) then skip this
   if (intersection == null || intersection == undefined)
     return false;
 
-  var intersectionArea = turf.area(intersection);
+  var intersectionArea = area(intersection);
   var overlapInPercent = Math.abs( intersectionArea / indicatorFeature_bboxPolygon_area) * 100;
 
   // if indicaturFeature overlaps for at least 90% with targetFeature, the assign it for aggregation to targetFeature
