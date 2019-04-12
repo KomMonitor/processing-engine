@@ -61,6 +61,17 @@ const jStat = require('jStat').jStat;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+* This constant contains the target URL for queries against openrouteservice (ORS) instance (version 4.7.2).
+* Per default, it takes the value from the environment variable {@linkcode OPEN_ROUTE_SERVICE_URL}, which should
+* be already configured by system administrator. Otherwise users may overwrite it and set an individual target URL.
+* Note, that the methods that internally make use of this constant to perform ORS queries, expect version 4.7.2 without API-Key Authorization.
+* @type {string}
+* @memberof CONSTANTS
+* @constant
+*/
+const openrouteservice_url = process.env.OPEN_ROUTE_SERVICE_URL;
+
+/**
 * This constant is required to aquire the unique identifier of a certain feature of a spatial unit
 * @type {string}
 * @memberof CONSTANTS
@@ -197,6 +208,24 @@ function isGeoJSONFeature(feature){
 };
 
 /**
+* Checks whether the submitted object is a valid GeoJSON feature with geometryType {@linkcode Point}.
+* The feature must contain a property {@linkcode "type"="Feature"} and a property named {@linkcode geometry}, which must have a {@linkcode coordinates} array and {@linkcode type=Point} property.
+* The method does not check, if the feature contains a {@linkcode properties} attribute.
+* @param {Object} feature - a candidate for a GeoJSON point feature.
+* @return returns {@linkcode true} if the object is a valid GeoJSON point feature; {@linkcode false} otherwise
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function isGeoJSONPointFeature(feature){
+  if (feature.type === "Feature" && feature.geometry && feature.geometry.coordinates && feature.geometry.type === 'Point'){
+    return true;
+  }
+  else{
+    return false;
+  }
+};
+
+/**
 * Checks whether the submitted object is a valid GeoJSON FeatureCollection.
 * The featureCollection must contain a property {@linkcode "type"="FeatureCollection"} and a property named {@linkcode features}, which must have an array of valid feature objects.
 * @param {Object} featureCollection - a candidate for a GeoJSON FeatureCollection.
@@ -264,7 +293,7 @@ function getTargetDateWithPropertyPrefix(targetDate){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#feature} to create a GeoJSON feature from a GeoJSON geometry.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#feature} to create a GeoJSON feature from a GeoJSON geometry.
 * @param {Object} geometry - a GeoJSON Geometry (consisting of attributes {@linkcode type} and {@linkcode coordinates}).
 * @returns {number} a GeoJSON feature wrapping the submitted GeoJSON geometry.
 * @see turf CONSTANT
@@ -277,7 +306,7 @@ function asFeature(geometry){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#featureCollection} to create a GeoJSON featureCollection from an array of GeoJSON features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#featureCollection} to create a GeoJSON featureCollection from an array of GeoJSON features.
 * @param {Array<Object>} features - an array of GeoJSON features.
 * @returns {number} a GeoJSON FeatureCollection containing all the submitted features.
 * @see turf CONSTANT
@@ -407,7 +436,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted features in square meters (m²).
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted features in square meters (m²).
 * @param {Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection) with polygonal geometries.
 * @returns {number} the area of the submitted features in square meters (m²)
 * @see turf CONSTANT
@@ -420,7 +449,7 @@ function area(geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted feature in square meters (m²) and append it as new property {@linkcode area_squareMeters}.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted feature in square meters (m²) and append it as new property {@linkcode area_squareMeters}.
 * @param {Object} feature - A single GeoJSON feature with polygonal geometry.
 * @returns {Object} the GeoJSON feature containing its computed area in square meters (m²) within new property {@linkcode area_squareMeters}.
 * @see turf CONSTANT
@@ -458,7 +487,7 @@ function area_featureCollection_asProperty(featureCollection_geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#bbox} and {@linkcode https://turfjs.org/docs/#bboxPolygon} to compute the bounding box of a single feature.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#bbox} and {@linkcode https://turfjs.org/docs/#bboxPolygon} to compute the bounding box of a single feature.
 * @param {Object} feature - a single GeoJSON feature consisting of geometry and properties, for whom the bounding box shall be computed
 * @returns {Object} the GeoJSON feature whose geometry has been replaced by the bounding box geometry of type {@linkcode Polygon}.
 * The resulting feature contains all properties of the original feature
@@ -495,7 +524,7 @@ function bbox_featureCollection(featureCollection_geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#buffer} to compute the buffered geometry a single feature.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#buffer} to compute the buffered geometry a single feature.
 * @param {Object} feature - a single GeoJSON feature consisting of geometry and properties, for whom the buffer shall be computed
 * @param {number} radiusInMeters - the buffer radius in meters
 * @returns {Object} the GeoJSON feature whose geometry has been replaced by the buffered geometry of type {@linkcode Polygon}.
@@ -534,7 +563,7 @@ function buffer_featureCollection(featureCollection_geoJSON, radiusInMeters){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#center} to compute the geometric center point the submitted features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#center} to compute the geometric center point the submitted features.
 * @param {Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
 * @returns {Object} the GeoJSON point feature representing the absolute geometric center of the submitted features.
 * @see turf CONSTANT
@@ -547,7 +576,7 @@ function center_geometric(geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#centerOfMass} to compute the center of mass of the submitted features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#centerOfMass} to compute the center of mass of the submitted features.
 * @param {Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
 * @returns {Object} the GeoJSON point feature representing the center of mass of the submitted features (using the mean of all vertices).
 * @see turf CONSTANT
@@ -560,7 +589,7 @@ function center_mass(geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanContains} to check if the submitted GeoJSON feature {@linkcode feature_A} contains {@linkcode feature_B}.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanContains} to check if the submitted GeoJSON feature {@linkcode feature_A} contains {@linkcode feature_B}.
 * @param {Object} feature_A - a GeoJSON feature of any type
 * @param {Object} feature_B - a GeoJSON feature of any type
 * @returns {boolean} returns {@linkcode true}, if {@linkcode feature_A} contains {@linkcode feature_B}.
@@ -575,7 +604,7 @@ function contains(feature_A, feature_B){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#difference} to compute the {@linkcode difference} between two polygonal GeoJSON features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#difference} to compute the {@linkcode difference} between two polygonal GeoJSON features.
 * @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
 * @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon} to difference from {@linkcode polygonFeature_A}
 * @returns {Object|null} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} showing the area of {@linkcode polygonFeature_A}
@@ -591,7 +620,7 @@ function difference(polygonFeature_A, polygonFeature_B){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#dissolve} to dissolve polygonal features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#dissolve} to dissolve polygonal features.
 * @param {Object} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be transformed to multiple polygons before dissolving).
 * @param {string} propertyName - OPTIONAL parameter that points to an existing attribute used by the features. If set, only features with the same attribute value will be dissolved.
 * @returns {Object} the GeoJSON FeatureCollection containing the dissolved features (Note that attributes are not merged/aggregated).
@@ -613,7 +642,7 @@ function dissolve(featureCollection_geoJSON, propertyName){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanDisjoint} to check if the submitted GeoJSON features are {@linkcode disjoint}.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanDisjoint} to check if the submitted GeoJSON features are {@linkcode disjoint}.
 * @param {Object} feature_A - a GeoJSON feature of any type
 * @param {Object} feature_B - a GeoJSON feature of any type
 * @returns {boolean} returns {@linkcode true}, if both features are disjoint and thus do not intersect.
@@ -628,7 +657,116 @@ function disjoint(feature_A, feature_B){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanDisjoint} and negates the result to check if the submitted GeoJSON features {@linkcode intersect} each other.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#distance} to compute the direct (aerial) distance between the submitted points.
+* @param {Object} point_A - valid GeoJSON Feature with geometry type {@linkcode Point}
+* @param {Object} point_B - valid GeoJSON Feature with geometry type {@linkcode Point}
+* @returns {Object} the direct distance between the submitted points in kilometers.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#distance}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function distance_direct_kilometers(point_A, point_B){
+  return turf.distance(point_A, point_B, {unit: 'kilometers'});
+};
+
+/**
+* Performs a GET request against {@linkcode /routes} endpoint of the openrouteservice instance
+* specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the distance
+* between the submitted points based on waypath routing.
+* @param {Object} point_A - valid GeoJSON Feature with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}
+* @param {Object} point_B - valid GeoJSON Feature with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}
+* @param {Object} vehicleType - the type of vehicle to use for routing analysis;
+* allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
+* @returns {Object} the distance between the submitted points in kilometers based on waypath routing
+* (thus, the distance is likely to be greater then the direct distance computed by {@link distance_direct_kilometers}).
+* @see openrouteservice_url CONSTANT
+* @see {@link distance_direct_kilometers}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+async function distance_waypath_kilometers(point_A, point_B, vehicleType){
+  // call openroute service 4.7.2 API to query routing from A to B
+
+  // coordinate string must be "lon,lat|lon,lat"
+
+  var isPointFeature_A = isGeoJSONPointFeature(point_A);
+  var isPointFeature_B = isGeoJSONPointFeature(point_B);
+
+  if(! isPointFeature_A){
+    throwError("The submitted object point_A is not a valid GeoJSON point feature. It was: " + point_A);
+  }
+  if(! isPointFeature_B){
+    throwError("The submitted object point_B is not a valid GeoJSON point feature. It was: " + point_B);
+  }
+
+  var coordinates_A = point_A.geometry.coordinates;
+  var coordinates_B = point_B.geometry.coordinates;
+
+  var coordinatesString = coordinates_A[0] + "," + coordinates_A[1] + "|" + coordinates_B[0] + "," + coordinates_B[1];
+
+  var vehicleString;
+
+  switch (vehicleType) {
+    case "PEDESTRIAN":
+      vehicleString = "foot-walking";
+      break;
+    case "BIKE":
+      vehicleString = "cycling-regular";
+      break;
+    case "CAR":
+      vehicleString = "driving-car";
+      break;
+    default:
+      vehicleString = "foot-walking";
+  }
+
+  var constantParameterString = "&preference=shortest&units=km&language=en&geometry=false&instructions=false";
+
+  var ors_route_GET_request = openrouteservice_url + "/routes?" + "profile=" + vehicleString + "&coordinates=" + coordinatesString + constantParameterString;
+
+  console.log("Query OpenRouteService with following routing request: " + ors_route_GET_request);
+
+  var routingResult = await executeOrsQuery(ors_route_GET_request);
+
+  /*
+  * exemplar response
+  * {
+    "routes": [
+        {
+            "summary": {
+                "distance": 3.563,
+                "duration": 2565.3
+            },
+            "bbox": [
+                7.00902,
+                51.469817,
+                7.018066,
+                51.498569
+            ]
+        }
+    ],
+    ...
+  }
+  */
+
+  return routingResult.routes[0].summary.distance;
+};
+
+function executeOrsQuery(ors_route_GET_request){
+  axios.get(ors_route_GET_request)
+    .then(response => {
+      // response.data should be the query response
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error while executing OpenRouteService GET request. Error was: " + error);
+      throw error;
+    });
+};
+
+/**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanDisjoint} and negates the result to check if the submitted GeoJSON features {@linkcode intersect} each other.
 * @param {Object} feature_A - a GeoJSON feature of any type
 * @param {Object} feature_B - a GeoJSON feature of any type
 * @returns {boolean} returns {@linkcode true}, if both features intersect each other.
@@ -643,7 +781,7 @@ function intersects(feature_A, feature_B){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#intersect} to compute the {@linkcode intersection} between two polygonal GeoJSON features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#intersect} to compute the {@linkcode intersection} between two polygonal GeoJSON features.
 * @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
 * @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon}
 * @returns {Object|null} returns a GeoJSON feature representing the point(s) they share (in case of a {@linkcode Point} or {@linkcode MultiPoint} ),
@@ -660,7 +798,7 @@ function intersection(polygonFeature_A, polygonFeature_B){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanOverlap} to check if the submitted GeoJSON features overlaop each other.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanOverlap} to check if the submitted GeoJSON features overlaop each other.
 * @param {Object} feature_A - a GeoJSON feature of any type
 * @param {Object} feature_B - a GeoJSON feature of any type
 * @returns {boolean} returns {@linkcode true}, if {@linkcode feature_A} overlaps partially with {@linkcode feature_B}.
@@ -755,7 +893,7 @@ function replaceMultiPolygonsByPolygons(featureCollection_geoJSON){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#union} to compute the {@linkcode union} of two or more polygonal GeoJSON features.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#union} to compute the {@linkcode union} of two or more polygonal GeoJSON features.
 * @param {Object} polygonFeature_A - a GeoJSON feature of type {@linkcode Polygon}
 * @param {Object} polygonFeature_B - a GeoJSON feature of type {@linkcode Polygon}
 * @returns {Object|null} the GeoJSON feature of type {@linkcode Polygon|MultiPolygon} representing the {@linkcode union} of the submitted features or {@linkcode null}.
@@ -769,7 +907,7 @@ function union(polygonFeature_A, polygonFeature_B){
 };
 
 /**
-* encapsulates {@linkcode turf} functon {@linkcode https://turfjs.org/docs/#booleanWithin} to check if the submitted GeoJSON feature {@linkcode feature_A} lies within {@linkcode feature_B}.
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanWithin} to check if the submitted GeoJSON feature {@linkcode feature_A} lies within {@linkcode feature_B}.
 * @param {Object} feature_A - a GeoJSON feature of any type
 * @param {Object} feature_B - a GeoJSON feature of any type
 * @returns {boolean} returns {@linkcode true}, if {@linkcode feature_A} lies within {@linkcode feature_B}.
