@@ -473,7 +473,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
 /**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#area} to compute the area of the submitted features in square meters (m²).
-* @param {GeoJSON Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection) with polygonal geometries.
+* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection) with polygonal geometries.
 * @returns {number} the area of the submitted features in square meters (m²)
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#area}
@@ -600,7 +600,7 @@ function buffer_featureCollection(featureCollection_geoJSON, radiusInMeters){
 
 /**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#center} to compute the geometric center point the submitted features.
-* @param {GeoJSON Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
 * @returns {Feature<Point>} the GeoJSON point feature representing the absolute geometric center of the submitted features.
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#center}
@@ -613,7 +613,7 @@ function center_geometric(geoJSON){
 
 /**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#centerOfMass} to compute the center of mass of the submitted features.
-* @param {GeoJSON Object} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
 * @returns {Feature<Point>} the GeoJSON point feature representing the center of mass of the submitted features (using the mean of all vertices).
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#centerOfMass}
@@ -1114,8 +1114,8 @@ function nearestPointOnLines_directDistance(targetPoint, lineStringCollection){
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#nearestPointOnLine}
 * @see {@link https://turfjs.org/docs/#polygonToLine}
-* @see {@link https://turfjs.org/docs/#nearestPointOnLine_directDistance}
-* @see {@link https://turfjs.org/docs/#nearestPointOnLines_directDistance}
+* @see {@link nearestPointOnLine_directDistance}
+* @see {@link nearestPointOnLines_directDistance}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
@@ -1152,8 +1152,8 @@ function nearestPointOnPolygon_directDistance(targetPoint, polygon){
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#nearestPointOnLine}
 * @see {@link https://turfjs.org/docs/#polygonToLine}
-* @see {@link https://turfjs.org/docs/#nearestPointOnLine_directDistance}
-* @see {@link https://turfjs.org/docs/#nearestPointOnLines_directDistance}
+* @see {@link nearestPointOnLine_directDistance}
+* @see {@link nearestPointOnLines_directDistance}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
