@@ -1083,7 +1083,7 @@ function nearestPointOnLines_directDistance(targetPoint, lineStringCollection){
   }
 
   for (var lineStringCandidate of lineStringCollection.features){
-    if(! isGeoJSONPointFeature(lineStringCandidate)){
+    if(! isGeoJSONLineStringFeature(lineStringCandidate)){
       throwError("The submitted lineStringCollection contains features that are no valid GeoJSON LineString features. lineStringCandidate was: " + lineStringCandidate);
     }
   }
@@ -1093,6 +1093,86 @@ function nearestPointOnLines_directDistance(targetPoint, lineStringCollection){
 
   for (var candidate of lineStringCollection.features){
      var pointCandidate = nearestPointOnLine_directDistance(targetPoint, candidate)
+
+    // set variables if a nearer point is found or set with initial values
+    if(shortestDistance === undefined || pointCandidate.dist < shortestDistance){
+      shortestDistance = pointCandidate.dist;
+      nearestPoint = pointCandidate;
+    }
+  }
+
+  return nearestPoint;
+};
+
+/**
+* Utilizes {@linkcode turf} functions {@linkcode https://turfjs.org/docs/#polygonToLine} to split up the Polygon|Multipolygon to LineStrings and
+* {@linkcode https://turfjs.org/docs/#nearestPointOnLine} to identify the nearest point on the lines of the polygon.
+* @param {Object} targetPoint - a GeoJSON feature with geometry type {@linkcode Point}, for which the nearest point will be searched
+* @param {Object} polygon - a GeoJSON feature with geometry type {@linkcode Polygon} or {@linkcode MultiPolygon}
+* @returns {Object} returns the nearest GeoJSON Point Feature with the shortest direct distance to {@linkcode targetPoint}. Furthermore it contains the property {@linkcode dist}, which
+* contains the direct distance to {@linkcode targetPoint} in kilometers.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#nearestPointOnLine}
+* @see {@link https://turfjs.org/docs/#polygonToLine}
+* @see {@link https://turfjs.org/docs/#nearestPointOnLine_directDistance}
+* @see {@link https://turfjs.org/docs/#nearestPointOnLines_directDistance}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function nearestPointOnPolygon_directDistance(targetPoint, polygon){
+
+  if(! isGeoJSONPointFeature(targetPoint)){
+    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  }
+  if(! isGeoJSONPolygonFeature(polygon)){
+    throwError("The submitted polygonCandidate is not a valid GeoJSON Polygon|MultiPolygon feature. Candidate was: " + polygon);
+  }
+
+  // split polygon into lines
+  // can be either Feature<LineString|MultiLineString> or FeatureCollection<LineString>
+  var lines = turf.polygonToLine(polygon);
+
+  if (lines.type === "Feature"){
+    // single feature (Multi)LineString
+    return nearestPointOnLine_directDistance(targetPoint, lines);
+  }
+  else{
+    // FeatureCollection of (Multi)LineString
+    return nearestPointOnLines_directDistance(targetPoint, lines);
+  }
+};
+
+/**
+* Utilizes {@linkcode turf} functions {@linkcode https://turfjs.org/docs/#polygonToLine} to split up the input Polygons|Multipolygons to LineStrings and
+* {@linkcode https://turfjs.org/docs/#nearestPointOnLine} to identify the nearest point on the lines of the polygons.
+* @param {Object} targetPoint - a GeoJSON feature with geometry type {@linkcode Point}, for which the nearest point will be searched
+* @param {Object} polygonCollection - a GeoJSON FeatureCollection of features with geometry type {@linkcode Polygon} or {@linkcode MultiPolygon}
+* @returns {Object} returns the nearest GeoJSON Point Feature with the shortest direct distance to {@linkcode targetPoint}. Furthermore it contains the property {@linkcode dist}, which
+* contains the direct distance to {@linkcode targetPoint} in kilometers.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#nearestPointOnLine}
+* @see {@link https://turfjs.org/docs/#polygonToLine}
+* @see {@link https://turfjs.org/docs/#nearestPointOnLine_directDistance}
+* @see {@link https://turfjs.org/docs/#nearestPointOnLines_directDistance}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function nearestPointOnPolygons_directDistance(targetPoint, polygonCollection){
+
+  if(! isGeoJSONPointFeature(targetPoint)){
+    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  }
+  for (var polygonCandidate of polygonCollection.features){
+    if(! isGeoJSONPolygonFeature(polygonCandidate)){
+      throwError("The submitted polygonCollection contains features that are no valid GeoJSON Polygon features. polygonCandidate was: " + polygonCandidate);
+    }
+  }
+
+  var shortestDistance = undefined;
+  var nearestPoint = undefined;
+
+  for (var candidate of polygonCollection.features){
+     var pointCandidate = nearestPointOnPolygon_directDistance(targetPoint, candidate)
 
     // set variables if a nearer point is found or set with initial values
     if(shortestDistance === undefined || pointCandidate.dist < shortestDistance){
