@@ -226,6 +226,42 @@ function isGeoJSONPointFeature(feature){
 };
 
 /**
+* Checks whether the submitted object is a valid GeoJSON feature with geometryType {@linkcode LineString} or {@linkcode MultiLineString}.
+* The feature must contain a property {@linkcode "type"="Feature"} and a property named {@linkcode geometry}, which must have a {@linkcode coordinates} array and {@linkcode type=LineString|MultiLineString} property.
+* The method does not check, if the feature contains a {@linkcode properties} attribute.
+* @param {Object} feature - a candidate for a GeoJSON LineString|MultiLineString feature.
+* @return returns {@linkcode true} if the object is a valid GeoJSON LineString|MultiLineString feature; {@linkcode false} otherwise
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function isGeoJSONLineStringFeature(feature){
+  if (feature.type === "Feature" && feature.geometry && feature.geometry.coordinates && (feature.geometry.type === 'LineString' || feature.geometry.type === 'MultiLineString')){
+    return true;
+  }
+  else{
+    return false;
+  }
+};
+
+/**
+* Checks whether the submitted object is a valid GeoJSON feature with geometryType {@linkcode Polygon} or {@linkcode MultiPolygon}.
+* The feature must contain a property {@linkcode "type"="Feature"} and a property named {@linkcode geometry}, which must have a {@linkcode coordinates} array and {@linkcode type=Polygon|MultiPolygon} property.
+* The method does not check, if the feature contains a {@linkcode properties} attribute.
+* @param {Object} feature - a candidate for a GeoJSON Polygon|MultiPolygon feature.
+* @return returns {@linkcode true} if the object is a valid GeoJSON Polygon|MultiPolygon feature; {@linkcode false} otherwise
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function isGeoJSONPolygonFeature(feature){
+  if (feature.type === "Feature" && feature.geometry && feature.geometry.coordinates && (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon')){
+    return true;
+  }
+  else{
+    return false;
+  }
+};
+
+/**
 * Checks whether the submitted object is a valid GeoJSON FeatureCollection.
 * The featureCollection must contain a property {@linkcode "type"="FeatureCollection"} and a property named {@linkcode features}, which must have an array of valid feature objects.
 * @param {Object} featureCollection - a candidate for a GeoJSON FeatureCollection.
@@ -937,6 +973,135 @@ function intersects(feature_A, feature_B){
 function intersection(polygonFeature_A, polygonFeature_B){
 
   return turf.intersect(polygonFeature_A, polygonFeature_B);
+};
+
+/**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#nearestPoint} to identify the nearest point of a point collection.
+* @param {Object} targetPoint - a GeoJSON feature with geometry type {@linkcode Point}, for which the nearest point will be searched
+* @param {Object} pointCollection - a GeoJSON FeatureCollection of features with geometry type {@linkcode Point}
+* @returns {Object} returns the nearest GeoJSON Point Feature with the shortest direct distance to {@linkcode targetPoint}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#nearestPoint}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function nearestPoint_directDistance(targetPoint, pointCollection){
+
+  if(! isGeoJSONPointFeature(targetPoint)){
+    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  }
+
+  for (var pointCandidate of pointCollection.features){
+    if(! isGeoJSONPointFeature(pointCandidate)){
+      throwError("The submitted pointCollection contains features that are no valid GeoJSON point features. PointCandidate was: " + pointCandidate);
+    }
+  }
+
+  return turf.nearestPoint(targetPoint, pointCollection);
+};
+
+/**
+* Identifies the nearest point of a {@linkcode pointCollection} which has the shortest waypath distance to {@linkcode targetPoint}. In contrast to method {@link nearestPoint_directDistance},
+* this method computes the distance based on waypaths of the corresponding {@linkcode vehicleType}. It makes use of method {@linkcode distance_waypath_kilometers}, which queries
+* Open Route Service for waypath routing between two points.
+* @param {Object} targetPoint - a GeoJSON feature with geometry type {@linkcode Point}, for which the nearest point will be searched
+* @param {Object} pointCollection - a GeoJSON FeatureCollection of features with geometry type {@linkcode Point}
+* @param {string} vehicleType - the type of vehicle to use for routing analysis;
+* allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
+* @returns {Object} returns the nearest GeoJSON Point Feature with the shortest waypath distance to {@linkcode targetPoint}.
+* @see {@link https://turfjs.org/docs/#nearestPoint_directDistance}
+* @see {@link https://turfjs.org/docs/#distance_waypath_kilometers}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function nearestPoint_waypathDistance(targetPoint, pointCollection, vehicleType){
+  if(! isGeoJSONPointFeature(targetPoint)){
+    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  }
+
+  for (var pointCandidate of pointCollection.features){
+    if(! isGeoJSONPointFeature(pointCandidate)){
+      throwError("The submitted pointCollection contains features that are no valid GeoJSON point features. PointCandidate was: " + pointCandidate);
+    }
+  }
+
+  var shortestDistance = undefined;
+  var nearestPoint = undefined;
+
+  for (var candidate of pointCollection.features){
+    var distance_waypath = distance_waypath_kilometers(targetPoint, candidate, vehicleType);
+
+    // set variables if a nearer point is found or set with initial values
+    if(shortestDistance === undefined || distance_waypath < shortestDistance){
+      shortestDistance = distance_waypath;
+      nearestPoint = candidate;
+    }
+  }
+
+  return nearestPoint;
+
+};
+
+/**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#nearestPointOnLine} to identify the nearest point on the submitted line.
+* @param {Object} targetPoint - a GeoJSON feature with geometry type {@linkcode Point}, for which the nearest point will be searched
+* @param {Object} lineString - a GeoJSON feature  with geometry type {@linkcode LineString} or {@linkcode MultiLineString}
+* @returns {Object} returns the nearest GeoJSON Point Feature with the shortest direct distance to {@linkcode targetPoint}. Furthermore it contains the property {@linkcode dist}, which
+* contains the direct distance to {@linkcode targetPoint} in kilometers.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#nearestPointOnLine}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function nearestPointOnLine_directDistance(targetPoint, lineString){
+
+  if(! isGeoJSONPointFeature(targetPoint)){
+    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  }
+  if(! isGeoJSONLineStringFeature(lineString)){
+    throwError("The submitted lineStringCandidate is not a valid GeoJSON LineString|MultiLineString feature. Candidate was: " + lineString);
+  }
+
+  return turf.nearestPointOnLine(targetPoint, lineString, {units: 'kilometers'});
+};
+
+/**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#nearestPointOnLine} to identify the nearest point for the nearest line of the submitted lines.
+* @param {Object} targetPoint - a GeoJSON feature with geometry type {@linkcode Point}, for which the nearest point will be searched
+* @param {Object} lineStringCollection - a GeoJSON FeatureCollection of features with geometry type {@linkcode LineString} or {@linkcode MultiLineString}
+* @returns {Object} returns the nearest GeoJSON Point Feature with the shortest direct distance to {@linkcode targetPoint}. Furthermore it contains the property {@linkcode dist}, which
+* contains the direct distance to {@linkcode targetPoint} in kilometers.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#nearestPointOnLine}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function nearestPointOnLines_directDistance(targetPoint, lineStringCollection){
+
+  if(! isGeoJSONPointFeature(targetPoint)){
+    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  }
+
+  for (var lineStringCandidate of lineStringCollection.features){
+    if(! isGeoJSONPointFeature(lineStringCandidate)){
+      throwError("The submitted lineStringCollection contains features that are no valid GeoJSON LineString features. lineStringCandidate was: " + lineStringCandidate);
+    }
+  }
+
+  var shortestDistance = undefined;
+  var nearestPoint = undefined;
+
+  for (var candidate of lineStringCollection.features){
+     var pointCandidate = nearestPointOnLine_directDistance(targetPoint, candidate)
+
+    // set variables if a nearer point is found or set with initial values
+    if(shortestDistance === undefined || pointCandidate.dist < shortestDistance){
+      shortestDistance = pointCandidate.dist;
+      nearestPoint = pointCandidate;
+    }
+  }
+
+  return nearestPoint;
 };
 
 /**
