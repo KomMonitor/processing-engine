@@ -1344,3 +1344,208 @@ function within_usingBBOX(feature_A, feature_B){
 
   return false;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// JSTAT statistical methods                                                                                                                                         //
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#covariance} to compute the covariance value of the submitted value arrays
+* @param {Array.<number>} populationArray_A - first data array of numeric values
+* @param {Array.<number>} populationArray_B - second data array of numeric values
+* @returns {number} returns the covariance value of the submitted data arrays
+* @see {@link https://jstat.github.io/all.html#covariance}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function covariance (populationArray_A, populationArray_B){
+  return jStat.covariance(populationArray_A, populationArray_B);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#max} to compute the max value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the max value shall be computed
+* @returns {number} returns the max value of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#max}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function max (populationArray){
+  return jStat.max(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#mean} to compute the mean value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the mean shall be computed
+* @returns {number} returns the mean value of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#mean}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function mean (populationArray){
+  return jStat.mean(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#meansqerr} to compute the mean square error value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the mean square error value shall be computed
+* @returns {number} returns the mean square error value value of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#meansqerr}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function meanSquareError (populationArray){
+  return jStat.meansqerr(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#median} to compute the median value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the median shall be computed
+* @returns {number} returns the median value of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#median}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function median (populationArray){
+  return jStat.median(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#min} to compute the min value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the min value shall be computed
+* @returns {number} returns the min value of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#min}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function min (populationArray){
+  return jStat.min(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#percentile} to compute the percentile of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the percentile shall be computed
+* @param {number} k - value between {@linkcode 0 - 1, exclusive} to specify the k-th percentile to be computed
+* @returns {number} returns the k-th percentile of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#percentile}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function percentile (populationArray, k){
+  return jStat.percentile(populationArray, k);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#quantiles} to compute the quantiles of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the quantiles shall be computed
+* @param {Array.<number>} quantilesArray - an array of quantile values (i.e. {@linkcode 0.25, 0.5, 0.75})
+* @returns {Array.<number>} returns the quantiles of {@linkcode populationArray} according to the {@linkcode quantilesArray}
+* @see {@link https://jstat.github.io/all.html#quantiles}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function quantiles (populationArray, quantilesArray){
+  return jStat.quantiles(populationArray, quantilesArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#quartiles} to compute the quartiles of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the quartiles shall be computed
+* @returns {Array.<number>} returns the quartiles of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#quartiles}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function quartiles (populationArray){
+  return jStat.quartiles(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#range} to compute the range value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the range value shall be computed
+* @returns {number} returns the range value of the submitted array of numeric values {@linkcode max - min}
+* @see {@link https://jstat.github.io/all.html#range}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function range (populationArray){
+  return jStat.range(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#stdev} to compute the standard deviation for an array of values. By defaut, the population standard deviation is returned.
+* Passing {@linkcode true} for the flag parameter returns the sample standard deviation.
+* @param {Array.<number>} values - an array of numeric values for which the standard deviation shall be computed
+* @param {boolean|null} computeSampledStandardDeviation - OPTIONAL flag.
+* If set to {@linkcode true} then 'sample' standard deviation is computed, which is also called the 'corrected standard deviation', and is an unbiased estimator of the population standard deviation.
+* If set to {@linkcode false} or {@linkcode null|undefined} then the population standard deviation is computed, which is also the 'uncorrected standard deviation',
+* and is a biased but minimum-mean-squared-error estimator
+* @returns {number} returns the standard deviation
+* @see {@link https://jstat.github.io/all.html#stdev}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function standardDeviation (values, computeSampledStandardDeviation){
+  if (computeSampledStandardDeviation){
+    return jStat.stdev(values, computeSampledStandardDeviation);
+  }
+  else{
+    return jStat.stdev(values);
+  }
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#variance} to compute the variance value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the variance value shall be computed
+* @param {boolean|null} computeSampledVariance - OPTIONAL flag.
+* If set to {@linkcode true} then 'sample' variance is computed.
+* If set to {@linkcode false} or {@linkcode null|undefined} then the population variance is computed
+* @returns {number} returns the variance value of the submitted array of numeric values {@linkcode max - min}
+* @see {@link https://jstat.github.io/all.html#variance}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function variance (populationArray, computeSampledVariance){
+  if (computeSampledVariance){
+    return jStat.variance(populationArray, computeSampledVariance);
+  }
+  else{
+    return jStat.variance(populationArray);
+  }
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#jStat.zscore} to compute the zScore of the submitted value given the mean and standard deviation of the associated population.
+* @param {number} value - the numeric value for which  the zScore shall be computed
+* @param {number} mean - the  numeric mean value of the associated population
+* @param {number} stdev - the  numeric standard deviation of the associated population
+* @returns {number} returns the zScore of the submitted value
+* @see {@link https://jstat.github.io/all.html#jStat.zscore}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function zScore_byMeanAndStdev (value, mean, stdev){
+  return jStat.zscore(value, mean, stdev);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#jStat.zscore} to compute the zScore of the submitted value given the mean and standard deviation of the associated population.
+* @param {number} value - the numeric value for which  the zScore shall be computed
+* @param {Array.<number>} populationArray - an array of numeric values for which the standard deviation shall be computed
+* @param {boolean|null} computeSampledStandardDeviation - OPTIONAL flag.
+* If set to {@linkcode true} then 'sample' standard deviation is computed, which is also called the 'corrected standard deviation', and is an unbiased estimator of the population standard deviation.
+* If set to {@linkcode false} or {@linkcode null|undefined} then the population standard deviation is computed, which is also the 'uncorrected standard deviation',
+* and is a biased but minimum-mean-squared-error estimator
+* @returns {number} returns the zScore of the submitted value
+* @see {@link https://jstat.github.io/all.html#jStat.zscore}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+function zScore_byPopulationArray (value, populationArray, computeSampledStandardDeviation){
+  if (computeSampledStandardDeviation){
+    return jStat.zscore(value, populationArray, computeSampledStandardDeviation);
+  }
+  else{
+    return jStat.zscore(value, populationArray);
+  }
+};
