@@ -110,7 +110,7 @@ const aggregationType = "AVERAGE";
 * This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
 * as method parameters that can be used within the method body.
 *
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit as GeoJSON FeatureCollection object.
 * @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, wheres key='meaningful name of the indicator' and value='indicator as GeoJSON object'
 * @param {map.<string, FeatureCollection<Polygon>>} georesourcesMap - Map containing all georesources, wheres key='meaningful name of the georesource' and value='georesource as GeoJSON object' (they are used to execute geometric/toptologic computations)
@@ -131,7 +131,7 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
 * The aggrgation internally aggregates features of {@linkcode indicator_geoJSON} to features of {@linkcode targetSpatialUnit_geoJSON} by comparing their geometries.
 * Each {@linkcode indicator_geoJSON} feature whose geometry lies within a certain geometry of a {@linkcode targetSpatialUnit_geoJSON} feature will be used to compute the aggregated indicator values.
 * The within comparison is executed by method {@linkcode within_usingBBOX}.
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit features of the target spatial unit, for which the indicator shall be aggregated to as GeoJSON FeatureCollection
 * @param {FeatureCollection<Polygon>} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter targetSpatialUnit_geoJSON
 * @see aggregationType
@@ -159,7 +159,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 /**
 * This method is used to disaggregate indicators of a certain spatial unit to the features of a more low-level spatial unit (i.e. disaggregate from city districts to building blocks).
 * @todo CURRENTLY THIS METHOD IS NOT USED WITHIN KOMMONITOR PROJECT: THUS IT CONTAINS NO IMPLEMENTATION YET!
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit features of the target spatial unit, for which the indicator shall be disaggregated to as GeoJSON FeatureCollection
 * @param {FeatureCollection<Polygon>} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be disaggregated to the features of parameter targetSpatialUnit_geoJSON
 * @returns {FeatureCollection<Polygon>} the features of {@linkcode targetSpatialUnit_geoJSON} which contain the disaggregated indicator values as GeoJSON FeatureCollection.
@@ -307,13 +307,127 @@ function throwError(message){
 };
 
 /**
+* Aquire the {@linkcode feature}'s property value for the specified {@linkcode propertyName}.
+* @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing certain property values
+* @param {string} propertyName - string representing the name of the queried property
+* @returns {number|null} returns the property value for the specified {@linkcode propertyName} or {@linkcode null} if the feature does not contain the relevant property.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getPropertyValue(feature, propertyName){
+
+  var value = feature.properties[propertyName];
+
+  if(value){
+    return value;
+  }
+  else{
+    return null;
+  }
+};
+
+/**
+* Aquire the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate}.
+* @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate - string representing the target date for which the indicator value shall be extracted, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @returns {number|null} returns the indicator value for the specified {@linkcode targetDate} or {@linkcode null} if the feature does not contain an indicator value for the specified date.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getIndicatorValue(feature, targetDate){
+  var targetDateWithPrefix;
+  if(! targetDate.includes(indicator_date_prefix)){
+      targetDateWithPrefix = targetDate;
+  }
+  else{
+      targetDateWithPrefix = getTargetDateWithPropertyPrefix(targetDate);
+  }
+
+  var indicatorValue = feature.properties[targetDateWithPrefix];
+
+  if(indicatorValue){
+    return indicatorValue;
+  }
+  else{
+    return null;
+  }
+};
+
+/**
+* Aquire the array of indicator values for the specified {@linkcode targetDate}.
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate - string representing the target date for which the indicator value array shall be extracted, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @returns {Array<number>|null} returns the indicator values of all features of the {@linkcode featureCollection} for the specified {@linkcode targetDate} or {@linkcode null} if the features do not contain an indicator value for the specified date.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getIndicatorValueArray(featureCollection, targetDate){
+  var targetDateWithPrefix;
+  if(! targetDate.includes(indicator_date_prefix)){
+      targetDateWithPrefix = targetDate;
+  }
+  else{
+      targetDateWithPrefix = getTargetDateWithPropertyPrefix(targetDate);
+  }
+
+  var resultArray = [];
+
+  for (feature of featureCollection.features){
+    var indicatorValue = feature.properties[targetDateWithPrefix];
+
+    if(indicatorValue){
+      resultArray.push(indicatorValue);
+    }
+    else{
+      console.log("A feature did not contain an indicator value for the targetDate " + targetDate + ". Feature was: " + feature);
+    }
+  }
+
+  if(! resultArray.length > 0){
+    console.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
+    return null;
+  }
+
+  return resultArray;
+};
+
+/**
+* Set the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate} with the specified {@linkcode value}.
+* @param {Feature} feature - a valid GeoJSON Feature
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @param {number} value - a numeric value which shall be set as the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate}
+* @returns {Feature} returns the GeoJSON Feature
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function setIndicatorValue(feature, targetDate, value){
+
+  if (typeof value != 'number'){
+    console.log("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
+    throwError("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
+  }
+
+  var targetDateWithPrefix;
+  if(! targetDate.includes(indicator_date_prefix)){
+      targetDateWithPrefix = targetDate;
+  }
+  else{
+      targetDateWithPrefix = getTargetDateWithPropertyPrefix(targetDate);
+  }
+
+  feature.properties[targetDateWithPrefix] = value;
+
+  return feature;
+};
+
+/**
 * Concatenates indicator date property prefix and submitted targetDate.
 * I.e, for exemplar targetDate="2018-01-01" it produces targetDateWithPrefix="DATE_2018-01-01".
 * This is necessary in order to query timeseries property values from an indicator feature.
 *
 * indicatorFeature.properties[targetDate] --> null
 * indicatorFeature.properties[targetDateWithPrefix] --> indicator value, (if timestamp is present)
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @returns {string} the targetDate string with additional prefix from constant {@linkcode indicator_date_prefix} --> i.e. DATE_2018-01-01
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
@@ -358,7 +472,7 @@ function asFeatureCollection(features){
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
 * by computing the AVERAGE indicator value of all affected features. Internally this uses the function {@linkcode within_usingBBOX}
 * to determine which features of {@linkcode indicator_geoJSON} can be aggregated to which features of {@linkcode targetSpatialUnit_geoJSON}.
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 * @param {FeatureCollection<Polygon>} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter {@linkcode targetSpatialUnitFeatures}
 * @returns {FeatureCollection<Polygon>} a GeoJSON FeatureCollection of all features of the submitted {@linkcode targetSpatialUnit_geoJSON}
@@ -419,7 +533,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
 * by computing the SUM indicator value of all affected features. Internally this uses the function {@linkcode within_usingBBOX}
 * to determine which features of {@linkcode indicator_geoJSON} can be aggregated to which features of {@linkcode targetSpatialUnit_geoJSON}.
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, e.g. 2018-01-01
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 * @param {FeatureCollection<Polygon>} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter {@linkcode targetSpatialUnitFeatures}
 * @returns {FeatureCollection<Polygon>} a GeoJSON FeatureCollection of all features of the submitted {@linkcode targetSpatialUnit_geoJSON}
