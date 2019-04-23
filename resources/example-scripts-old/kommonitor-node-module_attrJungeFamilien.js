@@ -34,11 +34,11 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
 
 
   // retrieve required baseIndicator using its meaningful name
-  var supermaerkte = baseIndicatorsMap.get('Erreichbarkeit der drei nächstgelegenen Lebensmittelgeschäfte');
-  var freiraum = baseIndicatorsMap.get('Erreichbarkeit von Freiraumflächen');
-  var grundschulen = baseIndicatorsMap.get('Erreichbarkeit von Grundschulen');
-  var kitas = baseIndicatorsMap.get('Erreichbarkeit von Kindertagesstätten');
-  var spielplaetze = baseIndicatorsMap.get('Erreichbarkeit von Spielplätzen');
+  var supermaerkte = baseIndicatorsMap.get('05ea8533-a792-401c-a79a-b3bb975047c0');
+  var freiraum = baseIndicatorsMap.get('1f5906e2-60c8-4647-abef-231723e65205');
+  var grundschulen = baseIndicatorsMap.get('76f9d771-7405-498b-9b39-1e2f565cce27');
+  var kitas = baseIndicatorsMap.get('40d6eb29-efd5-4f7c-953d-b115e4438774');
+  var spielplaetze = baseIndicatorsMap.get('a835507e-8c81-41b9-b339-0a554dca3fd3');
 
 
   // divide by 1000 for meters-->kilometers
