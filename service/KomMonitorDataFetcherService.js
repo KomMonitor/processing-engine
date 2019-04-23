@@ -286,9 +286,9 @@ exports.fetchGeoresourcesByIds = async function(baseUrlPath, georesourceIds, tar
       }
 
       var georesourceName = georesourceMetadata.datasetName;
-      var georesourceId = georesourceMetadata.georesourceId;
+      var georesourceIdKey = georesourceMetadata.georesourceId;
       georesourcesMap.set(georesourceName, georesource_geojsonString);
-      georesourcesMap.set(georesourceId, georesource_geojsonString);
+      georesourcesMap.set(georesourceIdKey, georesource_geojsonString);
     };
   }
   catch(error){
@@ -384,9 +384,9 @@ exports.fetchIndicatorsByIds = async function(baseUrlPath, indicatorIds, targetD
         throw error;
       }
       var indicatorName = indicatorMetadata.indicatorName;
-      var indicatorId = indicatorMetadata.indicatorId;
+      var indicatorIdKey = indicatorMetadata.indicatorId;
       indicatorsMap.set(indicatorName, indicator_geojsonString);
-      indicatorsMap.set(indicatorId, indicator_geojsonString);
+      indicatorsMap.set(indicatorIdKey, indicator_geojsonString);
     };
   }
   catch(error){
