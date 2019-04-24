@@ -53,6 +53,9 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
       		}
         }
       }
+
+      // divide by 1000 to transform from kilogram to tonnes
+      targetSpatialUnitFeature.properties[targetDate] = Number(targetSpatialUnitFeature.properties[targetDate] / 1000);
   });
 
   console.log("Computation of indicator finished");
