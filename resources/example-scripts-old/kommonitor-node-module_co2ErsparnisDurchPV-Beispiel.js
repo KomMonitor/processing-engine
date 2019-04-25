@@ -7,7 +7,7 @@ var turf = require('@turf/turf');
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
 const indicator_date_prefix = "DATE_";
 
-const leistungAttributeValue = "Leistung";
+const co2AttributeValue = "CO2_Erspar";
 const yearOfActivationAttribute = "Jahr_Zugan";
 
 /**
@@ -49,10 +49,13 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
           if (turf.booleanWithin(pvFeature, targetSpatialUnitFeature)){
       			pvAnlagen.features.splice(pointIndex, 1);
             pointIndex--;
-      			targetSpatialUnitFeature.properties[targetDate] += Number(pvFeature.properties[leistungAttributeValue]);
+      			targetSpatialUnitFeature.properties[targetDate] += Number(pvFeature.properties[co2AttributeValue]);
       		}
         }
       }
+
+      // divide by 1000 to transform from kilogram to tonnes
+      targetSpatialUnitFeature.properties[targetDate] = Number(targetSpatialUnitFeature.properties[targetDate] / 1000);
   });
 
   console.log("Computation of indicator finished");

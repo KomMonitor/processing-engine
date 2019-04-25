@@ -4,10 +4,11 @@ var turf = require('@turf/turf');
 
 
 // CONSTANTS DEFINITION
-const indicator_date_prefix = "DATE_";
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+const indicator_date_prefix = "DATE_";
 
-
+const co2AttributeValue = "CO2_Erspar";
+const yearOfActivationAttribute = "Jahr_Zugan";
 
 /**
 This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
@@ -22,102 +23,44 @@ as method parameters that can be used within the method body.
 function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processProperties){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
-
-  // make a map object mapping the featureName to the numbrToBeCOmputet
-  // iterate one time over each subindicator
-    // add number multiplied by weight to map object
-
-  // iterate one time over targetSpatialUnit id, identify map entry for each feature and  compute and set value / (sum weights)
-
-  var map = new Map();
-
-
-
   // retrieve required baseIndicator using its meaningful name
-  var supermaerkte = baseIndicatorsMap.get('Erreichbarkeit der drei nächstgelegenen Lebensmittelgeschäfte');
-  var freiraum = baseIndicatorsMap.get('Erreichbarkeit von Freiraumflächen');
-  var grundschulen = baseIndicatorsMap.get('Erreichbarkeit von Grundschulen');
-  var kitas = baseIndicatorsMap.get('Erreichbarkeit von Kindertagesstätten');
-  var spielplaetze = baseIndicatorsMap.get('Erreichbarkeit von Spielplätzen');
-
-
-  // divide by 1000 for meters-->kilometers
-  var gewicht_supermaerkte;
-  var gewicht_freiraum;
-  var gewicht_grundschulen;
-  var gewicht_kitas;
-  var gewicht_spielplaetze;
+  var pvAnlagen = georesourcesMap.get('Photovoltaikanlagen');
 
   targetDate = indicator_date_prefix + targetDate;
   console.log('Target Date with prefix: ' + targetDate);
 
-  processProperties.forEach(function(property){
-    if(property.name === "GewichtLebensmittelgeschaefte")
-      gewicht_supermaerkte = Number(property.value);
-    else if(property.name === "GewichtFreiraum")
-      gewicht_freiraum = Number(property.value);
-    else if(property.name === "GewichtGrundschulen")
-      gewicht_grundschulen = Number(property.value);
-    else if(property.name === "GewichtKitas")
-      gewicht_kitas = Number(property.value);
-    else if(property.name === "GewichtSpielplaetze")
-      gewicht_spielplaetze = Number(property.value);
+  //DATE_year-month-day --> split("-") --> [DATE_year, month, day]
+  var targetYearWithPrefix = targetDate.split("-")[0];
+  var targetYear = targetYearWithPrefix.split(indicator_date_prefix)[1];
+
+  // now we compute the new indicator 'wachstumsstress'
+  console.log("Compute indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " features");
+
+  targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
+
+      var pvFeature;
+      targetSpatialUnitFeature.properties[targetDate] = 0;
+
+      for (var pointIndex=0; pointIndex < pvAnlagen.features.length; pointIndex++){
+
+        pvFeature = pvAnlagen.features[pointIndex];
+
+        if(Number(targetYear) >= Number(pvFeature.properties[yearOfActivationAttribute])){
+          if (turf.booleanWithin(pvFeature, targetSpatialUnitFeature)){
+      			pvAnlagen.features.splice(pointIndex, 1);
+            pointIndex--;
+
+            var factor = 1 + Number(Number(targetYear) - Number(pvFeature.properties[yearOfActivationAttribute]));
+
+            targetSpatialUnitFeature.properties[targetDate] += (Number(factor) * Number(pvFeature.properties[co2AttributeValue]));
+
+      		}
+        }
+      }
+
+      // divide by 1000 to transform from kilogram to tonnes
+      targetSpatialUnitFeature.properties[targetDate] = Number(targetSpatialUnitFeature.properties[targetDate] / 1000);
   });
-
-  var weightSum = gewicht_supermaerkte + gewicht_freiraum + gewicht_grundschulen + gewicht_kitas + gewicht_spielplaetze;
-
-  console.log("Sum of weights should be equal to 1. It is " + weightSum);
-
-  console.log("fill map by iterating over each base indicator");
-
-  supermaerkte.features.forEach(function(feature) {
-    console.log("supermarkt: " + Number(feature.properties[targetDate]) * gewicht_supermaerkte);
-    map.set(""+feature.properties[spatialUnitFeatureIdPropertyName], Number(feature.properties[targetDate]) * gewicht_supermaerkte);
-  });
-
-  freiraum.features.forEach(function(feature) {
-    var value = map.get(""+feature.properties[spatialUnitFeatureIdPropertyName]);
-    console.log("freiraum: " + value + " , ID: " + feature.properties[spatialUnitFeatureIdPropertyName]);
-    map.set(""+feature.properties[spatialUnitFeatureIdPropertyName], value + Number(feature.properties[targetDate]) * gewicht_freiraum);
-  });
-
-  grundschulen.features.forEach(function(feature) {
-    var value = map.get(""+feature.properties[spatialUnitFeatureIdPropertyName]);
-    console.log("grundschulen: " + value + " , ID: " + feature.properties[spatialUnitFeatureIdPropertyName]);
-    map.set(""+feature.properties[spatialUnitFeatureIdPropertyName], value + Number(feature.properties[targetDate]) * gewicht_grundschulen);
-  });
-
-  kitas.features.forEach(function(feature) {
-    var value = map.get(""+feature.properties[spatialUnitFeatureIdPropertyName]);
-    console.log("kitas: " + value + " , ID: " + feature.properties[spatialUnitFeatureIdPropertyName]);
-    map.set(""+feature.properties[spatialUnitFeatureIdPropertyName], value + Number(feature.properties[targetDate]) * gewicht_kitas);
-  });
-
-  spielplaetze.features.forEach(function(feature) {
-    var value = map.get(""+feature.properties[spatialUnitFeatureIdPropertyName]);
-    console.log("spielplaetze: " + value + " , ID: " + feature.properties[spatialUnitFeatureIdPropertyName]);
-    map.set(""+feature.properties[spatialUnitFeatureIdPropertyName], value + Number(feature.properties[targetDate]) * gewicht_spielplaetze);
-
-    value = map.get(""+feature.properties[spatialUnitFeatureIdPropertyName]);
-    console.log("spielplaetze: " + value + " , ID: " + feature.properties[spatialUnitFeatureIdPropertyName] + "----");
-  });
-
-console.log("compute targetIndicator");
-
-var spatialUnitIndex = 0;
-targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
-
-  console.log("map: " + map);
-  var value = Number(map.get(""+spatialUnitFeature.properties[spatialUnitFeatureIdPropertyName]));
-  console.log("unit: " + value + " , ID: " + spatialUnitFeature.properties[spatialUnitFeatureIdPropertyName] + "----");
-  var result = Number(value / weightSum);
-
-  console.log("Result: " + result);
-	spatialUnitFeature.properties[targetDate] = result;
-
-	spatialUnitIndex ++;
-	console.log("Computed spatialUnitFeature number " + spatialUnitIndex);
-});
 
   console.log("Computation of indicator finished");
 
@@ -162,13 +105,11 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 
   			numberOfIndicatorFeaturesWithinTargetFeature++;
 
-  			targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]);
+  			targetFeature.properties[targetDate] += indicatorFeature.properties[targetDate];
   		}
   	}
 
     // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
-  	// compute average for share
-  	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
     // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
@@ -178,7 +119,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 
   if(indicatorFeatures.length > 0){
     console.error("Spatial Aggregation failed for a total number of " + indicatorFeatures.length);
-    throw Error("Spatial Aggregation operation failed for a total number of " + indicatorFeatures.length);
+    //throw Error("Spatial Aggregation operation failed for a total number of " + indicatorFeatures.length);
   }
 
   return targetSpatialUnit_geoJSON;

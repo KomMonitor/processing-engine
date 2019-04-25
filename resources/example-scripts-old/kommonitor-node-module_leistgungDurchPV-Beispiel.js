@@ -7,7 +7,7 @@ var turf = require('@turf/turf');
 const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
 const indicator_date_prefix = "DATE_";
 
-const co2AttributeValue = "CO2_Erspar";
+const leistungAttributeValue = "Leistung";
 const yearOfActivationAttribute = "Jahr_Zugan";
 
 /**
@@ -41,6 +41,8 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
       var pvFeature;
       targetSpatialUnitFeature.properties[targetDate] = 0;
 
+        console.log("Comparing to " + pvAnlagen.features.length + " PV POIs");
+
       for (var pointIndex=0; pointIndex < pvAnlagen.features.length; pointIndex++){
 
         pvFeature = pvAnlagen.features[pointIndex];
@@ -49,7 +51,9 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
           if (turf.booleanWithin(pvFeature, targetSpatialUnitFeature)){
       			pvAnlagen.features.splice(pointIndex, 1);
             pointIndex--;
-      			targetSpatialUnitFeature.properties[targetDate] += Number(pvFeature.properties[co2AttributeValue]);
+            console.log("PV Feature found with value " + pvFeature.properties[leistungAttributeValue]);
+      			targetSpatialUnitFeature.properties[targetDate] += Number(pvFeature.properties[leistungAttributeValue]);
+            console.log("targetSpatialUnitFeature value is now: " + targetSpatialUnitFeature.properties[targetDate]);
       		}
         }
       }
