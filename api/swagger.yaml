@@ -22,6 +22,33 @@ schemes:
 security:
 - basicAuth: []
 paths:
+  /feedback-mail:
+    post:
+      tags:
+      - "feedback-mail"
+      summary: "Send Feedback Mail."
+      description: "Send Feedback Mail."
+      operationId: "postFeedbackMail"
+      consumes:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "mail-input"
+        description: "details necessary to send the mail"
+        required: true
+        schema:
+          $ref: "#/definitions/FeedbackMailInputType"
+      responses:
+        200:
+          description: "OK"
+        401:
+          description: "API key is missing or invalid"
+          headers:
+            WWW_Authenticate:
+              type: "string"
+        405:
+          description: "Invalid input"
+      x-swagger-router-controller: "FeedbackMail"
   /script-engine/customizableIndicatorComputation:
     post:
       tags:
@@ -182,18 +209,18 @@ definitions:
     description: "required input parameters to execute a customizable indicator computation"
     example:
       targetSpatialUnitId: "targetSpatialUnitId"
+      georesourceIds:
+      - "georesourceIds"
+      - "georesourceIds"
       scriptId: "scriptId"
       customProcessProperties:
       - dataType: "string"
         name: "name"
-        value: "customValue"
+        value: "value"
       - dataType: "string"
         name: "name"
-        value: "customValue"
+        value: "value"
       targetDate: "2000-01-23"
-      georesourceIds:
-      - "georesourceIds"
-      - "georesourceIds"
       baseIndicatorIds:
       - "baseIndicatorIds"
       - "baseIndicatorIds"
@@ -228,7 +255,7 @@ definitions:
     required:
     - "jobId"
     - "progress"
-    - "result_geoJSON_base64"
+    - "result_geoJSON"
     - "status"
     properties:
       jobId:
@@ -248,10 +275,10 @@ definitions:
         type: "number"
         format: "int32"
         description: "the progress of indicator computation in percent."
-      result_geoJSON_base64:
+      result_geoJSON:
         type: "string"
         description: "the computed target indicator for the target spatial unit as\
-          \ valid GeoJSON string encoded via Base64."
+          \ valid GeoJSON string."
       error:
         type: "string"
         description: "an error message if an error occured during indicator computation.\
@@ -260,16 +287,18 @@ definitions:
       \ If the result was computed then it is also included within the response object."
     example:
       jobId: "jobId"
-      result_geoJSON_base64: "result_geoJSON_base64"
-      progress: 100
+      result_geoJSON: "result_geoJSON"
+      progress: 0.80082819046101150206595775671303272247314453125
       error: "error"
-      status: "Succeeded"
+      status: "ACCEPTED"
   DefaultIndicatorComputationInputType:
     type: "object"
     required:
+    - "defaultProcessProperties"
+    - "georesourceIds"
     - "scriptId"
-    - "targetIndicatorId"
     - "targetDate"
+    - "targetIndicatorId"
     properties:
       scriptId:
         type: "string"
@@ -277,7 +306,8 @@ definitions:
           \ the target indicator computation."
       targetIndicatorId:
         type: "string"
-        description: "the identifier of the target indicator that can be computed by the associated script."
+        description: "the identifier of the target indicator that can be computed\
+          \ by the associated script."
       targetDate:
         type: "string"
         format: "date"
@@ -298,7 +328,7 @@ definitions:
         items:
           type: "string"
       defaultProcessProperties:
-        type: array
+        type: "array"
         description: "a list of process parameters utilizing their default values."
         items:
           $ref: "#/definitions/ProcessPropertyType"
@@ -306,28 +336,28 @@ definitions:
       \ Default means that the process parameters/properties that infect the indicator\
       \ computation are set to default values."
     example:
-      scriptId: "scriptId"
-      targetIndicatorId: "targetIndicatorId"
-      targetDate: "2000-01-23"
       georesourceIds:
       - "georesourceIds"
       - "georesourceIds"
+      scriptId: "scriptId"
+      targetDate: "2000-01-23"
+      targetIndicatorId: "targetIndicatorId"
       baseIndicatorIds:
       - "baseIndicatorIds"
       - "baseIndicatorIds"
       defaultProcessProperties:
       - dataType: "string"
         name: "name"
-        value: "defaultValue"
+        value: "value"
       - dataType: "string"
         name: "name"
-        value: "defaultValue"
+        value: "value"
   DefaultIndicatorComputationStatusResultType:
     type: "object"
     required:
     - "jobId"
     - "progress"
-    - "result"
+    - "result_url"
     - "status"
     properties:
       jobId:
@@ -347,12 +377,9 @@ definitions:
         type: "number"
         format: "int32"
         description: "the progress of indicator computation in percent."
-      result:
-        type: "array"
-        description: "an array of objects containing information about indicator resources persisted within KomMonitor data management service."
-        items:
-          $ref: "#/definitions/PersistedIndicatorResultType"
-          type: "string"
+      result_url:
+        type: "string"
+        description: "the full URL to the freshly computed and persisted indicator."
       error:
         type: "string"
         description: "an error message if an error occured during indicator computation.\
@@ -360,58 +387,31 @@ definitions:
     description: "status information about the default execution of the target indicator."
     example:
       jobId: "jobId"
-      result:
-        - indicatorId: "indicatorId1"
-          indicatorName: "indicatorName"
-          spatialUnitId: "spatialUnitId1"
-          spatialUnitName: "spatialUnitName"
-          targetDate: "2018-01-01"
-          urlToPersistedResource: "UrlToResource"
-        - indicatorId: "indicatorId1"
-          indicatorName: "indicatorName"
-          spatialUnitId: "spatialUnitId2"
-          spatialUnitName: "spatialUnitName"
-          targetDate: "2018-01-01"
-          urlToPersistedResource: "UrlToResource"
-      progress: 5
+      result_url: "result_url"
+      progress: 0.80082819046101150206595775671303272247314453125
       error: "error"
-      status: "Created"
-  PersistedIndicatorResultType:
+      status: "ACCEPTED"
+  FeedbackMailInputType:
     type: "object"
     required:
-    - "indicatorId"
-    - "indicatorName"
-    - "spatialUnitId"
-    - "spatialUnitName"
-    - "targetDate"
-    - "urlToPersistedResource"
+    - "body"
+    - "recipientMail"
+    - "subject"
     properties:
-      indicatorId:
+      recipientMail:
         type: "string"
-        description: "the identifier of the indicator"
-      indicatorName:
+        description: "the mail address of the recipient."
+      body:
         type: "string"
-        description: "the name of the indicator"
-      spatialUnitId:
+        description: "the mail message body."
+      subject:
         type: "string"
-        description: "the identifier of the associated spatialUnit"
-      spatialUnitName:
-        type: "string"
-        description: "the name of the associated spatialUnit"
-      targetDate:
-        type: "string"
-        description: "the target date according to the pattern 'YYY-MM-DD'"
-      urlToPersistedResource:
-        type: "string"
-        description: "the URL pointing to the persisted indicator within the KomMonitor data management API."
+        description: "the mail subject."
+    description: "input details for feedback mail."
     example:
-      indicatorId: "indicatorId1"
-      indicatorName: "indicatorName"
-      spatialUnitId: "spatialUnitId1"
-      spatialUnitName: "spatialUnitName"
-      targetDate: "2018-01-01"
-      urlToPersistedResource: "UrlToResource"
-
+      subject: "subject"
+      body: "body"
+      recipientMail: "recipientMail"
 responses:
   UnauthorizedError:
     description: "API key is missing or invalid"
