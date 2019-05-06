@@ -112,8 +112,8 @@ const aggregationType = "AVERAGE";
 *
 * @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit as GeoJSON FeatureCollection object.
-* @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, wheres key='meaningful name of the indicator' and value='indicator as GeoJSON object'
-* @param {map.<string, FeatureCollection<Polygon>>} georesourcesMap - Map containing all georesources, wheres key='meaningful name of the georesource' and value='georesource as GeoJSON object' (they are used to execute geometric/toptologic computations)
+* @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, wheres key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
+* @param {map.<string, FeatureCollection<Polygon|LineString|Point>>} georesourcesMap - Map containing all georesources, wheres key='meaningful name or id of the georesource' and value='georesource as GeoJSON object' (they are used to execute geometric/toptologic computations) (it contains duplicate entries, one for the georesource name and one for the georesource id)
 * @param {Array.<Object.<string, (string|number|boolean)>>} processProperties - an array containing objects representing variable additional properties that are required to perform the indicator computation.
 * Each entry has properties Object.name and Object.value for name and value of the parameter.
 * @returns {FeatureCollection<Polygon>} the computed indicator for submitted {@linkcode targetSpatialUnit_geoJSON} features as GeoJSON FeatureCollection
@@ -188,6 +188,78 @@ module.exports.disaggregateIndicator = disaggregateIndicator;
 // from other baseIndicators or georesources in method "computeIndicator" or when writing your own aggregation/disaggregation logic.                        //
 // However, you are free to implement your own methods and logic, especially when the desired operation is not covered by the API methods offered here.     //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Aquires the base indicator with the name {@linkcode indicatorName} from the submitted {@linkcode baseIndicatorsMap}.
+* @param {string} indicatorName - the name of the base indicator
+* @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, whereas key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
+* @return {FeatureCollection<Polygon>} returns the base indicator as {@linkcode FeatureCollection<Polygon>} or throws an error if the {@linkcode baseIndicatorsMap} does not contain an entry with {@linkcode key=indicatorName}
+* @throws {Error} if the {@linkcode baseIndicatorsMap} does not contain an entry with {@linkcode key=indicatorName}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getBaseIndicatorByName(indicatorName, baseIndicatorsMap){
+  var baseIndicatorCandidate = baseIndicatorsMap.get(indicatorName);
+  if(baseIndicatorCandidate === null || baseIndicatorCandidate === undefined){
+    console.log("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
+    throwError("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
+  }
+  return baseIndicatorCandidate;
+};
+
+/**
+* Aquires the base indicator with the id {@linkcode indicatorId} from the submitted {@linkcode baseIndicatorsMap}.
+* @param {string} indicatorId - the name of the base indicator
+* @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, whereas key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
+* @return {FeatureCollection<Polygon>} returns the base indicator as {@linkcode FeatureCollection<Polygon>} or throws an error if the {@linkcode baseIndicatorsMap} does not contain an entry with {@linkcode key=indicatorId}
+* @throws {Error} if the {@linkcode baseIndicatorsMap} does not contain an entry with {@linkcode key=indicatorId}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getBaseIndicatorById(indicatorId, baseIndicatorsMap){
+  var baseIndicatorCandidate = baseIndicatorsMap.get(indicatorId);
+  if(baseIndicatorCandidate === null || baseIndicatorCandidate === undefined){
+    console.log("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
+    throwError("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
+  }
+  return baseIndicatorCandidate;
+};
+
+/**
+* Aquires the georesource with the name {@linkcode georesourceName} from the submitted {@linkcode georesourcesMap}.
+* @param {string} georesourceName - the name of the georesources
+* @param {map.<string, FeatureCollection<Polygon|LineString|Point>>} georesourcesMap - Map containing all georesources, whereas key='meaningful name or id of the georesource' and value='georesourc as GeoJSON object' (it contains duplicate entries, one for the georesource's name and one for the georesource's id)
+* @return {FeatureCollection<Polygon|LineString|Point>} returns the georesource as {@linkcode FeatureCollection<Polygon|LineString|Point>} or throws an error if the {@linkcode georesourcesMap} does not contain an entry with {@linkcode key=georesourceName}
+* @throws {Error} if the {@linkcode georesourcesMap} does not contain an entry with {@linkcode key=georesourceName}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getGeoresourceByName(georesourceName, georesourcesMap){
+  var georesourceCandidate = georesourcesMap.get(georesourceName);
+  if(georesourceCandidate === null || georesourceCandidate === undefined){
+    console.log("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
+    throwError("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
+  }
+  return georesourceCandidate;
+};
+
+/**
+* Aquires the georesource with the id {@linkcode georesourceId} from the submitted {@linkcode georesourcesMap}.
+* @param {string} georesourceId - the id of the georesources
+* @param {map.<string, FeatureCollection<Polygon|LineString|Point>>} georesourcesMap - Map containing all georesources, whereas key='meaningful name or id of the georesource' and value='georesourc as GeoJSON object' (it contains duplicate entries, one for the georesource's name and one for the georesource's id)
+* @return {FeatureCollection<Polygon|LineString|Point>} returns the georesource as {@linkcode FeatureCollection<Polygon|LineString|Point>} or throws an error if the {@linkcode georesourcesMap} does not contain an entry with {@linkcode key=georesourceId}
+* @throws {Error} if the {@linkcode georesourcesMap} does not contain an entry with {@linkcode key=georesourceId}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getGeoresourceById(georesourceId, georesourcesMap){
+  var georesourceCandidate = georesourcesMap.get(georesourceId);
+  if(georesourceCandidate === null || georesourceCandidate === undefined){
+    console.log("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
+    throwError("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
+  }
+  return georesourceCandidate;
+};
 
 /**
 * Checks whether the submitted object is a valid GeoJSON feature.
