@@ -370,7 +370,7 @@ function getProcessParameterByName_asBoolean(parameterName, processParameters){
 * @function
 */
 function getSpatialUnitFeatureIdValue(feature){
-  return feature.properties.spatialUnitFeatureId;
+  return String(feature.properties.spatialUnitFeatureId);
 };
 
 /**
@@ -381,7 +381,7 @@ function getSpatialUnitFeatureIdValue(feature){
 * @function
 */
 function getSpatialUnitFeatureNameValue(feature){
-  return feature.properties.spatialUnitFeatureName;
+  return String(feature.properties.spatialUnitFeatureName);
 };
 
 /**
