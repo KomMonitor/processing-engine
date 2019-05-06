@@ -114,13 +114,13 @@ const aggregationType = "AVERAGE";
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit as GeoJSON FeatureCollection object.
 * @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, wheres key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
 * @param {map.<string, FeatureCollection<Polygon|LineString|Point>>} georesourcesMap - Map containing all georesources, wheres key='meaningful name or id of the georesource' and value='georesource as GeoJSON object' (they are used to execute geometric/toptologic computations) (it contains duplicate entries, one for the georesource name and one for the georesource id)
-* @param {Array.<Object.<string, (string|number|boolean)>>} processProperties - an array containing objects representing variable additional properties that are required to perform the indicator computation.
+* @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
 * Each entry has properties Object.name and Object.value for name and value of the parameter.
 * @returns {FeatureCollection<Polygon>} the computed indicator for submitted {@linkcode targetSpatialUnit_geoJSON} features as GeoJSON FeatureCollection
 * @memberof METHODS_TO_IMPLEMENT_OR_OVERWRITE
 * @function
 */
-function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processProperties){
+function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
 };
@@ -259,6 +259,107 @@ function getGeoresourceById(georesourceId, georesourcesMap){
     throwError("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
   }
   return georesourceCandidate;
+};
+
+/**
+* Aquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
+* @param {string} parameterName - the name of the process parameter
+* @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
+* Each entry has properties Object.name and Object.value for name and value of the parameter.
+* @return {Object<String>} returns the {@linkcode value} of the requested process parameter as {@linkcode String}. Users should know the real type (i.e. {@linkcode boolean, number}).
+* Throws an error if the {@linkcode processParameters} array does not contain an entry with {@linkcode Object.name=parameterName}
+* @throws {Error} if the {@linkcode processParameters} array does not contain an entry with {@linkcode Object.name=parameterName}
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getProcessParameterByName_asString(parameterName, processParameters){
+  var parameter = undefined;
+
+  processParameters.forEach(function(property){
+    if(property.name === parameterName){
+      parameter = property.value;
+    }
+  });
+
+  if(parameter === undefined){
+    throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
+  }
+  else{
+    return parameter;
+  }
+};
+
+/**
+* Aquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
+* @param {string} parameterName - the name of the process parameter
+* @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
+* Each entry has properties Object.name and Object.value for name and value of the parameter.
+* @return {Object<Number>} returns the {@linkcode value} of the requested process parameter as {@linkcode String}. The {@linkcode value} is parsed as {@linkcode Number} and returned.
+* Throws an error if the {@linkcode processParameters} array does not contain an entry with {@linkcode Object.name=parameterName} or if the parsing of the value from {@linkcode String --> Number} throws an error.
+* @throws {Error} if the {@linkcode processParameters} array does not contain an entry with {@linkcode Object.name=parameterName} or if the parsing of the value from {@linkcode String --> Number} throws an error.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getProcessParameterByName_asNumber(parameterName, processParameters){
+  var parameter = undefined;
+
+  processParameters.forEach(function(property){
+    if(property.name === parameterName){
+      parameter = property.value;
+    }
+  });
+
+  if(parameter === undefined){
+    throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
+  }
+  else{
+
+    try{
+      parameter = Number(parameter);
+    }
+    catch(error){
+        throwError("Error while parsing parameter value '" + parameter + "' from parameter with name '" + parameterName + "' as Number.");
+    }
+
+    return parameter;
+  }
+};
+
+/**
+* Aquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
+* @param {string} parameterName - the name of the process parameter
+* @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
+* Each entry has properties Object.name and Object.value for name and value of the parameter.
+* @return {Object<true|false>} returns the {@linkcode value} of the requested process parameter as {@linkcode String}. The {@linkcode value} is parsed as {@linkcode Boolean (true|false)} and returned.
+* Throws an error if the {@linkcode processParameters} array does not contain an entry with {@linkcode Object.name=parameterName} or if the parsing of the value from {@linkcode String --> Number} throws an error.
+* @throws {Error} if the {@linkcode processParameters} array does not contain an entry with {@linkcode Object.name=parameterName} or if the parsing of the value from {@linkcode String --> Number} throws an error.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getProcessParameterByName_asBoolean(parameterName, processParameters){
+  var parameter = undefined;
+
+  processParameters.forEach(function(property){
+    if(property.name === parameterName){
+      parameter = property.value;
+    }
+  });
+
+  if(parameter === undefined){
+    throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
+  }
+  else{
+
+    try{
+      // try to convert into boolean true or false!
+      parameter = JSON.parse(parameter);
+    }
+    catch(error){
+        throwError("Error while parsing parameter value '" + parameter + "' from parameter with name '" + parameterName + "' as Number.");
+    }
+
+    return parameter;
+  }
 };
 
 /**
