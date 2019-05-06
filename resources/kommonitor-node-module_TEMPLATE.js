@@ -190,7 +190,7 @@ module.exports.disaggregateIndicator = disaggregateIndicator;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* Aquires the base indicator with the name {@linkcode indicatorName} from the submitted {@linkcode baseIndicatorsMap}.
+* Acquires the base indicator with the name {@linkcode indicatorName} from the submitted {@linkcode baseIndicatorsMap}.
 * @param {string} indicatorName - the name of the base indicator
 * @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, whereas key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
 * @return {FeatureCollection<Polygon>} returns the base indicator as {@linkcode FeatureCollection<Polygon>} or throws an error if the {@linkcode baseIndicatorsMap} does not contain an entry with {@linkcode key=indicatorName}
@@ -208,7 +208,7 @@ function getBaseIndicatorByName(indicatorName, baseIndicatorsMap){
 };
 
 /**
-* Aquires the base indicator with the id {@linkcode indicatorId} from the submitted {@linkcode baseIndicatorsMap}.
+* Acquires the base indicator with the id {@linkcode indicatorId} from the submitted {@linkcode baseIndicatorsMap}.
 * @param {string} indicatorId - the name of the base indicator
 * @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, whereas key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
 * @return {FeatureCollection<Polygon>} returns the base indicator as {@linkcode FeatureCollection<Polygon>} or throws an error if the {@linkcode baseIndicatorsMap} does not contain an entry with {@linkcode key=indicatorId}
@@ -226,7 +226,7 @@ function getBaseIndicatorById(indicatorId, baseIndicatorsMap){
 };
 
 /**
-* Aquires the georesource with the name {@linkcode georesourceName} from the submitted {@linkcode georesourcesMap}.
+* Acquires the georesource with the name {@linkcode georesourceName} from the submitted {@linkcode georesourcesMap}.
 * @param {string} georesourceName - the name of the georesources
 * @param {map.<string, FeatureCollection<Polygon|LineString|Point>>} georesourcesMap - Map containing all georesources, whereas key='meaningful name or id of the georesource' and value='georesourc as GeoJSON object' (it contains duplicate entries, one for the georesource's name and one for the georesource's id)
 * @return {FeatureCollection<Polygon|LineString|Point>} returns the georesource as {@linkcode FeatureCollection<Polygon|LineString|Point>} or throws an error if the {@linkcode georesourcesMap} does not contain an entry with {@linkcode key=georesourceName}
@@ -244,7 +244,7 @@ function getGeoresourceByName(georesourceName, georesourcesMap){
 };
 
 /**
-* Aquires the georesource with the id {@linkcode georesourceId} from the submitted {@linkcode georesourcesMap}.
+* Acquires the georesource with the id {@linkcode georesourceId} from the submitted {@linkcode georesourcesMap}.
 * @param {string} georesourceId - the id of the georesources
 * @param {map.<string, FeatureCollection<Polygon|LineString|Point>>} georesourcesMap - Map containing all georesources, whereas key='meaningful name or id of the georesource' and value='georesourc as GeoJSON object' (it contains duplicate entries, one for the georesource's name and one for the georesource's id)
 * @return {FeatureCollection<Polygon|LineString|Point>} returns the georesource as {@linkcode FeatureCollection<Polygon|LineString|Point>} or throws an error if the {@linkcode georesourcesMap} does not contain an entry with {@linkcode key=georesourceId}
@@ -262,7 +262,7 @@ function getGeoresourceById(georesourceId, georesourcesMap){
 };
 
 /**
-* Aquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
+* Acquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
 * @param {string} parameterName - the name of the process parameter
 * @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
 * Each entry has properties Object.name and Object.value for name and value of the parameter.
@@ -290,7 +290,7 @@ function getProcessParameterByName_asString(parameterName, processParameters){
 };
 
 /**
-* Aquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
+* Acquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
 * @param {string} parameterName - the name of the process parameter
 * @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
 * Each entry has properties Object.name and Object.value for name and value of the parameter.
@@ -326,7 +326,7 @@ function getProcessParameterByName_asNumber(parameterName, processParameters){
 };
 
 /**
-* Aquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
+* Acquires the process parameter with the name {@linkcode parameterName} from the submitted {@linkcode processParametersObject}.
 * @param {string} parameterName - the name of the process parameter
 * @param {Array.<Object.<string, (string|number|boolean)>>} processParameters - an array containing objects representing variable additional process parameters that are required to perform the indicator computation.
 * Each entry has properties Object.name and Object.value for name and value of the parameter.
@@ -360,6 +360,28 @@ function getProcessParameterByName_asBoolean(parameterName, processParameters){
 
     return parameter;
   }
+};
+
+/**
+* Acquires the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature}.
+* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature, which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureId} that holds the value of the unique feature id.
+* @return {string} returns the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getSpatialUnitFeatureIdValue(feature){
+  return feature.properties.spatialUnitFeatureId;
+};
+
+/**
+* Acquires the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature}.
+* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature, which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureName} that holds the value of the unique feature name.
+* @return {string} returns the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function getSpatialUnitFeatureNameValue(feature){
+  return feature.properties.spatialUnitFeatureName;
 };
 
 /**
