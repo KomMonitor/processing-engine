@@ -363,8 +363,8 @@ function getProcessParameterByName_asBoolean(parameterName, processParameters){
 };
 
 /**
-* Acquires the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature}.
-* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature, which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureId} that holds the value of the unique feature id.
+* Acquires the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature} representing a spatial unit (i.e. city districts, building blocks, etc).
+* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature representing a spatial unit (i.e. city districts, building blocks, etc), which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureId} that holds the value of the unique feature id.
 * @return {string} returns the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature}.
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
@@ -374,8 +374,8 @@ function getSpatialUnitFeatureIdValue(feature){
 };
 
 /**
-* Acquires the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature}.
-* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature, which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureName} that holds the value of the unique feature name.
+* Acquires the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature} representing a spatial unit (i.e. city districts, building blocks, etc).
+* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature representing a spatial unit (i.e. city districts, building blocks, etc), which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureName} that holds the value of the unique feature name.
 * @return {string} returns the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature}.
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
