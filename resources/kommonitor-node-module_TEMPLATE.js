@@ -541,7 +541,7 @@ function getPropertyValue(feature, propertyName){
 */
 function getIndicatorValue(feature, targetDate){
   var targetDateWithPrefix;
-  if(! targetDate.includes(indicator_date_prefix)){
+  if(targetDate.includes(indicator_date_prefix)){
       targetDateWithPrefix = targetDate;
   }
   else{
@@ -568,7 +568,7 @@ function getIndicatorValue(feature, targetDate){
 */
 function getIndicatorValueArray(featureCollection, targetDate){
   var targetDateWithPrefix;
-  if(! targetDate.includes(indicator_date_prefix)){
+  if(targetDate.includes(indicator_date_prefix)){
       targetDateWithPrefix = targetDate;
   }
   else{
@@ -613,7 +613,7 @@ function setIndicatorValue(feature, targetDate, value){
   }
 
   var targetDateWithPrefix;
-  if(! targetDate.includes(indicator_date_prefix)){
+  if(targetDate.includes(indicator_date_prefix)){
       targetDateWithPrefix = targetDate;
   }
   else{
