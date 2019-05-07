@@ -174,8 +174,9 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
     // get spatialUnit feature id as string --> use it to get associated map entry
     var spatialUnitFeatureId = getSpatialUnitFeatureIdValue(spatialUnitFeature);
 
-    // compute area of spatial unit feature in square meters
-    var featureArea = area(spatialUnitFeature);
+    // compute area of spatial unit feature in hectars
+    // divide by 10000 to transform m² to ha
+    var featureArea = area(spatialUnitFeature) / 10000;
 
     // retrieve map entry value associated to feature id
     // Casting to Number() is optional but recommended, when performing numeric calculations
