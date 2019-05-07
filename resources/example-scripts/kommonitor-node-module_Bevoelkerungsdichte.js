@@ -102,7 +102,7 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "AVERAGE";
+const aggregationType = "SUM";
 
 
 
