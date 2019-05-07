@@ -385,6 +385,16 @@ function getSpatialUnitFeatureNameValue(feature){
 };
 
 /**
+* Logs a custom message (i.e. to console).
+* @param {string} logMessage - message that shall be logged.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function log(logMessage){
+  console.log(logMessage);
+};
+
+/**
 * Checks whether the submitted object is a valid GeoJSON feature.
 * The feature must contain a property {@linkcode "type"="Feature"} and a property named {@linkcode geometry}, which must have a {@linkcode coordinates} array and {@linkcode type} property.
 * The method does not check, if the feature contains a {@linkcode properties} attribute.
