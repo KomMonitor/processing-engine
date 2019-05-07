@@ -657,7 +657,7 @@ function getTargetDateWithPropertyPrefix(targetDate){
 * @function
 */
 function asFeature(geometry){
-  return turf.area(geoJSON);
+  return turf.feature(geometry);
 };
 
 /**
@@ -670,7 +670,7 @@ function asFeature(geometry){
 * @function
 */
 function asFeatureCollection(features){
-  return turf.area(geoJSON);
+  return turf.featureCollection(features);
 };
 
 /**
