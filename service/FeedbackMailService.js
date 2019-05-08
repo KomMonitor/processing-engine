@@ -27,7 +27,7 @@ exports.postFeedbackMail = function(mailInput) {
         });
 
         // file as base64 encoded URI path (i.e. data:text/plain;base64,aGVsbG8gd29ybGQ=)
-        var attachement = mailInput.attachement;
+        var attachment = mailInput.attachment;
 
     // setup email data with unicode symbols
         var mailOptions = {
@@ -38,7 +38,7 @@ exports.postFeedbackMail = function(mailInput) {
             // html: '<b>Hello world?</b>' // html body
             attachments: [
               {   // data uri as an attachment
-                  path: attachement
+                  path: attachment
               }
             ]
         };
