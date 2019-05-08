@@ -933,6 +933,7 @@ function center_geometric(geoJSON){
 /**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#centerOfMass} to compute the center of mass of the submitted features.
 * @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @param {Object} properties - the properties object that shall be used to set the point feature's properties.
 * @returns {Feature<Point>} the GeoJSON point feature representing the center of mass of the submitted features (using the mean of all vertices).
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#centerOfMass}
@@ -940,7 +941,7 @@ function center_geometric(geoJSON){
 * @function
 */
 function center_mass(geoJSON){
-  return turf.center(geoJSON);
+  return turf.centerOfMass(geoJSON, properties);
 };
 
 /**
