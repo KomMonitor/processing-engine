@@ -102,7 +102,7 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
 
 
 
@@ -124,7 +124,7 @@ function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsM
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var ewzGeoJSON = getBaseIndicatorByName('Gesamteinwohnerzahl', baseIndicatorsMap);
+  var ewzGeoJSON = getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
 
   log("Retrieved required baseIndicators successfully");
 
@@ -781,7 +781,8 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      if(within_usingBBOX(indicatorFeature, targetFeature)){
+      var centerPoint = center_geometric(indicatorFeature);
+      if(within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
@@ -792,7 +793,12 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
     // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
-  	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
+    if(numberOfIndicatorFeaturesWithinTargetFeature === 0){
+      console.log("WARNING: For feature with id '" + targetFeature.properties.spatialUnitFeatureId + "' no aggregatable sub features have been found. Thus the indicator result will be 0.");
+    }
+    else{
+        targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
+    }
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
     // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
@@ -842,7 +848,8 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      if(within_usingBBOX(indicatorFeature, targetFeature)){
+      var centerPoint = center_geometric(indicatorFeature);
+      if(within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
