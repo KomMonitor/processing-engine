@@ -51,7 +51,7 @@ const turf = require('@turf/turf');
 */
 const jStat = require('jStat').jStat;
 
-
+const axios = require("axios");
 
 
 
@@ -940,7 +940,7 @@ function center_geometric(geoJSON){
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-function center_mass(geoJSON){
+function center_mass(geoJSON, properties){
   return turf.centerOfMass(geoJSON, properties);
 };
 
