@@ -8,7 +8,13 @@ var fs = require('fs'),
 
 var cors = require('cors');
 var serveStatic = require('serve-static');
-var app = require('connect')();
+// var app = require('connect')();
+var express = require('express');
+var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit:'50mb'}));
+app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
+
 const corsOptions = {
   exposedHeaders: 'Location,Connection,Content-Type,Date,Transfer-Encoding',
 };

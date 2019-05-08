@@ -26,13 +26,21 @@ exports.postFeedbackMail = function(mailInput) {
             }
         });
 
+        // file as base64 encoded URI path (i.e. data:text/plain;base64,aGVsbG8gd29ybGQ=)
+        var attachement = mailInput.attachement;
+
     // setup email data with unicode symbols
         var mailOptions = {
             from: '"KomMonitor Projekt" <kommonitor@gmx.de>', // sender address
             to: mailInput.recipientMail, // list of receivers
             subject: mailInput.subject, // Subject line
-            text: mailInput.body // plain text body
+            text: mailInput.body, // plain text body
             // html: '<b>Hello world?</b>' // html body
+            attachments: [
+              {   // data uri as an attachment
+                  path: attachement
+              }
+            ]
         };
 
         transporter.sendMail(mailOptions, function (error, info) {
