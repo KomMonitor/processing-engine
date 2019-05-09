@@ -719,7 +719,12 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
     // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
-  	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
+    if(numberOfIndicatorFeaturesWithinTargetFeature === 0){
+      console.log("WARNING: For feature with id '" + getSpatialUnitFeatureIdValue(targetFeature) + "' no aggregatable sub features have been found. Thus the indicator result will be 0.");
+    }
+    else{
+        targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
+    }
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
     // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
