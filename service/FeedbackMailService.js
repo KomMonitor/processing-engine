@@ -36,12 +36,15 @@ exports.postFeedbackMail = function(mailInput) {
             subject: mailInput.subject, // Subject line
             text: mailInput.body, // plain text body
             // html: '<b>Hello world?</b>' // html body
-            attachments: [
-              {   // data uri as an attachment
-                  path: attachment
-              }
-            ]
         };
+
+        if (attachment){
+          mailOptions.attachments = [
+            {   // data uri as an attachment
+                path: attachment
+            }
+          ];
+        }
 
         transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
