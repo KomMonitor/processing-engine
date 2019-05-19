@@ -16,7 +16,9 @@ app.use(bodyParser.json({limit:'50mb'}));
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 
 const corsOptions = {
-  exposedHeaders: 'Location,Connection,Content-Type,Date,Transfer-Encoding',
+  // exposedHeaders: 'Access-Control-Allow-Origin,Location,Connection,Content-Type,Date,Transfer-Encoding'
+  exposedHeaders: ['Access-Control-Allow-Origin','Location','Connection','Content-Type','Date','Transfer-Encoding','Origin','X-Requested-With', 'Accept'],
+  origin: "*"
 };
 app.use(cors(corsOptions));
 app.use(serveStatic("public"));

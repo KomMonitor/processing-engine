@@ -407,11 +407,15 @@ definitions:
       subject:
         type: "string"
         description: "the mail subject."
+      attachment:
+        type: "string"
+        description: "an optional attachment as Base64 encoded String."
     description: "input details for feedback mail."
     example:
       subject: "subject"
       body: "body"
       recipientMail: "recipientMail"
+      attachment: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAPACAYAAACl4s..."
 responses:
   UnauthorizedError:
     description: "API key is missing or invalid"
