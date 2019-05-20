@@ -15,21 +15,13 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit:'50mb'}));
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 
-const whitelist = ['https://kommonitor.essen.de', 'https://km.essen.de'];
-
 const corsOptions = {
   // exposedHeaders: 'Access-Control-Allow-Origin,Location,Connection,Content-Type,Date,Transfer-Encoding'
   exposedHeaders: ['Access-Control-Allow-Origin','Location','Connection','Content-Type','Date','Transfer-Encoding','Origin','X-Requested-With', 'Accept'],
-  origin: function(origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
+  origin: "*"
 };
-app.use(serveStatic("public"));
 app.use(cors(corsOptions));
+app.use(serveStatic("public"));
 
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
