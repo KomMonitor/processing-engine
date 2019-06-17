@@ -120,7 +120,7 @@ const aggregationType = "AVERAGE";
 * @memberof METHODS_TO_IMPLEMENT_OR_OVERWRITE
 * @function
 */
-function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
+async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
 };
@@ -1186,7 +1186,7 @@ async function distance_waypath_kilometers(point_A, point_B, vehicleType){
         }
     }
 }
-* @returns {number} the distance matrix between the submitted source and destination points based on waypath routing.
+* @returns {object} the distance matrix between the submitted source and destination points based on waypath routing.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
@@ -1327,7 +1327,7 @@ async function distance_matrix_kilometers(locations, sourceIndices, destinationI
         }
     }
 }
-* @returns {number} the duration matrix between the submitted source and destination points based on waypath routing.
+* @returns {object} the duration matrix between the submitted source and destination points based on waypath routing.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
