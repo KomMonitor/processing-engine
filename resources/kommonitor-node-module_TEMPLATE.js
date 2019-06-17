@@ -110,6 +110,9 @@ const aggregationType = "AVERAGE";
 * This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
 * as method parameters that can be used within the method body.
 *
+* NOTE: The function is async, so users may make use of keyword "await" to wait for results of other async helper API methods.
+* (This is necessary when users want to wait for asynchronous method execution such as external API calls in a synchronous program)
+*
 * @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit as GeoJSON FeatureCollection object.
 * @param {map.<string, FeatureCollection<Polygon>>} baseIndicatorsMap - Map containing all indicators, wheres key='meaningful name or id of the indicator' and value='indicator as GeoJSON object' (it contains duplicate entries, one for the indicator name and one for the indicator id)
