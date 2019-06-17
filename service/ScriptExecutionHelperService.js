@@ -120,10 +120,10 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       // require the script code as new NodeJS module
       fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
       var nodeModuleForIndicator = require("../tmp/tmp.js");
-      // var nodeModuleForIndicator = require("../resources/kommonitor-node-module_wachstumsstressBeispiel.js");
+      // var nodeModuleForIndicator = require("../resources/example-scripts/kommonitor-node-module_Distanz_Naheste_Grundschule.js");
 
       //execute script to compute indicator
-      var indicatorGeoJson_lowestSpatialUnit = nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
+      var indicatorGeoJson_lowestSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
 
       // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
       var resultingIndicatorsMap = new Map();
@@ -212,7 +212,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       progressHelper.persistProgress(job.id, "customizedComputation", 60);
 
       //execute script to compute indicator
-      var responseGeoJson = nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
+      var responseGeoJson = await nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
 
       // job.data.progress = 90;
       progressHelper.persistProgress(job.id, "customizedComputation", 90);

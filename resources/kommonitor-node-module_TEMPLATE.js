@@ -180,7 +180,6 @@ module.exports.disaggregateIndicator = disaggregateIndicator;
 
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PREDEFINED API HELPER METHODS                                                                                                                            //
 // here you find helpful methods that can be used to perform certain spatio-temporal or statistical computation. These methods make internal use of Turf.js //
@@ -719,12 +718,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
     // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
-    if(numberOfIndicatorFeaturesWithinTargetFeature === 0){
-      console.log("WARNING: For feature with id '" + getSpatialUnitFeatureIdValue(targetFeature) + "' no aggregatable sub features have been found. Thus the indicator result will be 0.");
-    }
-    else{
-        targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
-    }
+  	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
     // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
@@ -1117,6 +1111,287 @@ async function distance_waypath_kilometers(point_A, point_B, vehicleType){
 };
 
 /**
+* Performs a POST request against {@linkcode /matrix} endpoint of the openrouteservice instance
+* specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the distance matrix
+* for the submitted source and destinations points based on waypath routing.
+* @param {Array.Feature<Point>} locations - array of valid GeoJSON Features with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}.
+* WARNING: it might be possible, that the queried instance of OpenRouteService has a configuration for maximum number of allowed locations per request (i.e. 200 is default configuration),
+* causing the request to fail.
+* @param {String} sourceIndices - the indices pointing to such points within submitted {@linkcode locations}, that shall be used as source points for matrix analysis,
+* as comma-separated string of indices. Required format: 'index1,index2,index3,...'. A check, whether the index string contains indices that do not match the {@linkcode locations} array, is not performed.
+* @param {String} destinationIndices - the indices pointing to such points within submitted {@linkcode locations}, that shall be used as destination points for matrix analysis,
+* as comma-separated string of indices. Required format: 'index4,index5,index6,...'. A check, whether the index string contains indices that do not match the {@linkcode locations} array, is not performed.
+* @param {string} vehicleType - the type of vehicle to use for routing analysis;
+* allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
+* @example
+* // examplar response to show how distance matrix is structured
+* {
+    "distances": [
+        [
+            2.59,
+            4.55
+        ],
+        [
+            2.05,
+            2.6
+        ]
+    ]
+    "destinations": [
+        {
+            "location": [
+                7.019859,
+                51.458106
+            ],
+            "name": "Severinstraße",
+            "snapped_distance": 24.9
+        },
+        {
+            "location": [
+                7.032748,
+                51.445316
+            ],
+            "name": "",
+            "snapped_distance": 12.44
+        }
+    ],
+    "sources": [
+        {
+            "location": [
+                7.007574,
+                51.475965
+            ],
+            "name": "Gladbecker Straße, B 224",
+            "snapped_distance": 0.35
+        },
+        {
+            "location": [
+                7.001853,
+                51.449557
+            ],
+            "name": "",
+            "snapped_distance": 1.98
+        }
+    ],
+    "info": {
+        "service": "matrix",
+        "engine": {
+            "version": "4.7.2",
+            "build_date": "2019-03-29T11:38:45Z"
+        },
+        "attribution": "openrouteservice.org, OpenStreetMap contributors",
+        "timestamp": 1560748456760,
+        "query": {
+            "profile": "foot-walking",
+            "units": "km"
+        }
+    }
+}
+* @returns {number} the distance matrix between the submitted source and destination points based on waypath routing.
+* @see openrouteservice_url CONSTANT
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+async function distance_matrix_kilometers(locations, sourceIndices, destinationIndices, vehicleType){
+  // call openroute service 4.7.2 API to query matrix
+
+
+  for (var location of locations){
+    if(! isGeoJSONPointFeature(location)){
+      throwError("The submitted locations array contains objects that are not valid GeoJSON point features. It was: " + location);
+    }
+  }
+
+// coordinate string must be "lon,lat|lon,lat"
+  var coordinatesArray = [];
+
+  for (var loc of locations){
+    // expected to have order longitude, latitude!
+    coordinatesArray.push(loc.geometry.coordinates);
+  }
+
+  var vehicleString;
+
+  switch (vehicleType) {
+    case "PEDESTRIAN":
+      vehicleString = "foot-walking";
+      break;
+    case "BIKE":
+      vehicleString = "cycling-regular";
+      break;
+    case "CAR":
+      vehicleString = "driving-car";
+      break;
+    default:
+      vehicleString = "foot-walking";
+  }
+
+  var matrixPostBody = {
+    "profile": vehicleString,
+    "locations": coordinatesArray,
+    "sources": sourceIndices,
+    "destinations": destinationIndices,
+    "metrics": "distance",
+    "resolve_locations": true,
+    "units": "km",
+    "optimized": true
+  };
+
+  console.log("Query OpenRouteService matix endpoint ('" + openrouteservice_url + "/matrix" + "') with following matrix POST request: " + matrixPostBody);
+
+  var matrix = await axios.post(openrouteservice_url + "/matrix", matrixPostBody)
+    .then(response => {
+      // response.data should be the query response
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error while executing OpenRouteService POST request. Error was: " + error);
+      throw error;
+    });
+
+  return matrix;
+};
+
+/**
+* Performs a POST request against {@linkcode /matrix} endpoint of the openrouteservice instance
+* specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the duration matrix
+* for the submitted source and destinations points based on waypath routing.
+* @param {Array.Feature<Point>} locations - array of valid GeoJSON Features with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}.
+* WARNING: it might be possible, that the queried instance of OpenRouteService has a configuration for maximum number of allowed locations per request (i.e. 200 is default configuration),
+* causing the request to fail.
+* @param {String} sourceIndices - the indices pointing to such points within submitted {@linkcode locations}, that shall be used as source points for matrix analysis,
+* as comma-separated string of indices. Required format: 'index1,index2,index3,...'. A check, whether the index string contains indices that do not match the {@linkcode locations} array, is not performed.
+* @param {String} destinationIndices - the indices pointing to such points within submitted {@linkcode locations}, that shall be used as destination points for matrix analysis,
+* as comma-separated string of indices. Required format: 'index4,index5,index6,...'. A check, whether the index string contains indices that do not match the {@linkcode locations} array, is not performed.
+* @param {string} vehicleType - the type of vehicle to use for routing analysis;
+* allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
+* @example
+* // examplar response to show how distance matrix is structured
+* {
+    "durations": [
+        [
+            259,
+            455
+        ],
+        [
+            205,
+            26
+        ]
+    ]
+    "destinations": [
+        {
+            "location": [
+                7.019859,
+                51.458106
+            ],
+            "name": "Severinstraße",
+            "snapped_distance": 24.9
+        },
+        {
+            "location": [
+                7.032748,
+                51.445316
+            ],
+            "name": "",
+            "snapped_distance": 12.44
+        }
+    ],
+    "sources": [
+        {
+            "location": [
+                7.007574,
+                51.475965
+            ],
+            "name": "Gladbecker Straße, B 224",
+            "snapped_distance": 0.35
+        },
+        {
+            "location": [
+                7.001853,
+                51.449557
+            ],
+            "name": "",
+            "snapped_distance": 1.98
+        }
+    ],
+    "info": {
+        "service": "matrix",
+        "engine": {
+            "version": "4.7.2",
+            "build_date": "2019-03-29T11:38:45Z"
+        },
+        "attribution": "openrouteservice.org, OpenStreetMap contributors",
+        "timestamp": 1560748456760,
+        "query": {
+            "profile": "foot-walking",
+            "units": "seconds"
+        }
+    }
+}
+* @returns {number} the duration matrix between the submitted source and destination points based on waypath routing.
+* @see openrouteservice_url CONSTANT
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+async function duration_matrix_seconds(locations, sourceIndices, destinationIndices, vehicleType){
+  // call openroute service 4.7.2 API to query matrix
+
+
+  for (var location of locations){
+    if(! isGeoJSONPointFeature(location)){
+      throwError("The submitted locations array contains objects that are not valid GeoJSON point features. It was: " + location);
+    }
+  }
+
+// coordinate string must be "lon,lat|lon,lat"
+  var coordinatesArray = [];
+
+  for (var loc of locations){
+    // expected to have order longitude, latitude!
+    coordinatesArray.push(loc.geometry.coordinates);
+  }
+
+  var vehicleString;
+
+  switch (vehicleType) {
+    case "PEDESTRIAN":
+      vehicleString = "foot-walking";
+      break;
+    case "BIKE":
+      vehicleString = "cycling-regular";
+      break;
+    case "CAR":
+      vehicleString = "driving-car";
+      break;
+    default:
+      vehicleString = "foot-walking";
+  }
+
+  var matrixPostBody = {
+    "profile": vehicleString,
+    "locations": coordinatesArray,
+    "sources": sourceIndices,
+    "destinations": destinationIndices,
+    "metrics": "duration",
+    "resolve_locations": true,
+    "optimized": true
+  };
+
+  console.log("Query OpenRouteService matix endpoint ('" + openrouteservice_url + "/matrix" + "') with following matrix POST request: " + matrixPostBody);
+
+  var matrix = await axios.post(openrouteservice_url + "/matrix", matrixPostBody)
+    .then(response => {
+      // response.data should be the query response
+      return response.data;
+    })
+    .catch(error => {
+      console.log("Error while executing OpenRouteService POST request. Error was: " + error);
+      throw error;
+    });
+
+  return matrix;
+};
+
+/**
 * Performs a GET request against {@linkcode /isochrones} endpoint of the openrouteservice instance
 * specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the reachability isochrones by time
 * starting from the submitted points based on waypath routing.
@@ -1259,7 +1534,7 @@ async function isochrones_byDistance(startingPoints, vehicleType, travelDistance
 };
 
 function executeOrsQuery(ors_route_GET_request){
-  axios.get(ors_route_GET_request)
+  return axios.get(ors_route_GET_request)
     .then(response => {
       // response.data should be the query response
       return response.data;
@@ -1341,7 +1616,7 @@ function nearestPoint_directDistance(targetPoint, pointCollection){
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-function nearestPoint_waypathDistance(targetPoint, pointCollection, vehicleType){
+async function nearestPoint_waypathDistance(targetPoint, pointCollection, vehicleType){
   if(! isGeoJSONPointFeature(targetPoint)){
     throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
@@ -1352,16 +1627,39 @@ function nearestPoint_waypathDistance(targetPoint, pointCollection, vehicleType)
     }
   }
 
+  // compute distance matrix for all points and then find closest point
+  var locations = [];
+  var sourceIndices = "";
+  var destinationIndices = "";
+  // targte point is our source point
+  locations.push(targetPoint);
+  sourceIndices = "0";
+  // all points from pointCollection are our destination points
+  for (var index=0; index < pointCollection.features.length; index++){
+    var pointCandidate = pointCollection.features[index];
+    locations.push(pointCandidate);
+
+    // plus one as first index is the source point in locations array
+    var indexForDestinations = index + 1;
+    destinationIndices += "" + indexForDestinations + ",";
+  }
+
+  var distanceMatrix = await distance_matrix_kilometers(locations, sourceIndices, destinationIndices, vehicleType);
+
+  // distances array contains distances sub-array for each source point
+  var distancesForSingleSourcePoint = distanceMatrix.distances[0];
+
+  // get index of shortest distance, that index points to the closest point within pointCollection
   var shortestDistance = undefined;
   var nearestPoint = undefined;
 
-  for (var candidate of pointCollection.features){
-    var distance_waypath = distance_waypath_kilometers(targetPoint, candidate, vehicleType);
-
+  for (var index=0; index < distancesForSingleSourcePoint.length; index++){
+    distanceCandidate = distancesForSingleSourcePoint[index];
     // set variables if a nearer point is found or set with initial values
-    if(shortestDistance === undefined || distance_waypath < shortestDistance){
-      shortestDistance = distance_waypath;
-      nearestPoint = candidate;
+    if(shortestDistance === undefined || distanceCandidate < shortestDistance){
+      shortestDistance = distanceCandidate;
+      // this index corresponds to the index of the point feature within pointCollection
+      nearestPoint = pointCollection.features[index];
     }
   }
 
