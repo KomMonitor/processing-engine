@@ -1,0 +1,16 @@
+{
+  "name": "kmhelper",
+  "version": "1.0.0",
+  "description": "Helper methods to write KomMonitor scripts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "KomMonitor",
+    "Processing",
+    "Engine"
+  ],
+  "author": "Christian Danowski-Buhren",
+  "license": "ISC"
+}
