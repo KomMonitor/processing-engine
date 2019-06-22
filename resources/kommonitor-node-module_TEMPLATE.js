@@ -1834,7 +1834,7 @@ function overlap(feature_A, feature_B){
 * @function
 */
 function hasMultiPolygon(featureCollection_geoJSON){
-  for (var feature of featureCollection_geoJSON){
+  for (var feature of featureCollection_geoJSON.features){
     if (feature.geometry.type === "MultiPolygon"){
       return true;
     }
