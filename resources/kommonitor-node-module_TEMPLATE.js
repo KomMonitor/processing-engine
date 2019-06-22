@@ -709,7 +709,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = center_geometric(indicatorFeature);
+      var centerPoint = centroid(indicatorFeature);
       if(within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
@@ -771,7 +771,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = center_geometric(indicatorFeature);
+      var centerPoint = centroid(indicatorFeature);
       if(within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
@@ -946,6 +946,19 @@ function center_geometric(geoJSON){
 */
 function center_mass(geoJSON, properties){
   return turf.centerOfMass(geoJSON, properties);
+};
+
+/**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#center} to compute the centroid the submitted features.
+* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @returns {Feature<Point>} the GeoJSON point feature representing the centroid of the submitted features.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#centroid}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+function centroid(geoJSON){
+  return turf.centroid(geoJSON);
 };
 
 /**
