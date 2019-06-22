@@ -534,6 +534,27 @@ function getPropertyValue(feature, propertyName){
 };
 
 /**
+* Add a new property to the {@linkcode feature}
+* @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing certain property values
+* @param {string} propertyName - string representing the name of the property
+* @param {object} propertyValue - the value of the property
+* @returns {Feature} returns the submitted feature which was enriched with the submitted property (the property is available via {@linkcode feature.properties[propertyName]})
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+function setPropertyValue(feature, propertyName, propertyValue){
+
+  var value = feature.properties[propertyName];
+
+  if(value){
+    return value;
+  }
+  else{
+    return null;
+  }
+};
+
+/**
 * Aquire the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate}.
 * @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
 * @param {string} targetDate - string representing the target date for which the indicator value shall be extracted, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
