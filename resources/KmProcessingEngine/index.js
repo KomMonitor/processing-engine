@@ -112,7 +112,7 @@ exports.getBaseIndicatorByName = function (indicatorName, baseIndicatorsMap){
   var baseIndicatorCandidate = baseIndicatorsMap.get(indicatorName);
   if(baseIndicatorCandidate === null || baseIndicatorCandidate === undefined){
     console.log("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
-    throwError("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
+    exports.throwError("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
   }
   return baseIndicatorCandidate;
 };
@@ -130,7 +130,7 @@ exports.getBaseIndicatorById = function (indicatorId, baseIndicatorsMap){
   var baseIndicatorCandidate = baseIndicatorsMap.get(indicatorId);
   if(baseIndicatorCandidate === null || baseIndicatorCandidate === undefined){
     console.log("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
-    throwError("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
+    exports.throwError("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
   }
   return baseIndicatorCandidate;
 };
@@ -148,7 +148,7 @@ exports.getGeoresourceByName = function (georesourceName, georesourcesMap){
   var georesourceCandidate = georesourcesMap.get(georesourceName);
   if(georesourceCandidate === null || georesourceCandidate === undefined){
     console.log("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
-    throwError("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
+    exports.throwError("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
   }
   return georesourceCandidate;
 };
@@ -166,7 +166,7 @@ exports.getGeoresourceById = function (georesourceId, georesourcesMap){
   var georesourceCandidate = georesourcesMap.get(georesourceId);
   if(georesourceCandidate === null || georesourceCandidate === undefined){
     console.log("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
-    throwError("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
+    exports.throwError("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
   }
   return georesourceCandidate;
 };
@@ -192,7 +192,7 @@ exports.getProcessParameterByName_asString = function (parameterName, processPar
   });
 
   if(parameter === undefined){
-    throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
+    exports.throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
   }
   else{
     return parameter;
@@ -220,7 +220,7 @@ exports.getProcessParameterByName_asNumber = function (parameterName, processPar
   });
 
   if(parameter === undefined){
-    throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
+    exports.throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
   }
   else{
 
@@ -228,7 +228,7 @@ exports.getProcessParameterByName_asNumber = function (parameterName, processPar
       parameter = Number(parameter);
     }
     catch(error){
-        throwError("Error while parsing parameter value '" + parameter + "' from parameter with name '" + parameterName + "' as Number.");
+        exports.throwError("Error while parsing parameter value '" + parameter + "' from parameter with name '" + parameterName + "' as Number.");
     }
 
     return parameter;
@@ -256,7 +256,7 @@ exports.getProcessParameterByName_asBoolean = function (parameterName, processPa
   });
 
   if(parameter === undefined){
-    throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
+    exports.throwError("Tried to aquire a process parameter with Object.name '" + parameterName + "', but the array of processParameters does not contain such an entry");
   }
   else{
 
@@ -265,7 +265,7 @@ exports.getProcessParameterByName_asBoolean = function (parameterName, processPa
       parameter = JSON.parse(parameter);
     }
     catch(error){
-        throwError("Error while parsing parameter value '" + parameter + "' from parameter with name '" + parameterName + "' as Number.");
+        exports.throwError("Error while parsing parameter value '" + parameter + "' from parameter with name '" + parameterName + "' as Number.");
     }
 
     return parameter;
@@ -392,7 +392,7 @@ exports.isGeoJSONFeatureCollection = function (featureCollection){
     var isValid = true;
 
     for (var featureCandidate of featureCollection.features){
-      if (!isGeoJSONFeature(featureCandidate)){
+      if (!exports.isGeoJSONFeature(featureCandidate)){
         isValid = false;
         break;
       }
@@ -476,7 +476,7 @@ exports.getIndicatorValue = function (feature, targetDate){
       targetDateWithPrefix = targetDate;
   }
   else{
-      targetDateWithPrefix = getTargetDateWithPropertyPrefix(targetDate);
+      targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
   }
 
   var indicatorValue = feature.properties[targetDateWithPrefix];
@@ -503,7 +503,7 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
       targetDateWithPrefix = targetDate;
   }
   else{
-      targetDateWithPrefix = getTargetDateWithPropertyPrefix(targetDate);
+      targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
   }
 
   var resultArray = [];
@@ -540,7 +540,7 @@ exports.setIndicatorValue = function (feature, targetDate, value){
 
   if (typeof value != 'number'){
     console.log("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
-    throwError("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
+    exports.throwError("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
   }
 
   var targetDateWithPrefix;
@@ -548,7 +548,7 @@ exports.setIndicatorValue = function (feature, targetDate, value){
       targetDateWithPrefix = targetDate;
   }
   else{
-      targetDateWithPrefix = getTargetDateWithPropertyPrefix(targetDate);
+      targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
   }
 
   feature.properties[targetDateWithPrefix] = value;
@@ -628,10 +628,10 @@ exports.area = function (geoJSON){
 * @function
 */
 exports.area_feature_asProperty = function (feature){
-  var isFeature = isGeoJSONFeature(feature);
+  var isFeature = exports.isGeoJSONFeature(feature);
 
   if(! isFeature){
-    throwError("The submitted object is not a valid GeoJSON feature");
+    exports.throwError("The submitted object is not a valid GeoJSON feature");
   }
   feature.properties.area_squareMeters = turf.area(feature);
   return feature;
@@ -650,7 +650,7 @@ exports.area_featureCollection_asProperty = function (featureCollection_geoJSON)
 
   // replace all feature geometries with their bbox using turf.
   for(var index=0; index < featureCollection_geoJSON.features.length; index++){
-    featureCollection_geoJSON.features[index] = area_feature_asProperty(featureCollection_geoJSON.features[index]);
+    featureCollection_geoJSON.features[index] = exports.area_feature_asProperty(featureCollection_geoJSON.features[index]);
   };
 
   return featureCollection_geoJSON;
@@ -688,7 +688,7 @@ exports.bbox_featureCollection = function (featureCollection_geoJSON){
 
   // replace all feature geometries with their bbox using turf.
   for(var index=0; index < featureCollection_geoJSON.features.length; index++){
-    featureCollection_geoJSON.features[index] = bbox_feature(featureCollection_geoJSON.features[index]);
+    featureCollection_geoJSON.features[index] = exports.bbox_feature(featureCollection_geoJSON.features[index]);
   };
   return featureCollection_geoJSON;
 };
@@ -727,7 +727,7 @@ exports.buffer_featureCollection = function (featureCollection_geoJSON, radiusIn
 
   // replace all feature geometries with their bbox using turf.
   for(var index=0; index < featureCollection_geoJSON.features.length; index++){
-    featureCollection_geoJSON.features[index] = bbox_feature(featureCollection_geoJSON.features[index]);
+    featureCollection_geoJSON.features[index] = exports.bbox_feature(featureCollection_geoJSON.features[index]);
   };
   return featureCollection_geoJSON;
 };
@@ -815,7 +815,7 @@ exports.difference = function (polygonFeature_A, polygonFeature_B){
 */
 exports.dissolve = function (featureCollection_geoJSON, propertyName){
 
-  featureCollection_geoJSON = transformMultiPolygonsToPolygons(featureCollection_geoJSON);
+  featureCollection_geoJSON = exports.transformMultiPolygonsToPolygons(featureCollection_geoJSON);
 
   if (propertyName){
       return turf.dissolve(featureCollection_geoJSON, {propertyName: propertyName});
@@ -874,14 +874,14 @@ exports.distance_waypath_kilometers = async function (point_A, point_B, vehicleT
 
   // coordinate string must be "lon,lat|lon,lat"
 
-  var isPointFeature_A = isGeoJSONPointFeature(point_A);
-  var isPointFeature_B = isGeoJSONPointFeature(point_B);
+  var isPointFeature_A = exports.isGeoJSONPointFeature(point_A);
+  var isPointFeature_B = exports.isGeoJSONPointFeature(point_B);
 
   if(! isPointFeature_A){
-    throwError("The submitted object point_A is not a valid GeoJSON point feature. It was: " + point_A);
+    exports.throwError("The submitted object point_A is not a valid GeoJSON point feature. It was: " + point_A);
   }
   if(! isPointFeature_B){
-    throwError("The submitted object point_B is not a valid GeoJSON point feature. It was: " + point_B);
+    exports.throwError("The submitted object point_B is not a valid GeoJSON point feature. It was: " + point_B);
   }
 
   var coordinates_A = point_A.geometry.coordinates;
@@ -1023,8 +1023,8 @@ exports.distance_matrix_kilometers = async function (locations, sourceIndices, d
 
 
   for (var location of locations){
-    if(! isGeoJSONPointFeature(location)){
-      throwError("The submitted locations array contains objects that are not valid GeoJSON point features. It was: " + location);
+    if(! exports.isGeoJSONPointFeature(location)){
+      exports.throwError("The submitted locations array contains objects that are not valid GeoJSON point features. It was: " + location);
     }
   }
 
@@ -1164,8 +1164,8 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
 
 
   for (var location of locations){
-    if(! isGeoJSONPointFeature(location)){
-      throwError("The submitted locations array contains objects that are not valid GeoJSON point features. It was: " + location);
+    if(! exports.isGeoJSONPointFeature(location)){
+      exports.throwError("The submitted locations array contains objects that are not valid GeoJSON point features. It was: " + location);
     }
   }
 
@@ -1236,10 +1236,10 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
-    var isPoint = isGeoJSONPointFeature(pointCandidate);
+    var isPoint = exports.isGeoJSONPointFeature(pointCandidate);
 
     if(! isPoint){
-      throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
+      exports.throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
     }
   }
 
@@ -1285,7 +1285,7 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1){
-    isochronesResult = dissolve(isochronesResult);
+    isochronesResult = exports.dissolve(isochronesResult);
   }
 
   return isochronesResult;
@@ -1308,10 +1308,10 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
-    var isPoint = isGeoJSONPointFeature(pointCandidate);
+    var isPoint = exports.isGeoJSONPointFeature(pointCandidate);
 
     if(! isPoint){
-      throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
+      exports.throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
     }
   }
 
@@ -1354,7 +1354,7 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1){
-    isochronesResult = dissolve(isochronesResult);
+    isochronesResult = exports.dissolve(isochronesResult);
   }
 
   return isochronesResult;
@@ -1416,13 +1416,13 @@ exports.intersection = function (polygonFeature_A, polygonFeature_B){
 */
 exports.nearestPoint_directDistance = function (targetPoint, pointCollection){
 
-  if(! isGeoJSONPointFeature(targetPoint)){
-    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  if(! exports.isGeoJSONPointFeature(targetPoint)){
+    exports.throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
 
   for (var pointCandidate of pointCollection.features){
-    if(! isGeoJSONPointFeature(pointCandidate)){
-      throwError("The submitted pointCollection contains features that are no valid GeoJSON point features. PointCandidate was: " + pointCandidate);
+    if(! exports.isGeoJSONPointFeature(pointCandidate)){
+      exports.throwError("The submitted pointCollection contains features that are no valid GeoJSON point features. PointCandidate was: " + pointCandidate);
     }
   }
 
@@ -1444,13 +1444,13 @@ exports.nearestPoint_directDistance = function (targetPoint, pointCollection){
 * @function
 */
 exports.nearestPoint_waypathDistance = async function (targetPoint, pointCollection, vehicleType){
-  if(! isGeoJSONPointFeature(targetPoint)){
-    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  if(! exports.isGeoJSONPointFeature(targetPoint)){
+    exports.throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
 
   for (var pointCandidate of pointCollection.features){
-    if(! isGeoJSONPointFeature(pointCandidate)){
-      throwError("The submitted pointCollection contains features that are no valid GeoJSON point features. PointCandidate was: " + pointCandidate);
+    if(! exports.isGeoJSONPointFeature(pointCandidate)){
+      exports.throwError("The submitted pointCollection contains features that are no valid GeoJSON point features. PointCandidate was: " + pointCandidate);
     }
   }
 
@@ -1471,7 +1471,7 @@ exports.nearestPoint_waypathDistance = async function (targetPoint, pointCollect
     destinationIndices += "" + indexForDestinations + ",";
   }
 
-  var distanceMatrix = await distance_matrix_kilometers(locations, sourceIndices, destinationIndices, vehicleType);
+  var distanceMatrix = await exports.distance_matrix_kilometers(locations, sourceIndices, destinationIndices, vehicleType);
 
   // distances array contains distances sub-array for each source point
   var distancesForSingleSourcePoint = distanceMatrix.distances[0];
@@ -1507,11 +1507,11 @@ exports.nearestPoint_waypathDistance = async function (targetPoint, pointCollect
 */
 exports.nearestPointOnLine_directDistance = function (targetPoint, lineString){
 
-  if(! isGeoJSONPointFeature(targetPoint)){
-    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  if(! exports.isGeoJSONPointFeature(targetPoint)){
+    exports.throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
-  if(! isGeoJSONLineStringFeature(lineString)){
-    throwError("The submitted lineStringCandidate is not a valid GeoJSON LineString|MultiLineString feature. Candidate was: " + lineString);
+  if(! exports.isGeoJSONLineStringFeature(lineString)){
+    exports.throwError("The submitted lineStringCandidate is not a valid GeoJSON LineString|MultiLineString feature. Candidate was: " + lineString);
   }
 
   return turf.nearestPointOnLine(targetPoint, lineString, {units: 'kilometers'});
@@ -1530,13 +1530,13 @@ exports.nearestPointOnLine_directDistance = function (targetPoint, lineString){
 */
 exports.nearestPointOnLines_directDistance = function (targetPoint, lineStringCollection){
 
-  if(! isGeoJSONPointFeature(targetPoint)){
-    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  if(! exports.isGeoJSONPointFeature(targetPoint)){
+    exports.throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
 
   for (var lineStringCandidate of lineStringCollection.features){
-    if(! isGeoJSONLineStringFeature(lineStringCandidate)){
-      throwError("The submitted lineStringCollection contains features that are no valid GeoJSON LineString features. lineStringCandidate was: " + lineStringCandidate);
+    if(! exports.isGeoJSONLineStringFeature(lineStringCandidate)){
+      exports.throwError("The submitted lineStringCollection contains features that are no valid GeoJSON LineString features. lineStringCandidate was: " + lineStringCandidate);
     }
   }
 
@@ -1544,7 +1544,7 @@ exports.nearestPointOnLines_directDistance = function (targetPoint, lineStringCo
   var nearestPoint = undefined;
 
   for (var candidate of lineStringCollection.features){
-     var pointCandidate = nearestPointOnLine_directDistance(targetPoint, candidate)
+     var pointCandidate = exports.nearestPointOnLine_directDistance(targetPoint, candidate)
 
     // set variables if a nearer point is found or set with initial values
     if(shortestDistance === undefined || pointCandidate.dist < shortestDistance){
@@ -1573,11 +1573,11 @@ exports.nearestPointOnLines_directDistance = function (targetPoint, lineStringCo
 */
 exports.nearestPointOnPolygon_directDistance = function (targetPoint, polygon){
 
-  if(! isGeoJSONPointFeature(targetPoint)){
-    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  if(! exports.isGeoJSONPointFeature(targetPoint)){
+    exports.throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
-  if(! isGeoJSONPolygonFeature(polygon)){
-    throwError("The submitted polygonCandidate is not a valid GeoJSON Polygon|MultiPolygon feature. Candidate was: " + polygon);
+  if(! exports.isGeoJSONPolygonFeature(polygon)){
+    exports.throwError("The submitted polygonCandidate is not a valid GeoJSON Polygon|MultiPolygon feature. Candidate was: " + polygon);
   }
 
   // split polygon into lines
@@ -1586,11 +1586,11 @@ exports.nearestPointOnPolygon_directDistance = function (targetPoint, polygon){
 
   if (lines.type === "Feature"){
     // single feature (Multi)LineString
-    return nearestPointOnLine_directDistance(targetPoint, lines);
+    return exports.nearestPointOnLine_directDistance(targetPoint, lines);
   }
   else{
     // FeatureCollection of (Multi)LineString
-    return nearestPointOnLines_directDistance(targetPoint, lines);
+    return exports.nearestPointOnLines_directDistance(targetPoint, lines);
   }
 };
 
@@ -1611,12 +1611,12 @@ exports.nearestPointOnPolygon_directDistance = function (targetPoint, polygon){
 */
 exports.nearestPointOnPolygons_directDistance = function (targetPoint, polygonCollection){
 
-  if(! isGeoJSONPointFeature(targetPoint)){
-    throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
+  if(! exports.isGeoJSONPointFeature(targetPoint)){
+    exports.throwError("The submitted object targetPoint is not a valid GeoJSON point feature. It was: " + targetPoint);
   }
   for (var polygonCandidate of polygonCollection.features){
-    if(! isGeoJSONPolygonFeature(polygonCandidate)){
-      throwError("The submitted polygonCollection contains features that are no valid GeoJSON Polygon features. polygonCandidate was: " + polygonCandidate);
+    if(! exports.isGeoJSONPolygonFeature(polygonCandidate)){
+      exports.throwError("The submitted polygonCollection contains features that are no valid GeoJSON Polygon features. polygonCandidate was: " + polygonCandidate);
     }
   }
 
@@ -1624,7 +1624,7 @@ exports.nearestPointOnPolygons_directDistance = function (targetPoint, polygonCo
   var nearestPoint = undefined;
 
   for (var candidate of polygonCollection.features){
-     var pointCandidate = nearestPointOnPolygon_directDistance(targetPoint, candidate)
+     var pointCandidate = exports.nearestPointOnPolygon_directDistance(targetPoint, candidate)
 
     // set variables if a nearer point is found or set with initial values
     if(shortestDistance === undefined || pointCandidate.dist < shortestDistance){
@@ -1677,9 +1677,9 @@ exports.hasMultiPolygon = function (featureCollection_geoJSON){
 */
 exports.transformMultiPolygonsToPolygons = function (featureCollection_geoJSON){
 
-  while(hasMultiPolygon(featureCollection_geoJSON)){
+  while(exports.hasMultiPolygon(featureCollection_geoJSON)){
     console.log("Replace MultiPolygon features by Polygons");
-    featureCollection_geoJSON = replaceMultiPolygonsByPolygons(featureCollection_geoJSON);
+    featureCollection_geoJSON = exports.replaceMultiPolygonsByPolygons(featureCollection_geoJSON);
   }
 
   return featureCollection_geoJSON;
@@ -1778,16 +1778,16 @@ exports.within = function (feature_A, feature_B){
 * @function
 */
 exports.within_usingBBOX = function (feature_A, feature_B){
-  var feature_A_bboxPolygon = bbox_feature(feature_A);
-  var feature_B_bboxPolygon = bbox_feature(feature_B);
-  var feature_A_bboxPolygon_area = area(feature_A_bboxPolygon);
+  var feature_A_bboxPolygon = exports.bbox_feature(feature_A);
+  var feature_B_bboxPolygon = exports.bbox_feature(feature_B);
+  var feature_A_bboxPolygon_area = exports.area(feature_A_bboxPolygon);
 
   var intersection = turf.intersect(feature_B_bboxPolygon, feature_A_bboxPolygon);
   // if there is no intersection (features are disjoint) then skip this
   if (intersection == null || intersection == undefined)
     return false;
 
-  var intersectionArea = area(intersection);
+  var intersectionArea = exports.area(intersection);
   var overlapInPercent = Math.abs( intersectionArea / feature_A_bboxPolygon_area) * 100;
 
   // if indicaturFeature overlaps for at least 90% with feature_B, the assign it for aggregation to feature_B
@@ -1822,7 +1822,7 @@ exports.covariance = function  (populationArray_A, populationArray_B){
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
 */
-expots.max = function (populationArray){
+exports.max = function (populationArray){
   return jStat.max(populationArray);
 };
 

@@ -128,7 +128,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
   console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
 
-  targetDate = getTargetDateWithPropertyPrefix(targetDate);
+  targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   console.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
@@ -140,8 +140,8 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = centroid(indicatorFeature);
-      if(within(centerPoint, targetFeature)){
+      var centerPoint = KmHelper.centroid(indicatorFeature);
+      if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
@@ -190,7 +190,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
   console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
   console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
 
-  targetDate = getTargetDateWithPropertyPrefix(targetDate);
+  targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   console.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
@@ -202,8 +202,8 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = centroid(indicatorFeature);
-      if(within(centerPoint, targetFeature)){
+      var centerPoint = KmHelper.centroid(indicatorFeature);
+      if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
