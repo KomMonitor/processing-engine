@@ -812,6 +812,16 @@ exports.dissolve = function (featureCollection_geoJSON, propertyName){
 
   featureCollection_geoJSON = exports.transformMultiPolygonsToPolygons(featureCollection_geoJSON);
 
+  var geomTypeSample = featureCollection_geoJSON.features[0].geometry.type;
+
+  featureCollection_geoJSON.features.forEach(function(feature){
+    var geomType = feature.geometry.type;
+
+    if (geomType !== geomTypeSample){
+      KmHelper.throwError("Dissolve cannot be executed as the feature collection contains features with different geometry types. The conflicting types are " + geomType + " and " + geomTypeSample);
+    }
+  });
+
   if (propertyName){
       return turf.dissolve(featureCollection_geoJSON, {propertyName: propertyName});
   }
