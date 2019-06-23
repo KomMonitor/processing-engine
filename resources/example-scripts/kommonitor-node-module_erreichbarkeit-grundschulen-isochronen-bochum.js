@@ -85,7 +85,7 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 KmHelper.log("create distance isochrones for preliminary schools");
 
 // isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
-var isochrones_grundschulen = await KmHelper.isochrones_byDistance(grundschulen, "PEDESTRIAN", maxDistance);
+var isochrones_grundschulen = await KmHelper.isochrones_byDistance(grundschulen, "PEDESTRIAN", maxDistance, true);
 
 KmHelper.log("Compute area for each building as proxy for wohnfläche");
 wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);

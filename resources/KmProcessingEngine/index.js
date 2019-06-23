@@ -1227,12 +1227,13 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
 * @param {number} travelTimeInSeconds - the travel time to compute the isochrones in seconds
 * @param {number|null} customMaxSpeedInKilometersPerHour - a custom maximum speed to use for isochrone computation or {@linkcode null} to use defaults from OpenRouteService
+* @param {boolean} [dissolve=false] - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour){
+exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
@@ -1284,7 +1285,8 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
 
   // dissolve isochrones if multiple starting points were used
-  if (startingPoints.length > 1){
+  if (startingPoints.length > 1 && dissolve){
+    console.log("Dissolving isochrones from multiple starting points");
     isochronesResult = exports.dissolve(isochronesResult);
   }
 
@@ -1299,12 +1301,13 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 * @param {string} vehicleType - the type of vehicle to use for routing analysis;
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
 * @param {number} travelDistanceInMeters - the travel distance to compute the isochrones (equidistance) in meters
+* @param {boolean} [dissolve=false] - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters){
+exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
@@ -1353,7 +1356,8 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
 
   // dissolve isochrones if multiple starting points were used
-  if (startingPoints.length > 1){
+  if (startingPoints.length > 1  && dissolve){
+    console.log("Dissolving isochrones from multiple starting points");
     isochronesResult = exports.dissolve(isochronesResult);
   }
 
