@@ -1286,8 +1286,8 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1 && dissolve){
-    console.log("Dissolving isochrones from multiple starting points");
-    isochronesResult = exports.dissolve(isochronesResult);
+    console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+    isochronesResult = exports.dissolve(isochronesResult, "value");
   }
 
   return isochronesResult;
@@ -1357,8 +1357,8 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1  && dissolve){
-    console.log("Dissolving isochrones from multiple starting points");
-    isochronesResult = exports.dissolve(isochronesResult);
+    console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+    isochronesResult = exports.dissolve(isochronesResult, "value");
   }
 
   return isochronesResult;
