@@ -454,12 +454,7 @@ exports.setPropertyValue = function (feature, propertyName, propertyValue){
 
   var value = feature.properties[propertyName];
 
-  if(value){
-    return value;
-  }
-  else{
-    return null;
-  }
+  return feature;
 };
 
 /**
