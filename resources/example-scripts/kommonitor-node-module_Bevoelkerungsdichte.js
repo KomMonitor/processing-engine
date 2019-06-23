@@ -124,11 +124,11 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 
     // only log after certain progress
     if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        console.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
     }
   });
 
-  console.log("Computation of indicator finished");
+  KmHelper.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
 
@@ -152,9 +152,9 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // aggregate indicator
   if (!aggregationTypeEnum.includes(aggregationType)){
-    console.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
+    KmHelper.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
       "'. Allowed values are: " + aggregationTypeEnum);
-    console.log("Will fallback to using AVERAGE aggregation logic.");
+    KmHelper.log("Will fallback to using AVERAGE aggregation logic.");
     return aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
   }
   else if(aggregationType === "SUM"){
@@ -199,12 +199,12 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   var indicatorFeatures = indicator_geoJSON.features;
 
-  console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing AVERAGE values.");
-  console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
+  KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing AVERAGE values.");
+  KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
+  KmHelper.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
-  console.log('Target Date with prefix: ' + targetDate);
+  KmHelper.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
 
@@ -225,15 +225,15 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   		}
   	}
 
-    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
+    // KmHelper.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
   	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
-    // console.log("resulting average value is " + targetFeature.properties[targetDate]);
+    // KmHelper.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
 
-  console.log("Aggregation finished");
-  console.log(totalAggregatedIndicatorFeatures + " features were aggregated to " + targetSpatialUnit_geoJSON.features.length + " targetFeatures");
+  KmHelper.log("Aggregation finished");
+  KmHelper.log(totalAggregatedIndicatorFeatures + " features were aggregated to " + targetSpatialUnit_geoJSON.features.length + " targetFeatures");
 
   if(indicatorFeatures.length > 0){
     console.error("Spatial Aggregation failed for a total number of " + indicatorFeatures.length);
@@ -261,12 +261,12 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   var indicatorFeatures = indicator_geoJSON.features;
 
-  console.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
-  console.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  console.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
+  KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
+  KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
+  KmHelper.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
-  console.log('Target Date with prefix: ' + targetDate);
+  KmHelper.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
 
@@ -289,8 +289,8 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
   });
 
-  console.log("Aggregation finished");
-  console.log(totalAggregatedIndicatorFeatures + " features were aggregated to " + targetSpatialUnit_geoJSON.features.length + " targetFeatures");
+  KmHelper.log("Aggregation finished");
+  KmHelper.log(totalAggregatedIndicatorFeatures + " features were aggregated to " + targetSpatialUnit_geoJSON.features.length + " targetFeatures");
 
   if(indicatorFeatures.length > 0){
     console.error("Spatial Aggregation failed for a total number of " + indicatorFeatures.length);
