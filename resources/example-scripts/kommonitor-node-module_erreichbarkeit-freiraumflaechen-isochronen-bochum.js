@@ -344,8 +344,11 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
-  			numberOfIndicatorFeaturesWithinTargetFeature++;
-  			targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]);
+
+        if(Number(indicatorFeature.properties[targetDate]) !== 0){
+          numberOfIndicatorFeaturesWithinTargetFeature++;
+          targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]);
+        }
   		}
   	}
 
