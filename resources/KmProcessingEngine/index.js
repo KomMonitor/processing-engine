@@ -800,6 +800,7 @@ exports.difference = function (polygonFeature_A, polygonFeature_B){
 
 /**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#dissolve} to dissolve polygonal features.
+* NOTE: TURF DISSOLVE IS KNOWN TO BE BUGGY: IT MIGHT FAIL WITH ERROR ALTHOUGH IT SHOULD WORK. AS AN ALTERNATIVE, YOU SHOULD CONSIDER TO USE {@linkcode union} METHOD.
 * @param {FeatureCollection<Polygon>} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be transformed to multiple polygons before dissolving).
 * @param {string} propertyName - OPTIONAL parameter that points to an existing attribute used by the features. If set, only features with the same attribute value will be dissolved.
 * @returns {FeatureCollection<Polygon>} the GeoJSON FeatureCollection containing the dissolved features (Note that attributes are not merged/aggregated).
@@ -1233,12 +1234,13 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
 * @param {number} travelTimeInSeconds - the travel time to compute the isochrones in seconds
 * @param {number|null} customMaxSpeedInKilometersPerHour - a custom maximum speed to use for isochrone computation or {@linkcode null} to use defaults from OpenRouteService
 * @param {boolean} [dissolve=false] - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
+* @param {boolean} [deactivateLog=false] - set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve){
+exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
@@ -1285,13 +1287,17 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 
             var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters + "&options=" + encodeURIComponent(optionsString);
 
-  console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+            if (! deactivateLog){
+                console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+            }
 
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1 && dissolve){
-    console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+    if(! deactivateLog){
+        console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+    }
     isochronesResult = exports.dissolve(isochronesResult, "value");
   }
 
@@ -1307,12 +1313,13 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
 * @param {number} travelDistanceInMeters - the travel distance to compute the isochrones (equidistance) in meters
 * @param {boolean} [dissolve=false] - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
+* @param {boolean} [deactivateLog=false] - set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve){
+exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
@@ -1356,13 +1363,18 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
 
             var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelDistanceInMeters + constantParameters;
 
-  console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+  if (! deactivateLog){
+      console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+  }
 
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1  && dissolve){
-    console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+    if (! deactivateLog){
+        console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+    }
+
     isochronesResult = exports.dissolve(isochronesResult, "value");
   }
 
