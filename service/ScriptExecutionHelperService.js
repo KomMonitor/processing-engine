@@ -122,29 +122,40 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
       var nodeModuleForIndicator = require("../tmp/tmp.js");
       // var nodeModuleForIndicator = require("../resources/example-scripts/kommonitor-node-module_Distanz_Naheste_Grundschule.js");
 
-      //execute script to compute indicator
-      var indicatorGeoJson_lowestSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
-
       // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
       var resultingIndicatorsMap = new Map();
-      resultingIndicatorsMap.set(lowestSpatialUnit[0], indicatorGeoJson_lowestSpatialUnit);
-
-      progressHelper.persistProgress(job.id, "defaultComputation", 70);
-
-      // after computing the indicator for the lowest spatial unit
-      // we can now aggregate the result to all remaining superior units!
+      //execute script to compute indicator
       try{
-        resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnit[0], targetDate, nodeModuleForIndicator);
+        var indicatorGeoJson_lowestSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
+
+        resultingIndicatorsMap.set(lowestSpatialUnit[0], indicatorGeoJson_lowestSpatialUnit);
+
+        progressHelper.persistProgress(job.id, "defaultComputation", 70);
+
+        // after computing the indicator for the lowest spatial unit
+        // we can now aggregate the result to all remaining superior units!
+        try{
+          resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnit[0], targetDate, nodeModuleForIndicator);
+        }
+        catch(error){
+          console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
+          throw error;
+        }
+
+        delete require.cache[require.resolve('../tmp/tmp.js')];
+
+        // delete temporarily stored nodeModule file synchronously
+        fs.unlinkSync("./tmp/tmp.js");
       }
       catch(error){
-        console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
+        // if error occured then clean up temp files and temp node module
+        delete require.cache[require.resolve('../tmp/tmp.js')];
+
+        // delete temporarily stored nodeModule file synchronously
+        fs.unlinkSync("./tmp/tmp.js");
+        console.error("Error while calling indicator computation method from custom script. Error is: " + error);
         throw error;
       }
-
-      delete require.cache[require.resolve('../tmp/tmp.js')];
-
-      // delete temporarily stored nodeModule file synchronously
-      fs.unlinkSync("./tmp/tmp.js");
 
       progressHelper.persistProgress(job.id, "defaultComputation", 80);
 
@@ -212,15 +223,27 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       progressHelper.persistProgress(job.id, "customizedComputation", 60);
 
       //execute script to compute indicator
-      var responseGeoJson = await nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
+      var responseGeoJson;
+      try{
+        responseGeoJson = await nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
 
-      // job.data.progress = 90;
-      progressHelper.persistProgress(job.id, "customizedComputation", 90);
+        // job.data.progress = 90;
+        progressHelper.persistProgress(job.id, "customizedComputation", 90);
 
-      delete require.cache[require.resolve('../tmp/tmp.js')];
+        delete require.cache[require.resolve('../tmp/tmp.js')];
 
-      // delete temporarily stored nodeModule file synchronously
-      fs.unlinkSync("./tmp/tmp.js");
+        // delete temporarily stored nodeModule file synchronously
+        fs.unlinkSync("./tmp/tmp.js");
+      }
+      catch(error){
+        // if error occured then clean up temp files and temp node module
+        delete require.cache[require.resolve('../tmp/tmp.js')];
+
+        // delete temporarily stored nodeModule file synchronously
+        fs.unlinkSync("./tmp/tmp.js");
+        console.error("Error while calling indicator computation method from custom script. Error is: " + error);
+        throw error;
+      }
 
       return responseGeoJson;
     }
