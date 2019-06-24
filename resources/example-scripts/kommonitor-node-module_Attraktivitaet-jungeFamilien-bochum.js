@@ -225,12 +225,13 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
-
+        if(Number(indicatorFeature.properties[targetDate]) !== 0){
           var area = KmHelper.area(indicatorFeature);
 
           // use area as weight for indicator value
           baseIndicatorTotalWeight += area;
           targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]) * area;
+        }
   		}
   	}
 
