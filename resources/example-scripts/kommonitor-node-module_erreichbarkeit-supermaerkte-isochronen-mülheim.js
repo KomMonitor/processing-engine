@@ -206,7 +206,7 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
 * by computing the AVERAGE indicator value of all affected features. Internally this compares the centroids of each indicator feature to target spatial unit features.
-* Also it uses the indicator feature's area as weight during aggregtion.
+* Also it uses the {@linkcode KmHelper.getAggregationWeight(feature)} method as weight during aggregtion.
 * @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - GeoJSON features of the target spatial unit, for which the indicator shall be aggregated to
 * @param {FeatureCollection<Polygon>} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter {@linkcode targetSpatialUnitFeatures}
@@ -242,12 +242,13 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
+          // aggregationWeight is either 1 or a custom user-set weight value set within computeIndicator()-method
+          // it "survives" until this aggregation logic within processing engine
+          var weight = KmHelper.getAggregationWeight(indicatorFeature);
 
-          var area = KmHelper.area(indicatorFeature);
-
-          // use area as weight for indicator value
-          baseIndicatorTotalWeight += area;
-          targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]) * area;
+          // use weight as weight for indicator value
+          baseIndicatorTotalWeight += weight;
+          targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]) * weight;
   		}
   	}
 
@@ -289,7 +290,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
   KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  KmHelper.log("Aggregating by comparing the BBOXes of each base feature with each targetFeature. If the BBOXes overlap for > 90%, then aggregate the base feature to the target feature. (This method ensures that minor overlaps due to faulty coordinates do not break the process).");
+  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features. Each indicator feature will be weighted by its size (area in squareMeters).");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
