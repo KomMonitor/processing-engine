@@ -459,7 +459,7 @@ exports.setPropertyValue = function (feature, propertyName, propertyValue){
 
 /**
 * Add a new weight-specific property ('aggregationWeight') to the {@linkcode feature}. It can be utilized when aggregating lower spatial units to higher spatial units,
-* where relevant features might be weighted differently.
+* where relevant features might be weighted differently in an average-based aggretation process
 * @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing certain property values
 * @param {object} weightValue - the value of the aggregation weight - if submitted value is {@linkcode null|NAN} then default value of {@linkcode 1} will be set
 * @returns {Feature} returns the submitted feature which was enriched with the submitted weight property (the property is available via {@linkcode feature.properties['aggregationWeight']}
@@ -481,7 +481,7 @@ exports.setAggregationWeight = function (feature, weightValue){
 
 /**
 * Add a new weight-specific property ('aggregationWeight') to the {@linkcode feature}. It can be utilized when aggregating lower spatial units to higher spatial units,
-* where relevant features might be weighted differently.
+* where relevant features might be weighted differently in an average-based aggretation process.
 * @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing certain property values
 * @param {object} weightValue - the value of the aggregation weight
 * @returns {Feature} returns the submitted feature which was enriched with the submitted weight property (the property is available via {@linkcode feature.properties['aggregationWeight']}
