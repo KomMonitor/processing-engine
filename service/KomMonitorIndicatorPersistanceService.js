@@ -52,8 +52,8 @@
   indicatorFeatures.forEach(function(indicatorFeature){
 
     if(indicatorFeature.properties[targetDateWithPrefix] == null || indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
-      console.log("Input contains NULL or NAN values as indicator value. Will set its value to '0'. The feature has featureName: " + indicatorFeature.properties.spatialUnitFeatureName);
-      indicatorFeature.properties[targetDateWithPrefix] = 0;
+      console.log("Input contains NULL or UNDEFINED values as indicator value. Will set its value to 'Number.NaN'. The feature has featureName: " + indicatorFeature.properties.spatialUnitFeatureName);
+      indicatorFeature.properties[targetDateWithPrefix] = Number.NaN;
     }
 
     var indicatorValueObject = {};

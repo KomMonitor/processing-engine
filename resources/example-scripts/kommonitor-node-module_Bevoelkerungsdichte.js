@@ -205,12 +205,11 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
 
-  var totalAggregatedIndicatorFeatures = 0;
-
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
   	var baseIndicatorTotalWeight = 0;
+    var featureCounter = 0;
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
@@ -219,25 +218,33 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
-          // aggregationWeight is either 1 or a custom user-set weight value set within computeIndicator()-method
-          // it "survives" until this aggregation logic within processing engine
-          var weight = KmHelper.getAggregationWeight(indicatorFeature);
+        featureCounter++;
 
-          // use weight as weight for indicator value
-          baseIndicatorTotalWeight += weight;
-          targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]) * weight;
+        // only use in aggregation, if the indicator value is not NaN, null or undefined but a "real" numeric number
+          if(! Number.isNaN(indicatorFeature.properties[targetDate]) && indicatorFeature.properties[targetDate] !== null && indicatorFeature.properties[targetDate] !== undefined){
+            // aggregationWeight is either 1 or a custom user-set weight value set within computeIndicator()-method
+            // it "survives" until this aggregation logic within processing engine
+            var weight = KmHelper.getAggregationWeight(indicatorFeature);
+
+            // use weight as weight for indicator value
+            baseIndicatorTotalWeight += weight;
+            targetFeature.properties[targetDate] += Number(indicatorFeature.properties[targetDate]) * weight;
+          }
   		}
   	}
 
     // KmHelper.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + baseIndicatorTotalWeight);
   	// compute average for share
-  	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / baseIndicatorTotalWeight);
-    totalAggregatedIndicatorFeatures += baseIndicatorTotalWeight;
+    if(baseIndicatorTotalWeight === 0){
+      targetFeature.properties[targetDate] = Number.NaN;
+    }
+    else {
+        targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / baseIndicatorTotalWeight);
+    }
     // KmHelper.log("resulting average value is " + targetFeature.properties[targetDate]);
   });
 
   KmHelper.log("Aggregation finished");
-  KmHelper.log(totalAggregatedIndicatorFeatures + " features were aggregated to " + targetSpatialUnit_geoJSON.features.length + " targetFeatures");
 
   if(indicatorFeatures.length > 0){
     console.error("Spatial Aggregation failed for a total number of " + indicatorFeatures.length);
