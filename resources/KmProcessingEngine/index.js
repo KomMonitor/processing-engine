@@ -569,7 +569,7 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
 /**
 * Set the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate} with the specified {@linkcode value}.
 * @param {Feature} feature - a valid GeoJSON Feature
-* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @param {string} targetDate - string representing the target date for which the indicator value shall be set, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @param {number} value - a numeric value which shall be set as the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate}
 * @returns {Feature} returns the GeoJSON Feature
 * @memberof API_HELPER_METHODS_UTILITY
@@ -591,6 +591,33 @@ exports.setIndicatorValue = function (feature, targetDate, value){
   }
 
   feature.properties[targetDateWithPrefix] = value;
+
+  return feature;
+};
+
+/**
+* Set the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate} s so-called {@linkcode NO DATA value}, i.e. as {@linkcode Number.NaN}. I.e. if there are data protection mechanisms
+* that mark a certain feature's indicator value as too low, then the value must be set as NoData. Or another reason could be, that when performing spatial analysis, certain Features
+* simply do not contain the queried elements. To distuinguish between features whose indicator value is actually {@linkode 0}, one might set the value as {@linkode NoData}. Which can be very important when average-aggregating
+* indicaors from lower spatial units to upper spatial units, as {@linkode NoData} means somenhing different than {@linkode 0}.
+* @param {Feature} feature - a valid GeoJSON Feature
+* @param {string} targetDate - string representing the target date for which the indicator value shall be set, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @returns {Feature} returns the GeoJSON Feature
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.setIndicatorValue_asNoData = function (feature, targetDate){
+
+  var targetDateWithPrefix;
+  if(targetDate.includes(indicator_date_prefix)){
+      targetDateWithPrefix = targetDate;
+  }
+  else{
+      targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
+  }
+
+  // set Number.NaN as NoData value
+  feature.properties[targetDateWithPrefix] = Number.NaN;
 
   return feature;
 };
