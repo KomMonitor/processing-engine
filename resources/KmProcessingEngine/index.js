@@ -452,9 +452,53 @@ exports.getPropertyValue = function (feature, propertyName){
 */
 exports.setPropertyValue = function (feature, propertyName, propertyValue){
 
-  var value = feature.properties[propertyName];
+  feature.properties[propertyName] = propertyValue;
 
   return feature;
+};
+
+/**
+* Add a new weight-specific property ('aggregationWeight') to the {@linkcode feature}. It can be utilized when aggregating lower spatial units to higher spatial units,
+* where relevant features might be weighted differently.
+* @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing certain property values
+* @param {object} weightValue - the value of the aggregation weight - if submitted value is {@linkcode null|NAN} then default value of {@linkcode 1} will be set
+* @returns {Feature} returns the submitted feature which was enriched with the submitted weight property (the property is available via {@linkcode feature.properties['aggregationWeight']}
+* or via {@linkcode getAggregationWeight(feature) )
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.setAggregationWeight = function (feature, weightValue){
+
+  if(weightValue){
+      feature.properties['aggregationWeight'] = weightValue;
+  }
+  else{
+    feature.properties['aggregationWeight'] = 1;
+  }
+
+  return feature;
+};
+
+/**
+* Add a new weight-specific property ('aggregationWeight') to the {@linkcode feature}. It can be utilized when aggregating lower spatial units to higher spatial units,
+* where relevant features might be weighted differently.
+* @param {Feature} feature - a valid GeoJSON Feature, which must contain a {@linkcode properties} attribute storing certain property values
+* @param {object} weightValue - the value of the aggregation weight
+* @returns {Feature} returns the submitted feature which was enriched with the submitted weight property (the property is available via {@linkcode feature.properties['aggregationWeight']}
+* or via {@linkcode getAggregationWeight(feature) )
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.getAggregationWeight = function (feature){
+
+  var value = feature.properties[propertyName];
+
+  if(value){
+    return value;
+  }
+  else{
+    return 1;
+  }
 };
 
 /**
