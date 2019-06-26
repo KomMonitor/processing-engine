@@ -604,6 +604,7 @@ exports.setIndicatorValue = function (feature, targetDate, value){
 * @param {string} targetDate - string representing the target date for which the indicator value shall be set, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
 * @returns {Feature} returns the GeoJSON Feature
 * @memberof API_HELPER_METHODS_UTILITY
+* @see {@link indicatorValueIsNoDataValue}
 * @function
 */
 exports.setIndicatorValue_asNoData = function (feature, targetDate){
@@ -620,6 +621,45 @@ exports.setIndicatorValue_asNoData = function (feature, targetDate){
   feature.properties[targetDateWithPrefix] = Number.NaN;
 
   return feature;
+};
+
+/**
+* Checks if the features indicator value for the specified {@linkcode targetDate} is a NoData value.
+* @param {Feature} feature - a valid GeoJSON Feature
+* @param {string} targetDate - string representing the target date, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @returns {boolean} returns {@linkcode true} if indicator value is NoData value (i.e. Number.NaN, null or undefined)
+* @memberof API_HELPER_METHODS_UTILITY
+* @see {@link isNoDataValue}
+* @function
+*/
+exports.indicatorValueIsNoDataValue = function (feature, targetDate){
+  var targetDateWithPrefix;
+  if(targetDate.includes(indicator_date_prefix)){
+      targetDateWithPrefix = targetDate;
+  }
+  else{
+      targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
+  }
+
+  // set Number.NaN as NoData value
+  var value = feature.properties[targetDateWithPrefix];
+
+  return exports.isNoDataValue(value);
+};
+
+/**
+* Checks if the value is a NoData value.
+* @param {object} value - the value object to be inspected
+* @returns {boolean} returns {@linkcode true} if value is NoData value (i.e. Number.NaN, null or undefined)
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.isNoDataValue = function (value){
+
+  if (Number.isNaN(value) || value === null || value === undefined){
+    return true;
+  }
+  return false;
 };
 
 /**
