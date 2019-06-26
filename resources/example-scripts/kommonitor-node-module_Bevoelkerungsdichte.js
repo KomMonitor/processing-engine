@@ -105,6 +105,10 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   // create progress log after each 10th percent of features
   var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
   targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+
+    // set aggregationWeight as feature's area
+    KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
+
     // get spatialUnit feature id as string --> use it to get associated map entry
     var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
 
