@@ -491,7 +491,7 @@ exports.setAggregationWeight = function (feature, weightValue){
 */
 exports.getAggregationWeight = function (feature){
 
-  var value = feature.properties[propertyName];
+  var value = feature.properties['aggregationWeight'];
 
   if(value){
     return value;
@@ -596,7 +596,7 @@ exports.setIndicatorValue = function (feature, targetDate, value){
 };
 
 /**
-* Set the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate} s so-called {@linkcode NO DATA value}, i.e. as {@linkcode Number.NaN}. I.e. if there are data protection mechanisms
+* Set the {@linkcode feature}'s indicator value for the specified {@linkcode targetDate} s so-called {@linkcode NO DATA value}, i.e. as {@linkcode null}. I.e. if there are data protection mechanisms
 * that mark a certain feature's indicator value as too low, then the value must be set as NoData. Or another reason could be, that when performing spatial analysis, certain Features
 * simply do not contain the queried elements. To distuinguish between features whose indicator value is actually {@linkode 0}, one might set the value as {@linkode NoData}. Which can be very important when average-aggregating
 * indicaors from lower spatial units to upper spatial units, as {@linkode NoData} means somenhing different than {@linkode 0}.
@@ -617,8 +617,8 @@ exports.setIndicatorValue_asNoData = function (feature, targetDate){
       targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
   }
 
-  // set Number.NaN as NoData value
-  feature.properties[targetDateWithPrefix] = Number.NaN;
+  // set null as NoData value
+  feature.properties[targetDateWithPrefix] = null;
 
   return feature;
 };
@@ -627,7 +627,7 @@ exports.setIndicatorValue_asNoData = function (feature, targetDate){
 * Checks if the features indicator value for the specified {@linkcode targetDate} is a NoData value.
 * @param {Feature} feature - a valid GeoJSON Feature
 * @param {string} targetDate - string representing the target date, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
-* @returns {boolean} returns {@linkcode true} if indicator value is NoData value (i.e. Number.NaN, null or undefined)
+* @returns {boolean} returns {@linkcode true} if indicator value is NoData value (i.e. null, null or undefined)
 * @memberof API_HELPER_METHODS_UTILITY
 * @see {@link isNoDataValue}
 * @function
@@ -641,7 +641,7 @@ exports.indicatorValueIsNoDataValue = function (feature, targetDate){
       targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
   }
 
-  // set Number.NaN as NoData value
+  // set null as NoData value
   var value = feature.properties[targetDateWithPrefix];
 
   return exports.isNoDataValue(value);
@@ -650,7 +650,7 @@ exports.indicatorValueIsNoDataValue = function (feature, targetDate){
 /**
 * Checks if the value is a NoData value.
 * @param {object} value - the value object to be inspected
-* @returns {boolean} returns {@linkcode true} if value is NoData value (i.e. Number.NaN, null or undefined)
+* @returns {boolean} returns {@linkcode true} if value is NoData value (i.e. null, null or undefined)
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
 */

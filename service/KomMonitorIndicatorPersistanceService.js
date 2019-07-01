@@ -51,9 +51,9 @@
   // now for each element of inputFeatures create object and append to array
   indicatorFeatures.forEach(function(indicatorFeature){
 
-    if(indicatorFeature.properties[targetDateWithPrefix] == null || indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
-      console.log("Input contains NULL or UNDEFINED values as indicator value. Will set its value to 'Number.NaN'. The feature has featureName: " + indicatorFeature.properties.spatialUnitFeatureName);
-      indicatorFeature.properties[targetDateWithPrefix] = Number.NaN;
+    if(indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
+      console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties.spatialUnitFeatureName);
+      indicatorFeature.properties[targetDateWithPrefix] = null;
     }
 
     var indicatorValueObject = {};
