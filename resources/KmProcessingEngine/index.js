@@ -12,10 +12,6 @@
 */
 
 /**
-* @namespace METHODS_TO_IMPLEMENT_OR_OVERWRITE
-*/
-
-/**
 * @namespace API_HELPER_METHODS_UTILITY
 */
 
