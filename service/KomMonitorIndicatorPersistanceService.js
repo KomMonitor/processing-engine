@@ -52,12 +52,12 @@
   indicatorFeatures.forEach(function(indicatorFeature){
 
     if(indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
-      console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties.spatialUnitFeatureName);
+      console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties[process.env.FEATURE_NAME_PROPERTY_NAME]);
       indicatorFeature.properties[targetDateWithPrefix] = null;
     }
 
     var indicatorValueObject = {};
-    indicatorValueObject.spatialReferenceKey = indicatorFeature.properties.spatialUnitFeatureId;
+    indicatorValueObject.spatialReferenceKey = indicatorFeature.properties[process.env.FEATURE_ID_PROPERTY_NAME];
 
     indicatorValueObject.valueMapping = new Array();
     var valueMappingObject = {};

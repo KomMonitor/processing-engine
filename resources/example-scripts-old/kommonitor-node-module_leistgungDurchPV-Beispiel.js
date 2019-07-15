@@ -4,7 +4,7 @@ var turf = require('@turf/turf');
 
 
 // CONSTANTS DEFINITION
-const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+const spatialUnitFeatureIdPropertyName = "ID";
 const indicator_date_prefix = "DATE_";
 
 const leistungAttributeValue = "Leistung";
@@ -106,7 +106,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   		}
   	}
 
-    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
+    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.ID + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;
     // console.log("resulting average value is " + targetFeature.properties[targetDate]);
   });

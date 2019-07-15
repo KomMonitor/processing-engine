@@ -5,7 +5,7 @@ var jStat = require('jStat').jStat;
 
 
 // CONSTANTS DEFINITION
-const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+const spatialUnitFeatureIdPropertyName = "ID";
 const indicator_date_prefix = "DATE_";
 
 
@@ -107,7 +107,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
   		}
   	}
 
-    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.spatialUnitFeatureId + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
+    // console.log("total accumulated value is " + targetFeature.properties[targetDate] + " for targetFeature with id " + targetFeature.properties.ID + ". It will be divided by " + numberOfIndicatorFeaturesWithinTargetFeature);
   	// compute average for share
   	targetFeature.properties[targetDate] = (targetFeature.properties[targetDate] / numberOfIndicatorFeaturesWithinTargetFeature);
     totalAggregatedIndicatorFeatures += numberOfIndicatorFeaturesWithinTargetFeature;

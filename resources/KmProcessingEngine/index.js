@@ -73,7 +73,14 @@ const openrouteservice_url = process.env.OPEN_ROUTE_SERVICE_URL;
 * @memberof CONSTANTS
 * @constant
 */
-const spatialUnitFeatureIdPropertyName = "spatialUnitFeatureId";
+const spatialUnitFeatureIdPropertyName = "ID";
+/**
+* This constant is required to aquire the unique name of a certain feature of a spatial unit
+* @type {string}
+* @memberof CONSTANTS
+* @constant
+*/
+const spatialUnitFeatureNamePropertyName = "NAME";
 /**
 * This constant is required to access indicator timeseries values correctly (i.e. DATE_2018-01-01)
 * @see getTargetDateWithPropertyPrefix
@@ -270,24 +277,24 @@ exports.getProcessParameterByName_asBoolean = function (parameterName, processPa
 
 /**
 * Acquires the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature} representing a spatial unit (i.e. city districts, building blocks, etc).
-* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature representing a spatial unit (i.e. city districts, building blocks, etc), which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureId} that holds the value of the unique feature id.
+* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature representing a spatial unit (i.e. city districts, building blocks, etc), which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.ID} that holds the value of the unique feature id.
 * @return {string} returns the unique {@linkcode feature id} of the submitted GeoJSON {@linkcode feature}.
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
 exports.getSpatialUnitFeatureIdValue = function (feature){
-  return String(feature.properties.spatialUnitFeatureId);
+  return String(feature.properties[spatialUnitFeatureIdPropertyName]);
 };
 
 /**
 * Acquires the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature} representing a spatial unit (i.e. city districts, building blocks, etc).
-* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature representing a spatial unit (i.e. city districts, building blocks, etc), which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.spatialUnitFeatureName} that holds the value of the unique feature name.
+* @param {GeoJSONFeature<Polygon>} feature - the GeoJSON feature representing a spatial unit (i.e. city districts, building blocks, etc), which must accord to the KomMonitor specific data model. It then has a property named {@linkcode feature.properties.NAME} that holds the value of the unique feature name.
 * @return {string} returns the unique {@linkcode feature name} of the submitted GeoJSON {@linkcode feature}.
 * @memberof API_HELPER_METHODS_UTILITY
 * @function
 */
 exports.getSpatialUnitFeatureNameValue = function (feature){
-  return String(feature.properties.spatialUnitFeatureName);
+  return String(feature.properties[spatialUnitFeatureNamePropertyName]);
 };
 
 /**
