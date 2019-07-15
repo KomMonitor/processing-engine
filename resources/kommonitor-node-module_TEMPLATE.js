@@ -199,7 +199,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
   KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features. Each indicator feature will be weighted by its size (area in squareMeters).");
+  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features.");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
