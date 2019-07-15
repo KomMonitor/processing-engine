@@ -35,6 +35,18 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 */
 const aggregationType = "AVERAGE";
 
+// CUSTOM CONSTANTS
+const freiflaecheTypeAttrName = "Code2015";
+const freiflaecheTypeAttrTargetValueArray = ["250", "320", "321", "322", "323", "324", "325", "326", "327", "328", "329",
+    "330", "331", "332", "333", "334", "335", "336", "337", "338", "339", "340", "341", "342", "343", "344", "345", "346", "347", "348", "349",
+    "350", "351", "352", "353", "354", "355", "356", "357", "358", "359", "360", "361", "362", "363", "364", "365", "367", "368", "369",
+    "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385",
+    "400", "401", "402", "403", "404", "405", "406", "407", "408", "409", "410", "411", "412", "413", "414", "415", "416", "417", "418", "419",
+    "420", "421", "422", "423", "424", "425", "426", "427", "428", "429", "430", "431", "432", "433", "434", "435", "436", "437", "438", "439",
+    "440", "441", "442", "443", "444", "445", "446", "447", "448", "449", "450", "451", "452", "453", "454", "455", "456", "457", "458", "459",
+    "460", "461", "462", "463", "464", "465", "466", "467", "468", "469", "470", "471", "472", "473", "474", "475", "476", "477", "478", "479",
+    "480", "481", "482", "483", "484", "485", "486", "487", "488", "489", "490"];
+
 
 
 /**
@@ -56,86 +68,203 @@ const aggregationType = "AVERAGE";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var ewzGeoJSON = KmHelper.getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
+  var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
+  var rnk = KmHelper.getGeoresourceById("16cdb495-b242-4bf1-95b8-fbbcaf038f39", georesourcesMap);
 
-  KmHelper.log("Retrieved required baseIndicators successfully");
+  var radius_kleineFlaechen = KmHelper.getProcessParameterByName_asNumber("RadiusKleineFreiflaechen", processParameters);
+  var radius_grosseFlaechen = KmHelper.getProcessParameterByName_asNumber("RadiusGrosseFreiflaechen", processParameters);
+  var mindestgroesse = KmHelper.getProcessParameterByName_asNumber("FreiflaechenMindestgroesse", processParameters);
+  var schwellwertFlaechen = KmHelper.getProcessParameterByName_asNumber("FreiflaechenSchwellwert", processParameters);
 
-  // now we compute the new indicator
-  KmHelper.log("Iterate over base indicators and save intermediate values within a map object");
+  KmHelper.log("radius small in m: " + radius_kleineFlaechen);
+  KmHelper.log("radius big in m: " + radius_grosseFlaechen);
+  KmHelper.log("min size in hectar: " + mindestgroesse);
+  KmHelper.log("threshold for big and small areas in hectar: " + schwellwertFlaechen);
 
-  /**
-  * create a map to store indicator values for each feature of the target spatial unit
-  * by using such a map object, we can ensure, that we only iterate ONCE over each bease indicator
-  * and also can only iterate ONCE over each target spatial unit feature at the end to compute the indicator
-  */
-  var map = new Map();
 
-  KmHelper.log("Process base indicator 'Gesamteinwohnerzahl'");
+  KmHelper.log("Remove all RNK entries that are no freiraum!");
+  var countRemovedRNKs = 0;
+  var numberOfTotalRNKs = rnk.features.length;
 
-  /**
-  * iterate over each feature of the baseIndicator and use its indicator value to modify map object
-  * NOTE use spatialUnitFeatureId as key to be able to identify entries by their unique feature id!
-  */
-  ewzGeoJSON.features.forEach(function(feature) {
-    // get the unique featureID of the spatial unit feature as String
-    var featureId = KmHelper.getSpatialUnitFeatureIdValue(feature);
-    // get the time series value of the base indicator feature for the requested target date (with its required prefix!)
-    var einwohnerzahl = KmHelper.getIndicatorValue(feature, targetDate);
+  for (var index=0; index < rnk.features.length; index++){
 
-    if(einwohnerzahl === undefined || einwohnerzahl === null){
-      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for targetDate '" + targetDate + "'");
-      KmHelper.log("WARNING: the feature value will thus be set to '0' and computation will continue");
-      einwohnerzahl = 0;
+    var rnkCandidate = rnk.features[index];
+
+    // oneLiner to query if the candidate does NOT fulfill the freiraumfl. criteria
+    // cast property value to String!!!
+    if (! freiflaecheTypeAttrTargetValueArray.some(substring => String(rnkCandidate.properties[freiflaecheTypeAttrName]).includes(substring))){
+
+      // remove feature from array and set index back!
+      delete rnk.features.splice(index, 1);
+
+      // set back index as the array contents were shifetd one to the left!
+      index--;
+
+      countRemovedRNKs++;
+    }
+  }
+
+    KmHelper.log("Removed '" + countRemovedRNKs + "' from a total of '" + numberOfTotalRNKs + "' RNK features as they were no freiraumflaechen.");
+
+  var freifl_klein = [];
+var freifl_gross = [];
+
+
+// skip dissolve step as turf dissolve is kinda buggy sometimes
+// KmHelper.log("dissolve areas from RNK.");
+//
+// rnk = KmHelper.dissolve(rnk);
+
+KmHelper.log("Calculate area in hectar for dissolved frfl and group small and big areas");
+
+rnk.features.forEach(function(feature) {
+
+    // area in squareMeters
+    var area_squareMeters = KmHelper.area(feature);
+
+    var area_hectar = area_squareMeters / 10000;
+
+    // append area as new property
+    KmHelper.setPropertyValue(feature, "area_hectar", area_hectar);
+
+    // filter freiflaechen using area
+    if (area_hectar > mindestgroesse && area_hectar < schwellwertFlaechen){
+  	freifl_klein.push(feature);
+    }
+    else if (area_hectar >= schwellwertFlaechen){
+  	  freifl_gross.push(feature);
+    }
+});
+
+
+KmHelper.log("Compute area for each building as proxy for wohnfläche");
+wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
+
+KmHelper.log("get centroids of buildings");
+var wohngeb_centroids = new Array();
+wohngeb.features.forEach(function(feature){
+  wohngeb_centroids.push(KmHelper.center_mass(feature, feature.properties));
+});
+
+KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
+
+// initial values for later comparison
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+	spatialUnitFeature.properties.wohnflTotal = 0;
+	spatialUnitFeature.properties.wohnflCovered = 0;
+});
+
+
+/*
+* create a map collecting numbers of isochrone starting points and their isochrones
+*/
+KmHelper.log("create a map collecting numbers of isochrone starting points and their isochrones");
+
+// await is required to resolve the returned Promise as it is an async function!
+var wohngebIsochronesMap = await createWohngebIsochronesMap(wohngeb_centroids, radius_kleineFlaechen, radius_grosseFlaechen);
+
+/*
+* response map will have objects as follows:
+
+var mapKey = "" + index;
+var mapObject = {
+  "wohngebFeature": tempStartPointsArray[index],
+  "isochrone_small": isochrones_small.features[index],
+  "isochrone_big": isochrones_big.features[index]
+};
+*/
+
+// now iterate over each map object and compare to spatialUnit features and freiflaechen
+
+
+var wohngebLength = wohngebIsochronesMap.size;
+// create progress log after each 10th percent of features
+var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
+var counter = 0;
+	for (var [mapKey, mapObject] of wohngebIsochronesMap){
+
+		wohngebFeature = mapObject["wohngebFeature"];
+
+    // isochrones by distance of smaller and bigger radius using foot-walking as GeoJSON feature collection
+    var isochrone_wohngeb_smallRadius = mapObject["isochrone_small"];
+    var isochrone_wohngeb_bigRadius = mapObject["isochrone_big"];
+
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
+
+      if (KmHelper.within(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += wohngebFeature.properties.area_squareMeters;
+
+  			// for each small and big freiflaechen feature check if intersects with corresponding wohngeb_isochrone
+        var boolean_wohngebIsochrone_intersects = false;
+
+  			for (var frflSmallIndex = 0; frflSmallIndex < freifl_klein.length; frflSmallIndex++){
+
+  				var freiflaeche_small_feature = freifl_klein[frflSmallIndex];
+
+  				if(KmHelper.intersects(isochrone_wohngeb_smallRadius, freiflaeche_small_feature)){
+            boolean_wohngebIsochrone_intersects = true;
+  					break;
+  				}
+  			}
+
+        // only check big frfl. if wohngeb does not reach a small frfl
+        if (! boolean_wohngebIsochrone_intersects){
+          for (var frflBigIndex = 0; frflBigIndex < freifl_gross.length; frflBigIndex++){
+
+    				var freiflaeche_big_feature = freifl_gross[frflBigIndex];
+
+    				if(KmHelper.intersects(isochrone_wohngeb_bigRadius, freiflaeche_big_feature)){
+              boolean_wohngebIsochrone_intersects = true;
+    					break;
+    				}
+    			}
+        }
+
+        if (boolean_wohngebIsochrone_intersects){
+          // wohngeb reaches any freifl.
+          // add wohnflaeche to wohnflCovered
+          spatialUnitFeat.properties.wohnflCovered += wohngebFeature.properties.area_squareMeters;
+        }
+
+
+        break;
+  		}
     }
 
-    // modify map object (i.e. set value initially, or perform calculations and store modified value)
-    // key should be unique featureId of the spatial unit feature
-    map.set(featureId, einwohnerzahl);
-  });
+    counter++;
+    if(counter % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Compared '" + counter + "' of total '" + wohngebLength + "' building isochrones to small and big freiflaechen.");
+    }
+	}
 
-  var numFeatures = targetSpatialUnit_geoJSON.features.length;
-
-  // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
-
-  // iterate once over target spatial unit features and compute indicator utilizing map entries
-  var spatialUnitIndex = 0;
-  // create progress log after each 10th percent of features
-  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
   targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
-
-    // set aggregationWeight as feature's area
-    KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
-
-    // get spatialUnit feature id as string --> use it to get associated map entry
-    var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
-
-    // compute area of spatial unit feature in hectars
-    // divide by 10000 to transform m² to ha
-    var featureArea = KmHelper.area(spatialUnitFeature) / 10000;
-
-    // retrieve map entry value associated to feature id
-    // Casting to Number() is optional but recommended, when performing numeric calculations
-    var einwohnerzahl = Number(map.get(spatialUnitFeatureId));
-    var dichte = Number(einwohnerzahl / featureArea);
-
-    // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, dichte);
-
-  	spatialUnitIndex ++;
-
-    // only log after certain progress
-    if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+    if(spatialUnitFeature.properties.wohnflTotal === 0){
+      // no living building in this feature --> thus set value to NoData as it cannot be compared to features that have living buildings, which are not covered!
+        spatialUnitFeature = KmHelper.setIndicatorValue_asNoData(spatialUnitFeature, targetDate);
     }
+    else{
+      var indicatorValue = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal;
+      spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+    }
+
+    // set Wohnfläche as aggregation weight
+    spatialUnitFeature = KmHelper.setAggregationWeight(spatialUnitFeature, spatialUnitFeature.properties.wohnflTotal);
+
+    // delete temporary helper properties
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
   });
+
 
   KmHelper.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**
@@ -183,6 +312,7 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
   // disaggregate indicator
 
 };
+
 
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
@@ -237,7 +367,8 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   		}
   	}
 
-    // compute average for share
+
+  	// compute average for share
     if(baseIndicatorTotalWeight === 0){
       targetFeature.properties[targetDate] = Number.NaN;
     }
@@ -317,3 +448,53 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 module.exports.computeIndicator = computeIndicator;
 module.exports.aggregateIndicator = aggregateIndicator;
 module.exports.disaggregateIndicator = disaggregateIndicator;
+
+async function createWohngebIsochronesMap (wohngeb_centroids, radius_kleineFlaechen, radius_grosseFlaechen){
+  var map = new Map();
+  var maxLocationsForORSRequest = 200;
+
+  var featureIndex = 0;
+  // log progress for each 10% of features
+  var logProgressIndexSeparator = Math.round(wohngeb_centroids.length / 100 * 10);
+
+  var countFeatures = 0;
+  var tempStartPointsArray = [];
+  for (var pointIndex=0; pointIndex < wohngeb_centroids.length; pointIndex++){
+    tempStartPointsArray.push(wohngeb_centroids[pointIndex]);
+    countFeatures++;
+
+    if(countFeatures === maxLocationsForORSRequest){
+      // make request, collect results and fill map
+
+      // responses will be GeoJSON FeatureCollections
+      // do NOT dissolve isochrones
+      var isochrones_small = await KmHelper.isochrones_byDistance(tempStartPointsArray, "PEDESTRIAN", radius_kleineFlaechen, false, true);
+      var isochrones_big = await KmHelper.isochrones_byDistance(tempStartPointsArray, "PEDESTRIAN", radius_grosseFlaechen, false, true);
+
+      for (var index=0; index < tempStartPointsArray.length; index++){
+        // make sure that key is always treated as string
+        var mapKey = "" + featureIndex;
+        var mapObject = {
+          "wohngebFeature": tempStartPointsArray[index],
+          "isochrone_small": isochrones_small.features[index],
+          "isochrone_big": isochrones_big.features[index]
+        };
+
+        map.set(mapKey, mapObject);
+
+        // increment featureIndex
+        featureIndex++;
+        if(featureIndex % logProgressIndexSeparator === 0){
+            KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + wohngeb_centroids.length + "' building centroids.");
+        }
+      }
+
+      // reset temp vars
+      tempStartPointsArray = [];
+      countFeatures = 0;
+
+    } // end if
+  }
+
+  return map;
+}

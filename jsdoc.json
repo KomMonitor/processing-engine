@@ -4,9 +4,9 @@
     },
     "source": {
 			"include": [
-				"resources"
+				"resources/KmProcessingEngine"
 			],
-			"includePattern": ".+\\_TEMPLATE.js(doc)?$",
+			"includePattern": ".+\\index.js(doc)?$",
 			"excludePattern": "(^|\\/|\\\\)_"
     },
     "plugins": [

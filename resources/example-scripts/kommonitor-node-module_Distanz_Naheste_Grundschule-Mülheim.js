@@ -58,71 +58,38 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var ewzGeoJSON = KmHelper.getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
+  var grundschulenGeoJSON = KmHelper.getGeoresourceByName('Grundschulen', georesourcesMap);
 
-  KmHelper.log("Retrieved required baseIndicators successfully");
-
-  // now we compute the new indicator
-  KmHelper.log("Iterate over base indicators and save intermediate values within a map object");
-
-  /**
-  * create a map to store indicator values for each feature of the target spatial unit
-  * by using such a map object, we can ensure, that we only iterate ONCE over each bease indicator
-  * and also can only iterate ONCE over each target spatial unit feature at the end to compute the indicator
-  */
-  var map = new Map();
-
-  KmHelper.log("Process base indicator 'Gesamteinwohnerzahl'");
-
-  /**
-  * iterate over each feature of the baseIndicator and use its indicator value to modify map object
-  * NOTE use spatialUnitFeatureId as key to be able to identify entries by their unique feature id!
-  */
-  ewzGeoJSON.features.forEach(function(feature) {
-    // get the unique featureID of the spatial unit feature as String
-    var featureId = KmHelper.getSpatialUnitFeatureIdValue(feature);
-    // get the time series value of the base indicator feature for the requested target date (with its required prefix!)
-    var einwohnerzahl = KmHelper.getIndicatorValue(feature, targetDate);
-
-    if(einwohnerzahl === undefined || einwohnerzahl === null){
-      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for targetDate '" + targetDate + "'");
-      KmHelper.log("WARNING: the feature value will thus be set to '0' and computation will continue");
-      einwohnerzahl = 0;
-    }
-
-    // modify map object (i.e. set value initially, or perform calculations and store modified value)
-    // key should be unique featureId of the spatial unit feature
-    map.set(featureId, einwohnerzahl);
-  });
+  KmHelper.log("Retrieved required georesources successfully");
 
   var numFeatures = targetSpatialUnit_geoJSON.features.length;
 
   // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+  KmHelper.log("replace feature geometries of targetSpatialUnit with their center point of mass.");
+
+  // now we compute the new indicator
+  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features by calculating the nearest school using footway paths.");
+
 
   // iterate once over target spatial unit features and compute indicator utilizing map entries
   var spatialUnitIndex = 0;
   // create progress log after each 10th percent of features
   var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
-  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+  for (var index=0; index < targetSpatialUnit_geoJSON.features.length; index++){
 
-    // set aggregationWeight as feature's area
-    KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
+    KmHelper.log("INdex: " + index);
 
-    // get spatialUnit feature id as string --> use it to get associated map entry
-    var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
+    var spatialUnitFeature = targetSpatialUnit_geoJSON.features[index];
+    var centroid = KmHelper.center_mass(spatialUnitFeature, spatialUnitFeature.properties);
 
-    // compute area of spatial unit feature in hectars
-    // divide by 10000 to transform m² to ha
-    var featureArea = KmHelper.area(spatialUnitFeature) / 10000;
+    //targetPoint, pointCollection, vehicleType
+    var nearestElementarySchool = await KmHelper.nearestPoint_waypathDistance(centroid, grundschulenGeoJSON, "PEDESTRIAN");
 
-    // retrieve map entry value associated to feature id
-    // Casting to Number() is optional but recommended, when performing numeric calculations
-    var einwohnerzahl = Number(map.get(spatialUnitFeatureId));
-    var dichte = Number(einwohnerzahl / featureArea);
+    // footpath distance on km
+    var distance_waypath = await KmHelper.distance_waypath_kilometers(centroid, nearestElementarySchool, "PEDESTRIAN");
 
     // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, dichte);
+    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, distance_waypath);
 
   	spatialUnitIndex ++;
 
@@ -130,7 +97,27 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
     if(spatialUnitIndex % logProgressIndexSeparator === 0){
         KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
     }
-  });
+  }
+  // targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+  //
+  //   var centroid = center_mass(spatialUnitFeature, spatialUnitFeature.properties);
+  //
+  //   //targetPoint, pointCollection, vehicleType
+  //   var nearestElementarySchool = await nearestPoint_waypathDistance(centroid, grundschulenGeoJSON, "PEDESTRIAN");
+  //
+  //   // footpath distance on km
+  //   var distance_waypath = await distance_waypath_kilometers(centroid, nearestElementarySchool, "PEDESTRIAN");
+  //
+  //   // set indicator value for spatialUnitFeature
+  //   spatialUnitFeature = setIndicatorValue(spatialUnitFeature, targetDate, distance_waypath);
+  //
+  // 	spatialUnitIndex ++;
+  //
+  //   // only log after certain progress
+  //   if(spatialUnitIndex % logProgressIndexSeparator === 0){
+  //       KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+  //   }
+  // });
 
   KmHelper.log("Computation of indicator finished");
 
@@ -183,6 +170,7 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
   // disaggregate indicator
 
 };
+
 
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
@@ -237,7 +225,8 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   		}
   	}
 
-    // compute average for share
+
+  	// compute average for share
     if(baseIndicatorTotalWeight === 0){
       targetFeature.properties[targetDate] = Number.NaN;
     }

@@ -56,86 +56,119 @@ const aggregationType = "AVERAGE";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var ewzGeoJSON = KmHelper.getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
+  var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
+  var supermaerkteFeatures = KmHelper.getGeoresourceByName("Supermärkte", georesourcesMap);
 
-  KmHelper.log("Retrieved required baseIndicators successfully");
+  // divide by 1000 for meters-->kilometers
+  var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance);
 
-  // now we compute the new indicator
-  KmHelper.log("Iterate over base indicators and save intermediate values within a map object");
+  var supermaerkte = [];
 
-  /**
-  * create a map to store indicator values for each feature of the target spatial unit
-  * by using such a map object, we can ensure, that we only iterate ONCE over each bease indicator
-  * and also can only iterate ONCE over each target spatial unit feature at the end to compute the indicator
-  */
-  var map = new Map();
+  KmHelper.log("Filter for only supermarkets");
 
-  KmHelper.log("Process base indicator 'Gesamteinwohnerzahl'");
-
-  /**
-  * iterate over each feature of the baseIndicator and use its indicator value to modify map object
-  * NOTE use spatialUnitFeatureId as key to be able to identify entries by their unique feature id!
-  */
-  ewzGeoJSON.features.forEach(function(feature) {
-    // get the unique featureID of the spatial unit feature as String
-    var featureId = KmHelper.getSpatialUnitFeatureIdValue(feature);
-    // get the time series value of the base indicator feature for the requested target date (with its required prefix!)
-    var einwohnerzahl = KmHelper.getIndicatorValue(feature, targetDate);
-
-    if(einwohnerzahl === undefined || einwohnerzahl === null){
-      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for targetDate '" + targetDate + "'");
-      KmHelper.log("WARNING: the feature value will thus be set to '0' and computation will continue");
-      einwohnerzahl = 0;
-    }
-
-    // modify map object (i.e. set value initially, or perform calculations and store modified value)
-    // key should be unique featureId of the spatial unit feature
-    map.set(featureId, einwohnerzahl);
+  supermaerkteFeatures.features.forEach(function(feature) {
+    	supermaerkte.push(feature);
   });
 
-  var numFeatures = targetSpatialUnit_geoJSON.features.length;
+KmHelper.log("create distance isochrones for supermarkets");
 
-  // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_supermaerkte = await KmHelper.isochrones_byDistance(supermaerkte, "PEDESTRIAN", maxDistance, false);
 
-  // iterate once over target spatial unit features and compute indicator utilizing map entries
-  var spatialUnitIndex = 0;
-  // create progress log after each 10th percent of features
-  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
+KmHelper.log("Compute area for each building as proxy for wohnfläche");
+wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
+
+KmHelper.log("get centroids of buildings");
+var wohngeb_centroids = new Array();
+wohngeb.features.forEach(function(feature){
+  wohngeb_centroids.push(KmHelper.center_mass(feature, feature.properties));
+});
+
+KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
+
+// initial values for later comparison
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+	spatialUnitFeature.properties.wohnflTotal = 0;
+	spatialUnitFeature.properties.wohnflCovered = 0;
+});
+
+// check for three supermarkets!
+var numCoveredSupermaerkte = 0;
+var targetNumSupermaerkte = 3;
+
+var wohngebLength = wohngeb_centroids.length;
+// create progress log after each 10th percent of features
+var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+    //reset number of covered supermärkten
+    numCoveredSupermaerkte = 0;
+
+		wohngebFeature = wohngeb_centroids[pointIndex];
+
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
+
+      if (KmHelper.within(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += wohngebFeature.properties.area_squareMeters;
+
+  			// for each isochrones_supermaerkte feature check if wohngebFeature lies within it
+  			for (var isochroneIndex = 0; isochroneIndex < isochrones_supermaerkte.features.length; isochroneIndex++){
+
+  				var isochrone_supermarkt_feature = isochrones_supermaerkte.features[isochroneIndex];
+
+  				if(KmHelper.within(wohngebFeature, isochrone_supermarkt_feature)){
+
+            numCoveredSupermaerkte++;
+
+            if(numCoveredSupermaerkte === targetNumSupermaerkte){
+              // add wohnflaeche to wohnflCovered
+              spatialUnitFeat.properties.wohnflCovered += wohngebFeature.properties.area_squareMeters;;
+
+              break;
+            }
+
+
+  				}
+  			}
+
+        break;
+  		}
+    }
+
+    if(pointIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Compared '" + pointIndex + "' of total '" + wohngebLength + "' buildings to supermarkt isochrones.");
+    }
+	}
+
   targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
-
-    // set aggregationWeight as feature's area
-    KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
-
-    // get spatialUnit feature id as string --> use it to get associated map entry
-    var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
-
-    // compute area of spatial unit feature in hectars
-    // divide by 10000 to transform m² to ha
-    var featureArea = KmHelper.area(spatialUnitFeature) / 10000;
-
-    // retrieve map entry value associated to feature id
-    // Casting to Number() is optional but recommended, when performing numeric calculations
-    var einwohnerzahl = Number(map.get(spatialUnitFeatureId));
-    var dichte = Number(einwohnerzahl / featureArea);
-
-    // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, dichte);
-
-  	spatialUnitIndex ++;
-
-    // only log after certain progress
-    if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+    if(spatialUnitFeature.properties.wohnflTotal === 0){
+      // no living building in this feature --> thus set value to NoData as it cannot be compared to features that have living buildings, which are not covered!
+        spatialUnitFeature = KmHelper.setIndicatorValue_asNoData(spatialUnitFeature, targetDate);
     }
+    else{
+      var indicatorValue = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal;
+      spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+    }
+
+    // set Wohnfläche as aggregation weight
+    spatialUnitFeature = KmHelper.setAggregationWeight(spatialUnitFeature, spatialUnitFeature.properties.wohnflTotal);
+
+    // delete temporary helper properties
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
   });
+
 
   KmHelper.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**
@@ -183,6 +216,7 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
   // disaggregate indicator
 
 };
+
 
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
@@ -237,7 +271,8 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   		}
   	}
 
-    // compute average for share
+
+  	// compute average for share
     if(baseIndicatorTotalWeight === 0){
       targetFeature.properties[targetDate] = Number.NaN;
     }
