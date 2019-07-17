@@ -90,7 +90,18 @@ const spatialUnitFeatureNamePropertyName = "NAME";
 */
 const indicator_date_prefix = "DATE_";
 
-
+/**
+* This constant limits the number of allowed locations for requests against Open Route Service
+* This is necessary especially for GET requests, to keep the GET request length within handable sizes
+* @see isochrones_byTime
+* @see isochrones_byDistance
+* @see distance_matrix_kilometers
+* @see duration_matrix_seconds
+* @type {number}
+* @memberof CONSTANTS
+* @constant
+*/
+const maxLocationsForORSRequest = 200;
 
 
 
@@ -1365,54 +1376,106 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
     }
   }
 
-            // coordinate string must be "lon,lat|lon,lat"
-            var locationsString = "";
-            for (var index=0; index<startingPoints.length; index++){
-              //element is valid GeoJSON Point Feature with coordinates like [longitude,latitude]
-              locationsString += startingPoints[index].geometry.coordinates[0] + "," + startingPoints[index].geometry.coordinates[1];
-              if(index != startingPoints.length - 1){
-                // encode pipe symbol "|" manually
-                locationsString += "%7C";
-              }
-            };
+  if (startingPoints.length <= maxLocationsForORSRequest){
+    return await computeIsochrones_byTime(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog);
+  }
+  else{
+    var resultIsochrones;
 
-            var optionsString = '{"maximum_speed":' + speedInKilometersPerHour + '}';
+    var featureIndex = 0;
+    // log progress for each 10% of features
+    var logProgressIndexSeparator = Math.round(startingPoints.length / 100 * 10);
+
+    var countFeatures = 0;
+    var tempStartPointsArray = [];
+    for (var pointIndex=0; pointIndex < startingPoints.length; pointIndex++){
+      tempStartPointsArray.push(startingPoints[pointIndex]);
+      countFeatures++;
+
+      // if maxNumber of locations is reached or the last starting point is reached
+      if(countFeatures === maxLocationsForORSRequest || pointIndex === startingPoints.length -1){
+        // make request, collect results
+
+        // responses will be GeoJSON FeatureCollections
+        var tempIsochrones = await computeIsochrones_byTime(tempStartPointsArray, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog);
+
+        if (! resultIsochrones){
+          resultIsochrones = tempIsochrones;
+        }
+        else{
+          // apend results of tempIsochrones to resultIsochrones
+          resultIsochrones.features.concat(tempIsochrones.features);
+        }
+          // increment featureIndex
+          featureIndex++;
+          if(featureIndex % logProgressIndexSeparator === 0){
+              KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
+          }
+
+        // reset temp vars
+        tempStartPointsArray = [];
+        countFeatures = 0;
+
+      } // end if
+    }
+
+    // if dissolve is true then dissolve results
+    if (dissolve){
+      return exports.dissolve(resultIsochrones, "value");
+    }
+  } // end else
+};
+
+var computeIsochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog){
+
+  // coordinate string must be "lon,lat|lon,lat"
+  var locationsString = "";
+  for (var index=0; index<startingPoints.length; index++){
+    //element is valid GeoJSON Point Feature with coordinates like [longitude,latitude]
+    locationsString += startingPoints[index].geometry.coordinates[0] + "," + startingPoints[index].geometry.coordinates[1];
+    if(index != startingPoints.length - 1){
+      // encode pipe symbol "|" manually
+      locationsString += "%7C";
+    }
+  };
+
+  var optionsString = '{"maximum_speed":' + speedInKilometersPerHour + '}';
 
 
-            var vehicleString;
+  var vehicleString;
 
-            switch (vehicleType) {
-              case "PEDESTRIAN":
-                vehicleString = "foot-walking";
-                break;
-              case "BIKE":
-                vehicleString = "cycling-regular";
-                break;
-              case "CAR":
-                vehicleString = "driving-car";
-                break;
-              default:
-                vehicleString = "foot-walking";
-            }
+  switch (vehicleType) {
+    case "PEDESTRIAN":
+      vehicleString = "foot-walking";
+      break;
+    case "BIKE":
+      vehicleString = "cycling-regular";
+      break;
+    case "CAR":
+      vehicleString = "driving-car";
+      break;
+    default:
+      vehicleString = "foot-walking";
+  }
 
-            // var constantParameters = "&units=m&location_type=start&range_type=time";
-            // encode pipe symbol manually via %7C
-            var constantParameters = "&units=m&location_type=start&range_type=time";
+  // var constantParameters = "&units=m&location_type=start&range_type=time";
+  // encode pipe symbol manually via %7C
+  var constantParameters = "&units=m&location_type=start&range_type=time";
 
-            var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters + "&options=" + encodeURIComponent(optionsString);
+  var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters + "&options=" + encodeURIComponent(optionsString);
 
-            if (! deactivateLog){
-                console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
-            }
+  if (! deactivateLog){
+      console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+  }
 
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1 && dissolve){
-    if(! deactivateLog){
-        console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
-    }
-    isochronesResult = exports.dissolve(isochronesResult, "value");
+  if(! deactivateLog){
+  console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+  }
+  isochronesResult = exports.dissolve(isochronesResult, "value");
   }
 
   return isochronesResult;
@@ -1434,6 +1497,68 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 * @function
 */
 exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog){
+  // call openroute service 4.7.2 API to query routing from A to B
+
+  for (pointCandidate of startingPoints){
+    var isPoint = exports.isGeoJSONPointFeature(pointCandidate);
+
+    if(! isPoint){
+      exports.throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
+    }
+  }
+
+  if (startingPoints.length <= maxLocationsForORSRequest){
+    return await computeIsochrones_byDistance(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog);
+  }
+  else{
+    var resultIsochrones;
+
+    var featureIndex = 0;
+    // log progress for each 10% of features
+    var logProgressIndexSeparator = Math.round(startingPoints.length / 100 * 10);
+
+    var countFeatures = 0;
+    var tempStartPointsArray = [];
+    for (var pointIndex=0; pointIndex < startingPoints.length; pointIndex++){
+      tempStartPointsArray.push(startingPoints[pointIndex]);
+      countFeatures++;
+
+      // if maxNumber of locations is reached or the last starting point is reached
+      if(countFeatures === maxLocationsForORSRequest || pointIndex === startingPoints.length -1){
+        // make request, collect results
+
+        // responses will be GeoJSON FeatureCollections
+        var tempIsochrones = await computeIsochrones_byDistance(tempStartPointsArray, vehicleType, travelDistanceInMeters, dissolve, deactivateLog);
+
+        if (! resultIsochrones){
+          resultIsochrones = tempIsochrones;
+        }
+        else{
+          // apend results of tempIsochrones to resultIsochrones
+          resultIsochrones.features.concat(tempIsochrones.features);
+        }
+          // increment featureIndex
+          featureIndex++;
+          if(featureIndex % logProgressIndexSeparator === 0){
+              KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
+          }
+
+        // reset temp vars
+        tempStartPointsArray = [];
+        countFeatures = 0;
+
+      } // end if
+    }
+
+    // if dissolve is true then dissolve results
+    if (dissolve){
+      return exports.dissolve(resultIsochrones, "value");
+    }
+  } // end else
+
+};
+
+var computeIsochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
