@@ -1353,6 +1353,7 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
 * Performs a GET request against {@linkcode /isochrones} endpoint of the openrouteservice instance
 * specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the reachability isochrones by time
 * starting from the submitted points based on waypath routing.
+* If the number of {@linkcode startingPoints} is greater than allowed number of max locations ({@see maxLocationsForORSRequest}), {@linkcode startingPoints} will be plit up and multiple requests will be made. Results will be combined to a single FeatureCollection.
 * @param {Array.<Feature<Point>>} startingPoints - array of valid GeoJSON Features with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}
 * @param {string} vehicleType - the type of vehicle to use for routing analysis;
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
@@ -1380,6 +1381,7 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
     return await computeIsochrones_byTime(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog);
   }
   else{
+    exports.log("Number of Isochrone starting points is greater than the maximum number of locations (" + maxLocationsForORSRequest + "). Must split up starting points to make multiple requests. Result will contain all isochrones though.");
     var resultIsochrones;
 
     var featureIndex = 0;
@@ -1427,6 +1429,8 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 };
 
 var computeIsochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog){
+
+  exports.log("Compute Time Isochrones for a total of " + startingPoints.length + " starting points.");
 
   // coordinate string must be "lon,lat|lon,lat"
   var locationsString = "";
@@ -1485,6 +1489,7 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
 * Performs a GET request against {@linkcode /isochrones} endpoint of the openrouteservice instance
 * specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the reachability isochrones by distance (equidistance)
 * starting from the submitted points based on waypath routing.
+* If the number of {@linkcode startingPoints} is greater than allowed number of max locations ({@see maxLocationsForORSRequest}), {@linkcode startingPoints} will be plit up and multiple requests will be made. Results will be combined to a single FeatureCollection.
 * @param {Array.<Feature<Point>>} startingPoints - array of valid GeoJSON Features with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}
 * @param {string} vehicleType - the type of vehicle to use for routing analysis;
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
@@ -1511,6 +1516,7 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
     return await computeIsochrones_byDistance(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog);
   }
   else{
+    exports.log("Number of Isochrone starting points is greater than the maximum number of locations (" + maxLocationsForORSRequest + "). Must split up starting points to make multiple requests. Result will contain all isochrones though.");
     var resultIsochrones;
 
     var featureIndex = 0;
@@ -1561,13 +1567,7 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
 var computeIsochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog){
   // call openroute service 4.7.2 API to query routing from A to B
 
-  for (pointCandidate of startingPoints){
-    var isPoint = exports.isGeoJSONPointFeature(pointCandidate);
-
-    if(! isPoint){
-      exports.throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
-    }
-  }
+  exports.log("Compute Distance Isochrones for a total of " + startingPoints.length + " starting points.");
 
             // coordinate string must be "lon,lat|lon,lat"
             var locationsString = "";
