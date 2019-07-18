@@ -33,5 +33,10 @@
   "devDependencies": {
     "docdash": "^1.1.0",
     "jsdoc": "^3.5.5"
+  },
+  "jshintConfig": {
+    "undef": true,
+    "unused": true,
+    "esversion": 8
   }
 }
