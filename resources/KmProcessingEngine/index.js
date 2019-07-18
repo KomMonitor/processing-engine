@@ -1444,8 +1444,20 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
     }
   };
 
-  var optionsString = '{"maximum_speed":' + speedInKilometersPerHour + ',"avoid_features":"' + avoid_features + '"}';
-
+  var optionsString = undefined;
+  if (customMaxSpeedInKilometersPerHour || avoid_features){
+      optionsString = '{';
+      if(customMaxSpeedInKilometersPerHour){
+        optionsString += '"maximum_speed":' + customMaxSpeedInKilometersPerHour;
+      }
+      if(avoid_features){
+        if(customMaxSpeedInKilometersPerHour){
+            optionsString += ',';
+        }
+        optionsString += '"avoid_features":"' + avoid_features + '"';
+      }
+      optionsString += '}';
+  }
 
   var vehicleString;
 
@@ -1467,7 +1479,11 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
   // encode pipe symbol manually via %7C
   var constantParameters = "&units=m&location_type=start&range_type=time";
 
-  var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters + "&options=" + encodeURIComponent(optionsString);
+  var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters;
+
+  if (optionsString){
+    ors_isochrones_GET_request += "&options=" + encodeURIComponent(optionsString);
+  }
 
   if (! deactivateLog){
       console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
@@ -1598,13 +1614,19 @@ var computeIsochrones_byDistance = async function (startingPoints, vehicleType, 
                 vehicleString = "foot-walking";
             }
 
-            var optionsString = '{"avoid_features":"' + avoid_features + '"}';
+            var optionsString = undefined;
+            if(avoid_features){
+                optionsString = '{"avoid_features":"' + avoid_features + '"}';
+            }
 
             // var constantParameters = "&units=m&location_type=start&range_type=time";
             // encode pipe symbol manually via %7C
             var constantParameters = "&units=m&location_type=start&range_type=distance";
 
-            var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelDistanceInMeters + constantParameters + "&options=" + encodeURIComponent(optionsString);
+            var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelDistanceInMeters + constantParameters;
+            if(optionsString){
+              ors_isochrones_GET_request += "&options=" + encodeURIComponent(optionsString);
+            }
 
   if (! deactivateLog){
       console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
