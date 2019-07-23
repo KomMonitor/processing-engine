@@ -1,0 +1,2976 @@
+{
+  "@turf/along@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\along",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\along\\LICENSE"
+  },
+  "@turf/area@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\area",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\area\\LICENSE"
+  },
+  "@turf/bbox-clip@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bbox-clip",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bbox-clip\\LICENSE"
+  },
+  "@turf/bbox-polygon@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bbox-polygon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bbox-polygon\\LICENSE"
+  },
+  "@turf/bbox@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bbox",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bbox\\LICENSE"
+  },
+  "@turf/bearing@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bearing",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bearing\\LICENSE"
+  },
+  "@turf/bearing@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\bearing",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\bearing\\LICENSE"
+  },
+  "@turf/bezier-spline@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bezier-spline",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\bezier-spline\\LICENSE"
+  },
+  "@turf/boolean-clockwise@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-clockwise",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-clockwise\\LICENSE"
+  },
+  "@turf/boolean-contains@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-contains",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-contains\\LICENSE"
+  },
+  "@turf/boolean-crosses@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-crosses",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-crosses\\LICENSE"
+  },
+  "@turf/boolean-disjoint@5.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-disjoint",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-disjoint\\LICENSE"
+  },
+  "@turf/boolean-equal@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-equal",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-equal\\LICENSE"
+  },
+  "@turf/boolean-overlap@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-overlap",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-overlap\\LICENSE"
+  },
+  "@turf/boolean-parallel@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-parallel",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-parallel\\LICENSE"
+  },
+  "@turf/boolean-point-in-polygon@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-point-in-polygon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-point-in-polygon\\LICENSE"
+  },
+  "@turf/boolean-point-on-line@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-point-on-line",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-point-on-line\\LICENSE"
+  },
+  "@turf/boolean-within@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-within",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\boolean-within\\LICENSE"
+  },
+  "@turf/buffer@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\buffer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\buffer\\LICENSE"
+  },
+  "@turf/center-mean@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center-mean",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center-mean\\LICENSE"
+  },
+  "@turf/center-median@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center-median",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center-median\\LICENSE"
+  },
+  "@turf/center-of-mass@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center-of-mass",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center-of-mass\\LICENSE"
+  },
+  "@turf/center@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\center\\LICENSE"
+  },
+  "@turf/centroid@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\centroid",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\centroid\\LICENSE"
+  },
+  "@turf/circle@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\circle",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\circle\\LICENSE"
+  },
+  "@turf/clean-coords@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clean-coords",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clean-coords\\LICENSE"
+  },
+  "@turf/clone@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clone",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clone\\LICENSE"
+  },
+  "@turf/clone@6.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\clone",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\clone\\LICENSE"
+  },
+  "@turf/clusters-dbscan@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clusters-dbscan",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clusters-dbscan\\LICENSE"
+  },
+  "@turf/clusters-kmeans@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clusters-kmeans",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clusters-kmeans\\LICENSE"
+  },
+  "@turf/clusters@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clusters",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\clusters\\LICENSE"
+  },
+  "@turf/collect@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\collect",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\collect\\LICENSE"
+  },
+  "@turf/combine@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\combine",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\combine\\LICENSE"
+  },
+  "@turf/concave@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\concave",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\concave\\LICENSE"
+  },
+  "@turf/convex@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\convex",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\convex\\LICENSE"
+  },
+  "@turf/destination@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\destination",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\destination\\LICENSE"
+  },
+  "@turf/difference@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\difference",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\difference\\LICENSE"
+  },
+  "@turf/dissolve@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\dissolve",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\dissolve\\LICENSE"
+  },
+  "@turf/distance@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\distance",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\distance\\LICENSE"
+  },
+  "@turf/distance@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\distance",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\distance\\LICENSE"
+  },
+  "@turf/ellipse@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\ellipse",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\ellipse\\LICENSE"
+  },
+  "@turf/envelope@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\envelope",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\envelope\\LICENSE"
+  },
+  "@turf/explode@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\explode",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\explode\\LICENSE"
+  },
+  "@turf/flatten@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\flatten",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\flatten\\LICENSE"
+  },
+  "@turf/flip@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\flip",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\flip\\LICENSE"
+  },
+  "@turf/great-circle@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\great-circle",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\great-circle\\LICENSE"
+  },
+  "@turf/helpers@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\helpers",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\helpers\\LICENSE"
+  },
+  "@turf/helpers@6.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\node_modules\\@turf\\helpers",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\node_modules\\@turf\\helpers\\LICENSE"
+  },
+  "@turf/hex-grid@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\hex-grid",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\hex-grid\\LICENSE"
+  },
+  "@turf/interpolate@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\interpolate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\interpolate\\LICENSE"
+  },
+  "@turf/intersect@5.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\intersect",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\intersect\\LICENSE"
+  },
+  "@turf/invariant@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\invariant",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\invariant\\LICENSE"
+  },
+  "@turf/invariant@6.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\node_modules\\@turf\\invariant",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\node_modules\\@turf\\invariant\\LICENSE"
+  },
+  "@turf/isobands@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\isobands",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\isobands\\LICENSE"
+  },
+  "@turf/isolines@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\isolines",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\isolines\\LICENSE"
+  },
+  "@turf/kinks@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\kinks",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\kinks\\LICENSE"
+  },
+  "@turf/length@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\length",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\length\\LICENSE"
+  },
+  "@turf/line-arc@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-arc",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-arc\\LICENSE"
+  },
+  "@turf/line-chunk@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-chunk",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-chunk\\LICENSE"
+  },
+  "@turf/line-intersect@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-intersect",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-intersect\\LICENSE"
+  },
+  "@turf/line-offset@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-offset",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-offset\\LICENSE"
+  },
+  "@turf/line-overlap@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-overlap",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-overlap\\LICENSE"
+  },
+  "@turf/line-segment@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-segment",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-segment\\LICENSE"
+  },
+  "@turf/line-slice-along@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-slice-along",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-slice-along\\LICENSE"
+  },
+  "@turf/line-slice@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-slice",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-slice\\LICENSE"
+  },
+  "@turf/line-split@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-split",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-split\\LICENSE"
+  },
+  "@turf/line-to-polygon@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-to-polygon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\line-to-polygon\\LICENSE"
+  },
+  "@turf/mask@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\mask",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\mask\\LICENSE"
+  },
+  "@turf/meta@5.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\meta",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\meta\\LICENSE"
+  },
+  "@turf/meta@6.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\node_modules\\@turf\\meta",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\node_modules\\@turf\\meta\\LICENSE"
+  },
+  "@turf/midpoint@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\midpoint",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\midpoint\\LICENSE"
+  },
+  "@turf/nearest-point-on-line@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-on-line",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-on-line\\LICENSE"
+  },
+  "@turf/nearest-point-to-line@5.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point-to-line\\LICENSE"
+  },
+  "@turf/nearest-point@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\nearest-point\\LICENSE"
+  },
+  "@turf/planepoint@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\planepoint",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\planepoint\\LICENSE"
+  },
+  "@turf/point-grid@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-grid",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-grid\\LICENSE"
+  },
+  "@turf/point-on-feature@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-on-feature",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-on-feature\\LICENSE"
+  },
+  "@turf/point-to-line-distance@5.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\LICENSE"
+  },
+  "@turf/points-within-polygon@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\points-within-polygon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\points-within-polygon\\LICENSE"
+  },
+  "@turf/polygon-tangents@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\polygon-tangents",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\polygon-tangents\\LICENSE"
+  },
+  "@turf/polygon-to-line@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\polygon-to-line",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\polygon-to-line\\LICENSE"
+  },
+  "@turf/polygonize@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\polygonize",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\polygonize\\LICENSE"
+  },
+  "@turf/projection@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\projection",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\projection\\LICENSE"
+  },
+  "@turf/projection@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\projection",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\projection\\LICENSE"
+  },
+  "@turf/random@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\random",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\random\\LICENSE"
+  },
+  "@turf/rewind@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rewind",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rewind\\LICENSE"
+  },
+  "@turf/rhumb-bearing@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rhumb-bearing",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rhumb-bearing\\LICENSE"
+  },
+  "@turf/rhumb-bearing@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\rhumb-bearing",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\rhumb-bearing\\LICENSE"
+  },
+  "@turf/rhumb-destination@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rhumb-destination",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rhumb-destination\\LICENSE"
+  },
+  "@turf/rhumb-distance@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rhumb-distance",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\rhumb-distance\\LICENSE"
+  },
+  "@turf/rhumb-distance@6.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\rhumb-distance",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\point-to-line-distance\\node_modules\\@turf\\rhumb-distance\\LICENSE"
+  },
+  "@turf/sample@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\sample",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\sample\\LICENSE"
+  },
+  "@turf/sector@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\sector",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\sector\\LICENSE"
+  },
+  "@turf/shortest-path@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\shortest-path",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\shortest-path\\LICENSE"
+  },
+  "@turf/simplify@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\simplify",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\simplify\\LICENSE"
+  },
+  "@turf/square-grid@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\square-grid",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\square-grid\\LICENSE"
+  },
+  "@turf/square@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\square",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\square\\LICENSE"
+  },
+  "@turf/standard-deviational-ellipse@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\standard-deviational-ellipse",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\standard-deviational-ellipse\\LICENSE"
+  },
+  "@turf/tag@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\tag",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\tag\\LICENSE"
+  },
+  "@turf/tesselate@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\tesselate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\tesselate\\LICENSE"
+  },
+  "@turf/tin@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\tin",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\tin\\LICENSE"
+  },
+  "@turf/transform-rotate@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\transform-rotate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\transform-rotate\\LICENSE"
+  },
+  "@turf/transform-scale@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\transform-scale",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\transform-scale\\LICENSE"
+  },
+  "@turf/transform-translate@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\transform-translate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\transform-translate\\LICENSE"
+  },
+  "@turf/triangle-grid@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\triangle-grid",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\triangle-grid\\LICENSE"
+  },
+  "@turf/truncate@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\truncate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\truncate\\LICENSE"
+  },
+  "@turf/turf@5.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\turf",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\turf\\LICENSE"
+  },
+  "@turf/union@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\union",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\union\\LICENSE"
+  },
+  "@turf/unkink-polygon@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\unkink-polygon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\unkink-polygon\\LICENSE"
+  },
+  "@turf/voronoi@5.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Turfjs/turf",
+    "publisher": "Turf Authors",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\voronoi",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\@turf\\voronoi\\LICENSE"
+  },
+  "abbrev@1.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/abbrev-js",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\abbrev",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\abbrev\\LICENSE"
+  },
+  "accepts@1.3.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/accepts",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\accepts",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\accepts\\LICENSE"
+  },
+  "ansi-styles@3.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/ansi-styles",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ansi-styles",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ansi-styles\\license"
+  },
+  "append-field@0.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/LinusU/node-append-field",
+    "publisher": "Linus Unnebäck",
+    "email": "linus@folkdatorn.se",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\append-field",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\append-field\\LICENSE"
+  },
+  "argparse@1.0.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodeca/argparse",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\argparse",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\argparse\\LICENSE"
+  },
+  "array-find-index@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/array-find-index",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\array-find-index",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\array-find-index\\license"
+  },
+  "array-flatten@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/blakeembrey/array-flatten",
+    "publisher": "Blake Embrey",
+    "email": "hello@blakeembrey.com",
+    "url": "http://blakeembrey.me",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\array-flatten",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\array-flatten\\LICENSE"
+  },
+  "asap@2.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/kriskowal/asap",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\asap",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\asap\\LICENSE.md"
+  },
+  "async@2.6.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/caolan/async",
+    "publisher": "Caolan McMahon",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\async",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\async\\LICENSE"
+  },
+  "asynckit@0.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/alexindigo/asynckit",
+    "publisher": "Alex Indigo",
+    "email": "iam@alexindigo.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\asynckit",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\asynckit\\LICENSE"
+  },
+  "axios@0.18.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/axios/axios",
+    "publisher": "Matt Zabriskie",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\axios",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\axios\\LICENSE"
+  },
+  "babylon@7.0.0-beta.19": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babylon",
+    "publisher": "Sebastian McKenzie",
+    "email": "sebmck@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\babylon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\babylon\\LICENSE"
+  },
+  "balanced-match@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/balanced-match",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\balanced-match",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\balanced-match\\LICENSE.md"
+  },
+  "bee-queue@1.2.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bee-queue/bee-queue",
+    "publisher": "Lewis J Ellis",
+    "email": "me@lewisjellis.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\bee-queue",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\bee-queue\\LICENSE"
+  },
+  "bluebird@3.5.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/petkaantonov/bluebird",
+    "publisher": "Petka Antonov",
+    "email": "petka_antonov@hotmail.com",
+    "url": "http://github.com/petkaantonov/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\bluebird",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\bluebird\\LICENSE"
+  },
+  "body-parser@1.18.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/body-parser",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\body-parser",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\body-parser\\LICENSE"
+  },
+  "body-parser@1.18.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/body-parser",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\body-parser",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\body-parser\\LICENSE"
+  },
+  "body-parser@1.19.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/body-parser",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\LICENSE"
+  },
+  "brace-expansion@1.1.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/brace-expansion",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\brace-expansion",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\brace-expansion\\LICENSE"
+  },
+  "buffer-from@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/LinusU/buffer-from",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\buffer-from",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\buffer-from\\LICENSE"
+  },
+  "busboy@0.2.14": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mscdex/busboy",
+    "publisher": "Brian White",
+    "email": "mscdex@mscdex.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\busboy",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\busboy\\LICENSE"
+  },
+  "bytes@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/bytes.js",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "url": "http://tjholowaychuk.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\bytes",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\bytes\\LICENSE"
+  },
+  "bytes@3.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/bytes.js",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "url": "http://tjholowaychuk.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\bytes",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\bytes\\LICENSE"
+  },
+  "catharsis@0.8.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hegemonic/catharsis",
+    "publisher": "Jeff Williams",
+    "email": "jeffrey.l.williams@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\catharsis",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\catharsis\\LICENSE"
+  },
+  "chalk@2.4.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/chalk",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\chalk",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\chalk\\license"
+  },
+  "color-convert@1.9.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Qix-/color-convert",
+    "publisher": "Heather Arthur",
+    "email": "fayearthur@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\color-convert",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\color-convert\\LICENSE"
+  },
+  "color-name@1.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dfcreative/color-name",
+    "publisher": "DY",
+    "email": "dfcreative@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\color-name",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\color-name\\LICENSE"
+  },
+  "combined-stream@1.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/felixge/node-combined-stream",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\combined-stream",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\combined-stream\\License"
+  },
+  "commander@2.11.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/tj/commander.js",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\commander",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\commander\\LICENSE"
+  },
+  "component-emitter@1.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/component/emitter",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\component-emitter",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\component-emitter\\LICENSE"
+  },
+  "concat-map@0.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/node-concat-map",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\concat-map",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\concat-map\\LICENSE"
+  },
+  "concat-stream@1.6.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/maxogden/concat-stream",
+    "publisher": "Max Ogden",
+    "email": "max@maxogden.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\concat-stream",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\concat-stream\\LICENSE"
+  },
+  "concaveman@1.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/concaveman",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\concaveman",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\concaveman\\LICENSE"
+  },
+  "connect@3.6.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/senchalabs/connect",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "url": "http://tjholowaychuk.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\connect",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\connect\\LICENSE"
+  },
+  "content-disposition@0.5.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/content-disposition",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\content-disposition",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\content-disposition\\LICENSE"
+  },
+  "content-type@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/content-type",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\content-type",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\content-type\\LICENSE"
+  },
+  "cookie-signature@1.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/node-cookie-signature",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@learnboost.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cookie-signature",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cookie-signature\\Readme.md"
+  },
+  "cookie@0.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/cookie",
+    "publisher": "Roman Shtylman",
+    "email": "shtylman@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cookie",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cookie\\LICENSE"
+  },
+  "cookiejar@2.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bmeck/node-cookiejar",
+    "publisher": "bradleymeck",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cookiejar",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cookiejar\\LICENSE"
+  },
+  "core-util-is@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/isaacs/core-util-is",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\core-util-is",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\core-util-is\\LICENSE"
+  },
+  "cors@2.8.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/cors",
+    "publisher": "Troy Goode",
+    "email": "troygoode@gmail.com",
+    "url": "https://github.com/troygoode/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cors\\LICENSE"
+  },
+  "cron-file-cleaner@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pdaether/file-cleaner",
+    "publisher": "Patrick Daether",
+    "email": "public@pd-digital.de",
+    "url": "http://www.pd-digital.de/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cron-file-cleaner",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cron-file-cleaner\\LICENSE"
+  },
+  "cron@1.0.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ncb000gt/node-cron",
+    "publisher": "Nick Campbell",
+    "email": "nicholas.j.campbell@gmail.com",
+    "url": "http://github.com/ncb000gt",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cron",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cron\\README.md"
+  },
+  "d3-array@1.2.4": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-array",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\d3-array",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\d3-array\\LICENSE"
+  },
+  "d3-geo@1.7.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-geo",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\d3-geo",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\d3-geo\\LICENSE"
+  },
+  "d3-voronoi@1.1.2": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/d3/d3-voronoi",
+    "publisher": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\d3-voronoi",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\d3-voronoi\\LICENSE"
+  },
+  "debug@2.6.9": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/debug",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\debug",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\debug\\LICENSE"
+  },
+  "debug@3.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/debug",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\follow-redirects\\node_modules\\debug",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\follow-redirects\\node_modules\\debug\\LICENSE"
+  },
+  "debug@3.2.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/debug",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\license-checker\\node_modules\\debug",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\license-checker\\node_modules\\debug\\LICENSE"
+  },
+  "debuglog@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sam-github/node-debuglog",
+    "publisher": "Sam Roberts",
+    "email": "sam@strongloop.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\debuglog",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\debuglog\\LICENSE"
+  },
+  "deep-equal@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/node-deep-equal",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\deep-equal",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\deep-equal\\LICENSE"
+  },
+  "define-properties@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/define-properties",
+    "publisher": "Jordan Harband",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\define-properties",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\define-properties\\LICENSE"
+  },
+  "delayed-stream@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/felixge/node-delayed-stream",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\delayed-stream",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\delayed-stream\\License"
+  },
+  "density-clustering@1.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/LukaszKrawczyk/density-clustering",
+    "publisher": "Lukasz Krawczyk",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\density-clustering",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\density-clustering\\LICENSE"
+  },
+  "depd@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dougwilson/nodejs-depd",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\raw-body\\node_modules\\depd",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\raw-body\\node_modules\\depd\\LICENSE"
+  },
+  "depd@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dougwilson/nodejs-depd",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\depd",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\depd\\LICENSE"
+  },
+  "destroy@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stream-utils/destroy",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\destroy",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\destroy\\LICENSE"
+  },
+  "dezalgo@1.0.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/dezalgo",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dezalgo",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dezalgo\\LICENSE"
+  },
+  "dicer@0.2.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mscdex/dicer",
+    "publisher": "Brian White",
+    "email": "mscdex@mscdex.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\LICENSE"
+  },
+  "docdash@1.1.0": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/clenemt/docdash",
+    "publisher": "Clement Moron",
+    "email": "clement.moron@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\docdash",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\docdash\\LICENSE.md"
+  },
+  "dotenv@6.0.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/motdotla/dotenv",
+    "publisher": "scottmotte",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dotenv",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dotenv\\LICENSE"
+  },
+  "double-ended-queue@2.1.0-0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/petkaantonov/deque",
+    "publisher": "Petka Antonov",
+    "email": "petka_antonov@hotmail.com",
+    "url": "http://github.com/petkaantonov/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\double-ended-queue",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\double-ended-queue\\LICENSE"
+  },
+  "earcut@2.1.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/earcut",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\earcut",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\earcut\\LICENSE"
+  },
+  "ee-first@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jonathanong/ee-first",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ee-first",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ee-first\\LICENSE"
+  },
+  "encodeurl@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pillarjs/encodeurl",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\encodeurl",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\encodeurl\\LICENSE"
+  },
+  "es-abstract@1.12.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/es-abstract",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "url": "http://ljharb.codes",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\es-abstract",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\es-abstract\\LICENSE"
+  },
+  "es-to-primitive@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/es-to-primitive",
+    "publisher": "Jordan Harband",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\es-to-primitive",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\es-to-primitive\\LICENSE"
+  },
+  "escape-html@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/component/escape-html",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\escape-html",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\escape-html\\LICENSE"
+  },
+  "escape-string-regexp@1.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/escape-string-regexp",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\escape-string-regexp",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\escape-string-regexp\\license"
+  },
+  "esprima@4.0.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/jquery/esprima",
+    "publisher": "Ariya Hidayat",
+    "email": "ariya.hidayat@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\esprima",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\esprima\\LICENSE.BSD"
+  },
+  "etag@1.8.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/etag",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\etag",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\etag\\LICENSE"
+  },
+  "express@4.16.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/express",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\LICENSE"
+  },
+  "extend@3.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/justmoon/node-extend",
+    "publisher": "Stefan Thomas",
+    "email": "justmoon@members.fsf.org",
+    "url": "http://www.justmoon.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\extend",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\extend\\LICENSE"
+  },
+  "finalhandler@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pillarjs/finalhandler",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\finalhandler",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\finalhandler\\LICENSE"
+  },
+  "finalhandler@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pillarjs/finalhandler",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\finalhandler",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\finalhandler\\LICENSE"
+  },
+  "follow-redirects@1.5.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/olalonde/follow-redirects",
+    "publisher": "Olivier Lalonde",
+    "email": "olalonde@gmail.com",
+    "url": "http://www.syskall.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\follow-redirects",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\follow-redirects\\LICENSE"
+  },
+  "foreach@2.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/manuelstofer/foreach",
+    "publisher": "Manuel Stofer",
+    "email": "manuel@takimata.ch",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\foreach",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\foreach\\LICENSE"
+  },
+  "form-data@2.3.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/form-data/form-data",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\form-data",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\form-data\\License"
+  },
+  "formidable@1.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/felixge/node-formidable",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\formidable",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\formidable\\LICENSE"
+  },
+  "forwarded@0.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/forwarded",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\forwarded",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\forwarded\\LICENSE"
+  },
+  "fresh@0.5.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/fresh",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "url": "http://tjholowaychuk.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\fresh",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\fresh\\LICENSE"
+  },
+  "fs.realpath@1.0.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/fs.realpath",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\fs.realpath",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\fs.realpath\\LICENSE"
+  },
+  "function-bind@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Raynos/function-bind",
+    "publisher": "Raynos",
+    "email": "raynos2@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\function-bind",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\function-bind\\LICENSE"
+  },
+  "geojson-equality@0.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/geosquare/geojson-equality",
+    "publisher": "Gagan Bansal",
+    "email": "gaganbansal123@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\geojson-equality",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\geojson-equality\\LICENSE.md"
+  },
+  "geojson-rbush@2.1.0": {
+    "licenses": "MIT",
+    "publisher": "Denis Carriere",
+    "email": "@DenisCarriere",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\geojson-rbush",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\geojson-rbush\\LICENSE"
+  },
+  "get-closest@0.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/cosmosio/get-closest",
+    "publisher": "Olivier Scherrer",
+    "email": "pode.fr@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\get-closest",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\get-closest\\LICENSE"
+  },
+  "glob@7.1.4": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/node-glob",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\glob",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\glob\\LICENSE"
+  },
+  "graceful-fs@4.1.15": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/node-graceful-fs",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\graceful-fs",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\graceful-fs\\LICENSE"
+  },
+  "graphlib@2.1.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/dagrejs/graphlib",
+    "publisher": "Chris Pettitt",
+    "email": "cpettitt@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\graphlib",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\graphlib\\LICENSE"
+  },
+  "has-flag@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/has-flag",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\has-flag",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\has-flag\\license"
+  },
+  "has@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/tarruda/has",
+    "publisher": "Thiago de Arruda",
+    "email": "tpadilha84@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\has",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\has\\LICENSE-MIT"
+  },
+  "hosted-git-info@2.7.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/hosted-git-info",
+    "publisher": "Rebecca Turner",
+    "email": "me@re-becca.org",
+    "url": "http://re-becca.org",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\hosted-git-info",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\hosted-git-info\\LICENSE"
+  },
+  "http-errors@1.6.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/http-errors",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\raw-body\\node_modules\\http-errors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\raw-body\\node_modules\\http-errors\\LICENSE"
+  },
+  "http-errors@1.6.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/http-errors",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\http-errors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\http-errors\\LICENSE"
+  },
+  "http-errors@1.7.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/http-errors",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\http-errors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\http-errors\\LICENSE"
+  },
+  "iconv-lite@0.4.19": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ashtuchkin/iconv-lite",
+    "publisher": "Alexander Shtuchkin",
+    "email": "ashtuchkin@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\iconv-lite",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\iconv-lite\\LICENSE"
+  },
+  "iconv-lite@0.4.23": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ashtuchkin/iconv-lite",
+    "publisher": "Alexander Shtuchkin",
+    "email": "ashtuchkin@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\iconv-lite",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\iconv-lite\\LICENSE"
+  },
+  "iconv-lite@0.4.24": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ashtuchkin/iconv-lite",
+    "publisher": "Alexander Shtuchkin",
+    "email": "ashtuchkin@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\iconv-lite",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\iconv-lite\\LICENSE"
+  },
+  "inflight@1.0.6": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/inflight",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\inflight",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\inflight\\LICENSE"
+  },
+  "inherits@2.0.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/inherits",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\inherits",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\inherits\\LICENSE"
+  },
+  "ipaddr.js@1.9.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/whitequark/ipaddr.js",
+    "publisher": "whitequark",
+    "email": "whitequark@whitequark.org",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ipaddr.js",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ipaddr.js\\LICENSE"
+  },
+  "is-buffer@1.1.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/feross/is-buffer",
+    "publisher": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
+    "url": "http://feross.org/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-buffer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-buffer\\LICENSE"
+  },
+  "is-callable@1.1.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/is-callable",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "url": "http://ljharb.codes",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-callable",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-callable\\LICENSE"
+  },
+  "is-date-object@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/is-date-object",
+    "publisher": "Jordan Harband",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-date-object",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-date-object\\LICENSE"
+  },
+  "is-regex@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/is-regex",
+    "publisher": "Jordan Harband",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-regex",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-regex\\LICENSE"
+  },
+  "is-symbol@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/is-symbol",
+    "publisher": "Jordan Harband",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-symbol",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\is-symbol\\LICENSE"
+  },
+  "isarray@0.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/isarray",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\node_modules\\isarray",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\node_modules\\isarray\\README.md"
+  },
+  "isarray@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/juliangruber/isarray",
+    "publisher": "Julian Gruber",
+    "email": "mail@juliangruber.com",
+    "url": "http://juliangruber.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\isarray",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\isarray\\README.md"
+  },
+  "jStat@1.7.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jstat/jstat",
+    "publisher": "Trevor Norris",
+    "email": "trev.norris@gmail.com",
+    "url": "http://trevorjnorris.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\jStat",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\jStat\\LICENSE"
+  },
+  "js-yaml@3.12.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodeca/js-yaml",
+    "publisher": "Vladimir Zapparov",
+    "email": "dervus.grim@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\js-yaml",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\js-yaml\\LICENSE"
+  },
+  "js2xmlparser@3.0.0": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/michaelkourlas/node-js2xmlparser",
+    "publisher": "Michael Kourlas",
+    "email": "michael@kourlas.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\js2xmlparser",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\js2xmlparser\\LICENSE.md",
+    "noticeFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\js2xmlparser\\NOTICE.md"
+  },
+  "jsdoc@3.5.5": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/jsdoc3/jsdoc",
+    "publisher": "Michael Mathews",
+    "email": "micmath@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\jsdoc",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\jsdoc\\LICENSE.md"
+  },
+  "json-parse-better-errors@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/zkat/json-parse-better-errors",
+    "publisher": "Kat Marchán",
+    "email": "kzm@zkat.tech",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\json-parse-better-errors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\json-parse-better-errors\\LICENSE.md"
+  },
+  "json-refs@3.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/whitlockjc/json-refs",
+    "publisher": "Jeremy Whitlock",
+    "email": "jwhitlock@apache.org",
+    "url": "https://github.com/whitlockjc",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\json-refs",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\json-refs\\LICENSE"
+  },
+  "klaw@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jprichardson/node-klaw",
+    "publisher": "JP Richardson",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\klaw",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\klaw\\LICENSE"
+  },
+  "kmhelper@1.0.0": {
+    "licenses": "ISC",
+    "publisher": "Christian Danowski-Buhren",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\kmhelper"
+  },
+  "kommonitor-script-execution-engine-api@0.0.1": {
+    "licenses": "UNLICENSED",
+    "private": true,
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\README.md"
+  },
+  "license-checker@25.0.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/davglass/license-checker",
+    "publisher": "Dav Glass",
+    "email": "davglass@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\license-checker",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\license-checker\\LICENSE"
+  },
+  "lineclip@1.1.5": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mapbox/lineclip",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lineclip",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lineclip\\LICENSE"
+  },
+  "lodash._arraypool@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._arraypool",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._arraypool\\LICENSE.txt"
+  },
+  "lodash._basebind@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basebind",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basebind\\LICENSE.txt"
+  },
+  "lodash._baseclone@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._baseclone",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._baseclone\\LICENSE.txt"
+  },
+  "lodash._basecreate@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basecreate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basecreate\\LICENSE.txt"
+  },
+  "lodash._basecreatecallback@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basecreatecallback",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basecreatecallback\\LICENSE.txt"
+  },
+  "lodash._basecreatewrapper@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basecreatewrapper",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._basecreatewrapper\\LICENSE.txt"
+  },
+  "lodash._createwrapper@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._createwrapper",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._createwrapper\\LICENSE.txt"
+  },
+  "lodash._getarray@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._getarray",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._getarray\\LICENSE.txt"
+  },
+  "lodash._isnative@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._isnative",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._isnative\\LICENSE.txt"
+  },
+  "lodash._maxpoolsize@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._maxpoolsize",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._maxpoolsize\\LICENSE.txt"
+  },
+  "lodash._objecttypes@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._objecttypes",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._objecttypes\\LICENSE.txt"
+  },
+  "lodash._releasearray@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._releasearray",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._releasearray\\LICENSE.txt"
+  },
+  "lodash._setbinddata@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._setbinddata",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._setbinddata\\LICENSE.txt"
+  },
+  "lodash._shimkeys@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._shimkeys",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._shimkeys\\LICENSE.txt"
+  },
+  "lodash._slice@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._slice",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash._slice\\LICENSE.txt"
+  },
+  "lodash.assign@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.assign",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.assign\\LICENSE.txt"
+  },
+  "lodash.bind@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.bind",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.bind\\LICENSE.txt"
+  },
+  "lodash.clonedeep@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.clonedeep",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.clonedeep\\LICENSE.txt"
+  },
+  "lodash.foreach@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.foreach",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.foreach\\LICENSE.txt"
+  },
+  "lodash.forown@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.forown",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.forown\\LICENSE.txt"
+  },
+  "lodash.get@4.4.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.get",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.get\\LICENSE"
+  },
+  "lodash.identity@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.identity",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.identity\\LICENSE.txt"
+  },
+  "lodash.isarray@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isarray",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isarray\\LICENSE.txt"
+  },
+  "lodash.isequal@4.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isequal",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isequal\\LICENSE"
+  },
+  "lodash.isfunction@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isfunction",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isfunction\\LICENSE.txt"
+  },
+  "lodash.isobject@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isobject",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.isobject\\LICENSE.txt"
+  },
+  "lodash.keys@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.keys",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.keys\\LICENSE.txt"
+  },
+  "lodash.noop@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.noop",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.noop\\LICENSE.txt"
+  },
+  "lodash.support@2.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash-cli",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.support",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash.support\\LICENSE.txt"
+  },
+  "lodash@4.17.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "url": "http://allyoucanleet.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\lodash\\LICENSE"
+  },
+  "marked@0.3.19": {
+    "licenses": "MIT",
+    "repository": "https://github.com/markedjs/marked",
+    "publisher": "Christopher Jeffrey",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\marked",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\marked\\LICENSE.md"
+  },
+  "media-typer@0.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/media-typer",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\media-typer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\media-typer\\LICENSE"
+  },
+  "merge-descriptors@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/component/merge-descriptors",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\merge-descriptors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\merge-descriptors\\LICENSE"
+  },
+  "methods@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/methods",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\methods",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\methods\\LICENSE"
+  },
+  "mime-db@1.35.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/mime-db",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mime-db",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mime-db\\LICENSE"
+  },
+  "mime-db@1.40.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/mime-db",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\mime-db",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\mime-db\\LICENSE"
+  },
+  "mime-types@2.1.19": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/mime-types",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mime-types",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mime-types\\LICENSE"
+  },
+  "mime-types@2.1.24": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/mime-types",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\mime-types",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\mime-types\\LICENSE"
+  },
+  "mime@1.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/broofa/node-mime",
+    "publisher": "Robert Kieffer",
+    "email": "robert@broofa.com",
+    "url": "http://github.com/broofa",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\send\\node_modules\\mime",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\send\\node_modules\\mime\\LICENSE"
+  },
+  "mime@1.6.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/broofa/node-mime",
+    "publisher": "Robert Kieffer",
+    "email": "robert@broofa.com",
+    "url": "http://github.com/broofa",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mime",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mime\\LICENSE"
+  },
+  "minimatch@3.0.4": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/minimatch",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\minimatch",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\minimatch\\LICENSE"
+  },
+  "minimist@0.0.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/minimist",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\minimist",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\minimist\\LICENSE"
+  },
+  "mkdirp@0.5.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/node-mkdirp",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mkdirp",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\mkdirp\\LICENSE"
+  },
+  "moment-timezone@0.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/moment/moment-timezone",
+    "publisher": "Tim Wood",
+    "email": "washwithcare@gmail.com",
+    "url": "http://timwoodcreates.com/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\moment-timezone",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\moment-timezone\\LICENSE"
+  },
+  "moment@2.22.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/moment/moment",
+    "publisher": "Iskren Ivov Chernev",
+    "email": "iskren.chernev@gmail.com",
+    "url": "https://github.com/ichernev",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\moment",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\moment\\LICENSE"
+  },
+  "monotone-convex-hull-2d@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/monotone-convex-hull-2d",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\monotone-convex-hull-2d",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\monotone-convex-hull-2d\\LICENSE"
+  },
+  "ms@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/zeit/ms",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ms",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\ms\\license.md"
+  },
+  "ms@2.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/zeit/ms",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\license-checker\\node_modules\\ms",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\license-checker\\node_modules\\ms\\license.md"
+  },
+  "multer@1.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/multer",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\multer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\multer\\LICENSE"
+  },
+  "native-promise-only@0.8.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/getify/native-promise-only",
+    "publisher": "Kyle Simpson",
+    "email": "getify@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\native-promise-only",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\native-promise-only\\README.md"
+  },
+  "negotiator@0.6.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/negotiator",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\negotiator",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\negotiator\\LICENSE"
+  },
+  "nodemailer@6.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodemailer/nodemailer",
+    "publisher": "Andris Reinman",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\nodemailer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\nodemailer\\LICENSE"
+  },
+  "nopt@4.0.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/nopt",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\nopt",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\nopt\\LICENSE"
+  },
+  "normalize-package-data@2.5.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/npm/normalize-package-data",
+    "publisher": "Meryn Stol",
+    "email": "merynstol@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\normalize-package-data",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\normalize-package-data\\LICENSE"
+  },
+  "object-assign@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/object-assign",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\object-assign",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\object-assign\\license"
+  },
+  "object-assign@4.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/object-assign",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cors\\node_modules\\object-assign",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\cors\\node_modules\\object-assign\\license"
+  },
+  "object-keys@1.0.12": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/object-keys",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "url": "http://ljharb.codes",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\object-keys",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\object-keys\\LICENSE"
+  },
+  "object.getownpropertydescriptors@2.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/object.getownpropertydescriptors",
+    "publisher": "Jordan Harband",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\object.getownpropertydescriptors",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\object.getownpropertydescriptors\\LICENSE"
+  },
+  "on-finished@2.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/on-finished",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\on-finished",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\on-finished\\LICENSE"
+  },
+  "once@1.4.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/once",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\once",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\once\\LICENSE"
+  },
+  "os-homedir@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/os-homedir",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\os-homedir",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\os-homedir\\license"
+  },
+  "os-tmpdir@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/os-tmpdir",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\os-tmpdir",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\os-tmpdir\\license"
+  },
+  "osenv@0.1.5": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/osenv",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\osenv",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\osenv\\LICENSE"
+  },
+  "package@1.0.1": {
+    "licenses": "MIT*",
+    "repository": "https://github.com/vesln/package",
+    "publisher": "Veselin Todorov",
+    "email": "hi@vesln.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\package",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\package\\Readme.md"
+  },
+  "parseurl@1.3.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pillarjs/parseurl",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\parseurl",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\parseurl\\LICENSE"
+  },
+  "path-is-absolute@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/path-is-absolute",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-is-absolute",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-is-absolute\\license"
+  },
+  "path-loader@1.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/whitlockjc/path-loader",
+    "publisher": "Jeremy Whitlock",
+    "email": "jwhitlock@apache.org",
+    "url": "https://github.com/whitlockjc",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-loader",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-loader\\LICENSE"
+  },
+  "path-parse@1.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jbgutierrez/path-parse",
+    "publisher": "Javier Blanco",
+    "email": "http://jbgutierrez.info",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-parse",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-parse\\LICENSE"
+  },
+  "path-to-regexp@0.1.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/component/path-to-regexp",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\path-to-regexp",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\path-to-regexp\\LICENSE"
+  },
+  "path-to-regexp@2.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pillarjs/path-to-regexp",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-to-regexp",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\path-to-regexp\\LICENSE"
+  },
+  "point-in-polygon@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/point-in-polygon",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\point-in-polygon",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\point-in-polygon\\LICENSE"
+  },
+  "process-nextick-args@2.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/calvinmetcalf/process-nextick-args",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\process-nextick-args",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\process-nextick-args\\license.md"
+  },
+  "promise-callbacks@3.1.0": {
+    "licenses": "MIT",
+    "publisher": "Jeff Wear",
+    "email": "jeff@mixmax.com",
+    "url": "https://mixmax.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\promise-callbacks",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\promise-callbacks\\LICENSE"
+  },
+  "proxy-addr@2.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/proxy-addr",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\proxy-addr",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\proxy-addr\\LICENSE"
+  },
+  "punycode@2.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/bestiejs/punycode.js",
+    "publisher": "Mathias Bynens",
+    "url": "https://mathiasbynens.be/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\punycode",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\punycode\\LICENSE-MIT.txt"
+  },
+  "qs@6.5.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/ljharb/qs",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\body-parser\\node_modules\\qs",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\body-parser\\node_modules\\qs\\LICENSE"
+  },
+  "qs@6.5.2": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/ljharb/qs",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\qs",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\qs\\LICENSE"
+  },
+  "qs@6.7.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/ljharb/qs",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\qs",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\qs\\LICENSE"
+  },
+  "quickselect@1.1.1": {
+    "licenses": "ISC",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\quickselect",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\quickselect\\LICENSE"
+  },
+  "range-parser@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/range-parser",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "url": "http://tjholowaychuk.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\range-parser",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\range-parser\\LICENSE"
+  },
+  "raw-body@2.3.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stream-utils/raw-body",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\raw-body",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\raw-body\\LICENSE"
+  },
+  "raw-body@2.3.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stream-utils/raw-body",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\raw-body",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\raw-body\\LICENSE"
+  },
+  "raw-body@2.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stream-utils/raw-body",
+    "publisher": "Jonathan Ong",
+    "email": "me@jongleberry.com",
+    "url": "http://jongleberry.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\raw-body",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\raw-body\\LICENSE"
+  },
+  "rbush@2.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mourner/rbush",
+    "publisher": "Vladimir Agafonkin",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\rbush",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\rbush\\LICENSE"
+  },
+  "read-installed@4.0.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/read-installed",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\read-installed",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\read-installed\\LICENSE"
+  },
+  "read-package-json@2.0.13": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/read-package-json",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\read-package-json",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\read-package-json\\LICENSE"
+  },
+  "readable-stream@1.1.14": {
+    "licenses": "MIT",
+    "repository": "https://github.com/isaacs/readable-stream",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\node_modules\\readable-stream",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\node_modules\\readable-stream\\LICENSE"
+  },
+  "readable-stream@2.3.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodejs/readable-stream",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\readable-stream",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\readable-stream\\LICENSE"
+  },
+  "readdir-scoped-modules@1.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/readdir-scoped-modules",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\readdir-scoped-modules",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\readdir-scoped-modules\\LICENSE"
+  },
+  "redis-commands@1.3.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/NodeRedis/redis-commands",
+    "publisher": "luin",
+    "email": "i@zihua.li",
+    "url": "http://zihua.li",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\redis-commands",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\redis-commands\\LICENSE"
+  },
+  "redis-parser@2.6.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/NodeRedis/node-redis-parser",
+    "publisher": "Ruben Bridgewater",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\redis-parser",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\redis-parser\\LICENSE"
+  },
+  "redis@2.8.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/NodeRedis/node_redis",
+    "publisher": "Matt Ranney",
+    "email": "mjr@ranney.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\redis",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\redis\\LICENSE"
+  },
+  "requizzle@0.2.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/hegemonic/requizzle",
+    "publisher": "Jeff Williams",
+    "email": "jeffrey.l.williams@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\requizzle",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\requizzle\\LICENSE"
+  },
+  "resolve@1.11.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/browserify/resolve",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\resolve",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\resolve\\LICENSE"
+  },
+  "robust-orientation@1.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/robust-orientation",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-orientation",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-orientation\\LICENSE"
+  },
+  "robust-scale@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/robust-scale",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-scale",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-scale\\LICENSE"
+  },
+  "robust-subtract@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/robust-subtract",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-subtract",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-subtract\\LICENSE"
+  },
+  "robust-sum@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/robust-sum",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-sum",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\robust-sum\\LICENSE"
+  },
+  "safe-buffer@5.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/feross/safe-buffer",
+    "publisher": "Feross Aboukhadijeh",
+    "email": "feross@feross.org",
+    "url": "http://feross.org",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\safe-buffer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\safe-buffer\\LICENSE"
+  },
+  "safer-buffer@2.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ChALkeR/safer-buffer",
+    "publisher": "Nikita Skovoroda",
+    "email": "chalkerx@gmail.com",
+    "url": "https://github.com/ChALkeR",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\safer-buffer",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\safer-buffer\\LICENSE"
+  },
+  "semver@5.7.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/node-semver",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\semver",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\semver\\LICENSE"
+  },
+  "send@0.16.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/pillarjs/send",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\send",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\send\\LICENSE"
+  },
+  "serve-static@1.13.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/expressjs/serve-static",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\serve-static",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\serve-static\\LICENSE"
+  },
+  "setprototypeof@1.0.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/wesleytodd/setprototypeof",
+    "publisher": "Wes Todd",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\setprototypeof",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\node_modules\\setprototypeof\\LICENSE"
+  },
+  "setprototypeof@1.1.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/wesleytodd/setprototypeof",
+    "publisher": "Wes Todd",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\setprototypeof",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\setprototypeof\\LICENSE"
+  },
+  "setprototypeof@1.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/wesleytodd/setprototypeof",
+    "publisher": "Wes Todd",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\setprototypeof",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\setprototypeof\\LICENSE"
+  },
+  "skmeans@0.9.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/solzimer/skmeans",
+    "publisher": "David Gómez Matarrodona",
+    "email": "solzimer@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\skmeans",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\skmeans\\README.md"
+  },
+  "slash@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/slash",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\slash",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\slash\\readme.md"
+  },
+  "slide@1.1.6": {
+    "licenses": "ISC",
+    "repository": "https://github.com/isaacs/slide-flow-control",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\slide",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\slide\\LICENSE"
+  },
+  "spark-md5@3.0.0": {
+    "licenses": "WTFPL",
+    "repository": "https://github.com/satazor/js-spark-md5",
+    "publisher": "André Cruz",
+    "email": "andremiguelcruz@msn.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spark-md5",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spark-md5\\LICENSE"
+  },
+  "spdx-compare@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/kemitchell/spdx-compare.js",
+    "publisher": "Kyle E. Mitchell",
+    "email": "kyle@kemitchell.com",
+    "url": "https://kemitchell.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-compare",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-compare\\LICENSE.md"
+  },
+  "spdx-correct@3.1.0": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/jslicense/spdx-correct.js",
+    "publisher": "Kyle E. Mitchell",
+    "email": "kyle@kemitchell.com",
+    "url": "https://kemitchell.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-correct",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-correct\\LICENSE"
+  },
+  "spdx-exceptions@2.2.0": {
+    "licenses": "CC-BY-3.0",
+    "repository": "https://github.com/kemitchell/spdx-exceptions.json",
+    "publisher": "The Linux Foundation",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-exceptions",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-exceptions\\README.md"
+  },
+  "spdx-expression-parse@3.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jslicense/spdx-expression-parse.js",
+    "publisher": "Kyle E. Mitchell",
+    "email": "kyle@kemitchell.com",
+    "url": "http://kemitchell.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-expression-parse",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-expression-parse\\LICENSE"
+  },
+  "spdx-license-ids@3.0.5": {
+    "licenses": "CC0-1.0",
+    "repository": "https://github.com/shinnn/spdx-license-ids",
+    "publisher": "Shinnosuke Watanabe",
+    "url": "https://github.com/shinnn",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-license-ids",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-license-ids\\README.md"
+  },
+  "spdx-ranges@2.1.0": {
+    "licenses": "CC-BY-3.0",
+    "repository": "https://github.com/kemitchell/spdx-ranges.js",
+    "publisher": "The Linux Foundation",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-ranges",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-ranges\\LICENSE.md"
+  },
+  "spdx-satisfies@4.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/kemitchell/spdx-satisfies.js",
+    "publisher": "Kyle E. Mitchell",
+    "email": "kyle@kemitchell.com",
+    "url": "https://kemitchell.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-satisfies",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\spdx-satisfies\\LICENSE"
+  },
+  "sprintf-js@1.0.3": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/alexei/sprintf.js",
+    "publisher": "Alexandru Marasteanu",
+    "email": "hello@alexei.ro",
+    "url": "http://alexei.ro/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\sprintf-js",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\sprintf-js\\LICENSE"
+  },
+  "statuses@1.3.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/statuses",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\statuses",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\statuses\\LICENSE"
+  },
+  "statuses@1.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/statuses",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\statuses",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\express\\node_modules\\statuses\\LICENSE"
+  },
+  "statuses@1.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/statuses",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\statuses",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\statuses\\LICENSE"
+  },
+  "streamsearch@0.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mscdex/streamsearch",
+    "publisher": "Brian White",
+    "email": "mscdex@mscdex.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\streamsearch",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\streamsearch\\LICENSE"
+  },
+  "string_decoder@0.10.31": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rvagg/string_decoder",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\node_modules\\string_decoder",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\dicer\\node_modules\\string_decoder\\LICENSE"
+  },
+  "string_decoder@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/nodejs/string_decoder",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\string_decoder",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\string_decoder\\LICENSE"
+  },
+  "strip-json-comments@2.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/sindresorhus/strip-json-comments",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\strip-json-comments",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\strip-json-comments\\license"
+  },
+  "superagent@3.8.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/visionmedia/superagent",
+    "publisher": "TJ Holowaychuk",
+    "email": "tj@vision-media.ca",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\superagent",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\superagent\\LICENSE"
+  },
+  "supports-color@5.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chalk/supports-color",
+    "publisher": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\supports-color",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\supports-color\\license"
+  },
+  "swagger-converter@0.1.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/apigee-127/swagger-converter",
+    "publisher": "Mohsen Azimi",
+    "email": "me@azimi.me",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-converter",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-converter\\LICENSE"
+  },
+  "swagger-tools@0.10.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/apigee-127/swagger-tools",
+    "publisher": "Jeremy Whitlock",
+    "email": "jwhitlock@apache.org",
+    "url": "https://github.com/whitlockjc",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\swagger-tools\\LICENSE"
+  },
+  "taffydb@2.6.2": {
+    "licenses": "UNKNOWN",
+    "repository": "https://github.com/typicaljoe/taffydb",
+    "publisher": "Ian Smith",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\taffydb"
+  },
+  "temporary@0.0.8": {
+    "licenses": "MIT*",
+    "repository": "https://github.com/vesln/temporary",
+    "publisher": "Veselin Todorov",
+    "email": "hi@vesln.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\temporary",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\temporary\\Readme.md"
+  },
+  "tinyqueue@1.2.3": {
+    "licenses": "ISC",
+    "repository": "https://github.com/mourner/tinyqueue",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\tinyqueue",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\tinyqueue\\LICENSE"
+  },
+  "toidentifier@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/component/toidentifier",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\toidentifier",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\toidentifier\\LICENSE"
+  },
+  "topojson-client@3.0.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/topojson/topojson-client",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\topojson-client",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\topojson-client\\LICENSE.md"
+  },
+  "topojson-server@3.0.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/topojson/topojson-server",
+    "publisher": "Mike Bostock",
+    "url": "https://bost.ocks.org/mike",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\topojson-server",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\topojson-server\\LICENSE.md"
+  },
+  "traverse@0.6.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/js-traverse",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\traverse",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\traverse\\LICENSE"
+  },
+  "treeify@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/notatestuser/treeify",
+    "publisher": "Luke Plaster",
+    "email": "notatestuser@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\treeify",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\treeify\\LICENSE"
+  },
+  "turf-jsts@1.2.3": {
+    "licenses": "Custom: https://travis-ci.org/DenisCarriere/turf-jsts.svg",
+    "repository": "https://github.com/DenisCarriere/turf-jsts",
+    "publisher": "Björn Harrtell",
+    "email": "bjorn@wololo.org",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\turf-jsts",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\turf-jsts\\README.md"
+  },
+  "two-product@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/two-product",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\two-product",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\two-product\\LICENSE"
+  },
+  "two-sum@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mikolalysenko/two-sum",
+    "publisher": "Mikola Lysenko",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\two-sum",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\two-sum\\LICENSE"
+  },
+  "type-is@1.6.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/type-is",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\type-is",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\type-is\\LICENSE"
+  },
+  "type-is@1.6.18": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/type-is",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\type-is",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\body-parser\\node_modules\\type-is\\LICENSE"
+  },
+  "typedarray@0.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/substack/typedarray",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\typedarray",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\typedarray\\LICENSE"
+  },
+  "underscore-contrib@0.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/documentcloud/underscore-contrib",
+    "publisher": "Fogus",
+    "email": "me@fogus.me",
+    "url": "http://www.fogus.me",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\underscore-contrib",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\underscore-contrib\\LICENSE"
+  },
+  "underscore@1.6.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jashkenas/underscore",
+    "publisher": "Jeremy Ashkenas",
+    "email": "jeremy@documentcloud.org",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\underscore-contrib\\node_modules\\underscore",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\underscore-contrib\\node_modules\\underscore\\LICENSE"
+  },
+  "underscore@1.8.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jashkenas/underscore",
+    "publisher": "Jeremy Ashkenas",
+    "email": "jeremy@documentcloud.org",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\underscore",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\underscore\\LICENSE"
+  },
+  "unpipe@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/stream-utils/unpipe",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\unpipe",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\unpipe\\LICENSE"
+  },
+  "uri-js@3.0.2": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/garycourt/uri-js",
+    "publisher": "Gary Court",
+    "email": "gary.court@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\uri-js",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\uri-js\\README.md"
+  },
+  "util-deprecate@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/TooTallNate/util-deprecate",
+    "publisher": "Nathan Rajlich",
+    "email": "nathan@tootallnate.net",
+    "url": "http://n8.io/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\util-deprecate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\util-deprecate\\LICENSE"
+  },
+  "util-extend@1.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/isaacs/util-extend",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\util-extend",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\util-extend\\LICENSE"
+  },
+  "utils-merge@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jaredhanson/utils-merge",
+    "publisher": "Jared Hanson",
+    "email": "jaredhanson@gmail.com",
+    "url": "http://www.jaredhanson.net/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\utils-merge",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\utils-merge\\LICENSE"
+  },
+  "validate-npm-package-license@3.0.4": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/kemitchell/validate-npm-package-license.js",
+    "publisher": "Kyle E. Mitchell",
+    "email": "kyle@kemitchell.com",
+    "url": "https://kemitchell.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\validate-npm-package-license",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\validate-npm-package-license\\LICENSE"
+  },
+  "validator@10.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/chriso/validator.js",
+    "publisher": "Chris O'Hara",
+    "email": "cohara87@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\validator",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\validator\\LICENSE"
+  },
+  "vary@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/vary",
+    "publisher": "Douglas Christopher Wilson",
+    "email": "doug@somethingdoug.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\vary",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\vary\\LICENSE"
+  },
+  "wrappy@1.0.2": {
+    "licenses": "ISC",
+    "repository": "https://github.com/npm/wrappy",
+    "publisher": "Isaac Z. Schlueter",
+    "email": "i@izs.me",
+    "url": "http://blog.izs.me/",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\wrappy",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\wrappy\\LICENSE"
+  },
+  "xmlcreate@1.0.2": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/michaelkourlas/node-xmlcreate",
+    "publisher": "Michael Kourlas",
+    "email": "michael@kourlas.net",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\xmlcreate",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\xmlcreate\\LICENSE.md",
+    "noticeFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\xmlcreate\\NOTICE.md"
+  },
+  "xtend@4.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Raynos/xtend",
+    "publisher": "Raynos",
+    "email": "raynos2@gmail.com",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\xtend",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\xtend\\LICENCE"
+  },
+  "z-schema@3.22.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/zaggino/z-schema",
+    "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\z-schema",
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\node_modules\\z-schema\\LICENSE"
+  }
+}
