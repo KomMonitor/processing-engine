@@ -14,13 +14,13 @@ exports.postFeedbackMail = function(mailInput) {
   return new Promise(function(resolve, reject) {
 
     var transporter = nodeMailer.createTransport({
-            host: 'mail.gmx.net',
-            port: 587,
+            host: 'mail.essen.de',
+            port: 25,
             secure: false,  //true for 465 port, false for other ports
-            auth: {
-                user: 'kommonitor@gmx.de',
-                pass: 'ProjektKM2017'
-            },
+            // auth: {
+            //     user: 'kommonitor@gmx.de',
+            //     pass: 'ProjektKM2017'
+            // },
             tls: {
                 rejectUnauthorized: false
             }
@@ -31,7 +31,7 @@ exports.postFeedbackMail = function(mailInput) {
 
     // setup email data with unicode symbols
         var mailOptions = {
-            from: '"KomMonitor Projekt" <kommonitor@gmx.de>', // sender address
+            from: '"KomMonitor Projekt" <kommonitor@amt62.essen.de>', // sender address
             to: mailInput.recipientMail, // list of receivers
             subject: mailInput.subject, // Subject line
             text: mailInput.body, // plain text body
