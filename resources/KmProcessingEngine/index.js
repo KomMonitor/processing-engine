@@ -1407,7 +1407,7 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
         }
         else{
           // apend results of tempIsochrones to resultIsochrones
-          resultIsochrones.features.concat(tempIsochrones.features);
+          resultIsochrones.features = resultIsochrones.features.concat(tempIsochrones.features);
         }
           // increment featureIndex
           featureIndex++;
@@ -1559,7 +1559,7 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
         }
         else{
           // apend results of tempIsochrones to resultIsochrones
-          resultIsochrones.features.concat(tempIsochrones.features);
+          resultIsochrones.features = resultIsochrones.features.concat(tempIsochrones.features);
         }
           // increment featureIndex
           featureIndex++;
