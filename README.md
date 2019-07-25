@@ -37,7 +37,7 @@ Similar to other <b>KomMonitor</b> components, some settings are required, espec
 #### .env - Configure Deployment Details of other Services
 The central configuration file is located at [.env](./.env). Several important aspects must match your target environment when deploying the service. These are:
 
-- serevr port:
+- server port:
 ```
 # server port
 PORT=8086
@@ -77,11 +77,11 @@ FEATURE_NAME_PROPERTY_NAME=NAME
 
 After adjusting the configuration to your target environment, you may continue to build and run the service as described next.
 
-#### Running the NodeJS KomMonitor Processing Engine
-##### Local Manual Startup and Shutdown
+### Running the NodeJS KomMonitor Processing Engine
+#### Local Manual Startup and Shutdown
 Make sure you have installed all node dependencies by calling `npm install`. The to locally start the server enter command `node index.js` from the project root, which will launch the app and serve it according to port setting at `localhost:<PORT>` (per default `localhost:8086`). In a browser call ``localhost:<PORT>/docs`` to inspect the REST API.  
 
-##### Production Startup and Shutdown
+#### Production Startup and Shutdown
 To launch and monitor any NodeJS app in production environment, we recommend the Node Process Manager [PM2](http://pm2.keymetrics.io/). It is a node module itself and is able to manage and monitor NodeJS application by executing simple command like `pm2 start app.js`, `pm2 restart app.js`, `pm2 stop app.js`, `pm2 delete app.js`. Via ``pm2 list`` a status monitor for running applications can be displayed. See [PM2 Quickstart Guide](http://pm2.keymetrics.io/docs/usage/quick-start/) for further information and way more details.
 
 PM2 can even be registered as system service, so it can be automatically restarted on server restart, thus ensuring that the registered applications will be relaunched also. Depending on your host environment (e.g. ubuntu, windows, mac), the process differs. Please follow [PM2 Startup hints](http://pm2.keymetrics.io/docs/usage/startup/) for detailed information.
