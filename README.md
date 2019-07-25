@@ -79,25 +79,25 @@ After adjusting the configuration to your target environment, you may continue t
 
 #### Running the NodeJS KomMonitor Processing Engine
 ##### Local Manual Startup and Shutdown
-Make sure you have installed all node dependencies by calling `npm install`. The to locally start the server enter command `node index.js` from the project root, which will launch the app and serve it (per default)
+Make sure you have installed all node dependencies by calling `npm install`. The to locally start the server enter command `node index.js` from the project root, which will launch the app and serve it according to port setting at `localhost:<PORT>` (per default `localhost:8086`). In a browser call ``localhost:<PORT>/docs`` to inspect the REST API.  
 
 ##### Production Startup and Shutdown
-PM2
+To launch and monitor any NodeJS app in production environment, we recommend the Node Process Manager [PM2](http://pm2.keymetrics.io/). It is a node module itself and is able to manage and monitor NodeJS application by executing simple command like `pm2 start app.js`, `pm2 restart app.js`, `pm2 stop app.js`, `pm2 delete app.js`. Via ``pm2 list`` a status monitor for running applications can be displayed. See [PM2 Quickstart Guide](http://pm2.keymetrics.io/docs/usage/quick-start/) for further information and way more details.
 
-After these adjustments you can run the command `mvn clean install` or `mvn clean package`, which will create the corresponding <b>WAR</b> file in the folder <b>target</b>.
+PM2 can even be registered as system service, so it can be automatically restarted on server restart, thus ensuring that the registered applications will be relaunched also. Depending on your host environment (e.g. ubuntu, windows, mac), the process differs. Please follow [PM2 Startup hints](http://pm2.keymetrics.io/docs/usage/startup/) for detailed information.
+
+When installed and configured PM2, the <b>KomMonitor Processing Engine</b> can be started and monitored via `pm2 start index.js --name <app_name>` (while `<app_name>` is optional, it should be set individually, e.g. `km-processing-engine`, otherwise the application will be called `index`), executed from project root. To check application status just hit `pm2 list` and inspect the resulting dashboard for the entry with the specified `<app_name>`.
 
 ### Docker
-The <b>KomMonitor Data Management REST API</b> can also be build and deployed as Docker image. The project contains the associated `Dockerfile` and an exemplar `docker-compose.yml` on project root level. The `Dockerfile` already expects a pre-built <b>JAR</b> file of the service. So, before building the docker image, you must build the runnable <b>JAR</b> via maven.
+The <b>KomMonitor Processing Engine</b> can also be build and deployed as Docker image (i.e. `docker build -t processing-engine:latest .`). The project contains the associated `Dockerfile` and an exemplar `docker-compose.yml` on project root level. The Dockerfile contains a `RUN npm install` command, so necessary node dependencies will be fetched on build time.
 
-When building the docker image (i.e. `docker build -t data-management-api:latest .`), the profile `docker` is used. In contrast to the default profile, the `docker` profile consumes the associated `src/main/resources/application-docker.properties`, which makes use of environment variables to declare relevant settings (as described in the [Configuration](#configuration) section above). For instance check out the exemplar [docker-compose.yml](./docker-compose.yml) file. It specifies two services, `kommonitor-db` as required PostGIS database container and the actual `kommonitor-data-management-api` container. The latter depends on the database container and contains an `environment` section to define the required settings (connection details to other services etc.).
-
-A more advanced setup including a Geoserver as docker container is also given at [docker-compose_managementAndGeoserver.yml](./docker-compose_managementAndGeoserver.yml).
+The exemplar [docker-compose.yml](./docker-compose.yml) file specifies two services, `redis` as required redis database container and the actual `kommonitor-processing-engine` container. The latter depends on the database container and contains an `environment` section to define the required settings (connection details to other services etc. according to the [Configuration section](#configuration) mentioned above).
 
 ## User Guide
 TODO
 
 ### Indicator Script Development
-Complex indicators can be automatically computed by the use of custom Javascipt scripts. New scripts are based on a TEMPLATE script file. For more information about the template and the process to add/write new scripts please visit the respective documentation at [test](/resources/README.md).  
+Complex indicators can be automatically computed by the use of custom Javascipt scripts. New scripts are based on a TEMPLATE script file. For more information about the template and the process to add/write new scripts please visit the respective documentation at [resources/README.md](/resources/README.md).
 
 ## Contribution - Developer Information
 This section contains information for developers.
