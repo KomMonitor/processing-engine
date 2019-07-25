@@ -89,7 +89,7 @@ PM2 can even be registered as system service, so it can be automatically restart
 
 When installed and configured PM2, the <b>KomMonitor Processing Engine</b> can be started and monitored via `pm2 start index.js --name <app_name>` (while `<app_name>` is optional, it should be set individually, e.g. `km-processing-engine`, otherwise the application will be called `index`), executed from project root. To check application status just hit `pm2 list` and inspect the resulting dashboard for the entry with the specified `<app_name>`.
 
-To shutdown call `pm2 stop <app_name>` in the terminal. This will stop the service. to completely remove it from PM2, call `pm2 delete <app_name>`. 
+To shutdown call `pm2 stop <app_name>` in the terminal. This will stop the service. To completely remove it from PM2, call `pm2 delete <app_name>`. 
 
 ### Docker
 The <b>KomMonitor Processing Engine</b> can also be build and deployed as Docker image (i.e. `docker build -t processing-engine:latest .`). The project contains the associated `Dockerfile` and an exemplar `docker-compose.yml` on project root level. The Dockerfile contains a `RUN npm install` command, so necessary node dependencies will be fetched on build time.
