@@ -21,7 +21,11 @@ services:
       - KOMMONITOR_DATA_MANAGEMENT_HOST=kommonitor-data-management-api
       - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
       - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/management
+      - GEOMETRY_SIMPLIFICATION_PARAMETER_NAME=simplifyGeometries
+      - GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE=original
       - OPEN_ROUTE_SERVICE_URL=openrouteservice
+      - FEATURE_ID_PROPERTY_NAME=ID
+      - FEATURE_NAME_PROPERTY_NAME=NAME
   redis:
     image: redis:alpine
     networks:
