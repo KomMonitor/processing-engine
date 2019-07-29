@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>API_HELPER_METHODS_STATISTICAL_OPERATIONS - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html">API_HELPER_METHODS_GEOMETRIC_OPERATIONS</a><ul class='methods'><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.area">exports.area</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.area_feature_asProperty">exports.area_feature_asProperty</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.area_featureCollection_asProperty">exports.area_featureCollection_asProperty</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.bbox_feature">exports.bbox_feature</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.bbox_featureCollection">exports.bbox_featureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.buffer_feature">exports.buffer_feature</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.buffer_featureCollection">exports.buffer_featureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.center_geometric">exports.center_geometric</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.center_mass">exports.center_mass</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.centroid">exports.centroid</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.contains">exports.contains</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.difference">exports.difference</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.disjoint">exports.disjoint</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.dissolve">exports.dissolve</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.distance_direct_kilometers">exports.distance_direct_kilometers</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.distance_matrix_kilometers">exports.distance_matrix_kilometers</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.distance_waypath_kilometers">exports.distance_waypath_kilometers</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.duration_matrix_seconds">exports.duration_matrix_seconds</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.intersection">exports.intersection</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.intersects">exports.intersects</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.isochrones_byDistance">exports.isochrones_byDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.isochrones_byTime">exports.isochrones_byTime</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPoint_directDistance">exports.nearestPoint_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPoint_waypathDistance">exports.nearestPoint_waypathDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnLine_directDistance">exports.nearestPointOnLine_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnLines_directDistance">exports.nearestPointOnLines_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnPolygon_directDistance">exports.nearestPointOnPolygon_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnPolygons_directDistance">exports.nearestPointOnPolygons_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.overlap">exports.overlap</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.union">exports.union</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.within">exports.within</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.within_usingBBOX">exports.within_usingBBOX</a></li></ul></li><li><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html">API_HELPER_METHODS_STATISTICAL_OPERATIONS</a><ul class='methods'><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.covariance">exports.covariance</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.max">exports.max</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.mean">exports.mean</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.meanSquareError">exports.meanSquareError</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.median">exports.median</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.min">exports.min</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.percentile">exports.percentile</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.quantiles">exports.quantiles</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.quartiles">exports.quartiles</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.range">exports.range</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.standardDeviation">exports.standardDeviation</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.variance">exports.variance</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.zScore_byMeanAndStdev">exports.zScore_byMeanAndStdev</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.zScore_byPopulationArray">exports.zScore_byPopulationArray</a></li></ul></li><li><a href="API_HELPER_METHODS_UTILITY.html">API_HELPER_METHODS_UTILITY</a><ul class='methods'><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.asFeature">exports.asFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.asFeatureCollection">exports.asFeatureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getAggregationWeight">exports.getAggregationWeight</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getBaseIndicatorById">exports.getBaseIndicatorById</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getBaseIndicatorByName">exports.getBaseIndicatorByName</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getGeoresourceById">exports.getGeoresourceById</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getGeoresourceByName">exports.getGeoresourceByName</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getIndicatorValue">exports.getIndicatorValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getIndicatorValueArray">exports.getIndicatorValueArray</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getProcessParameterByName_asBoolean">exports.getProcessParameterByName_asBoolean</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getProcessParameterByName_asNumber">exports.getProcessParameterByName_asNumber</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getProcessParameterByName_asString">exports.getProcessParameterByName_asString</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getPropertyValue">exports.getPropertyValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getSpatialUnitFeatureIdValue">exports.getSpatialUnitFeatureIdValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getSpatialUnitFeatureNameValue">exports.getSpatialUnitFeatureNameValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getTargetDateWithPropertyPrefix">exports.getTargetDateWithPropertyPrefix</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.hasMultiPolygon">exports.hasMultiPolygon</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.indicatorValueIsNoDataValue">exports.indicatorValueIsNoDataValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONFeature">exports.isGeoJSONFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONFeatureCollection">exports.isGeoJSONFeatureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONLineStringFeature">exports.isGeoJSONLineStringFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONPointFeature">exports.isGeoJSONPointFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONPolygonFeature">exports.isGeoJSONPolygonFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isNoDataValue">exports.isNoDataValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.log">exports.log</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.replaceMultiPolygonsByPolygons">exports.replaceMultiPolygonsByPolygons</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setAggregationWeight">exports.setAggregationWeight</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setIndicatorValue">exports.setIndicatorValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setIndicatorValue_asNoData">exports.setIndicatorValue_asNoData</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setPropertyValue">exports.setPropertyValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.throwError">exports.throwError</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.transformMultiPolygonsToPolygons">exports.transformMultiPolygonsToPolygons</a></li></ul></li><li><a href="CONSTANTS.html">CONSTANTS</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">API_HELPER_METHODS_STATISTICAL_OPERATIONS</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        API_HELPER_METHODS_STATISTICAL_OPERATIONS
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.covariance"><span class="type-signature">(static) </span>exports.covariance<span class="signature">(populationArray_A, populationArray_B)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2099">line 2099</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#covariance">https://jstat.github.io/all.html#covariance</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#covariance">https://jstat.github.io/all.html#covariance</a> to compute the covariance value of the submitted value arrays</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>first data array of numeric values</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>second data array of numeric values</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the covariance value of the submitted data arrays</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.max"><span class="type-signature">(static) </span>exports.max<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2111">line 2111</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#max">https://jstat.github.io/all.html#max</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#max">https://jstat.github.io/all.html#max</a> to compute the max value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the max value shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the max value of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.mean"><span class="type-signature">(static) </span>exports.mean<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2123">line 2123</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#mean">https://jstat.github.io/all.html#mean</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#mean">https://jstat.github.io/all.html#mean</a> to compute the mean value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the mean shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the mean value of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.meanSquareError"><span class="type-signature">(static) </span>exports.meanSquareError<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2135">line 2135</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#meansqerr">https://jstat.github.io/all.html#meansqerr</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#meansqerr">https://jstat.github.io/all.html#meansqerr</a> to compute the mean square error value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the mean square error value shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the mean square error value value of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.median"><span class="type-signature">(static) </span>exports.median<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2147">line 2147</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#median">https://jstat.github.io/all.html#median</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#median">https://jstat.github.io/all.html#median</a> to compute the median value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the median shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the median value of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.min"><span class="type-signature">(static) </span>exports.min<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2159">line 2159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#min">https://jstat.github.io/all.html#min</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#min">https://jstat.github.io/all.html#min</a> to compute the min value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the min value shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the min value of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.percentile"><span class="type-signature">(static) </span>exports.percentile<span class="signature">(populationArray, k)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2172">line 2172</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#percentile">https://jstat.github.io/all.html#percentile</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#percentile">https://jstat.github.io/all.html#percentile</a> to compute the percentile of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the percentile shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>k</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>value between <code>- 1, exclusive</code> to specify the k-th percentile to be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the k-th percentile of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.quantiles"><span class="type-signature">(static) </span>exports.quantiles<span class="signature">(populationArray, quantilesArray)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2185">line 2185</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#quantiles">https://jstat.github.io/all.html#quantiles</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#quantiles">https://jstat.github.io/all.html#quantiles</a> to compute the quantiles of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the quantiles shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>quantilesArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of quantile values (i.e. <code>0.5, 0.75</code>)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the quantiles of <code>populationArray</code> according to the <code>quantilesArray</code></p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;number></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.quartiles"><span class="type-signature">(static) </span>exports.quartiles<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {Array.&lt;number>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2197">line 2197</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#quartiles">https://jstat.github.io/all.html#quartiles</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#quartiles">https://jstat.github.io/all.html#quartiles</a> to compute the quartiles of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the quartiles shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the quartiles of the submitted array of numeric values</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;number></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.range"><span class="type-signature">(static) </span>exports.range<span class="signature">(populationArray)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2209">line 2209</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#range">https://jstat.github.io/all.html#range</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#range">https://jstat.github.io/all.html#range</a> to compute the range value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the range value shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the range value of the submitted array of numeric values <code>- min</code></p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.standardDeviation"><span class="type-signature">(static) </span>exports.standardDeviation<span class="signature">(values, computeSampledStandardDeviation)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2226">line 2226</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#stdev">https://jstat.github.io/all.html#stdev</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#stdev">https://jstat.github.io/all.html#stdev</a> to compute the standard deviation for an array of values. By defaut, the population standard deviation is returned.
+Passing <code>true</code> for the flag parameter returns the sample standard deviation.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>values</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the standard deviation shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>computeSampledStandardDeviation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>OPTIONAL flag.
+If set to <code>true</code> then 'sample' standard deviation is computed, which is also called the 'corrected standard deviation', and is an unbiased estimator of the population standard deviation.
+If set to <code>false</code> or <code>undefined</code> then the population standard deviation is computed, which is also the 'uncorrected standard deviation',
+and is a biased but minimum-mean-squared-error estimator</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the standard deviation</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.variance"><span class="type-signature">(static) </span>exports.variance<span class="signature">(populationArray, computeSampledVariance)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2246">line 2246</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#variance">https://jstat.github.io/all.html#variance</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#variance">https://jstat.github.io/all.html#variance</a> to compute the variance value of the submitted value array</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the variance value shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>computeSampledVariance</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>OPTIONAL flag.
+If set to <code>true</code> then 'sample' variance is computed.
+If set to <code>false</code> or <code>undefined</code> then the population variance is computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the variance value of the submitted array of numeric values <code>- min</code></p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.zScore_byMeanAndStdev"><span class="type-signature">(static) </span>exports.zScore_byMeanAndStdev<span class="signature">(value, mean, stdev)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2265">line 2265</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#jStat.zscore">https://jstat.github.io/all.html#jStat.zscore</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#jStat.zscore">https://jstat.github.io/all.html#jStat.zscore</a> to compute the zScore of the submitted value given the mean and standard deviation of the associated population.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the numeric value for which  the zScore shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mean</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the  numeric mean value of the associated population</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stdev</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the  numeric standard deviation of the associated population</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the zScore of the submitted value</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.zScore_byPopulationArray"><span class="type-signature">(static) </span>exports.zScore_byPopulationArray<span class="signature">(value, populationArray, computeSampledStandardDeviation)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2282">line 2282</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://jstat.github.io/all.html#jStat.zscore">https://jstat.github.io/all.html#jStat.zscore</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates jStat's function <a href="https://jstat.github.io/all.html#jStat.zscore">https://jstat.github.io/all.html#jStat.zscore</a> to compute the zScore of the submitted value given the mean and standard deviation of the associated population.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the numeric value for which  the zScore shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>populationArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>an array of numeric values for which the standard deviation shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>computeSampledStandardDeviation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>OPTIONAL flag.
+If set to <code>true</code> then 'sample' standard deviation is computed, which is also called the 'corrected standard deviation', and is an unbiased estimator of the population standard deviation.
+If set to <code>false</code> or <code>undefined</code> then the population standard deviation is computed, which is also the 'uncorrected standard deviation',
+and is a biased but minimum-mean-squared-error estimator</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the zScore of the submitted value</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jul 29 2019 07:17:46 GMT+0200 (Mitteleuropäische Sommerzeit) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
