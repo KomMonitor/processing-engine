@@ -2,6 +2,31 @@
 
 This guide contains helpful information on how to write and manage custom indicator computation scripts for the **KomMonitor Processing Engine**.
 
+**Table of Content**
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [How to write an Indicator Computation Script for KomMonitor](#how-to-write-an-indicator-computation-script-for-kommonitor)
+	- [Overview](#overview)
+	- [Writing a custom KomMonitor Script](#writing-a-custom-kommonitor-script)
+		- [The Processing Engine Helper API Node Module](#the-processing-engine-helper-api-node-module)
+			- [Goals and Benefits](#goals-and-benefits)
+			- [Encapsulated Libraries / Dependencies](#encapsulated-libraries-dependencies)
+			- [Documented API Overview](#documented-api-overview)
+		- [The TEMPLATE Script](#the-template-script)
+			- [Structure and Content](#structure-and-content)
+			- [Encapsulated Libraries / Dependencies](#encapsulated-libraries-dependencies)
+			- [Implementing the `computeIndicator()` Method](#implementing-the-computeindicator-method)
+				- [Using Base Indicators, Georesources and Process Parameters](#using-base-indicators-georesources-and-process-parameters)
+				- [Using the `KmHelper` Module for various geoprocessing and statistical Operations](#using-the-kmhelper-module-for-various-geoprocessing-and-statistical-operations)
+				- [Compute and set Indicator Values for `targetSpatialUnit_geoJSON` features](#compute-and-set-indicator-values-for-targetspatialunitgeojson-features)
+				- [Log, log, log](#log-log-log)
+			- [Automated Aggregation - Adjust Aggregation Type or overwrite Aggregation Method](#automated-aggregation-adjust-aggregation-type-or-overwrite-aggregation-method)
+		- [Example Scripts](#example-scripts)
+	- [Register Script within **KomMonitor Data Management** Component](#register-script-within-kommonitor-data-management-component)
+	- [Running Scripts](#running-scripts)
+
+<!-- /TOC -->
+
 ## Overview
 The **KomMonitor** data infrastructure is designed to consume custom Node module scripts written in JavaScript programming language that follow a dedicated **Script TEMPLATE**. The **TEMPLATE** hereby defines special methods that need to be implemented/adjusted for each indicator. Such custom indicator computation script code can then be persisted within the **KomMonitor Data Management** component together with metadata about the associated target indicator, required base indicators, georesources and (variable) process parameters. Then, the NodeJS **KomMonitor Processing Engine** is able to integrate the script on-the-fly and call and execute the predefined methods.
 
@@ -29,7 +54,7 @@ To perform the geospatial and statistical operations the **KmHelper** module enc
 |   reference to running instance of **Open Route Service**   |   With regard to routing, isochrone or distance matrix computations, the **KmHelper** module builds and executes HTTP requests against Open Route Service   |  4.7.2   |  [https://github.com/GIScience/openrouteservice](https://github.com/GIScience/openrouteservice)   |
 
 #### Documented API Overview
-To inspect the **KmHelper API** and available operations please 
+To inspect the **KmHelper API** and available operations please
 use most recent version,
 DL git project with version control.
 name some tools (TurtoiseGit, SourceTree, git CLI, ...)
