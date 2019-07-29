@@ -4,7 +4,7 @@
     },
     "source": {
 			"include": [
-				"resources/KmProcessingEngine"
+				"resources/KmHelper"
 			],
 			"includePattern": ".+\\index.js(doc)?$",
 			"excludePattern": "(^|\\/|\\\\)_"
@@ -15,7 +15,7 @@
     "opts": {
         "template": "node_modules/docdash",
         "encoding": "utf8",
-        "destination": "docs/",
+        "destination": "kmHelperAPIdocs/",
         "recurse": true,
         "verbose": true
     },
