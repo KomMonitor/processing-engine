@@ -56,12 +56,14 @@ const co2AttributeValue = "CO2_Erspar";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // retrieve required baseIndicator using its meaningful name
+  // retrieve required georesource "Photovoltaik Plants"
   var pvAnlagen = KmHelper.getGeoresourceById("255576bd-2a61-4c70-9e9b-d67d8f9b0c69", georesourcesMap);;
 
-  // now we compute the new indicator 'wachstumsstress'
   KmHelper.log("Compute indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " features");
 
+  // for each feature of target spatial unit
+  //    find all photovoltaik plants (as POIs) that lie within the feature
+  //    and summarize the total CO2 savings with the help of a dedicated object property
   targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
 
       var pvFeature;
@@ -71,19 +73,24 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 
         pvFeature = pvAnlagen.features[pointIndex];
 
+          // spatial WITHIN via helper method
           if (KmHelper.within(pvFeature, targetSpatialUnitFeature)){
+            // remove PV plant from array and decrement pointIndex
+            // to remove current PV plant for remaining features
       			pvAnlagen.features.splice(pointIndex, 1);
             pointIndex--;
+
+            // summarize and set indicator value via helper method
             var indicatorValue = KmHelper.getIndicatorValue(targetSpatialUnitFeature, targetDate) + Number(KmHelper.getPropertyValue(pvFeature, co2AttributeValue));
             KmHelper.setIndicatorValue(targetSpatialUnitFeature, targetDate, indicatorValue);
       		}
       }
 
-      // divide by 1000 to transform from kilogram to tonnes
+      // divide by 1000 to transform from kilogram to tonnes through implicit knowledge of the datasource
       KmHelper.setIndicatorValue(targetSpatialUnitFeature, targetDate, KmHelper.getIndicatorValue(targetSpatialUnitFeature, targetDate) / 1000);
   });
 
-  console.log("Computation of indicator finished");
+  KmHelper.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
 };

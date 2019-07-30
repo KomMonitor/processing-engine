@@ -57,7 +57,7 @@ const aggregationType = "AVERAGE";
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  // retrieve required baseIndicator using its meaningful name
+  // retrieve required baseIndicator
   var ewzGeoJSON = KmHelper.getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
 
   KmHelper.log("Retrieved required baseIndicators successfully");

@@ -56,10 +56,8 @@ const leistungAttributeValue = "Leistung";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // retrieve required baseIndicator using its meaningful name
   var pvAnlagen = KmHelper.getGeoresourceById("255576bd-2a61-4c70-9e9b-d67d8f9b0c69", georesourcesMap);;
 
-  // now we compute the new indicator 'wachstumsstress'
   KmHelper.log("Compute indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " features");
 
   targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
