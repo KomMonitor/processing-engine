@@ -55,13 +55,12 @@ const aggregationType = "AVERAGE";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  // retrieve required baseIndicator using its meaningful name
+  // retrieve required georesources using its meaningful name
   var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
   var schulen = KmHelper.getGeoresourceByName("Grundschulen", georesourcesMap);
 
-  // divide by 1000 for meters-->kilometers
+  // retrieve process parameter for maximum distance
   var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
   KmHelper.log("max distance parameter in m: " + maxDistance);
 
