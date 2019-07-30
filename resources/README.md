@@ -18,10 +18,12 @@ This guide contains helpful information on how to write and manage custom indica
 				- [METHODS Section](#methods-section)
 			- [Implementing the `computeIndicator()` Method](#implementing-the-computeindicator-method)
 				- [Using Base Indicators, Georesources and Process Parameters](#using-base-indicators-georesources-and-process-parameters)
-					- [`KmHelper` utitliy methods to retrieve baseIndicators](#kmhelper-utitliy-methods-to-retrieve-baseindicators)
-					- [`KmHelper` utitliy methods to retrieve georesources](#kmhelper-utitliy-methods-to-retrieve-georesources)
-					- [`KmHelper` utitliy methods to retrieve process parameters](#kmhelper-utitliy-methods-to-retrieve-process-parameters)
+					- [`KmHelper` utility methods to retrieve baseIndicators](#kmhelper-utility-methods-to-retrieve-baseindicators)
+					- [`KmHelper` utility methods to retrieve georesources](#kmhelper-utility-methods-to-retrieve-georesources)
+					- [`KmHelper` utility methods to retrieve process parameters](#kmhelper-utility-methods-to-retrieve-process-parameters)
 				- [Using the `KmHelper` Module for various geoprocessing and statistical Operations](#using-the-kmhelper-module-for-various-geoprocessing-and-statistical-operations)
+					- [Statistical Operations](#statistical-operations)
+					- [Geospatial Operations](#geospatial-operations)
 				- [Using `await` to actively wait for HTTP calls](#using-await-to-actively-wait-for-http-calls)
 				- [Compute and set Indicator Values for `targetSpatialUnit_geoJSON` features](#compute-and-set-indicator-values-for-targetspatialunitgeojson-features)
 				- [Log, log, log](#log-log-log)
@@ -222,7 +224,6 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 */
 function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // disaggregate indicator
-
 };
 ```
 
@@ -244,8 +245,8 @@ In general at least one process resource from the three categories `baseIndicato
 
 While in theory, script developers might directly access the map or array objects to retrieve information (i.e. via name `var myGeoresource = georesourcesMap.get("myGeoresourceName");`), the `KmHelper` API offers utility methods for that purpose:
 
-###### `KmHelper` utitliy methods to retrieve baseIndicators
-!["`KmHelper` utitliy methods to retrieve baseIndicators"](../misc/KmHelper_baseIndicators.png "`KmHelper` utitliy methods to retrieve baseIndicators")
+###### `KmHelper` utility methods to retrieve baseIndicators
+!["`KmHelper` utility methods to retrieve baseIndicators"](../misc/KmHelper_baseIndicators.png "`KmHelper` utility methods to retrieve baseIndicators")
 
 Example:
 ```
@@ -262,8 +263,8 @@ var myBaseIndicator_asGeoJSONFeatureCollection = KmHelper.getBaseIndicatorByName
 // features as GeoJSON features in array myBaseIndicator_asGeoJSONFeatureCollection.features
 ```
 
-###### `KmHelper` utitliy methods to retrieve georesources
-!["`KmHelper` utitliy methods to retrieve georesources"](../misc/KmHelper_georesources.png "`KmHelper` utitliy methods to retrieve georesources")
+###### `KmHelper` utility methods to retrieve georesources
+!["`KmHelper` utility methods to retrieve georesources"](../misc/KmHelper_georesources.png "`KmHelper` utility methods to retrieve georesources")
 
 Example:
 ```
@@ -280,15 +281,15 @@ var myGeoresource_asGeoJSONFeatureCollection = KmHelper.getGeoresourceByName("St
 // as GeoJSON features in array myGeoresource_asGeoJSONFeatureCollection.features
 ```
 
-###### `KmHelper` utitliy methods to retrieve process parameters
+###### `KmHelper` utility methods to retrieve process parameters
 In contrast to *baeIndicators* and *georesources*, the *process parameters* can be of different types, i.e. `boolean`, `number`, `string`;
 For each type, a dedicated utility method is offered by `KmHelper`, which retrieves the parameter from `processParameters` array and tries to parse it according to the type. It thus might throw an error, either if no parameter is available or the type parsing fails. In addition, process parameters are only accessible via their *name*.
 
-!["`KmHelper` utitliy method to retrieve boolean process parameter"](../misc/KmHelper_processparameter_boolean.png "`KmHelper` utitliy method to retrieve boolean process parameter")
+!["`KmHelper` utility method to retrieve boolean process parameter"](../misc/KmHelper_processparameter_boolean.png "`KmHelper` utility method to retrieve boolean process parameter")
 
-!["`KmHelper` utitliy method to retrieve numeric process parameter"](../misc/KmHelper_processparameter_numeric.png "`KmHelper` utitliy method to retrieve numeric process parameter")
+!["`KmHelper` utility method to retrieve numeric process parameter"](../misc/KmHelper_processparameter_numeric.png "`KmHelper` utility method to retrieve numeric process parameter")
 
-!["`KmHelper` utitliy method to retrieve string process parameter"](../misc/KmHelper_processparameter_string.png "`KmHelper` utitliy method to retrieve string process parameter")
+!["`KmHelper` utility method to retrieve string process parameter"](../misc/KmHelper_processparameter_string.png "`KmHelper` utility method to retrieve string process parameter")
 
 Example:
 ```
@@ -308,12 +309,225 @@ var myTextualParameter = KmHelper.getProcessParameterByName_asString("myAggregat
 
 ##### Using the `KmHelper` Module for various geoprocessing and statistical Operations
 
+The process of computing *target indicator values* for each feature of the *target spatial unit* often required spatial or statistical analyzation and operations. The complexity hereby varies greatly, from simple scenarios, where only indicator values from one **baseIndicator** must be processed, to complex scenarios, where multiple **georesources** must be spatially processed and compared to *target spatial unit features*. For the majority of wide-spread typically required statistical and geospatial operations, the `KmHelper` API offers helper methods, that mostly work with GeoJSON input for geospatial operations or value arrays (often called *populationArray*) for statistical operations. Please inspect the complete `KmHelper` API sections `API_HELPER_METHODS_GEOMETRIC_OPERATIONS` and `API_HELPER_METHODS_STATISTICAL_OPERATIONS` for a full list of supported features including API documentation on how to use them.
+
+###### Statistical Operations
+When performing statistical operations (i.e. get min/max/average value or more sophisticated z-score computation), a complete `populationArray` of relevant values must be constructed. Often, this `populationArray` shall contain all indicator values of a GeoJSON FeatureCollection of a certain target spatial unit. Instead of acquiring the array manually, `KmHelper` offers the method `getIndicatorValueArray(featureCollection, targetDate)`, which derives an array of all indicator values of the submitted GeoJSON FeatureCollection for the submitted targetDate.
+
+Example:
+
+```
+async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
+  // compute indicator for targetDate and targetSpatialUnitFeatures
+
+  // retrieve base indicator ExampleIndicator with id "1234-5678-9876-5432"
+  var myBaseIndicator_asGeoJSONFeatureCollection = KmHelper.getBaseIndicatorById("1234-5678-9876-5432", baseIndicatorsMap);
+
+  // get indicator values array for submitted targetDate
+  var populationArray = KmHelper.getIndicatorValueArray(myBaseIndicator_asGeoJSONFeatureCollection, targetDate);
+
+  // get indicator values array for certain targetDate="2018-01-01"
+  var populationArray_2018 = KmHelper.getIndicatorValueArray(myBaseIndicator_asGeoJSONFeatureCollection, "2018-01-01");
+
+  /*
+  * now use population array to compute statistical characteristics
+  */
+
+  // maximum value
+  var maxValue = KmHelper.max(populationArray);
+
+  // minimum value
+  var minValue = KmHelper.min(populationArray);
+
+  // average value
+  var minValue = KmHelper.mean(populationArray);
+
+  // median value
+  var minValue = KmHelper.median(populationArray);
+
+  // quantiles value - here use "[0.5, 0.75]" as example
+  var quantiles = KmHelper.quantiles(populationArray, [0.5, 0.75]);
+
+  // zScore value
+  // interface: zScore_byPopulationArray(value, populationArray, computeSampledStandardDeviation)
+  /*
+  * computeSampledStandardDeviation: OPTIONAL flag. If set to true then 'sample' standard deviation is computed, which is also called the 'corrected standard deviation',
+  * and is an unbiased estimator of the population standard deviation.
+  * If set to false or undefined then the population standard deviation is computed, which is also the 'uncorrected standard deviation',
+  * and is a biased but minimum-mean-squared-error estimator
+  */
+  var sampleFeature = myBaseIndicator_asGeoJSONFeatureCollection.features[0];
+  var sampleValueOfInterest = KmHelper.getIndicatorValue(sampleFeature, targetDate);
+  var zScoreForSampleFeature = KmHelper.zScore_byPopulationArray(sampleValueOfInterest, populationArray, false);
+
+  // ...
+};
+```
+
+###### Geospatial Operations
+Geospatial operations analyse the spatial relation of two or more geospatial datasets. Typically, the GeoJSON features of the *target spatial unit* are compared (e.g. intersects, within) to other georesources while computing indicator values (e.g. count the number of photovoltaik-plants within each feature).
+
+**Exemplar Script to compute CO2 savings through use of Photovoltaik plants**
+```
+async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
+  // compute indicator for targetDate and targetSpatialUnitFeatures
+  // retrieve required georesource "Photovoltaik Plants"
+  var pvAnlagen = KmHelper.getGeoresourceById("255576bd-2a61-4c70-9e9b-d67d8f9b0c69", georesourcesMap);;
+
+  KmHelper.log("Compute indicator for a total amount of " + targetSpatialUnit_geoJSON.features.length + " features");
+
+  // for each feature of target spatial unit
+  //    find all photovoltaik plants (as POIs) that lie within the feature
+  //    and summarize the total CO2 savings with the help of a dedicated object property
+  targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
+
+      var pvFeature;
+      KmHelper.setIndicatorValue(targetSpatialUnitFeature, targetDate, 0);
+
+      for (var pointIndex=0; pointIndex < pvAnlagen.features.length; pointIndex++){
+
+        pvFeature = pvAnlagen.features[pointIndex];
+
+          // spatial WITHIN via helper method
+          if (KmHelper.within(pvFeature, targetSpatialUnitFeature)){
+            // remove PV plant from array and decrement pointIndex
+            // to remove current PV plant for remaining features
+      			pvAnlagen.features.splice(pointIndex, 1);
+            pointIndex--;
+
+            // summarize and set indicator value via helper method
+            var indicatorValue = KmHelper.getIndicatorValue(targetSpatialUnitFeature, targetDate) + Number(KmHelper.getPropertyValue(pvFeature, co2AttributeValue));
+            KmHelper.setIndicatorValue(targetSpatialUnitFeature, targetDate, indicatorValue);
+      		}
+      }
+
+      // divide by 1000 to transform from kilogram to tonnes through implicit knowledge of the datasource
+      KmHelper.setIndicatorValue(targetSpatialUnitFeature, targetDate, KmHelper.getIndicatorValue(targetSpatialUnitFeature, targetDate) / 1000);
+  });
+
+  KmHelper.log("Computation of indicator finished");
+
+  return targetSpatialUnit_geoJSON;
+};
+```
+In more complex scenarios, multiple georesources have to be considered and maybe preprocessed in order to derive the target information. For instance check out the `computeIndicator()` method within the reachability-of-preliminary-schools example script [./example-scripts/kommonitor-node-module_erreichbarkeit-grundschulen-isochronen-mülheim.js](./example-scripts/kommonitor-node-module_erreichbarkeit-grundschulen-isochronen-mülheim.js). In short, the script analyses the spatial relation of preliminary schools (as points), habitation buildings and the target spatial unit features. First, reachability foot-walking isochrones for the school points for a variable maximum distance of X meters are computed. Then from the habitation buildings the centroid is computed. Finally for each feature of the target spatial unit the indicator value is calculated by identifying all habitation buildings within the feature and, furthermore, identify which of those buildings is, in addition, spatially within the reachability isochrones.
+
+Some excerpts of the script, focusing the geospatial processing sections, are presented as follows.
+
+**Excerpts from exemplar Script to compute Reachability of preliminary schools**
+
+1. Retrieve georesources of habitation buildings and schools
+
+```
+// retrieve required georesources using its meaningful name
+var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
+var schulen = KmHelper.getGeoresourceByName("Grundschulen", georesourcesMap);
+
+// retrieve process parameter for maximum distance
+var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
+KmHelper.log("max distance parameter in m: " + maxDistance);
+
+var grundschulen = schulen.features;
+```
+
+2. Compute foot-waking isochrones for preliminary schools
+
+```
+KmHelper.log("create distance isochrones for preliminary schools");
+
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_grundschulen = await KmHelper.isochrones_byDistance(grundschulen, "PEDESTRIAN", maxDistance, true);
+
+```
+
+3. Compute area for each building and reduce geometry to centroids
+
+```
+KmHelper.log("Compute area for each building as proxy for wohnfläche");
+wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
+
+KmHelper.log("get centroids of buildings");
+var wohngeb_centroids = new Array();
+wohngeb.features.forEach(function(feature){
+  wohngeb_centroids.push(KmHelper.center_mass(feature, feature.properties));
+});
+```
+
+4. Spatially compare building centroids, isochrones and spatial unit features
+
+```
+KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
+
+// initial values for later comparison
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+	spatialUnitFeature.properties.wohnflTotal = 0;
+	spatialUnitFeature.properties.wohnflCovered = 0;
+});
 
 
-also mention helpful utility methods like set/get properties etc...
+var wohngebLength = wohngeb_centroids.length;
+// create progress log after each 10th percent of features
+var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+		wohngebFeature = wohngeb_centroids[pointIndex];
+
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
+
+      if (KmHelper.within(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += wohngebFeature.properties.area_squareMeters;
+
+  			// for each isochrones_grundschulen feature check if wohngebFeature lies within it
+  			for (var isochroneIndex = 0; isochroneIndex < isochrones_grundschulen.features.length; isochroneIndex++){
+
+  				var isochrone_grundschule_feature = isochrones_grundschulen.features[isochroneIndex];
+
+  				if(KmHelper.within(wohngebFeature, isochrone_grundschule_feature)){
+  					// add wohnflaeche to wohnflCovered
+  					spatialUnitFeat.properties.wohnflCovered += wohngebFeature.properties.area_squareMeters;;
+
+  					break;
+  				}
+  			}
+
+        break;
+  		}
+    }
+
+    if(pointIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Compared '" + pointIndex + "' of total '" + wohngebLength + "' buildings to school isochrones.");
+    }
+	}
+
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+    if(spatialUnitFeature.properties.wohnflTotal === 0){
+      // no living building in this feature --> thus set value to NoData as it cannot be compared to features that have living buildings, which are not covered!
+        spatialUnitFeature = KmHelper.setIndicatorValue_asNoData(spatialUnitFeature, targetDate);
+    }
+    else{
+      var indicatorValue = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal;
+      spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+    }
+
+    // set Wohnfläche as aggregation weight
+    spatialUnitFeature = KmHelper.setAggregationWeight(spatialUnitFeature, spatialUnitFeature.properties.wohnflTotal);
+
+    // delete temporary helper properties
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
+  });
+
+
+  KmHelper.log("Computation of indicator finished");
+
+  return targetSpatialUnit_geoJSON;
+```
 
 ##### Using `await` to actively wait for HTTP calls
-describe when and how to use `await`
+As mentioned 
 
 ##### Compute and set Indicator Values for `targetSpatialUnit_geoJSON` features
 
