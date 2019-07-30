@@ -2828,7 +2828,7 @@ NOTE: TURF DISSOLVE IS KNOWN TO BE BUGGY: IT MIGHT FAIL WITH ERROR ALTHOUGH IT S
 
     
 
-    <h4 class="name" id=".exports.distance_matrix_kilometers"><span class="type-signature">(static) </span>exports.distance_matrix_kilometers<span class="signature">(locations, sourceIndices, destinationIndices, vehicleType)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id=".exports.distance_matrix_kilometers"><span class="type-signature">(async, static) </span>exports.distance_matrix_kilometers<span class="signature">(locations, sourceIndices, destinationIndices, vehicleType)</span><span class="type-signature"> &rarr; {object}</span></h4>
 
     
 
@@ -2840,7 +2840,7 @@ NOTE: TURF DISSOLVE IS KNOWN TO BE BUGGY: IT MIGHT FAIL WITH ERROR ALTHOUGH IT S
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1152">line 1152</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1154">line 1154</a>
     </li></ul></dd>
     
 
@@ -3134,7 +3134,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
 
     
 
-    <h4 class="name" id=".exports.distance_waypath_kilometers"><span class="type-signature">(static) </span>exports.distance_waypath_kilometers<span class="signature">(point_A, point_B, vehicleType)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    <h4 class="name" id=".exports.distance_waypath_kilometers"><span class="type-signature">(async, static) </span>exports.distance_waypath_kilometers<span class="signature">(point_A, point_B, vehicleType)</span><span class="type-signature"> &rarr; {number}</span></h4>
 
     
 
@@ -3146,7 +3146,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1003">line 1003</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1004">line 1004</a>
     </li></ul></dd>
     
 
@@ -3351,7 +3351,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
 
     
 
-    <h4 class="name" id=".exports.duration_matrix_seconds"><span class="type-signature">(static) </span>exports.duration_matrix_seconds<span class="signature">(locations, sourceIndices, destinationIndices, vehicleType)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id=".exports.duration_matrix_seconds"><span class="type-signature">(async, static) </span>exports.duration_matrix_seconds<span class="signature">(locations, sourceIndices, destinationIndices, vehicleType)</span><span class="type-signature"> &rarr; {object}</span></h4>
 
     
 
@@ -3363,7 +3363,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1293">line 1293</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1296">line 1296</a>
     </li></ul></dd>
     
 
@@ -3669,7 +3669,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1688">line 1688</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1693">line 1693</a>
     </li></ul></dd>
     
 
@@ -3864,7 +3864,7 @@ If they do not share any point, returns <code>null</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1671">line 1671</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1676">line 1676</a>
     </li></ul></dd>
     
 
@@ -4042,7 +4042,7 @@ If they do not share any point, returns <code>null</code></p>
 
     
 
-    <h4 class="name" id=".exports.isochrones_byDistance"><span class="type-signature">(static) </span>exports.isochrones_byDistance<span class="signature">(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+    <h4 class="name" id=".exports.isochrones_byDistance"><span class="type-signature">(async, static) </span>exports.isochrones_byDistance<span class="signature">(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
 
     
 
@@ -4054,7 +4054,7 @@ If they do not share any point, returns <code>null</code></p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1522">line 1522</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1527">line 1527</a>
     </li></ul></dd>
     
 
@@ -4329,7 +4329,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
 
     
 
-    <h4 class="name" id=".exports.isochrones_byTime"><span class="type-signature">(static) </span>exports.isochrones_byTime<span class="signature">(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+    <h4 class="name" id=".exports.isochrones_byTime"><span class="type-signature">(async, static) </span>exports.isochrones_byTime<span class="signature">(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
 
     
 
@@ -4341,7 +4341,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1370">line 1370</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1374">line 1374</a>
     </li></ul></dd>
     
 
@@ -4654,7 +4654,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1703">line 1703</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1708">line 1708</a>
     </li></ul></dd>
     
 
@@ -4832,7 +4832,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
 
     
 
-    <h4 class="name" id=".exports.nearestPoint_waypathDistance"><span class="type-signature">(static) </span>exports.nearestPoint_waypathDistance<span class="signature">(targetPoint, pointCollection, vehicleType)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+    <h4 class="name" id=".exports.nearestPoint_waypathDistance"><span class="type-signature">(async, static) </span>exports.nearestPoint_waypathDistance<span class="signature">(targetPoint, pointCollection, vehicleType)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
 
     
 
@@ -4844,7 +4844,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1732">line 1732</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1738">line 1738</a>
     </li></ul></dd>
     
 
@@ -5060,7 +5060,7 @@ allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1794">line 1794</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1800">line 1800</a>
     </li></ul></dd>
     
 
@@ -5251,7 +5251,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1817">line 1817</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1823">line 1823</a>
     </li></ul></dd>
     
 
@@ -5442,7 +5442,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1860">line 1860</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1866">line 1866</a>
     </li></ul></dd>
     
 
@@ -5640,7 +5640,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1898">line 1898</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1904">line 1904</a>
     </li></ul></dd>
     
 
@@ -5838,7 +5838,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1935">line 1935</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1941">line 1941</a>
     </li></ul></dd>
     
 
@@ -6028,7 +6028,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2030">line 2030</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2036">line 2036</a>
     </li></ul></dd>
     
 
@@ -6221,7 +6221,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2044">line 2044</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2050">line 2050</a>
     </li></ul></dd>
     
 
@@ -6411,7 +6411,7 @@ contains the direct distance to <code>targetPoint</code> in kilometers.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2066">line 2066</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2072">line 2072</a>
     </li></ul></dd>
     
 
@@ -6612,7 +6612,7 @@ result in a positive <code>within</code> check.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Jul 29 2019 07:17:46 GMT+0200 (Mitteleuropäische Sommerzeit) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jul 30 2019 15:02:59 GMT+0200 (Mitteleuropäische Sommerzeit) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

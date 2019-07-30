@@ -998,6 +998,7 @@ exports.distance_direct_kilometers = function (point_A, point_B){
 * @see openrouteservice_url CONSTANT
 * @see {@link distance_direct_kilometers}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.distance_waypath_kilometers = async function (point_A, point_B, vehicleType){
@@ -1147,6 +1148,7 @@ exports.distance_waypath_kilometers = async function (point_A, point_B, vehicleT
 * @returns {object} the distance matrix between the submitted source and destination points based on waypath routing.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.distance_matrix_kilometers = async function (locations, sourceIndices, destinationIndices, vehicleType){
@@ -1288,6 +1290,7 @@ exports.distance_matrix_kilometers = async function (locations, sourceIndices, d
 * @returns {object} the duration matrix between the submitted source and destination points based on waypath routing.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.duration_matrix_seconds = async function (locations, sourceIndices, destinationIndices, vehicleType){
@@ -1365,6 +1368,7 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features){
@@ -1516,6 +1520,7 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
 * @param {string|null} avoid_features - may specify a featureType of routing network that shall be avoided. possible values are {@linkcode highways, tollways, ferries, tunnels, pavedroads, unpavedroads, tracks, fords, steps, hills}
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
+* @async
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
@@ -1726,6 +1731,7 @@ exports.nearestPoint_directDistance = function (targetPoint, pointCollection){
 * @returns {Feature<Point>} returns the nearest GeoJSON Point Feature with the shortest waypath distance to {@linkcode targetPoint}.
 * @see {@link https://turfjs.org/docs/#nearestPoint_directDistance}
 * @see {@link https://turfjs.org/docs/#distance_waypath_kilometers}
+* @async
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
