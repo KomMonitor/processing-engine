@@ -41,6 +41,20 @@ To simplify matters, a **KmHelper** module is maintained and integrated into the
 
 The following sections give details and hints on how to write custom **KomMonitor indicator computation scripts** based on the **TEMPLATE** and making use of the **KmHelper** module. First the **KmHelpere** module will be introduced in detail. Then the actual implementation of new computation scripts is focused by explaining the **TEMPLATE** structure and pointing out how to process base indicators, georesources and process parameters in order to compute the target indicator. Finally some exemplar scripts are presented that may serve as reference scripts (e.g. to apply code parts to new indicator scripts)  
 
+## Prerequisites
+
+The guide assumes certain **prerequisites**. Script developers should:
+- have experience with **GIS tasks** in order to apply geospatial and statistical operations for indicator computation
+- have **rudimentary JavaScript programming skills**
+   - i.e. check out [Mozillas Guide](https://developer.mozilla.org/de/docs/Web/JavaScript/Guide) or [https://javascript.info/](https://javascript.info/) for great guides/tutorials.
+	 - developers must not be JavaScript heroes, but at least *understand basic concepts and be able to learn from other examples*.
+- **prevent typical JavaScript errors**. Amongst others, check out [this collection](https://www.w3schools.com/js/js_mistakes.asp) and [that atricle](https://www.toptal.com/javascript/10-most-common-javascript-mistakes)
+   - depending on you development environment, try to use *linter tools* like [jshint](https://jshint.com/); i.e. using [Atom](https://atom.io/) as editor, you may install jshint as plugin to highlight code errors/warnings.
+- have knowledge about the [GeoJSON](https://geojson.org/) format, especially concerning *GeoJSON FeatureCollection* and *GeoJSON Feature*. See [this tutorial](https://macwright.org/2015/03/23/geojson-second-bite.html) for basic information and GeoJSON structure.
+- finally some general background information on the whole **KomMonitor Spatial Data Infrastructure** (i.e. how to interact with dedicated resources; get names and IDs of resources etc.)
+
+Having a solid knowledge base in each of the aforementioned aspects, developers may continue on the script writing guide.
+
 ## Writing a custom KomMonitor Script  
 The description is split in two parts. First the *Processing Engine Helper API Node Module* **KmHelper** module is described shortly. The actual guide then contains a detailed description of the [Template script](#the-template-script), its structure, methods to implement or overwrite and everything else required to write a script.
 
@@ -527,15 +541,93 @@ var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
 ```
 
 ##### Using `await` to actively wait for HTTP calls
-As mentioned 
+As mentioned above, the `computeIndicator()` method is an `async` function. This allows usage of the keyword `await` within the method. It may be utilized to command the program execution to actively wait until a Promise is resolved or rejected, a sometimes necessary trick in a synchronous program execution. In particular, when calling an asynchronous function (marked as `async`), then the method returns a Promise that is resolved or rejected sometime (i.e. make an HTTP call to external service, which takes time to fetch the result). However, the actual program execution would simply continue to the next statement, although the actual result of interest of the asynchronous function is still not available (because only the pending Promise was returned). Here, `await` comes to the rescue by commanding the execution to really wait until the Promise is resolved and return the actual result of interest (or fails when the Promise is rejected due to an error). See [this article](https://javascript.info/async-await) for further details good introduction into the matter.
+
+The `KmHelper` module contains several asynchronous methods. When using any of these within the `computeIndicator()` method, you must prefix the call with the `await` keyword in order to really wait for the relevant result. In the API documentation for `KmHelper` module the respective methods are declared as follows:
+
+![Declaration of asynchronous function within the KmHelper API Documentation](../misc/KmHelper_asyncFuntion.png "Declaration of asynchronous function within the KmHelper API Documentation")
+
+The following list reveals the relevant asynchronous methods:
+
+- `distance_waypath_kilometers(point_A, point_B, vehicleType) → {number}`
+- `distance_matrix_kilometers(locations, sourceIndices, destinationIndices, vehicleType) → {object}`
+- `duration_matrix_seconds(locations, sourceIndices, destinationIndices, vehicleType) → {object}`
+- `isochrones_byDistance(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features) → {FeatureCollection.<Polygon>}`
+- `isochrones_byTime(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features) → {FeatureCollection.<Polygon>}`
+- `nearestPoint_waypathDistance(targetPoint, pointCollection, vehicleType) → {Feature.<Point>}`
+
+**Example**
+When computing isochrones  you must prefix the call with `await`:
+
+```
+// request with await keyword
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_grundschulen = await KmHelper.isochrones_byDistance([[7.0,51.2],[7.1, 51.3]], "PEDESTRIAN", 1000, true);
+
+// program takes a few moments to reach this as the isochrone request takes some time but is fully resolved
+KmHelper.log(isochrones_grundschulen); // isochrones_grundschulen will be GeoJSON Feature Collection
+```
+
+If you do not use `await` then the synchronous program execution continues to work with the still pending Promise:
+
+```
+// request without await keyword
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_grundschulen = KmHelper.isochrones_byDistance([[7.0,51.2],[7.1, 51.3]], "PEDESTRIAN", 1000, true);
+
+// program continues immediately after former statement - Promise is still pending
+KmHelper.log(isochrones_grundschulen); // isochrones_grundschulen will be pending Promise;
+
+// any further call to isochrones_grundschulen will go against pending Promise
+```
 
 ##### Compute and set Indicator Values for `targetSpatialUnit_geoJSON` features
 
-##### Log, log, log
-Log often and meaningful
-important for failure detection to understand where and why the computation was aborted.
+When writing the script, chaining geospatial and/or statistical operations, script developers come to the point where the computed result has to be *registered* within the target spatial unit feature for the target date. In other words, the *timeseries of the respective feature must be updated with the computed indicator value for the target date*. As the **KomMonitor** data structure defines a certain pattern to store the timeseries (i.e. using the prefix `DATE_` as a feature property like `DATE_yyyy-mm-dd`; example `DATE_2018-01-01`), it is error prone to manually update the features properties with regard to timeseries modification. Instead the `KmHelper` module offers dedicated methods for **retrieval** and **modification** of indicator timeseries values. Within the `computeIndicator()` method, the method parameter `targetSpatialUnit_geoJSON` is a GeoJSON FeatureCollection comprising all target spatial unit features and their indicator timeseries. Retrieval or modification of timeseries values should be directly performed on the features of this FeatureCollection.
 
-Required as there is currently no dedicated test environment for new scripts...
+**Retrieval and Modification of Indicator Timeseries Values**
+To retrieve an indicator timeseries value of a single feature use the `KmHelper` method `getIndicatorValue(feature, targetDate) → {number}`. To set/modify the indicator timeseries value use `KmHelper` method `setIndicatorValue(feature, targetDate, indicatorValue) → {Feature}`.
+
+![Helper Methods to get/set indicator timeseries value of single feature](../misc/KmHelper_spatialUnitFeatureId_spatialUnitFeatureName.png "Helper Methods to get/set indicator timeseries value of single feature")
+
+The subsequent example loops over each feature of an exemplar target spatial unit FeatureCollection. Next to the unique `featureId` and `featureName`, its indicator timeseries value for the `targetDate` is fetched and logged (if unset, the result will be `undefined`). Then we assume some modifications of the indicator value and set it as new timeseries value within the feature.  
+
+```
+async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
+
+	// loop over each feature of the target spatial unit
+  targetSpatialUnit_geoJSON.features.forEach(function(targetSpatialUnitFeature){
+
+		var featureId = KmHelper.getSpatialUnitFeatureIdValue(targetSpatialUnitFeature);
+		var featureName = KmHelper.getSpatialUnitFeatureNameValue(targetSpatialUnitFeature);
+
+		// get the indicatorValue for the current target date
+		// target date as format "yyyy-mm-dd", e.g. "2018-01-01"
+    var indicatorValue = KmHelper.getIndicatorValue(targetSpatialUnitFeature, targetDate);
+
+		KmHelper.log("old indicatorValue for feature with id: " + featureId + " and name " + featureName + " is: " + indicatorValue); // might be undefined if it was not yet set
+
+		// modify indicatorValue
+		var modifiedIndicatorValue = ...; // omitted here
+
+		// set timeseries value
+		KmHelper.setIndicatorValue(targetSpatialUnitFeature, targetDate, modifiedIndicatorValue);
+
+		KmHelper.log("modified indicatorValue for feature with id: " + featureId + " and name " + featureName + " is: " + modifiedIndicatorValue);
+  });
+
+	// return all target spatial unit features
+  return targetSpatialUnit_geoJSON;
+};
+```
+
+###### NoData Values
+Indicator values in general are numeric values. Often the number `0` can be used to indicate that a certain phenomenon is not present for the feature. However, in some cases `NoData` must be used instead to differentiate between features that have `0` values and features that simply cannot be compared to others (so they must be set to a `NoData` value). For such cases, the `KmHelper` module offers the methods `setIndicatorValue_asNoData(feature, targetDate) → {Feature}` to set the `NoData` value and `isNoDataValue(value) → {boolean}` to inspect weather an indicator value is the `NoData` value. It is strongly recommended to make use of these methods when dealing with `NoData` indicator time series values, as the **KomMonitor Spatial Data Infrastructure** requires the implicitly defined `NoData` encoding.
+
+##### Log, log, log
+It is generally recommended to use log statements within the code. While it is not necessary to log each and every step, a good rule of thumb is to log the inputs, important intermediate results and the final computation results as well as to describe the process of data computation. Logs are important for failure detection and to understand where and why the computation was aborted for certain input objects. Especially the output of a computation should be logged, as in JavaScript, minor programming errors or data type conflicts might lead to silent `undefined` results that are tricky to resolve without any logs.
+
+To log something, either `console.log(text)` or `KmHelper.log(text)` can be used.
 
 #### Automated Aggregation - Adjust Aggregation Type or overwrite Aggregation Method
 
@@ -550,9 +642,25 @@ state when and how the `aggregateIndicator()` method should be completely overwr
 
 ### Example Scripts
 
+Example scripts are located at [./example-scripts](./example-scripts/). This directory contains numerous examples based on the current version of the **script TEMPLATE** and `KmHelper` API. Script developers may inspect those and copy code parts and adjust them for any new script.
+
 ## Register Script within **KomMonitor Data Management** Component
 REST call, Script registration, Parameter definition and naming etc.
 
+```
+TODO
+TODO
+TODO
+```
+
 ## Running Scripts
+Currently there is no dedicated test environment to test and execute written scripts. So, currently scripts must be integrated into a running KomMonitor instance and executed there (best in a local instance, not in productive environments).
+
+```
+TODO
+TODO
+TODO
+```
+
 REST call, Script registration, Parameter definition and naming etc. to Processing Engine
 distinguish between defaultCOmputation and CustomizableComputation and how there output will be used within data infrastructure
