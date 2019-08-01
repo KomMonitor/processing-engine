@@ -64,6 +64,7 @@ Having a solid knowledge base in each of the aforementioned aspects, developers 
 This section addresses developers who already have read the detailed script writing guide. The subsequent checklist highlights the most important steps and aspects to care about when writing a new script:
 
 - [ ] either start from scratch using the [kommonitor-node-module_TEMPLATE.js](kommonitor-node-module_TEMPLATE.js) or copy code from an existing script located at [./example-scripts](./example-scripts/)
+- [ ] download and open the most recent API docs for `KmHelper` API (e.g. from Sciebo link [https://hs-bochum.sciebo.de/s/Q7RqhhgsCmA2hbJ/download](https://hs-bochum.sciebo.de/s/Q7RqhhgsCmA2hbJ/download) - open `index.html`)
 - [ ] decide whether the already pre-implemented aggregation (using centroids of inferior features for aggregation to superior features and make use of either `SUM` or `AVERAGE` based aggregation) shall be used or if you want to overwrite the default behavior.
    - if pre-implemented aggregation shall be used
 	 - [ ] revise constant `aggregationType` to adjust the method how indicator values shall be aggregated (default is `AVERAGE`)
@@ -98,32 +99,9 @@ To perform the geospatial and statistical operations the `KmHelper` module encap
 |   reference to running instance of **Open Route Service**   |   With regard to routing, isochrone or distance matrix computations, the `KmHelper` module builds and executes HTTP requests against Open Route Service   |  4.7.2   |  [https://github.com/GIScience/openrouteservice](https://github.com/GIScience/openrouteservice)   |
 
 #### Documented API Overview
-```
-TODO
-TODO
-TODO
-TODO
-TODO ask Stefan, if gitlab-pages is set up and available
-TODO
-TODO if yes, give access to all those members that may write scripts
-TODO
-TODO
-use most recent version,
-DL git project with version control.
-name some tools (TurtoiseGit, SourceTree, git CLI, ...)
-keep it up to date
+While the implicit `KmHelper` project source files can be found at [./KmHelper](./KmHelper/), generated HTML API documentation is located at [../kmHelperAPIdocs](../kmHelperAPIdocs/). We plan to make them available via our **gitlab** instance, sadly our instance currently does not support **gitlab pages**. Hence, a temporary solution is that we publish the generated API docs within a Sciebo folder and regularly update them. The link to the folder is [https://hs-bochum.sciebo.de/s/Q7RqhhgsCmA2hbJ/download](https://hs-bochum.sciebo.de/s/Q7RqhhgsCmA2hbJ/download) or to download via sciebo inerface [https://hs-bochum.sciebo.de/s/Q7RqhhgsCmA2hbJ](https://hs-bochum.sciebo.de/s/Q7RqhhgsCmA2hbJ). Please download the complete folder, navigate to **ProcessingEngine_API_DOCS/kmHelperAPIdocs/index.html** and open it in your local browser.
 
-navigate to docs/index.html --> open it in a browser --> There you go.
-
-if docs are missing --> hints on how to generate docs from sources.
-
-TODO
-
-```
-To inspect the **KmHelper API** and available operations please......
-
-
-While the implicit `KmHelper` project source files can be found at [./KmHelper](./KmHelper/), generated HTML API documentation is located at [../kmHelperAPIdocs](../kmHelperAPIdocs/). So if the aforementioned [gitlab page](TODO) is not available developers can access the most recent version of the API docs from [../kmHelperAPIdocs](../kmHelperAPIdocs/) locally. It is recommended to download the project (e.g. as ZIP or via a git version control system), navigate into the *kmHelperAPIdocs* folder and open the `index.html` page to start inspecting the `KmHelper` API in a local browser, as shown in the subsequent screenshot.  
+Alternatively developers with access to the [Processing Engine gitlab project](https://gitlab.fbg-hsbo.de/kommonitor/kommonitor-script-execution-api) can access the most recent version of the API docs from [../kmHelperAPIdocs](../kmHelperAPIdocs/) locally (use the `develop` branch). It is recommended to download the project (e.g. as ZIP or via a git version control system), navigate into the *kmHelperAPIdocs* folder and open the `index.html` page to start inspecting the `KmHelper` API in a local browser, as shown in the subsequent screenshot.
 
 ![KmHelper API Overview](../misc/KmHelper_overview.png "KmHelper API Overview")
 
