@@ -5,6 +5,30 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+* This constant may be used to perform spatial analysis and geometric operation tasks.
+* A full-featured API documentation of Turf.js library can be found at {@link http://turfjs.org/}.
+* This template offers several API methods that utilize Turf.js to implement typical geospatial operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link http://turfjs.org/}
+* @see {@link https://github.com/Turfjs/turf}
+* @memberof CONSTANTS
+* @constant
+*/
+const turf = require('@turf/turf');
+
+/**
+* This constant may be used to perform statistical computations.
+* A full-featured API documentation of JStat.js library can be found at {@link http://jstat.org/}.
+* This template offers several API methods that utilize JStst.js to implement typical statistical operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link https://github.com/jstat/jstat}
+* @see {@link https://jstat.github.io/overview.html}
+* @memberof CONSTANTS
+* @constant
+*/
+const jStat = require('jStat').jStat;
+
+/**
 * Module that contains various helper methods (spatial GIS functions and statistical functions)
 * to simplify script writing
 */
