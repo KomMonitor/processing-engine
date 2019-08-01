@@ -137,7 +137,7 @@ Inspecting the `KmHelper` API reveals numerous alphabetically ordered methods wi
 
 You will notice that each available API method is prefixed with `exports.`. This is a NodeJS specific structure and means that the Node module makes all those methods prefixed with `exports.` available publicly, while other methods not marked with that prefix are internal private methods. When using the module, the prefix is not required. I.e.
 
-```
+```javascript
 const KmHelper = require("kmhelper");
 
 // call log method as an example
@@ -156,7 +156,7 @@ The **Script TEMPLATE** is quiet straightforward and well documented. It is loca
 ##### CONSTANTS Section
 Predefined **constants** are:
 
-```
+```javascript
 /**
 * This constant may be used to perform spatial analysis and geometric operation tasks.
 * A full-featured API documentation of Turf.js library can be found at {@link http://turfjs.org/}.
@@ -223,7 +223,7 @@ In total, there are three target methods `computeIndicator()`, `aggregateIndicat
 
 **computeIndicator()**
 
-```
+```javascript
 /**
 * This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
 * as method parameters that can be used within the method body.
@@ -252,7 +252,7 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 
 **aggregateIndicator()**
 
-```
+```javascript
 /**
 * This method is used to aggregate indicators of a certain spatial unit to the features of a more high-level spatial unit (i.e. aggregate from building blocks to city districts).
 * The template contains predefined aggregation logic that makes use of constant {@linkcode aggregationType} to decide how indicator values shall be aggregated.
@@ -277,7 +277,7 @@ function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geo
 
 **disaggregateIndicator()**
 
-```
+```javascript
 /**
 * This method is used to disaggregate indicators of a certain spatial unit to the features of a more low-level spatial unit (i.e. disaggregate from city districts to building blocks).
 * @todo CURRENTLY THIS METHOD IS NOT USED WITHIN KOMMONITOR PROJECT: THUS IT CONTAINS NO IMPLEMENTATION YET!
@@ -315,7 +315,7 @@ While in theory, script developers might directly access the map or array object
 !["`KmHelper` utility methods to retrieve baseIndicators"](../misc/KmHelper_baseIndicators.png "`KmHelper` utility methods to retrieve baseIndicators")
 
 Example:
-```
+```javascript
 // lets assume there is a base indicator called "Birth Rate" with Id "1234-5678-9876-5432"
 
 // recommended retrieval of baseIndicator --> via ID
@@ -333,7 +333,7 @@ var myBaseIndicator_asGeoJSONFeatureCollection = KmHelper.getBaseIndicatorByName
 !["`KmHelper` utility methods to retrieve georesources"](../misc/KmHelper_georesources.png "`KmHelper` utility methods to retrieve georesources")
 
 Example:
-```
+```javascript
 // lets assume there is a georesource called "Streets" with Id "1234-5678-9876-5432"
 
 // recommended retrieval of georesource --> via ID
@@ -358,7 +358,7 @@ For each type, a dedicated utility method is offered by `KmHelper`, which retrie
 !["`KmHelper` utility method to retrieve string process parameter"](../misc/KmHelper_processparameter_string.png "`KmHelper` utility method to retrieve string process parameter")
 
 Example:
-```
+```javascript
 // lets assume there is a numeric process parameter called "myRadius"=6
 // lets assume there is a boolean process parameter called "filterHighways"=true
 // lets assume there is a textual process parameter called "myAggregationType"="AVERAGE"
@@ -382,7 +382,7 @@ When performing statistical operations (i.e. get min/max/average value or more s
 
 Example:
 
-```
+```javascript
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
@@ -434,7 +434,7 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 Geospatial operations analyse the spatial relation of two or more geospatial datasets. Typically, the GeoJSON features of the *target spatial unit* are compared (e.g. intersects, within) to other georesources while computing indicator values (e.g. count the number of photovoltaik-plants within each feature).
 
 **Exemplar Script to compute CO2 savings through use of Photovoltaik plants**
-```
+```javascript
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
   // retrieve required georesource "Photovoltaik Plants"
@@ -484,7 +484,7 @@ Some excerpts of the script, focusing the geospatial processing sections, are pr
 
 1. Retrieve georesources of habitation buildings and schools
 
-```
+```javascript
 // retrieve required georesources using its meaningful name
 var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
 var schulen = KmHelper.getGeoresourceByName("Grundschulen", georesourcesMap);
@@ -498,7 +498,7 @@ var grundschulen = schulen.features;
 
 2. Compute foot-waking isochrones for preliminary schools
 
-```
+```javascript
 KmHelper.log("create distance isochrones for preliminary schools");
 
 // isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
@@ -508,7 +508,7 @@ var isochrones_grundschulen = await KmHelper.isochrones_byDistance(grundschulen,
 
 3. Compute area for each building and reduce geometry to centroids
 
-```
+```javascript
 KmHelper.log("Compute area for each building as proxy for wohnfläche");
 wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
 
@@ -521,7 +521,7 @@ wohngeb.features.forEach(function(feature){
 
 4. Spatially compare building centroids, isochrones and spatial unit features
 
-```
+```javascript
 KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
 
 // initial values for later comparison
@@ -613,7 +613,7 @@ The following list reveals the relevant asynchronous methods:
 **Example**
 When computing isochrones  you must prefix the call with `await`:
 
-```
+```javascript
 // request with await keyword
 // isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
 var isochrones_grundschulen = await KmHelper.isochrones_byDistance([[7.0,51.2],[7.1, 51.3]], "PEDESTRIAN", 1000, true);
@@ -624,7 +624,7 @@ KmHelper.log(isochrones_grundschulen); // isochrones_grundschulen will be GeoJSO
 
 If you do not use `await` then the synchronous program execution continues to work with the still pending Promise:
 
-```
+```javascript
 // request without await keyword
 // isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
 var isochrones_grundschulen = KmHelper.isochrones_byDistance([[7.0,51.2],[7.1, 51.3]], "PEDESTRIAN", 1000, true);
@@ -646,7 +646,7 @@ To retrieve an indicator timeseries value of a single feature use the `KmHelper`
 
 The subsequent example loops over each feature of an exemplar target spatial unit FeatureCollection. Next to the unique `featureId` and `featureName`, its indicator timeseries value for the `targetDate` is fetched and logged (if unset, the result will be `undefined`). Then we assume some modifications of the indicator value and set it as new timeseries value within the feature.  
 
-```
+```javascript
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
 
 	// loop over each feature of the target spatial unit
@@ -687,7 +687,7 @@ To log something, either `console.log(text)` or `KmHelper.log(text)` can be used
 
 The **KomMonitor Processing Engine** supports automated aggregation of indicators from inferior to superior spatial unit features (e.g. from *building blocks* to *statistical districts* and to *city districts*). For this purpose the **script TEMPLATE** comprises the `aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)` function. Inspecting this method in the **TEMPLATE** reveals pre-implemented code as shown below.
 
-```
+```javascript
 /**
 * This method is used to aggregate indicators of a certain spatial unit to the features of a more high-level spatial unit (i.e. aggregate from building blocks to city districts).
 * The template contains predefined aggregation logic that makes use of constant {@linkcode aggregationType} to decide how indicator values shall be aggregated.
