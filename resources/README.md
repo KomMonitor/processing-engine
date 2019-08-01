@@ -3,6 +3,39 @@
 This guide contains helpful information on how to write and manage custom indicator computation scripts for the **KomMonitor Processing Engine**.
 
 **Table of Content**
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [How to write an Indicator Computation Script for KomMonitor](#how-to-write-an-indicator-computation-script-for-kommonitor)
+	- [Overview](#overview)
+	- [Prerequisites](#prerequisites)
+	- [Checklist for new Scripts](#checklist-for-new-scripts)
+	- [Writing a custom KomMonitor Script](#writing-a-custom-kommonitor-script)
+		- [The Processing Engine Helper API Node Module](#the-processing-engine-helper-api-node-module)
+			- [Goals and Benefits](#goals-and-benefits)
+			- [Encapsulated Libraries / Dependencies](#encapsulated-libraries-dependencies)
+			- [Documented API Overview](#documented-api-overview)
+		- [The TEMPLATE Script](#the-template-script)
+			- [Structure and Content](#structure-and-content)
+				- [CONSTANTS Section](#constants-section)
+				- [METHODS Section](#methods-section)
+			- [Implementing the `computeIndicator()` Method](#implementing-the-computeindicator-method)
+				- [Using Base Indicators, Georesources and Process Parameters](#using-base-indicators-georesources-and-process-parameters)
+					- [`KmHelper` utility methods to retrieve baseIndicators](#kmhelper-utility-methods-to-retrieve-baseindicators)
+					- [`KmHelper` utility methods to retrieve georesources](#kmhelper-utility-methods-to-retrieve-georesources)
+					- [`KmHelper` utility methods to retrieve process parameters](#kmhelper-utility-methods-to-retrieve-process-parameters)
+				- [Using the `KmHelper` Module for various geoprocessing and statistical Operations](#using-the-kmhelper-module-for-various-geoprocessing-and-statistical-operations)
+					- [Statistical Operations](#statistical-operations)
+					- [Geospatial Operations](#geospatial-operations)
+				- [Using `await` to actively wait for HTTP calls](#using-await-to-actively-wait-for-http-calls)
+				- [Compute and set Indicator Values for `targetSpatialUnit_geoJSON` features](#compute-and-set-indicator-values-for-targetspatialunitgeojson-features)
+					- [NoData Values](#nodata-values)
+				- [Log, log, log](#log-log-log)
+			- [Automated Aggregation - Adjust Aggregation Type or overwrite Aggregation Method](#automated-aggregation-adjust-aggregation-type-or-overwrite-aggregation-method)
+		- [Example Scripts](#example-scripts)
+	- [Register Script within **KomMonitor Data Management** Component](#register-script-within-kommonitor-data-management-component)
+	- [Running Scripts](#running-scripts)
+
+<!-- /TOC -->
 
 ## Overview
 The **KomMonitor** data infrastructure is designed to consume custom Node module scripts written in JavaScript programming language that follow a dedicated **Script TEMPLATE**. The **TEMPLATE** hereby defines special methods that need to be implemented/adjusted for each indicator. Such custom indicator computation script code can then be persisted within the **KomMonitor Data Management** component together with metadata about the associated target indicator, required base indicators, georesources and (variable) process parameters. Then, the NodeJS **KomMonitor Processing Engine** is able to integrate the script on-the-fly and call and execute the predefined methods.
