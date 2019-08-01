@@ -7,9 +7,10 @@ This guide contains helpful information on how to write and manage custom indica
 ## Overview
 The **KomMonitor** data infrastructure is designed to consume custom Node module scripts written in JavaScript programming language that follow a dedicated **Script TEMPLATE**. The **TEMPLATE** hereby defines special methods that need to be implemented/adjusted for each indicator. Such custom indicator computation script code can then be persisted within the **KomMonitor Data Management** component together with metadata about the associated target indicator, required base indicators, georesources and (variable) process parameters. Then, the NodeJS **KomMonitor Processing Engine** is able to integrate the script on-the-fly and call and execute the predefined methods.
 
-To simplify matters, a **KmHelper** module is maintained and integrated into the **Script TEMPLATE**, that offers various geospatial and statistical as well as generic helper methods. So, as a script writer, you may intensively use this **KmHelper** module. Most operations (especially the geospatial operations) hereby work on *GeoJSON objects*, either by processing whole *GeoJSON FeatureCollections* or arrays of *GeoJSON Features* or by producing GeoJSON output (again either as whole *FeatureCollection* or as single *Feature* or an array of *Features*).
+To simplify matters, a `KmHelper` module is maintained and integrated into the **Script TEMPLATE**, that offers various geospatial and statistical as well as generic helper methods. So, as a script writer, you may intensively use this `KmHelper` module. Most operations (especially the geospatial operations) hereby work on *GeoJSON objects*, either by processing whole *GeoJSON FeatureCollections* or arrays of *GeoJSON Features* or by producing GeoJSON output (again either as whole *FeatureCollection* or as single *Feature* or an array of *Features*).
 
-The following sections give details and hints on how to write custom **KomMonitor indicator computation scripts** based on the **TEMPLATE** and making use of the **KmHelper** module. First the **KmHelper** module will be introduced in detail. Then the actual implementation of new computation scripts is focused by explaining the **TEMPLATE** structure and pointing out how to process base indicators, georesources and process parameters in order to compute the target indicator. Finally some exemplar scripts are presented that may serve as reference scripts (e.g. to apply code parts to new indicator scripts.
+The following sections give details and hints on how to write custom **KomMonitor indicator computation scripts** based on the **TEMPLATE** and making use of the `KmHelper` module. If you are already acquainted to the basic concepts and have read this guide at least once, you may inspect the [Checklist](#checklist-for-new-scripts)
+First the `KmHelper` module will be introduced in detail. Then the actual implementation of new computation scripts is focused by explaining the **TEMPLATE** structure and pointing out how to process base indicators, georesources and process parameters in order to compute the target indicator. Finally some exemplar scripts are presented that may serve as reference scripts (e.g. to apply code parts to new indicator scripts.
 
 ## Prerequisites
 
@@ -30,13 +31,14 @@ Having a solid knowledge base in each of the aforementioned aspects, developers 
 This section addresses developers who already have read the detailed script writing guide. The subsequent checklist highlights the most important steps and aspects to care about when writing a new script:
 
 - [ ] either start from scratch using the [kommonitor-node-module_TEMPLATE.js](kommonitor-node-module_TEMPLATE.js) or copy code from an existing script located at [./example-scripts](./example-scripts/)
-- [ ] decide whether the already pre-implemented aggregation (using centroids of inferior features for aggregation to superior features and make use of either SUM or AVERAGE based aggregation) shall be used or if you want to overwrite the default behavior.
+- [ ] decide whether the already pre-implemented aggregation (using centroids of inferior features for aggregation to superior features and make use of either `SUM` or `AVERAGE` based aggregation) shall be used or if you want to overwrite the default behavior.
    - if pre-implemented aggregation shall be used
 	 - [ ] revise constant `aggregationType` to adjust the method how indicator values shall be aggregated (default is `AVERAGE`)
 - [ ] implement `computeIndicator()` method
    - [ ] use `KmHelper` API methods to retrieve and process *base indicators*, *georesources* and *process parameters*
 	 - [ ] log relevant intermediate/final results to make debugging and failure analysis easier
-	 - [ ] when fetching attributes (i.e. from georesources) that ought to be numeric best make sure to cast them as number via `value = Number(value)`
+	 - [ ] when fetching attributes (i.e. from georesources) that ought to be numeric best make sure to cast them as number via `value = Number(value)`. When operating with `string` properties instead, sometimes computations may result in `undefined` or `null`.
+   - [ ] when using asynchronous `KmHelper` methods that are denoted with the keyword `async` (all methods performing reachability queries), remember to use the `await` keyword in order to wait for request execution (e.g. `var isochrones_grundschulen = await KmHelper.isochrones_byDistance(grundschulen, "PEDESTRIAN", maxDistance, true);`)
 	 - [ ] for each feature of `targetSpatialUnit_geoJSON` Feature Collection compute the indicator result using the geospatial and statistical methods from `KmHelper`
 	 - [ ] use `KmHelper` method `setIndicatorValue()` or `setIndicatorValue_asNoData()` to set the indicator timeseries value for each target spatial unit feature feature
 	 - [ ] if `aggregationType === "AVERAGE"` and if you want to weight each feature differently, then compute and set a custom *aggregation weight* for each target spatial unit feature (if unset, each feature is equally weighted per default) - if `aggregationType === "SUM"` this is not relevant
@@ -44,23 +46,23 @@ This section addresses developers who already have read the detailed script writ
 - [ ] use a linter tool to identify and fix possible JavaScript programming errors (mostly syntax errors)
 
 ## Writing a custom KomMonitor Script
-The description is split in two parts. First the *Processing Engine Helper API Node Module* **KmHelper** module is described shortly. The actual guide then contains a detailed description of the [Template script](#the-template-script), its structure, methods to implement or overwrite and everything else required to write a script.
+The description is split in two parts. First the *Processing Engine Helper API Node Module* `KmHelper` module is described shortly. The actual guide then contains a detailed description of the [Template script](#the-template-script), its structure, methods to implement or overwrite and everything else required to write a script.
 
 ### The Processing Engine Helper API Node Module
-This section describes the **KmHelper** module offering several geospatial and statistical as well as generic helper methods. As the **KomMonitor Processing Engine** is built as NodeJS server app, the **KmHelper** module is also written as a NodeJS module. It is not available publicly but is an implicit part of the **Processing Engine** project. Hence, the JavaScript code of the **KmHelper** module is located at [/KmHelper](./KmHelper/). The following sub sections aim to give a short overview of **KmHelper** and how to use it.
+This section describes the `KmHelper` module offering several geospatial and statistical as well as generic helper methods. As the **KomMonitor Processing Engine** is built as NodeJS server app, the `KmHelper` module is also written as a NodeJS module. It is not available publicly but is an implicit part of the **Processing Engine** project. Hence, the JavaScript code of the `KmHelper` module is located at [/KmHelper](./KmHelper/). The following sub sections aim to give a short overview of `KmHelper` and how to use it.
 
 #### Goals and Benefits
-The **KmHelper** module is intended to simplify the process of writing an indicator computation script. It is based on working with *GeoJSON objects* and offers several geospatial und statistical methods to process *GeoJSON Features* and, eventually compute an indicator through systematical usage of the helper methods. While it is not required to rely on **KmHelper** it is strongly recommended to make use of its predefined methods. It maximizes productivity, minifies the effort to write a new script and harmonizes the whole collection of indicator computation scripts. Moreover, improvements/adjustments to helper methods within the **KmHelper** module can thus be automatically applied to each script that utilizes the relevant methods.
+The `KmHelper` module is intended to simplify the process of writing an indicator computation script. It is based on working with *GeoJSON objects* and offers several geospatial und statistical methods to process *GeoJSON Features* and, eventually compute an indicator through systematical usage of the helper methods. While it is not required to rely on `KmHelper` it is strongly recommended to make use of its predefined methods. It maximizes productivity, minifies the effort to write a new script and harmonizes the whole collection of indicator computation scripts. Moreover, improvements/adjustments to helper methods within the `KmHelper` module can thus be automatically applied to each script that utilizes the relevant methods.
 
 #### Encapsulated Libraries / Dependencies
-To perform the geospatial and statistical operations the **KmHelper** module encapsulates dedicated JavaScript libraries. As a script writing user you do not have to know anything about those internally used libraries/components as **KmHelper** encapsulates the access to those libraries/components completely within dedicated *API methods*. Nonetheless, it might be interesting to know what libraries are used under the hood.
+To perform the geospatial and statistical operations the `KmHelper` module encapsulates dedicated JavaScript libraries. As a script writing user you do not have to know anything about those internally used libraries/components as `KmHelper` encapsulates the access to those libraries/components completely within dedicated *API methods*. Nonetheless, it might be interesting to know what libraries are used under the hood.
 
 |  Library Name  |  Description  |  Library / Component Version     |  Library Link   |
 | :-------------:|:-----------: | :------------------: | :-------------: |
 |  turf.js    |  mighty JavaScript library for geospatial analysis    |  5.1.6   | [https://turfjs.org/](https://turfjs.org/) <br/> [https://github.com/Turfjs/turf](https://github.com/Turfjs/turf) |
 |  jStat    |   mighty JavaScript library for statistical analysis   |  1.7.1   |   [https://github.com/jstat/jstat](https://github.com/jstat/jstat)   |
 |   axios   |   Promise based HTTP client for NodeJS (required to perform HTTP requests against external services like Open Route Service or Data Management API)   |  0.18.0   |  [https://github.com/axios/axios](https://github.com/axios/axios)   |
-|   reference to running instance of **Open Route Service**   |   With regard to routing, isochrone or distance matrix computations, the **KmHelper** module builds and executes HTTP requests against Open Route Service   |  4.7.2   |  [https://github.com/GIScience/openrouteservice](https://github.com/GIScience/openrouteservice)   |
+|   reference to running instance of **Open Route Service**   |   With regard to routing, isochrone or distance matrix computations, the `KmHelper` module builds and executes HTTP requests against Open Route Service   |  4.7.2   |  [https://github.com/GIScience/openrouteservice](https://github.com/GIScience/openrouteservice)   |
 
 #### Documented API Overview
 ```
@@ -88,10 +90,11 @@ TODO
 To inspect the **KmHelper API** and available operations please......
 
 
-
+While the implicit `KmHelper` project source files can be found at [./KmHelper](./KmHelper/), generated HTML API documentation is located at [../kmHelperAPIdocs](../kmHelperAPIdocs/). So if the aforementioned [gitlab page](TODO) is not available developers can access the most recent version of the API docs from [../kmHelperAPIdocs](../kmHelperAPIdocs/) locally. It is recommended to download the project (e.g. as ZIP or via a git version control system), navigate into the *kmHelperAPIdocs* folder and open the `index.html` page to start inspecting the `KmHelper` API in a local browser, as shown in the subsequent screenshot.  
 
 ![KmHelper API Overview](../misc/KmHelper_overview.png "KmHelper API Overview")
-Inspecting the **KmHelper** API reveals numerous alphabetically ordered methods within three so-called namespaces. The namespaces group the available operations as follows:
+
+Inspecting the `KmHelper` API reveals numerous alphabetically ordered methods within three so-called namespaces. The namespaces group the available operations as follows:
 
 | Namespace | Description |
 | :-------: | :-------:       |
@@ -121,6 +124,30 @@ The **Script TEMPLATE** is quiet straightforward and well documented. It is loca
 Predefined **constants** are:
 
 ```
+/**
+* This constant may be used to perform spatial analysis and geometric operation tasks.
+* A full-featured API documentation of Turf.js library can be found at {@link http://turfjs.org/}.
+* This template offers several API methods that utilize Turf.js to implement typical geospatial operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link http://turfjs.org/}
+* @see {@link https://github.com/Turfjs/turf}
+* @memberof CONSTANTS
+* @constant
+*/
+const turf = require('@turf/turf');
+
+/**
+* This constant may be used to perform statistical computations.
+* A full-featured API documentation of JStat.js library can be found at {@link http://jstat.org/}.
+* This template offers several API methods that utilize JStst.js to implement typical statistical operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link https://github.com/jstat/jstat}
+* @see {@link https://jstat.github.io/overview.html}
+* @memberof CONSTANTS
+* @constant
+*/
+const jStat = require('jStat').jStat;
+
 /**
 * Module that contains various helper methods (spatial GIS functions and statistical functions)
 * to simplify script writing
@@ -154,7 +181,8 @@ const aggregationType = "AVERAGE";
 
 ```
 
-The first constant `const KmHelper = require("kmhelper");` is necessary to make use of the `KmHelper` API offering various helper methods as described in [The Processing Engine Helper API Node Module](#the-processing-engine-helper-api-node-module) (i.e. `KmHelper.area(geoJSONFeature);`). There are only two additional constants that have an impact on the pre-implemented generic `aggregateIndicator()` method. In detail, `const aggregationTypeEnum = ["SUM", "AVERAGE"]` lists allowed values to tweak automated aggregation, while `const aggregationType = "AVERAGE"` specifies the aggregation type that shall be applied when calling the pre-implemented `aggregateIndicator()` method. Via this constant script developers define if the **SUM** or **AVERAGE** of indicator values of features of an inferior spatial unit shall be computed for the associated superior spatial unit features. Per default, or if an unknown value is set, **AVERAGE** is used. More details about tweaking the automated indicator aggregation are described in [Automated Aggregation - Adjust Aggregation Type or overwrite Aggregation Method](#automated-aggregation-adjust-aggregation-type-or-overwrite-aggregation-method).
+The first two constants `const turf = require('@turf/turf');` and `const jStat = require('jStat').jStat;` are merely available if the current `KmHelper` API misses certain spatial features required for the computation of the new indicator. In general, it is strongly recommended to prefer utilizing existing methods from `KmHelper` instead of using `turf` and `jStat` on your own.
+The next constant `const KmHelper = require("kmhelper");` is necessary to make use of the `KmHelper` API offering various helper methods as described in [The Processing Engine Helper API Node Module](#the-processing-engine-helper-api-node-module) (i.e. `KmHelper.area(geoJSONFeature);`). There are only two additional constants that have an impact on the pre-implemented generic `aggregateIndicator()` method. In detail, `const aggregationTypeEnum = ["SUM", "AVERAGE"]` lists allowed values to tweak automated aggregation, while `const aggregationType = "AVERAGE"` specifies the aggregation type that shall be applied when calling the pre-implemented `aggregateIndicator()` method. Via this constant script developers define if the **SUM** or **AVERAGE** of indicator values of features of an inferior spatial unit shall be computed for the associated superior spatial unit features. Per default, or if an unknown value is set, **AVERAGE** is used. More details about tweaking the automated indicator aggregation are described in [Automated Aggregation - Adjust Aggregation Type or overwrite Aggregation Method](#automated-aggregation-adjust-aggregation-type-or-overwrite-aggregation-method).
 
 ##### METHODS Section
 
@@ -182,7 +210,10 @@ In total, there are three target methods `computeIndicator()`, `aggregateIndicat
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // i.e. then modify the features of targetSpatialUnit_geoJSON and return it
 
+
+  return targetSpatialUnit_geoJSON;
 };
 ```
 
@@ -234,14 +265,14 @@ For each method the submitted method parameters are automatically build and asse
 #### Implementing the `computeIndicator()` Method
 When it comes to implementing the **Script TEMPLATE** for a new indicator, the most important thing to do is to implement the required `computeIndicator()` method. The full method interface lists several submitted parameters and marks the method as `async`: `async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters)`
 
-The main goal hereby is, to modify the indicator timeseries of each GeoJSON feature from `targetSpatialUnit_geoJSON` (which represent the features for the target spatial unit) for the submitted `targetDate`, taking the submitted process resources `baseIndicatorsMap`, `georesourcesMap` and `processParameters` into account. Eventually, the modifed `targetSpatialUnit_geoJSON` should be returned;
+The main goal hereby is, to modify the indicator timeseries of each GeoJSON feature from `targetSpatialUnit_geoJSON` (which represent the features for the target spatial unit) for the submitted `targetDate`, taking the submitted process resources `baseIndicatorsMap`, `georesourcesMap` and `processParameters` into account. Eventually, the modifed `targetSpatialUnit_geoJSON` should be returned.
 
 While the method parameters contain required computation resources for the target indicator, the keyword `async` marks the method as an asynchronous function. It is a JavaScript specific notation, and wraps the methods result within a JavaScript specific [Promise](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise). As a script developer you still may simply return the result (the modified `targetSpatialUnit_geoJSON`) as usual. The executing **Processing Engine** takes care of dealing with the Promise-based response of the method. Nonetheless, it is important to mark the `computeIndicator()` method as `async` as this will allow the usage of another keyword `await` within the method. The keyword `await` commands the program execution to actively wait for the complete execution of other asynchronous methods and is necessary especially when performing HTTP calls to external services. More details as well as an example can be found in the section [Using `await` to actively wait for HTTP calls](#using-await-to-actively-wait-for-http-calls).
 
 The following subsections contain recommendations on how to use process parameters and the `KmHelper` API to modify the time series of the features of `targetSpatialUnit_geoJSON`.
 
 ##### Using Base Indicators, Georesources and Process Parameters
-In general at least one process resource from the three categories `baseIndicatorsMap`, `georesourcesMap` or  `processParameters` is required to compute an indicator. I.e., an indicator may be computed through statistical analysis of one or more **base indicators**, or by geospatial analysis/processing considering one or more **georesources** or both in combination. Furthermore, **process parameters** such as, *weight*, *radius*, *maximum distance*, *...* might be necessary during the computation of indicator values. While `processParameters` is a simple array of JavaScript objects with properties `object.name` and `object.value` to store proces parameters, the aforementioned method variables `baseIndicatorsMap` and `georesourcesMap` are Javascript [Map](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Map) objects that either are empty or contains entries for each relevant resource. Each entry is represented by a **Key-Value-Pair** consisting of *Key=name* and *Value=value*. The **KomMonitor** infrastructure hereby specifies two dedicated **Key-Value-Pairs** per resource, one using the *meaningful name* as *Key* and one using the *unique resource ID* within the **KomMonitor Data Management** component as *Key*. Hence, the corresponding *Map* object contains two entries for each resource that can be accessed either by the *resource name* or the *resource ID*.
+In general at least one process resource from the three categories `baseIndicatorsMap`, `georesourcesMap` or  `processParameters` is required to compute an indicator. I.e., an indicator may be computed through statistical analysis of one or more **base indicators**, or by geospatial analysis/processing considering one or more **georesources** or both in combination. Furthermore, **process parameters** such as, *weight*, *radius*, *maximum distance*, *...* might be necessary during the computation of indicator values. While `processParameters` is a simple array of JavaScript objects with properties `object.name` and `object.value` to store proces parameters, the aforementioned method variables `baseIndicatorsMap` and `georesourcesMap` are Javascript [Map](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Map) objects that either are empty or containing entries for each relevant resource. Each entry is represented by a **Key-Value-Pair** consisting of *Key=name* and *Value=value*. The **KomMonitor** infrastructure hereby specifies two dedicated **Key-Value-Pairs** per resource, one using the *meaningful name* as *Key* and one using the *unique resource ID* within the **KomMonitor Data Management** component as *Key*. Hence, the corresponding *Map* object contains two entries for each resource that can be accessed either by the *resource name* or the *resource ID*.
 
 **Note, in general it is recommended to retrieve process resources via their <u>unique ID</u> as the name of a resource might change over time whereas the ID remains the same as long as the resource is not deleted completely. <u>A changing name thus might break a prior script and requires modification of associated scripts.</u>**
 
@@ -284,8 +315,8 @@ var myGeoresource_asGeoJSONFeatureCollection = KmHelper.getGeoresourceByName("St
 ```
 
 ###### `KmHelper` utility methods to retrieve process parameters
-In contrast to *baeIndicators* and *georesources*, the *process parameters* can be of different types, i.e. `boolean`, `number`, `string`;
-For each type, a dedicated utility method is offered by `KmHelper`, which retrieves the parameter from `processParameters` array and tries to parse it according to the type. It thus might throw an error, either if no parameter is available or the type parsing fails. In addition, process parameters are only accessible via their *name*.
+In contrast to *baseIndicators* and *georesources*, the *process parameters* can be of different types, i.e. `boolean`, `number`, `string`.
+For each type, a dedicated utility method is offered by `KmHelper`, which retrieves the parameter from `processParameters` array and tries to parse it according to the type. It thus might throw an error, either if no parameter is available or the type conversion fails. In addition, process parameters are only accessible via their *name*.
 
 !["`KmHelper` utility method to retrieve boolean process parameter"](../misc/KmHelper_processparameter_boolean.png "`KmHelper` utility method to retrieve boolean process parameter")
 
@@ -412,7 +443,7 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   return targetSpatialUnit_geoJSON;
 };
 ```
-In more complex scenarios, multiple georesources have to be considered and maybe preprocessed in order to derive the target information. For instance check out the `computeIndicator()` method within the reachability-of-preliminary-schools example script [./example-scripts/kommonitor-node-module_erreichbarkeit-grundschulen-isochronen-mülheim.js](./example-scripts/kommonitor-node-module_erreichbarkeit-grundschulen-isochronen-mülheim.js). In short, the script analyses the spatial relation of preliminary schools (as points), habitation buildings and the target spatial unit features. First, reachability foot-walking isochrones for the school points for a variable maximum distance of X meters are computed. Then from the habitation buildings the centroid is computed. Finally for each feature of the target spatial unit the indicator value is calculated by identifying all habitation buildings within the feature and, furthermore, identify which of those buildings is, in addition, spatially within the reachability isochrones.
+In more complex scenarios, multiple georesources have to be considered and maybe preprocessed in order to derive the target information. For instance check out the `computeIndicator()` method within the reachability-of-preliminary-schools example script [./example-scripts/kommonitor-node-module_erreichbarkeit-grundschulen-isochronen-mülheim.js](./example-scripts/kommonitor-node-module_erreichbarkeit-grundschulen-isochronen-mülheim.js). In short, the script analyses the spatial relation of preliminary schools (as points), habitation buildings and the target spatial unit features. First, reachability foot-walking isochrones for the school points for a variable maximum distance of X meters are computed. Then from the habitation buildings the center of mass is computed. Finally for each feature of the target spatial unit the indicator value is calculated by identifying all habitation buildings within the feature and, furthermore, identify which of those buildings is, in addition, spatially within the reachability isochrones.
 
 Some excerpts of the script, focusing the geospatial processing sections, are presented as follows.
 
@@ -528,8 +559,10 @@ var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
   return targetSpatialUnit_geoJSON;
 ```
 
+When writing a new script developers are free to copy from existing scripts saving time and make use of existing procedures for comparable computation cases.
+
 ##### Using `await` to actively wait for HTTP calls
-As mentioned above, the `computeIndicator()` method is an `async` function. This allows usage of the keyword `await` within the method. It may be utilized to command the program execution to actively wait until a Promise is resolved or rejected, a sometimes necessary trick in a synchronous program execution. In particular, when calling an asynchronous function (marked as `async`), then the method returns a Promise that is resolved or rejected sometime (i.e. make an HTTP call to external service, which takes time to fetch the result). However, the actual program execution would simply continue to the next statement, although the actual result of interest of the asynchronous function is still not available (because only the pending Promise was returned). Here, `await` comes to the rescue by commanding the execution to really wait until the Promise is resolved and return the actual result of interest (or fails when the Promise is rejected due to an error). See [this article](https://javascript.info/async-await) for further details good introduction into the matter.
+As mentioned above, the `computeIndicator()` method is an `async` function. This allows usage of the keyword `await` within the method. It may be utilized to command the program execution to actively wait until a [Promise](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise) is resolved or rejected, a sometimes necessary trick in a synchronous program execution. In particular, when calling an asynchronous function (marked as `async`), then the method returns a [Promise](https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Promise) that is resolved or rejected sometime (i.e. make an HTTP call to external service, which takes time to fetch the result). However, the actual program execution would simply continue to the next statement, although the actual result of interest of the asynchronous function is still not available (because only the pending Promise was returned). Here, `await` comes to the rescue by commanding the execution to really wait until the Promise is resolved and return the actual result of interest (or fails when the Promise is rejected due to an error). See [this article](https://javascript.info/async-await) for further details good introduction into the matter.
 
 The `KmHelper` module contains several asynchronous methods. When using any of these within the `computeIndicator()` method, you must prefix the call with the `await` keyword in order to really wait for the relevant result. In the API documentation for `KmHelper` module the respective methods are declared as follows:
 
@@ -619,14 +652,46 @@ To log something, either `console.log(text)` or `KmHelper.log(text)` can be used
 
 #### Automated Aggregation - Adjust Aggregation Type or overwrite Aggregation Method
 
-describe default setting
---> aggregation by comparing the centroid of inferior spatial unit features to superior spatial unit features --> best with a picture
+The **KomMonitor Processing Engine** supports automated aggregation of indicators from inferior to superior spatial unit features (e.g. from *building blocks* to *statistical districts* and to *city districts*). For this purpose the **script TEMPLATE** comprises the `aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)` function. Inspecting this method in the **TEMPLATE** reveals pre-implemented code as shown below.
 
-tweakable aggregation according to type (SUM/AVERAGE)
+```
+/**
+* This method is used to aggregate indicators of a certain spatial unit to the features of a more high-level spatial unit (i.e. aggregate from building blocks to city districts).
+* The template contains predefined aggregation logic that makes use of constant {@linkcode aggregationType} to decide how indicator values shall be aggregated.
+* The aggrgation internally aggregates features of {@linkcode indicator_geoJSON} to features of {@linkcode targetSpatialUnit_geoJSON} by comparing their geometries.
+* Each {@linkcode indicator_geoJSON} feature whose geometry lies within a certain geometry of a {@linkcode targetSpatialUnit_geoJSON} feature will be used to compute the aggregated indicator values.
+* The within comparison is executed by method {@linkcode within_usingBBOX}.
+* @param {string} targetDate - string representing the target date for which the indicator shall be computed, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @param {FeatureCollection<Polygon>} targetSpatialUnit_geoJSON - string target spatial unit features of the target spatial unit, for which the indicator shall be aggregated to as GeoJSON FeatureCollection
+* @param {FeatureCollection<Polygon>} indicator_geoJSON - GeoJSON features containing the indicator values for a spatial unit that can be aggregated to the features of parameter targetSpatialUnit_geoJSON
+* @see aggregationType
+* @see within_usingBBOX
+* @returns {FeatureCollection<Polygon>} the features of {@linkcode targetSpatialUnit_geoJSON} which contain the aggregated indicator values as GeoJSON FeatureCollection.
+* @memberof METHODS_TO_IMPLEMENT_OR_OVERWRITE
+* @function
+*/
+function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
+  // aggregate indicator
+  if (!aggregationTypeEnum.includes(aggregationType)){
+    console.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
+      "'. Allowed values are: " + aggregationTypeEnum);
+    console.log("Will fallback to using AVERAGE aggregation logic.");
+    return aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
+  }
+  else if(aggregationType === "SUM"){
+    return aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
+  }
+  else {
+    return aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
+  }
+};
+```
 
-set aggregation weight during indicator computation within `computeIndicator()`!!!
+Hence the **TEMPLATE** offers a default aggregation method, that distinguishes between computing the `SUM` or the `AVERAGE` indicator values for all inferior features that are aggregated to a single superior feature. The helper methods `aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)` and `aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)` are also embedded at the end of the **script TEMPLATE**, their code is omitted here. The aggregation itself hereby computes the centroids of all inferior spatial unit features and perform a spatial *WITHIN* comparison to identify all inferior features within each superior target spatial unit feature. This **centroid-based** comparison has been chosen, because experience proved that sometimes the features geometries of different spatial units did not always use the exact same coordinates and, thus, sometimes a direct *WITHIN* check on the actual polygonal geometries failed for some features. In contrast, the controid-based procedure guarantees that all inferior features will be aggregated to any superior feature. **However, this procedure expects that there are no intersections between the inferior and superior polygonal features and thus, the geometries of the inferior features either are completely within the target superior feature or (in theory) at least share equal borders.**
 
-state when and how the `aggregateIndicator()` method should be completely overwritten by script developers.
+If this pre-implementation of the aggregation process shall be used, script developers only have to revise the constant `aggregationType` at the top of the **script TEMPLATE** to adjust specify whether the `SUM` or `AVERAGE` shall be computed (default is `AVERAGE`). In addition, if `aggregationType === "AVERAGE"` and if you want to weight each feature differently, then compute and set a custom *aggregation weight* for each target spatial unit feature within the `computeIndicator()` method (if unset, each feature is equally weighted per default). If `aggregationType === "SUM"` this is not relevant.
+
+If the pre-implementation shall not be used, script developers are free to overwrite the default behavior by overwriting the `aggregateIndicator()` method themselves.
 
 ### Example Scripts
 
