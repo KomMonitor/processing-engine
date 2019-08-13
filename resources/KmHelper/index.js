@@ -1481,7 +1481,7 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
 
   // var constantParameters = "&units=m&location_type=start&range_type=time";
   // encode pipe symbol manually via %7C
-  var constantParameters = "&units=m&location_type=start&range_type=time";
+  var constantParameters = "&smoothing=0&units=m&location_type=start&range_type=time";
 
   var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters;
 
@@ -1626,7 +1626,7 @@ var computeIsochrones_byDistance = async function (startingPoints, vehicleType, 
 
             // var constantParameters = "&units=m&location_type=start&range_type=time";
             // encode pipe symbol manually via %7C
-            var constantParameters = "&units=m&location_type=start&range_type=distance";
+            var constantParameters = "&smoothing=0&units=m&location_type=start&range_type=distance";
 
             var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelDistanceInMeters + constantParameters;
             if(optionsString){
