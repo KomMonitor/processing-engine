@@ -13,7 +13,6 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "@turf/turf": "^5.1.6",
     "axios": "^0.18.0",
     "bee-queue": "^1.2.2",
     "body-parser": "^1.19.0",
@@ -28,7 +27,8 @@
     "nodemailer": "^6.1.1",
     "serve-static": "^1.13.2",
     "swagger-tools": "^0.10.4",
-    "temporary": "0.0.8"
+    "temporary": "0.0.8",
+    "turf": "^7.0.0-alpha.1"
   },
   "devDependencies": {
     "docdash": "^1.1.0",

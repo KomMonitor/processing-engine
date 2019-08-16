@@ -33,7 +33,7 @@
 * @memberof CONSTANTS
 * @constant
 */
-const turf = require('@turf/turf');
+const turf = require('turf');
 
 /**
 * This constant may be used to perform statistical computations.
