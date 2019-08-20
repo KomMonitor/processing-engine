@@ -34,6 +34,14 @@
 * @constant
 */
 const turf = require('turf');
+//
+// const turf_intersect = require('@turf/intersect');
+
+
+const gpsi = require('geojson-polygon-self-intersections');
+const simplepolygon = require ('simplepolygon');
+
+const fs = require("fs");
 
 /**
 * This constant may be used to perform statistical computations.
@@ -112,6 +120,42 @@ const maxLocationsForORSRequest = 200;
 // from other baseIndicators or georesources in method "computeIndicator" or when writing your own aggregation/disaggregation logic.                        //
 // However, you are free to implement your own methods and logic, especially when the desired operation is not covered by the API methods offered here.     //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+exports.unkinkPolygon = function(geojson) {
+  const features = []
+  const holes = []
+
+  turf.flattenEach(geojson, feature => {
+    if (feature.geometry.type !== 'Polygon') return
+    const isects = gpsi(feature, val => val);
+    if (isects.length < 1)
+      return features.push(feature); // don't run it through simple polygon if it's not really intersecting
+
+    // remove the holes and set them aside for later
+    const holeCoords = feature.geometry.coordinates.splice(1, feature.geometry.coordinates.length - 1)
+    if (holeCoords.length > 0) holes.push(turf.multiPolygon(holeCoords.map(c => [c])))
+
+    turf.featureEach(simplepolygon(feature), poly => {
+      const newPoly = turf.polygon(poly.geometry.coordinates, feature.properties);
+      features.push(newPoly);
+    });
+  });
+
+  // punch the holes back out of the feature
+  const fixedFeatures = holes.length > 0 ? features.map(feature => {
+    return holes.reduce((accumulator, hole) => turf.difference(accumulator, hole), feature)
+  }) : features;
+  return turf.featureCollection(fixedFeatures);
+};
+
+exports.kinks = function(geojson) {
+  const coordinates = [];
+  turf.flattenEach(geojson, function (feature) {
+    if (feature.geometry.type !== 'Polygon')
+      return gpsi(feature, isect => { coordinates.push(isect) })
+  });
+  return turf.multiPoint(coordinates);
+};
 
 /**
 * Acquires the base indicator with the name {@linkcode indicatorName} from the submitted {@linkcode baseIndicatorsMap}.
@@ -1691,8 +1735,119 @@ exports.intersects = function (feature_A, feature_B){
 * @function
 */
 exports.intersection = function (polygonFeature_A, polygonFeature_B){
+  var intersection;
+  var cleanOptions = {mutate: true};
+  var truncateOptions = {precision: 8, coordinates: 2, mutate:true};
+  var simplifyOptions = {tolerance: 0.0000001, highQuality: true, mutate: true};
 
-  return turf.intersect(polygonFeature_A, polygonFeature_B);
+  // perform sanity checks on rings
+
+  // if (polygonFeature_A.geometry.type === "MultiPolygon"){
+  //   polygonFeature_A = turf.multiPolygon(polygonFeature_A.geometry.coordinates, polygonFeature_A.properties);
+  // }
+  //
+  // else if(polygonFeature_A.geometry.type === "Polygon"){
+  //   polygonFeature_A = turf.polygon(polygonFeature_A.geometry.coordinates, polygonFeature_A.properties);
+  // }
+  //
+  // if (polygonFeature_B.geometry.type === "MultiPolygon"){
+  //   polygonFeature_B = turf.multiPolygon(polygonFeature_A.geometry.coordinates, polygonFeature_B.properties);
+  // }
+  //
+  // else if(polygonFeature_B.geometry.type === "Polygon"){
+  //   polygonFeature_B = turf.polygon(polygonFeature_B.geometry.coordinates, polygonFeature_B.properties);
+  // }
+
+  try{
+      intersection = turf.intersect(polygonFeature_A, polygonFeature_B);
+  }
+  catch(error){
+    exports.log("Error while intersecting polygon features. Error message is: " + error);
+    exports.log("Logging relevant input features as GeoJSON to file system at tmp/intersection_featureA.geoJSON and tmp/intersection_featureB.geoJSON ");
+    fs.writeFile("./tmp/intersection_featureA.geoJSON", JSON.stringify(polygonFeature_A), function(err) {
+        if(err) {
+            return console.log(err);
+        }
+    });
+    fs.writeFile("./tmp/intersection_featureB.geoJSON", JSON.stringify(polygonFeature_B), function(err) {
+        if(err) {
+            return console.log(err);
+        }
+    });
+    exports.log("Will try to fix input geometries using turf truncate, cleanCoords and custom unkinkPolygon functions.");
+
+    try{
+      polygonFeature_A = turf.truncate(polygonFeature_A, truncateOptions);
+      // run cleanCoords twice just to be sure...
+      polygonFeature_A = turf.cleanCoords(polygonFeature_A);
+      polygonFeature_A = turf.cleanCoords(polygonFeature_A);
+      // unkink produces featureCollection
+      featureCollection_A = exports.unkinkPolygon(polygonFeature_A);
+
+      polygonFeature_B = turf.truncate(polygonFeature_B, truncateOptions);
+      polygonFeature_B = turf.cleanCoords(polygonFeature_B);
+      polygonFeature_B = turf.cleanCoords(polygonFeature_B);
+      // unkink produces featureCollection
+      featureCollection_B = exports.unkinkPolygon(polygonFeature_B);
+
+      // intersect everything and compute union of all interections
+      featureCollection_A.features.forEach(function (feature_A){
+        featureCollection_B.features.forEach(function (feature_B){
+          var tempIntersection = turf.intersect(feature_A, feature_B);
+
+          if(intersection == undefined || intersection == null){
+            intersection = tempIntersection;
+          }
+          else{
+            intersection = exports.union(intersection, tempIntersection);
+          }
+        });
+      });
+    }
+    catch(error){
+      exports.log("Error while trying intersection for cleaned and unkinked polygon features. Error message is: " + error);
+      exports.log("Logging relevant input features as GeoJSON to file system at tmp/intersection_featureA_cleaned_unkinked.geoJSON and tmp/intersection_featureB_cleaned_unkinked.geoJSON ");
+      fs.writeFile("./tmp/intersection_featureA_cleaned_unkinked.geoJSON", JSON.stringify(polygonFeature_A), function(err) {
+          if(err) {
+              return console.log(err);
+          }
+      });
+      fs.writeFile("./tmp/intersection_featureB_cleaned_unkinked.geoJSON", JSON.stringify(polygonFeature_B), function(err) {
+          if(err) {
+              return console.log(err);
+          }
+      });
+      exports.log("Will try to mutate geometries using turf simplify geometries to retrieve intersectable features.");
+
+      try{
+        polygonFeature_A = turf.simplify(polygonFeature_A, simplifyOptions);
+
+        polygonFeature_B = turf.simplify(polygonFeature_B, simplifyOptions);
+
+        intersection = turf.intersect(polygonFeature_A, polygonFeature_B);
+      }
+      catch(error){
+        exports.log("Truncation and Simplification of input features did not fix intersection problem. Will throw error and abort computation");
+
+        exports.log("Logging relevant input features as GeoJSON to file system at tmp/intersection_featureA_simplified.geoJSON and tmp/intersection_featureB_simplified.geoJSON ");
+        fs.writeFile("./tmp/intersection_featureA_simplified.geoJSON", JSON.stringify(polygonFeature_A), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        });
+        fs.writeFile("./tmp/intersection_featureB_simplified.geoJSON", JSON.stringify(polygonFeature_B), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        });
+
+        exports.throwError(error);
+      }
+    }
+
+  }
+
+  return intersection;
 };
 
 /**

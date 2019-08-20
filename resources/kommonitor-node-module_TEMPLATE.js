@@ -14,7 +14,7 @@
 * @memberof CONSTANTS
 * @constant
 */
-const turf = require('@turf/turf');
+const turf = require('turf');
 
 /**
 * This constant may be used to perform statistical computations.
@@ -80,7 +80,7 @@ const aggregationType = "AVERAGE";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // i.e. then modify the features of targetSpatialUnit_geoJSON and return it 
+  // i.e. then modify the features of targetSpatialUnit_geoJSON and return it
 
 
   return targetSpatialUnit_geoJSON;
