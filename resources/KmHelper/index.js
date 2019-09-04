@@ -893,6 +893,19 @@ exports.centroid = function (geoJSON){
 };
 
 /**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointOnFeature} to compute the a point guaranteed to be on the surface of submitted features.
+* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @returns {Feature<Point>} the GeoJSON point feature on the surface of the submitted features.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#pointOnFeature}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+exports.pointOnFeature = function (geoJSON){
+  return turf.pointOnFeature(geoJSON);
+};
+
+/**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanContains} to check if the submitted GeoJSON feature {@linkcode feature_A} contains {@linkcode feature_B}.
 * @param {Feature} feature_A - a GeoJSON feature of any type
 * @param {Feature} feature_B - a GeoJSON feature of any type

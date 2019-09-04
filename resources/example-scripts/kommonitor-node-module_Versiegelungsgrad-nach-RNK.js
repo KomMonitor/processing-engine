@@ -4,6 +4,32 @@
 // SEE MODULE "KmProcessingEngine" for numerous predefined helper methods                                 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var fs = require("fs");
+
+/**
+* This constant may be used to perform spatial analysis and geometric operation tasks.
+* A full-featured API documentation of Turf.js library can be found at {@link http://turfjs.org/}.
+* This template offers several API methods that utilize Turf.js to implement typical geospatial operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link http://turfjs.org/}
+* @see {@link https://github.com/Turfjs/turf}
+* @memberof CONSTANTS
+* @constant
+*/
+const turf = require('@turf/turf');
+
+/**
+* This constant may be used to perform statistical computations.
+* A full-featured API documentation of JStat.js library can be found at {@link http://jstat.org/}.
+* This template offers several API methods that utilize JStst.js to implement typical statistical operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link https://github.com/jstat/jstat}
+* @see {@link https://jstat.github.io/overview.html}
+* @memberof CONSTANTS
+* @constant
+*/
+const jStat = require('jStat').jStat;
+
 /**
 * Module that contains various helper methods (spatial GIS functions and statistical functions)
 * to simplify script writing
@@ -33,9 +59,27 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
 
-const KITA_COUNT_TOTAL_PROPERTY = "PLAETZE_KINDER_UNTER3J";
+const rnkCodeMappingArray = [
+  {
+    "rnkCodeYear": "code",
+    "targetDate": "2009-31-12"
+  },
+  {
+    "rnkCodeYear": "code2012",
+    "targetDate": "2012-31-12"
+  },
+  {
+    "rnkCodeYear": "code2015",
+    "targetDate": "2015-31-12"
+  }
+];
+const codeMappingKeyAttr = "Code";
+const codeMappingVERSAttr = "VERS";
+const codeMapping_vsg_proz_Attr = "vsg_proz";
+const vsgCodeMappingArray = [{"Code":10,"VERS":0.3,"vsg_proz":30},{"Code":20,"VERS":0.5,"vsg_proz":50},{"Code":30,"VERS":0.3,"vsg_proz":30},{"Code":40,"VERS":0.8,"vsg_proz":80},{"Code":51,"VERS":0.4,"vsg_proz":40},{"Code":52,"VERS":0.5,"vsg_proz":50},{"Code":53,"VERS":0,"vsg_proz":0},{"Code":54,"VERS":0.8,"vsg_proz":80},{"Code":55,"VERS":0.8,"vsg_proz":80},{"Code":56,"VERS":1,"vsg_proz":100},{"Code":57,"VERS":1,"vsg_proz":100},{"Code":58,"VERS":1,"vsg_proz":100},{"Code":61,"VERS":0.9,"vsg_proz":90},{"Code":62,"VERS":0.8,"vsg_proz":80},{"Code":63,"VERS":0.4,"vsg_proz":40},{"Code":64,"VERS":0.8,"vsg_proz":80},{"Code":65,"VERS":0.8,"vsg_proz":80},{"Code":66,"VERS":0.8,"vsg_proz":80},{"Code":71,"VERS":0.8,"vsg_proz":80},{"Code":72,"VERS":0.8,"vsg_proz":80},{"Code":73,"VERS":0.8,"vsg_proz":80},{"Code":74,"VERS":0.8,"vsg_proz":80},{"Code":75,"VERS":0.6,"vsg_proz":60},{"Code":76,"VERS":1,"vsg_proz":100},{"Code":81,"VERS":1,"vsg_proz":100},{"Code":82,"VERS":0.45,"vsg_proz":45},{"Code":83,"VERS":0.8,"vsg_proz":80},{"Code":84,"VERS":0.7,"vsg_proz":70},{"Code":85,"VERS":0.7,"vsg_proz":70},{"Code":86,"VERS":1,"vsg_proz":100},{"Code":87,"VERS":0.8,"vsg_proz":80},{"Code":88,"VERS":0.8,"vsg_proz":80},{"Code":89,"VERS":1,"vsg_proz":100},{"Code":91,"VERS":0.7,"vsg_proz":70},{"Code":92,"VERS":0.7,"vsg_proz":70},{"Code":93,"VERS":0.1,"vsg_proz":10},{"Code":101,"VERS":1,"vsg_proz":100},{"Code":102,"VERS":0,"vsg_proz":0},{"Code":103,"VERS":0.8,"vsg_proz":80},{"Code":110,"VERS":0.9,"vsg_proz":90},{"Code":140,"VERS":1,"vsg_proz":100},{"Code":151,"VERS":0.9,"vsg_proz":90},{"Code":152,"VERS":0.8,"vsg_proz":80},{"Code":160,"VERS":0.9,"vsg_proz":90},{"Code":171,"VERS":0.8,"vsg_proz":80},{"Code":172,"VERS":1,"vsg_proz":100},{"Code":173,"VERS":1,"vsg_proz":100},{"Code":174,"VERS":1,"vsg_proz":100},{"Code":181,"VERS":1,"vsg_proz":100},{"Code":182,"VERS":1,"vsg_proz":100},{"Code":183,"VERS":0.8,"vsg_proz":80},{"Code":184,"VERS":0.8,"vsg_proz":80},{"Code":191,"VERS":0.8,"vsg_proz":80},{"Code":192,"VERS":1,"vsg_proz":100},{"Code":193,"VERS":0,"vsg_proz":0},{"Code":200,"VERS":0.8,"vsg_proz":80},{"Code":211,"VERS":0.7,"vsg_proz":70},{"Code":212,"VERS":0.5,"vsg_proz":50},{"Code":213,"VERS":0.6,"vsg_proz":60},{"Code":214,"VERS":0.8,"vsg_proz":80},{"Code":215,"VERS":0,"vsg_proz":0},{"Code":221,"VERS":0.5,"vsg_proz":50},{"Code":222,"VERS":0.1,"vsg_proz":10},{"Code":223,"VERS":0,"vsg_proz":0},{"Code":231,"VERS":0.6,"vsg_proz":60},{"Code":232,"VERS":0.7,"vsg_proz":70},{"Code":233,"VERS":0.2,"vsg_proz":20},{"Code":234,"VERS":0.1,"vsg_proz":10},{"Code":241,"VERS":0.6,"vsg_proz":60},{"Code":245,"VERS":0,"vsg_proz":0},{"Code":246,"VERS":0.9,"vsg_proz":90},{"Code":247,"VERS":0.1,"vsg_proz":10},{"Code":250,"VERS":0.05,"vsg_proz":5},{"Code":264,"VERS":0.1,"vsg_proz":10},{"Code":271,"VERS":0.1,"vsg_proz":10},{"Code":272,"VERS":0.2,"vsg_proz":20},{"Code":273,"VERS":0.1,"vsg_proz":10},{"Code":281,"VERS":0.8,"vsg_proz":80},{"Code":282,"VERS":0.1,"vsg_proz":10},{"Code":283,"VERS":0,"vsg_proz":0},{"Code":284,"VERS":0.2,"vsg_proz":20},{"Code":291,"VERS":0.05,"vsg_proz":5},{"Code":292,"VERS":0.2,"vsg_proz":20},{"Code":293,"VERS":0.05,"vsg_proz":5},{"Code":301,"VERS":0.05,"vsg_proz":5},{"Code":302,"VERS":0.1,"vsg_proz":10},{"Code":303,"VERS":0.05,"vsg_proz":5},{"Code":304,"VERS":0.1,"vsg_proz":10},{"Code":305,"VERS":0.05,"vsg_proz":5},{"Code":306,"VERS":0.05,"vsg_proz":5},{"Code":307,"VERS":0.05,"vsg_proz":5},{"Code":308,"VERS":0.05,"vsg_proz":5},{"Code":309,"VERS":0.5,"vsg_proz":50},{"Code":311,"VERS":0.05,"vsg_proz":5},{"Code":313,"VERS":0.05,"vsg_proz":5},{"Code":320,"VERS":0,"vsg_proz":0},{"Code":321,"VERS":0,"vsg_proz":0},{"Code":322,"VERS":0,"vsg_proz":0},{"Code":323,"VERS":0,"vsg_proz":0},{"Code":324,"VERS":0,"vsg_proz":0},{"Code":325,"VERS":0,"vsg_proz":0},{"Code":326,"VERS":0,"vsg_proz":0},{"Code":331,"VERS":0,"vsg_proz":0},{"Code":332,"VERS":0.05,"vsg_proz":5},{"Code":341,"VERS":0.8,"vsg_proz":80},{"Code":342,"VERS":0.05,"vsg_proz":5},{"Code":343,"VERS":0.1,"vsg_proz":10},{"Code":351,"VERS":0,"vsg_proz":0},{"Code":352,"VERS":0,"vsg_proz":0},{"Code":353,"VERS":0,"vsg_proz":0},{"Code":354,"VERS":0,"vsg_proz":0},{"Code":355,"VERS":0,"vsg_proz":0},{"Code":356,"VERS":0.1,"vsg_proz":10},{"Code":357,"VERS":0,"vsg_proz":0},{"Code":361,"VERS":0,"vsg_proz":0},{"Code":362,"VERS":0,"vsg_proz":0},{"Code":363,"VERS":0,"vsg_proz":0},{"Code":370,"VERS":0,"vsg_proz":0},{"Code":381,"VERS":0.4,"vsg_proz":40},{"Code":382,"VERS":0.1,"vsg_proz":10},{"Code":383,"VERS":0,"vsg_proz":0},{"Code":400,"VERS":0,"vsg_proz":0},{"Code":410,"VERS":0,"vsg_proz":0},{"Code":420,"VERS":0,"vsg_proz":0},{"Code":431,"VERS":0,"vsg_proz":0},{"Code":432,"VERS":0,"vsg_proz":0},{"Code":441,"VERS":0,"vsg_proz":0},{"Code":442,"VERS":0,"vsg_proz":0},{"Code":451,"VERS":0,"vsg_proz":0},{"Code":452,"VERS":0.1,"vsg_proz":5},{"Code":453,"VERS":0,"vsg_proz":0},{"Code":454,"VERS":0,"vsg_proz":0},{"Code":461,"VERS":0,"vsg_proz":0},{"Code":462,"VERS":0,"vsg_proz":0},{"Code":463,"VERS":0,"vsg_proz":0},{"Code":471,"VERS":0,"vsg_proz":0},{"Code":472,"VERS":0,"vsg_proz":0},{"Code":473,"VERS":0,"vsg_proz":0},{"Code":481,"VERS":1,"vsg_proz":100},{"Code":482,"VERS":0.7,"vsg_proz":70},{"Code":483,"VERS":0.1,"vsg_proz":10},{"Code":490,"VERS":0.1,"vsg_proz":10},{"Code":491,"VERS":0.1,"vsg_proz":10},{"Code":492,"VERS":0.1,"vsg_proz":10},{"Code":493,"VERS":0.9,"vsg_proz":90},{"Code":501,"VERS":0.05,"vsg_proz":5},{"Code":502,"VERS":0.05,"vsg_proz":5},{"Code":503,"VERS":0,"vsg_proz":0}];
+
 
 /**
 * This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
@@ -56,49 +100,136 @@ const KITA_COUNT_TOTAL_PROPERTY = "PLAETZE_KINDER_UNTER3J";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  // retrieve required baseIndicator using its meaningful name
-  var kitas = KmHelper.getGeoresourceById("7edc6d6b-bf04-46d1-b8a6-e17d4019dd57", georesourcesMap);
+  // retrieve required baseIndicator
+  var rnk = KmHelper.getGeoresourceById('619de1fd-c706-42d4-99db-f9b9972e110f', georesourcesMap);
 
-KmHelper.log("calculating intersections between kitas and target spatial unit.");
+  var rnkAttrNameForTargetDate = "code2015";
 
-// create progress log after each 10th percent of features
-var logProgressIndexSeparator = Math.round(targetSpatialUnit_geoJSON.features.length / 100 * 10);
+  if (targetDate.includes("2015")){
+    rnkAttrNameForTargetDate = "code2015";
+  }
+  else if (targetDate.includes("2012")){
+    rnkAttrNameForTargetDate = "code2012";
+  }
+  else{
+    rnkAttrNameForTargetDate = "code";
+  }
 
-    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
-      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
-      // nitialize indicatorValue
-      KmHelper.setIndicatorValue(spatialUnitFeat, targetDate, 0);
+var codesMap = new Map();
 
-  			// for each kita feature check if it lies within spatialUnit feature it
-  			for (var kitaIndex = 0; kitaIndex < kitas.features.length; kitaIndex++){
+vsgCodeMappingArray.forEach(function(codeMapping) {
+  codesMap.set(codeMapping[codeMappingKeyAttr], codeMapping[codeMapping_vsg_proz_Attr]);
+});
 
-  				var kita_feature = kitas.features[kitaIndex];
+// spatial comparison of RNK features and spatialUnit features
 
-  				if(KmHelper.within(kita_feature, spatialUnitFeat)){
-  					// add value to indicator value
-            // delete kita for next loop and decrement kita_index
+  var spatialUnitMap = new Map();
+  var exampleMapObj = {
+    "ID" : "id",
+    "vsg_proz_sum" : 2,
+    "vsg_weight_sum": 40
+  };
 
-            // convert value to Number just to be sure
-            var indicatorValue = KmHelper.getIndicatorValue(spatialUnitFeat, targetDate) + Number(KmHelper.getPropertyValue(kita_feature, KITA_COUNT_TOTAL_PROPERTY));
-            KmHelper.setIndicatorValue(spatialUnitFeat, targetDate, indicatorValue);
+  // iterate once over target spatial unit features and compute indicator utilizing map entries
+  var rnkIndex = 0;
+  // create progress log after each 5th percent of features
+  var logProgressIndexSeparator = Math.round(rnk.features.length / 100 * 5);
 
-            // removing the element may increase performance for large data with numerous entries
-            // take care of decreasing the index as well! Otheriwse features will be skipped
-            kitas.features.splice(kitaIndex, 1);
-            kitaIndex --;
-  				}
-  			}
+  KmHelper.log("Begin intersection");
 
-      if(featureIndex % logProgressIndexSeparator === 0){
-          KmHelper.log("PROGRESS: Compared '" + featureIndex + "' of total '" + targetSpatialUnit_geoJSON.features.length + "' spatial units to kitas.");
+  rnk.features.forEach(function(rnkFeature) {
+    // for each RNK feature check which spatial unit features intersect it and process it area-weighted
+
+    targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+
+      if(KmHelper.overlap(rnkFeature, spatialUnitFeature)){
+        var intersectionFeature = KmHelper.intersection(rnkFeature, spatialUnitFeature);
+
+          if (intersectionFeature === null || intersectionFeature === undefined){
+
+          }
+          else{
+            var rnkCode = rnkFeature.properties[rnkAttrNameForTargetDate];
+            var vsg_proz = codesMap.get(rnkCode);
+            var intersectionArea = KmHelper.area(intersectionFeature);
+            var spatialUnitFeatureTotalArea = KmHelper.area(spatialUnitFeature);
+            var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
+
+            var weight = intersectionArea / spatialUnitFeatureTotalArea;
+            var vsg_proz_weighted = weight * vsg_proz;
+
+            if (spatialUnitMap.get(spatialUnitFeatureId)){
+              //edit eisting map entry
+              var entry = spatialUnitMap.get(""+spatialUnitFeatureId);
+              entry["vsg_proz_sum"] += vsg_proz_weighted;
+              entry["vsg_weight_sum"] += weight;
+
+              spatialUnitMap.set(""+spatialUnitFeatureId, entry);
+            }
+            else{
+              // create new map object
+              var entry = {
+                "ID" : spatialUnitFeatureId,
+                "vsg_proz_sum" : vsg_proz_weighted,
+                "vsg_weight_sum": weight,
+              };
+              spatialUnitMap.set(""+spatialUnitFeatureId, entry);
+            }
+          }
       }
+
+    });
+
+    rnkIndex ++;
+
+    KmHelper.log("PROGRESS: Processed " + rnkIndex + " of total total '" + rnk.features.length + "' features.");
+
+    // only log after certain progress
+    if(rnkIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Computed '" + rnkIndex + "' of total '" + rnk.features.length + "' features.");
     }
+  });
+
+  var numFeatures = targetSpatialUnit_geoJSON.features.length;
+
+  // now we compute the new indicator
+  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+
+  // iterate once over target spatial unit features and compute indicator utilizing map entries
+  var spatialUnitIndex = 0;
+  // create progress log after each 10th percent of features
+  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+
+    // set aggregationWeight as feature's area
+    KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
+
+    // get spatialUnit feature id as string --> use it to get associated map entry
+    var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
+
+    var mapEntry = spatialUnitMap.get(spatialUnitFeatureId);
+
+    var vsg_proz_sum = mapEntry["vsg_proz_sum"];
+    var weight_sum = mapEntry["vsg_weight_sum"];
+
+    var indicatorValue = vsg_proz_sum / weight_sum;
+
+    // set indicator value for spatialUnitFeature
+    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+
+  	spatialUnitIndex ++;
+
+    // only log after certain progress
+    if(spatialUnitIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+    }
+  });
 
   KmHelper.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
+
 };
 
 /**
@@ -119,9 +250,9 @@ var logProgressIndexSeparator = Math.round(targetSpatialUnit_geoJSON.features.le
 function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // aggregate indicator
   if (!aggregationTypeEnum.includes(aggregationType)){
-    console.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
+    KmHelper.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
       "'. Allowed values are: " + aggregationTypeEnum);
-    console.log("Will fallback to using AVERAGE aggregation logic.");
+    KmHelper.log("Will fallback to using AVERAGE aggregation logic.");
     return aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
   }
   else if(aggregationType === "SUM"){
@@ -146,7 +277,6 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
   // disaggregate indicator
 
 };
-
 
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
@@ -201,7 +331,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   		}
   	}
 
-  	// compute average for share
+    // compute average for share
     if(baseIndicatorTotalWeight === 0){
       targetFeature.properties[targetDate] = Number.NaN;
     }

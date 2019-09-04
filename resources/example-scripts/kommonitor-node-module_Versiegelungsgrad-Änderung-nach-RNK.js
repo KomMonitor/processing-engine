@@ -33,9 +33,9 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
 
-const KITA_COUNT_TOTAL_PROPERTY = "PLAETZE_KINDER_UNTER3J";
+
 
 /**
 * This method computes the indicator for the specified point in time and target spatial unit. To do this, necessary base indicators and/or georesources as well as variable process properties are defined
@@ -56,49 +56,102 @@ const KITA_COUNT_TOTAL_PROPERTY = "PLAETZE_KINDER_UNTER3J";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  // retrieve required baseIndicator using its meaningful name
-  var kitas = KmHelper.getGeoresourceById("7edc6d6b-bf04-46d1-b8a6-e17d4019dd57", georesourcesMap);
+  // retrieve required baseIndicator
+  var vsgGeoJSON = KmHelper.getBaseIndicatorById('debe8b91-939a-4ef4-b32e-5d73cbf8c2d8', baseIndicatorsMap);
 
-KmHelper.log("calculating intersections between kitas and target spatial unit.");
+  KmHelper.log("Retrieved required baseIndicators successfully");
 
-// create progress log after each 10th percent of features
-var logProgressIndexSeparator = Math.round(targetSpatialUnit_geoJSON.features.length / 100 * 10);
+  // parse targetYear from input parameter
+  var targetDateArray = targetDate.split('-');
+  var specifiedYear = targetDateArray[0];
 
-    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
-      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
-      // nitialize indicatorValue
-      KmHelper.setIndicatorValue(spatialUnitFeat, targetDate, 0);
+  var year_threeBefore = specifiedYear - 3;
+  var date_threeBefore = year_threeBefore + '-' + targetDateArray[1] + '-' + targetDateArray[2];
 
-  			// for each kita feature check if it lies within spatialUnit feature it
-  			for (var kitaIndex = 0; kitaIndex < kitas.features.length; kitaIndex++){
+  // now we compute the new indicator
+  KmHelper.log("Iterate over base indicators and save intermediate values within a map object");
 
-  				var kita_feature = kitas.features[kitaIndex];
+  /**
+  * create a map to store indicator values for each feature of the target spatial unit
+  * by using such a map object, we can ensure, that we only iterate ONCE over each bease indicator
+  * and also can only iterate ONCE over each target spatial unit feature at the end to compute the indicator
+  */
+  var map = new Map();
 
-  				if(KmHelper.within(kita_feature, spatialUnitFeat)){
-  					// add value to indicator value
-            // delete kita for next loop and decrement kita_index
+  KmHelper.log("Process base indicator 'VSG nach RNK'");
 
-            // convert value to Number just to be sure
-            var indicatorValue = KmHelper.getIndicatorValue(spatialUnitFeat, targetDate) + Number(KmHelper.getPropertyValue(kita_feature, KITA_COUNT_TOTAL_PROPERTY));
-            KmHelper.setIndicatorValue(spatialUnitFeat, targetDate, indicatorValue);
+  /**
+  * iterate over each feature of the baseIndicator and use its indicator value to modify map object
+  * NOTE use spatialUnitFeatureId as key to be able to identify entries by their unique feature id!
+  */
+  vsgGeoJSON.features.forEach(function(feature) {
+    // get the unique featureID of the spatial unit feature as String
+    var featureId = KmHelper.getSpatialUnitFeatureIdValue(feature);
+    // get the time series value of the base indicator feature for the requested target date (with its required prefix!)
+    var vsg_targetDate = KmHelper.getIndicatorValue(feature, targetDate);
+    var vsg_Date_threeBefore = KmHelper.getIndicatorValue(feature, date_threeBefore);
 
-            // removing the element may increase performance for large data with numerous entries
-            // take care of decreasing the index as well! Otheriwse features will be skipped
-            kitas.features.splice(kitaIndex, 1);
-            kitaIndex --;
-  				}
-  			}
-
-      if(featureIndex % logProgressIndexSeparator === 0){
-          KmHelper.log("PROGRESS: Compared '" + featureIndex + "' of total '" + targetSpatialUnit_geoJSON.features.length + "' spatial units to kitas.");
-      }
+    if(vsg_Date_threeBefore === undefined || vsg_Date_threeBefore === null){
+      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for date '" + date_threeBefore + "'");
+      KmHelper.log("WARNING: the feature value will thus be set to 'null' and computation will continue");
+      vsg_Date_threeBefore = null;
     }
+
+    if(vsg_targetDate === undefined || vsg_targetDate === null){
+      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for date '" + targetDate + "'");
+      KmHelper.log("WARNING: the feature value will thus be set to 'null' and computation will continue");
+      vsg_targetDate = null;
+    }
+
+    if (vsg_targetDate && vsg_Date_threeBefore){
+      // modify map object (i.e. set value initially, or perform calculations and store modified value)
+      // key should be unique featureId of the spatial unit feature
+      var vsgChange = Number(vsg_targetDate) - Number(vsg_Date_threeBefore);
+      map.set(featureId, vsgChange);
+    }
+    else{
+          map.set(featureId, null);
+    }
+
+  });
+
+  var numFeatures = targetSpatialUnit_geoJSON.features.length;
+
+  // now we compute the new indicator
+  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+
+  // iterate once over target spatial unit features and compute indicator utilizing map entries
+  var spatialUnitIndex = 0;
+  // create progress log after each 10th percent of features
+  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+
+    // set aggregationWeight as feature's area
+    KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
+
+    // get spatialUnit feature id as string --> use it to get associated map entry
+    var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
+
+    // retrieve map entry value associated to feature id
+    // Casting to Number() is optional but recommended, when performing numeric calculations
+    var vsgChange = Number(map.get(spatialUnitFeatureId));
+
+    // set indicator value for spatialUnitFeature
+    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, vsgChange);
+
+  	spatialUnitIndex ++;
+
+    // only log after certain progress
+    if(spatialUnitIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+    }
+  });
 
   KmHelper.log("Computation of indicator finished");
 
   return targetSpatialUnit_geoJSON;
+
 };
 
 /**
@@ -119,9 +172,9 @@ var logProgressIndexSeparator = Math.round(targetSpatialUnit_geoJSON.features.le
 function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // aggregate indicator
   if (!aggregationTypeEnum.includes(aggregationType)){
-    console.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
+    KmHelper.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
       "'. Allowed values are: " + aggregationTypeEnum);
-    console.log("Will fallback to using AVERAGE aggregation logic.");
+    KmHelper.log("Will fallback to using AVERAGE aggregation logic.");
     return aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
   }
   else if(aggregationType === "SUM"){
@@ -146,7 +199,6 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
   // disaggregate indicator
 
 };
-
 
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}
@@ -201,7 +253,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   		}
   	}
 
-  	// compute average for share
+    // compute average for share
     if(baseIndicatorTotalWeight === 0){
       targetFeature.properties[targetDate] = Number.NaN;
     }

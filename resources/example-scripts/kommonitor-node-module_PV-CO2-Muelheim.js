@@ -175,7 +175,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
@@ -249,7 +249,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
