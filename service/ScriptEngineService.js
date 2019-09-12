@@ -6,6 +6,20 @@
 
   var FileCleaner = require('cron-file-cleaner').FileCleaner;
 
+  const tmpDir = './tmp/';
+
+  if (fs.existsSync(tmpDir)) {
+    console.log(`Directory '${tmpDir}' already exists.`);
+  }else{
+    fs.mkdir(tmpDir, { recursive: true }, (err) => {
+      if(err){
+        console.error(`Creation of directory '${tmpDir}' failed with error ${err.message}`);
+      }else{
+        console.log(`Directory '${tmpDir}' has been created succesfully.`);
+      }
+    });
+  }
+
   // scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)
   console.log("scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)");
   var fileWatcher = new FileCleaner('./tmp/', 3600000,  '* */15 * * * *', {
