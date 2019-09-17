@@ -10,21 +10,25 @@
 
   if (fs.existsSync(tmpDir)) {
     console.log(`Directory '${tmpDir}' already exists.`);
+    startTmpDirWatching(tmpDir);
   }else{
     fs.mkdir(tmpDir, { recursive: true }, (err) => {
       if(err){
         console.error(`Creation of directory '${tmpDir}' failed with error ${err.message}`);
       }else{
         console.log(`Directory '${tmpDir}' has been created succesfully.`);
+        startTmpDirWatching(tmpDir);
       }
     });
   }
 
-  // scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)
-  console.log("scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)");
-  var fileWatcher = new FileCleaner('./tmp/', 3600000,  '* */15 * * * *', {
-    start: true
-  });
+  function startTmpDirWatching(dir){
+    // scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)
+    console.log(`scan the directory '${dir}' every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)`);
+    var fileWatcher = new FileCleaner(dir, 3600000,  '* */15 * * * *', {
+      start: true
+    });
+  }
 
   // instantiate Bee-Queue worker queues, which can execute jobs
   // one for defaultIndicatorComputation
