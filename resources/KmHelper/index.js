@@ -90,7 +90,18 @@ const spatialUnitFeatureNamePropertyName = "NAME";
 */
 const indicator_date_prefix = "DATE_";
 
-
+/**
+* This constant limits the number of allowed locations for requests against Open Route Service
+* This is necessary especially for GET requests, to keep the GET request length within handable sizes
+* @see isochrones_byTime
+* @see isochrones_byDistance
+* @see distance_matrix_kilometers
+* @see duration_matrix_seconds
+* @type {number}
+* @memberof CONSTANTS
+* @constant
+*/
+const maxLocationsForORSRequest = 200;
 
 
 
@@ -882,6 +893,19 @@ exports.centroid = function (geoJSON){
 };
 
 /**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointOnFeature} to compute the a point guaranteed to be on the surface of submitted features.
+* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* @returns {Feature<Point>} the GeoJSON point feature on the surface of the submitted features.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#pointOnFeature}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+exports.pointOnFeature = function (geoJSON){
+  return turf.pointOnFeature(geoJSON);
+};
+
+/**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#booleanContains} to check if the submitted GeoJSON feature {@linkcode feature_A} contains {@linkcode feature_B}.
 * @param {Feature} feature_A - a GeoJSON feature of any type
 * @param {Feature} feature_B - a GeoJSON feature of any type
@@ -987,6 +1011,7 @@ exports.distance_direct_kilometers = function (point_A, point_B){
 * @see openrouteservice_url CONSTANT
 * @see {@link distance_direct_kilometers}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.distance_waypath_kilometers = async function (point_A, point_B, vehicleType){
@@ -1136,6 +1161,7 @@ exports.distance_waypath_kilometers = async function (point_A, point_B, vehicleT
 * @returns {object} the distance matrix between the submitted source and destination points based on waypath routing.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.distance_matrix_kilometers = async function (locations, sourceIndices, destinationIndices, vehicleType){
@@ -1277,6 +1303,7 @@ exports.distance_matrix_kilometers = async function (locations, sourceIndices, d
 * @returns {object} the duration matrix between the submitted source and destination points based on waypath routing.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
 exports.duration_matrix_seconds = async function (locations, sourceIndices, destinationIndices, vehicleType){
@@ -1342,19 +1369,22 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
 * Performs a GET request against {@linkcode /isochrones} endpoint of the openrouteservice instance
 * specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the reachability isochrones by time
 * starting from the submitted points based on waypath routing.
+* If the number of {@linkcode startingPoints} is greater than allowed number of max locations ({@see maxLocationsForORSRequest}), {@linkcode startingPoints} will be plit up and multiple requests will be made. Results will be combined to a single FeatureCollection.
 * @param {Array.<Feature<Point>>} startingPoints - array of valid GeoJSON Features with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}
 * @param {string} vehicleType - the type of vehicle to use for routing analysis;
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
 * @param {number} travelTimeInSeconds - the travel time to compute the isochrones in seconds
 * @param {number|null} customMaxSpeedInKilometersPerHour - a custom maximum speed to use for isochrone computation or {@linkcode null} to use defaults from OpenRouteService
-* @param {boolean} [dissolve=false] - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
-* @param {boolean} [deactivateLog=false] - set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false
+* @param {boolean} dissolve - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
+* @param {boolean} deactivateLog - set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false
+* @param {string|null} avoid_features - may specify a featureType of routing network that shall be avoided. possible values are {@linkcode highways, tollways, ferries, tunnels, pavedroads, unpavedroads, tracks, fords, steps, hills}
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @async
 * @function
 */
-exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog){
+exports.isochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
@@ -1365,54 +1395,125 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
     }
   }
 
-            // coordinate string must be "lon,lat|lon,lat"
-            var locationsString = "";
-            for (var index=0; index<startingPoints.length; index++){
-              //element is valid GeoJSON Point Feature with coordinates like [longitude,latitude]
-              locationsString += startingPoints[index].geometry.coordinates[0] + "," + startingPoints[index].geometry.coordinates[1];
-              if(index != startingPoints.length - 1){
-                // encode pipe symbol "|" manually
-                locationsString += "%7C";
-              }
-            };
+  if (startingPoints.length <= maxLocationsForORSRequest){
+    return await computeIsochrones_byTime(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features);
+  }
+  else{
+    exports.log("Number of Isochrone starting points is greater than the maximum number of locations (" + maxLocationsForORSRequest + "). Must split up starting points to make multiple requests. Result will contain all isochrones though.");
+    var resultIsochrones;
 
-            var optionsString = '{"maximum_speed":' + speedInKilometersPerHour + '}';
+    var featureIndex = 0;
+    // log progress for each 10% of features
+    var logProgressIndexSeparator = Math.round(startingPoints.length / 100 * 10);
 
+    var countFeatures = 0;
+    var tempStartPointsArray = [];
+    for (var pointIndex=0; pointIndex < startingPoints.length; pointIndex++){
+      tempStartPointsArray.push(startingPoints[pointIndex]);
+      countFeatures++;
 
-            var vehicleString;
+      // if maxNumber of locations is reached or the last starting point is reached
+      if(countFeatures === maxLocationsForORSRequest || pointIndex === startingPoints.length -1){
+        // make request, collect results
 
-            switch (vehicleType) {
-              case "PEDESTRIAN":
-                vehicleString = "foot-walking";
-                break;
-              case "BIKE":
-                vehicleString = "cycling-regular";
-                break;
-              case "CAR":
-                vehicleString = "driving-car";
-                break;
-              default:
-                vehicleString = "foot-walking";
-            }
+        // responses will be GeoJSON FeatureCollections
+        var tempIsochrones = await computeIsochrones_byTime(tempStartPointsArray, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features);
 
-            // var constantParameters = "&units=m&location_type=start&range_type=time";
-            // encode pipe symbol manually via %7C
-            var constantParameters = "&units=m&location_type=start&range_type=time";
+        if (! resultIsochrones){
+          resultIsochrones = tempIsochrones;
+        }
+        else{
+          // apend results of tempIsochrones to resultIsochrones
+          resultIsochrones.features = resultIsochrones.features.concat(tempIsochrones.features);
+        }
+          // increment featureIndex
+          featureIndex++;
+          if(featureIndex % logProgressIndexSeparator === 0){
+              KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
+          }
 
-            var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters + "&options=" + encodeURIComponent(optionsString);
+        // reset temp vars
+        tempStartPointsArray = [];
+        countFeatures = 0;
 
-            if (! deactivateLog){
-                console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
-            }
+      } // end if
+    }
+
+    // if dissolve is true then dissolve results
+    if (dissolve){
+      return exports.dissolve(resultIsochrones, "value");
+    }
+  } // end else
+};
+
+var computeIsochrones_byTime = async function (startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features){
+
+  exports.log("Compute Time Isochrones for a total of " + startingPoints.length + " starting points.");
+
+  // coordinate string must be "lon,lat|lon,lat"
+  var locationsString = "";
+  for (var index=0; index<startingPoints.length; index++){
+    //element is valid GeoJSON Point Feature with coordinates like [longitude,latitude]
+    locationsString += startingPoints[index].geometry.coordinates[0] + "," + startingPoints[index].geometry.coordinates[1];
+    if(index != startingPoints.length - 1){
+      // encode pipe symbol "|" manually
+      locationsString += "%7C";
+    }
+  };
+
+  var optionsString = undefined;
+  if (customMaxSpeedInKilometersPerHour || avoid_features){
+      optionsString = '{';
+      if(customMaxSpeedInKilometersPerHour){
+        optionsString += '"maximum_speed":' + customMaxSpeedInKilometersPerHour;
+      }
+      if(avoid_features){
+        if(customMaxSpeedInKilometersPerHour){
+            optionsString += ',';
+        }
+        optionsString += '"avoid_features":"' + avoid_features + '"';
+      }
+      optionsString += '}';
+  }
+
+  var vehicleString;
+
+  switch (vehicleType) {
+    case "PEDESTRIAN":
+      vehicleString = "foot-walking";
+      break;
+    case "BIKE":
+      vehicleString = "cycling-regular";
+      break;
+    case "CAR":
+      vehicleString = "driving-car";
+      break;
+    default:
+      vehicleString = "foot-walking";
+  }
+
+  // var constantParameters = "&units=m&location_type=start&range_type=time";
+  // encode pipe symbol manually via %7C
+  var constantParameters = "&smoothing=0&units=m&location_type=start&range_type=time";
+
+  var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelTimeInSeconds + constantParameters;
+
+  if (optionsString){
+    ors_isochrones_GET_request += "&options=" + encodeURIComponent(optionsString);
+  }
+
+  if (! deactivateLog){
+      console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+  }
 
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1 && dissolve){
-    if(! deactivateLog){
-        console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
-    }
-    isochronesResult = exports.dissolve(isochronesResult, "value");
+  if(! deactivateLog){
+  console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+  }
+  isochronesResult = exports.dissolve(isochronesResult, "value");
   }
 
   return isochronesResult;
@@ -1422,18 +1523,21 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
 * Performs a GET request against {@linkcode /isochrones} endpoint of the openrouteservice instance
 * specified via the CONSTANT {@link openrouteservice_url} (version 4.7.2) to aquire the reachability isochrones by distance (equidistance)
 * starting from the submitted points based on waypath routing.
+* If the number of {@linkcode startingPoints} is greater than allowed number of max locations ({@see maxLocationsForORSRequest}), {@linkcode startingPoints} will be plit up and multiple requests will be made. Results will be combined to a single FeatureCollection.
 * @param {Array.<Feature<Point>>} startingPoints - array of valid GeoJSON Features with geometry type {@linkcode Point} - the coordinates are expected to follow the order {@linkcode longitude, latitude}
 * @param {string} vehicleType - the type of vehicle to use for routing analysis;
 * allowed values are {@linkcode PEDESTRIAN},{@linkcode BIKE}, {@linkcode CAR}. If parameter has in invalid value, {@linkcode PEDESTRIAN} is used per default.
 * @param {number} travelDistanceInMeters - the travel distance to compute the isochrones (equidistance) in meters
-* @param {boolean} [dissolve=false] - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
-* @param {boolean} [deactivateLog=false] - set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false
+* @param {boolean} dissolve - if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false
+* @param {boolean} deactivateLog - set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false
+* @param {string|null} avoid_features - may specify a featureType of routing network that shall be avoided. possible values are {@linkcode highways, tollways, ferries, tunnels, pavedroads, unpavedroads, tracks, fords, steps, hills}
 * @returns {FeatureCollection<Polygon>} the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.
 * @see openrouteservice_url CONSTANT
+* @async
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
-exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog){
+exports.isochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features){
   // call openroute service 4.7.2 API to query routing from A to B
 
   for (pointCandidate of startingPoints){
@@ -1443,6 +1547,63 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
       exports.throwError("The submitted object is not a valid GeoJSON point feature. It was: " + pointCandidate);
     }
   }
+
+  if (startingPoints.length <= maxLocationsForORSRequest){
+    return await computeIsochrones_byDistance(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features);
+  }
+  else{
+    exports.log("Number of Isochrone starting points is greater than the maximum number of locations (" + maxLocationsForORSRequest + "). Must split up starting points to make multiple requests. Result will contain all isochrones though.");
+    var resultIsochrones;
+
+    var featureIndex = 0;
+    // log progress for each 10% of features
+    var logProgressIndexSeparator = Math.round(startingPoints.length / 100 * 10);
+
+    var countFeatures = 0;
+    var tempStartPointsArray = [];
+    for (var pointIndex=0; pointIndex < startingPoints.length; pointIndex++){
+      tempStartPointsArray.push(startingPoints[pointIndex]);
+      countFeatures++;
+
+      // if maxNumber of locations is reached or the last starting point is reached
+      if(countFeatures === maxLocationsForORSRequest || pointIndex === startingPoints.length -1){
+        // make request, collect results
+
+        // responses will be GeoJSON FeatureCollections
+        var tempIsochrones = await computeIsochrones_byDistance(tempStartPointsArray, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features);
+
+        if (! resultIsochrones){
+          resultIsochrones = tempIsochrones;
+        }
+        else{
+          // apend results of tempIsochrones to resultIsochrones
+          resultIsochrones.features = resultIsochrones.features.concat(tempIsochrones.features);
+        }
+          // increment featureIndex
+          featureIndex++;
+          if(featureIndex % logProgressIndexSeparator === 0){
+              KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
+          }
+
+        // reset temp vars
+        tempStartPointsArray = [];
+        countFeatures = 0;
+
+      } // end if
+    }
+
+    // if dissolve is true then dissolve results
+    if (dissolve){
+      return exports.dissolve(resultIsochrones, "value");
+    }
+  } // end else
+
+};
+
+var computeIsochrones_byDistance = async function (startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features){
+  // call openroute service 4.7.2 API to query routing from A to B
+
+  exports.log("Compute Distance Isochrones for a total of " + startingPoints.length + " starting points.");
 
             // coordinate string must be "lon,lat|lon,lat"
             var locationsString = "";
@@ -1471,11 +1632,19 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
                 vehicleString = "foot-walking";
             }
 
+            var optionsString = undefined;
+            if(avoid_features){
+                optionsString = '{"avoid_features":"' + avoid_features + '"}';
+            }
+
             // var constantParameters = "&units=m&location_type=start&range_type=time";
             // encode pipe symbol manually via %7C
-            var constantParameters = "&units=m&location_type=start&range_type=distance";
+            var constantParameters = "&smoothing=0&units=m&location_type=start&range_type=distance";
 
             var ors_isochrones_GET_request = openrouteservice_url + "/isochrones?profile=" + vehicleString + "&locations=" + locationsString + "&range=" + travelDistanceInMeters + constantParameters;
+            if(optionsString){
+              ors_isochrones_GET_request += "&options=" + encodeURIComponent(optionsString);
+            }
 
   if (! deactivateLog){
       console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
@@ -1575,6 +1744,7 @@ exports.nearestPoint_directDistance = function (targetPoint, pointCollection){
 * @returns {Feature<Point>} returns the nearest GeoJSON Point Feature with the shortest waypath distance to {@linkcode targetPoint}.
 * @see {@link https://turfjs.org/docs/#nearestPoint_directDistance}
 * @see {@link https://turfjs.org/docs/#distance_waypath_kilometers}
+* @async
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */

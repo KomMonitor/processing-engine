@@ -57,7 +57,7 @@ const aggregationType = "AVERAGE";
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  // retrieve required baseIndicator using its meaningful name
+  // retrieve required baseIndicator
   var ewzGeoJSON = KmHelper.getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
 
   KmHelper.log("Retrieved required baseIndicators successfully");
@@ -217,7 +217,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
@@ -291,7 +291,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);

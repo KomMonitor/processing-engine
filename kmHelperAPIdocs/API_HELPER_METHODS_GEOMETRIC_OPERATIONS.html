@@ -1,0 +1,6625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>API_HELPER_METHODS_GEOMETRIC_OPERATIONS - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html">API_HELPER_METHODS_GEOMETRIC_OPERATIONS</a><ul class='methods'><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.area">exports.area</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.area_feature_asProperty">exports.area_feature_asProperty</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.area_featureCollection_asProperty">exports.area_featureCollection_asProperty</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.bbox_feature">exports.bbox_feature</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.bbox_featureCollection">exports.bbox_featureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.buffer_feature">exports.buffer_feature</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.buffer_featureCollection">exports.buffer_featureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.center_geometric">exports.center_geometric</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.center_mass">exports.center_mass</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.centroid">exports.centroid</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.contains">exports.contains</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.difference">exports.difference</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.disjoint">exports.disjoint</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.dissolve">exports.dissolve</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.distance_direct_kilometers">exports.distance_direct_kilometers</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.distance_matrix_kilometers">exports.distance_matrix_kilometers</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.distance_waypath_kilometers">exports.distance_waypath_kilometers</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.duration_matrix_seconds">exports.duration_matrix_seconds</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.intersection">exports.intersection</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.intersects">exports.intersects</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.isochrones_byDistance">exports.isochrones_byDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.isochrones_byTime">exports.isochrones_byTime</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPoint_directDistance">exports.nearestPoint_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPoint_waypathDistance">exports.nearestPoint_waypathDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnLine_directDistance">exports.nearestPointOnLine_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnLines_directDistance">exports.nearestPointOnLines_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnPolygon_directDistance">exports.nearestPointOnPolygon_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.nearestPointOnPolygons_directDistance">exports.nearestPointOnPolygons_directDistance</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.overlap">exports.overlap</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.union">exports.union</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.within">exports.within</a></li><li data-type='method'><a href="API_HELPER_METHODS_GEOMETRIC_OPERATIONS.html#.exports.within_usingBBOX">exports.within_usingBBOX</a></li></ul></li><li><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html">API_HELPER_METHODS_STATISTICAL_OPERATIONS</a><ul class='methods'><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.covariance">exports.covariance</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.max">exports.max</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.mean">exports.mean</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.meanSquareError">exports.meanSquareError</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.median">exports.median</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.min">exports.min</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.percentile">exports.percentile</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.quantiles">exports.quantiles</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.quartiles">exports.quartiles</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.range">exports.range</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.standardDeviation">exports.standardDeviation</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.variance">exports.variance</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.zScore_byMeanAndStdev">exports.zScore_byMeanAndStdev</a></li><li data-type='method'><a href="API_HELPER_METHODS_STATISTICAL_OPERATIONS.html#.exports.zScore_byPopulationArray">exports.zScore_byPopulationArray</a></li></ul></li><li><a href="API_HELPER_METHODS_UTILITY.html">API_HELPER_METHODS_UTILITY</a><ul class='methods'><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.asFeature">exports.asFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.asFeatureCollection">exports.asFeatureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getAggregationWeight">exports.getAggregationWeight</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getBaseIndicatorById">exports.getBaseIndicatorById</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getBaseIndicatorByName">exports.getBaseIndicatorByName</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getGeoresourceById">exports.getGeoresourceById</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getGeoresourceByName">exports.getGeoresourceByName</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getIndicatorValue">exports.getIndicatorValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getIndicatorValueArray">exports.getIndicatorValueArray</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getProcessParameterByName_asBoolean">exports.getProcessParameterByName_asBoolean</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getProcessParameterByName_asNumber">exports.getProcessParameterByName_asNumber</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getProcessParameterByName_asString">exports.getProcessParameterByName_asString</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getPropertyValue">exports.getPropertyValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getSpatialUnitFeatureIdValue">exports.getSpatialUnitFeatureIdValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getSpatialUnitFeatureNameValue">exports.getSpatialUnitFeatureNameValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.getTargetDateWithPropertyPrefix">exports.getTargetDateWithPropertyPrefix</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.hasMultiPolygon">exports.hasMultiPolygon</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.indicatorValueIsNoDataValue">exports.indicatorValueIsNoDataValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONFeature">exports.isGeoJSONFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONFeatureCollection">exports.isGeoJSONFeatureCollection</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONLineStringFeature">exports.isGeoJSONLineStringFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONPointFeature">exports.isGeoJSONPointFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isGeoJSONPolygonFeature">exports.isGeoJSONPolygonFeature</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.isNoDataValue">exports.isNoDataValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.log">exports.log</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.replaceMultiPolygonsByPolygons">exports.replaceMultiPolygonsByPolygons</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setAggregationWeight">exports.setAggregationWeight</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setIndicatorValue">exports.setIndicatorValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setIndicatorValue_asNoData">exports.setIndicatorValue_asNoData</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.setPropertyValue">exports.setPropertyValue</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.throwError">exports.throwError</a></li><li data-type='method'><a href="API_HELPER_METHODS_UTILITY.html#.exports.transformMultiPolygonsToPolygons">exports.transformMultiPolygonsToPolygons</a></li></ul></li><li><a href="CONSTANTS.html">CONSTANTS</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">API_HELPER_METHODS_GEOMETRIC_OPERATIONS</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.area"><span class="type-signature">(static) </span>exports.area<span class="signature">(geoJSON)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line737">line 737</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#area">https://turfjs.org/docs/#area</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#area">https://turfjs.org/docs/#area</a> to compute the area of the submitted features in square meters (m²).</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GeoJSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection) with polygonal geometries.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the area of the submitted features in square meters (m²)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.area_feature_asProperty"><span class="type-signature">(static) </span>exports.area_feature_asProperty<span class="signature">(feature)</span><span class="type-signature"> &rarr; {Feature.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line750">line 750</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#area">https://turfjs.org/docs/#area</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#area">https://turfjs.org/docs/#area</a> to compute the area of the submitted feature in square meters (m²) and append it as new property <code>area_squareMeters</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A single GeoJSON feature with polygonal geometry.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON feature containing its computed area in square meters (m²) within new property <code>area_squareMeters</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.area_featureCollection_asProperty"><span class="type-signature">(static) </span>exports.area_featureCollection_asProperty<span class="signature">(featureCollection_geoJSON)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line769">line 769</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li>area_feature_asProperty</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Computes the area in square meters (m²) of each feature of the submitted <code>featureCollection_geoJSON</code> as new property <code>area_squareMeters</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>featureCollection_geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A GeoJSON FeatureCollection with polygonal geometries.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON FeatureCollection containing the computed area of each feature in square meters (m²) within new property <code>area_squareMeters</code> of each feature.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.bbox_feature"><span class="type-signature">(static) </span>exports.bbox_feature<span class="signature">(feature)</span><span class="type-signature"> &rarr; {Feature}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line790">line 790</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#bbox">https://turfjs.org/docs/#bbox</a></li>
+        
+            <li><a href="https://turfjs.org/docs/#bboxPolygon">https://turfjs.org/docs/#bboxPolygon</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#bbox">https://turfjs.org/docs/#bbox</a> and <a href="https://turfjs.org/docs/#bboxPolygon">https://turfjs.org/docs/#bboxPolygon</a> to compute the bounding box of a single feature.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a single GeoJSON feature consisting of geometry and properties, for whom the bounding box shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON feature whose geometry has been replaced by the bounding box geometry of type <code>Polygon</code>.
+The resulting feature contains all properties of the original feature</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.bbox_featureCollection"><span class="type-signature">(static) </span>exports.bbox_featureCollection<span class="signature">(featureCollection_geoJSON)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line807">line 807</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li>bbox_feature</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Computes the bounding boxes of all features of the submitted <code>featureCollection_geoJSON</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>featureCollection_geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON FeatureCollection consisting of multiple features, for whom the bounding box shall be computed</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON features whose geometry has been replaced by the bounding box geometry of type <code>Polygon</code> as GeoJSON FeatureCollection.
+The resulting features contain all properties of the original features.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.buffer_feature"><span class="type-signature">(static) </span>exports.buffer_feature<span class="signature">(feature, radiusInMeters)</span><span class="type-signature"> &rarr; {Feature.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line827">line 827</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#buffer">https://turfjs.org/docs/#buffer</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#buffer">https://turfjs.org/docs/#buffer</a> to compute the buffered geometry a single feature.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a single GeoJSON feature consisting of geometry and properties, for whom the buffer shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>radiusInMeters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the buffer radius in meters</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON feature whose geometry has been replaced by the buffered geometry of type <code>Polygon</code>.
+The resulting feature contains all properties of the original feature</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.buffer_featureCollection"><span class="type-signature">(static) </span>exports.buffer_featureCollection<span class="signature">(featureCollection_geoJSON, radiusInMeters)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line846">line 846</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li>buffer_feature</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Computes the buffered geometries of all features of the submitted <code>featureCollection_geoJSON</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>featureCollection_geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON FeatureCollection consisting of multiple features, for whom the buffers shall be computed</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>radiusInMeters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the buffer radius in meters</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON features whose geometry has been replaced by the buffered geometry of type <code>Polygon</code> as GeoJSON FeatureCollection.
+The resulting features contain all properties of the original features.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.center_geometric"><span class="type-signature">(static) </span>exports.center_geometric<span class="signature">(geoJSON)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line864">line 864</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#center">https://turfjs.org/docs/#center</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#center">https://turfjs.org/docs/#center</a> to compute the geometric center point the submitted features.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GeoJSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON point feature representing the absolute geometric center of the submitted features.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.center_mass"><span class="type-signature">(static) </span>exports.center_mass<span class="signature">(geoJSON, properties)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line878">line 878</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#centerOfMass">https://turfjs.org/docs/#centerOfMass</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#centerOfMass">https://turfjs.org/docs/#centerOfMass</a> to compute the center of mass of the submitted features.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GeoJSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>properties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the properties object that shall be used to set the point feature's properties.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON point feature representing the center of mass of the submitted features (using the mean of all vertices).</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.centroid"><span class="type-signature">(static) </span>exports.centroid<span class="signature">(geoJSON)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line891">line 891</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#centroid">https://turfjs.org/docs/#centroid</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#center">https://turfjs.org/docs/#center</a> to compute the centroid the submitted features.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">GeoJSON</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON point feature representing the centroid of the submitted features.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.contains"><span class="type-signature">(static) </span>exports.contains<span class="signature">(feature_A, feature_B)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line905">line 905</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#booleanContains">https://turfjs.org/docs/#booleanContains</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#booleanContains">https://turfjs.org/docs/#booleanContains</a> to check if the submitted GeoJSON feature <code>feature_A</code> contains <code>feature_B</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns <code>true</code>, if <code>feature_A</code> contains <code>feature_B</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.difference"><span class="type-signature">(static) </span>exports.difference<span class="signature">(polygonFeature_A, polygonFeature_B)</span><span class="type-signature"> &rarr; {Feature.&lt;(Polygon|MultiPolygon)>|null}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line921">line 921</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#difference">https://turfjs.org/docs/#difference</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#difference">https://turfjs.org/docs/#difference</a> to compute the <code>difference</code> between two polygonal GeoJSON features.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonFeature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of type <code>Polygon</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonFeature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of type <code>Polygon</code> to difference from <code>polygonFeature_A</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON feature of type <code>MultiPolygon</code> showing the area of <code>polygonFeature_A</code>
+excluding the area of <code>polygonFeature_B</code> (if empty returns <code>null</code>).</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;(Polygon|MultiPolygon)></span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.disjoint"><span class="type-signature">(static) </span>exports.disjoint<span class="signature">(feature_A, feature_B)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line969">line 969</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#booleanDisjoint">https://turfjs.org/docs/#booleanDisjoint</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#booleanDisjoint">https://turfjs.org/docs/#booleanDisjoint</a> to check if the submitted GeoJSON features are <code>disjoint</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns <code>true</code>, if both features are disjoint and thus do not intersect.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.dissolve"><span class="type-signature">(static) </span>exports.dissolve<span class="signature">(featureCollection_geoJSON, propertyName)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line937">line 937</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#dissolve">https://turfjs.org/docs/#dissolve</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#dissolve">https://turfjs.org/docs/#dissolve</a> to dissolve polygonal features.
+NOTE: TURF DISSOLVE IS KNOWN TO BE BUGGY: IT MIGHT FAIL WITH ERROR ALTHOUGH IT SHOULD WORK. AS AN ALTERNATIVE, YOU SHOULD CONSIDER TO USE <code>union</code> METHOD.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>featureCollection_geoJSON</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be transformed to multiple polygons before dissolving).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>propertyName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>OPTIONAL parameter that points to an existing attribute used by the features. If set, only features with the same attribute value will be dissolved.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON FeatureCollection containing the dissolved features (Note that attributes are not merged/aggregated).</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.distance_direct_kilometers"><span class="type-signature">(static) </span>exports.distance_direct_kilometers<span class="signature">(point_A, point_B)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line984">line 984</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#distance">https://turfjs.org/docs/#distance</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#distance">https://turfjs.org/docs/#distance</a> to compute the direct (aerial) distance between the submitted points.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>point_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>valid GeoJSON Feature with geometry type <code>Point</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>point_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>valid GeoJSON Feature with geometry type <code>Point</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the direct distance between the submitted points in kilometers.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.distance_matrix_kilometers"><span class="type-signature">(async, static) </span>exports.distance_matrix_kilometers<span class="signature">(locations, sourceIndices, destinationIndices, vehicleType)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1154">line 1154</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>openrouteservice_url CONSTANT</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Performs a POST request against <code>/matrix</code> endpoint of the openrouteservice instance
+specified via the CONSTANT openrouteservice_url (version 4.7.2) to aquire the distance matrix
+for the submitted source and destinations points based on waypath routing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// examplar response to show how distance matrix is structured{
+    "distances": [
+        [
+            2.59,
+            4.55
+        ],
+        [
+            2.05,
+            2.6
+        ]
+    ]
+    "destinations": [
+        {
+            "location": [
+                7.019859,
+                51.458106
+            ],
+            "name": "Severinstraße",
+            "snapped_distance": 24.9
+        },
+        {
+            "location": [
+                7.032748,
+                51.445316
+            ],
+            "name": "",
+            "snapped_distance": 12.44
+        }
+    ],
+    "sources": [
+        {
+            "location": [
+                7.007574,
+                51.475965
+            ],
+            "name": "Gladbecker Straße, B 224",
+            "snapped_distance": 0.35
+        },
+        {
+            "location": [
+                7.001853,
+                51.449557
+            ],
+            "name": "",
+            "snapped_distance": 1.98
+        }
+    ],
+    "info": {
+        "service": "matrix",
+        "engine": {
+            "version": "4.7.2",
+            "build_date": "2019-03-29T11:38:45Z"
+        },
+        "attribution": "openrouteservice.org, OpenStreetMap contributors",
+        "timestamp": 1560748456760,
+        "query": {
+            "profile": "foot-walking",
+            "units": "km"
+        }
+    }
+}</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>locations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>array of valid GeoJSON Features with geometry type <code>Point</code> - the coordinates are expected to follow the order <code>latitude</code>.
+WARNING: it might be possible, that the queried instance of OpenRouteService has a configuration for maximum number of allowed locations per request (i.e. 200 is default configuration),
+causing the request to fail.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sourceIndices</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the indices pointing to such points within submitted <code>locations</code>, that shall be used as source points for matrix analysis,
+as comma-separated string of indices. Required format: 'index1,index2,index3,...'. A check, whether the index string contains indices that do not match the <code>locations</code> array, is not performed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>destinationIndices</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the indices pointing to such points within submitted <code>locations</code>, that shall be used as destination points for matrix analysis,
+as comma-separated string of indices. Required format: 'index4,index5,index6,...'. A check, whether the index string contains indices that do not match the <code>locations</code> array, is not performed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vehicleType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of vehicle to use for routing analysis;
+allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. If parameter has in invalid value, <code>PEDESTRIAN</code> is used per default.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the distance matrix between the submitted source and destination points based on waypath routing.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.distance_waypath_kilometers"><span class="type-signature">(async, static) </span>exports.distance_waypath_kilometers<span class="signature">(point_A, point_B, vehicleType)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1004">line 1004</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>openrouteservice_url CONSTANT</li>
+        
+            <li>distance_direct_kilometers</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Performs a GET request against <code>/routes</code> endpoint of the openrouteservice instance
+specified via the CONSTANT openrouteservice_url (version 4.7.2) to aquire the distance
+between the submitted points based on waypath routing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>point_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>valid GeoJSON Feature with geometry type <code>Point</code> - the coordinates are expected to follow the order <code>latitude</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>point_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>valid GeoJSON Feature with geometry type <code>Point</code> - the coordinates are expected to follow the order <code>latitude</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vehicleType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of vehicle to use for routing analysis;
+allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. If parameter has in invalid value, <code>PEDESTRIAN</code> is used per default.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the distance between the submitted points in kilometers based on waypath routing
+(thus, the distance is likely to be greater then the direct distance computed by distance_direct_kilometers).</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.duration_matrix_seconds"><span class="type-signature">(async, static) </span>exports.duration_matrix_seconds<span class="signature">(locations, sourceIndices, destinationIndices, vehicleType)</span><span class="type-signature"> &rarr; {object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1296">line 1296</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>openrouteservice_url CONSTANT</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Performs a POST request against <code>/matrix</code> endpoint of the openrouteservice instance
+specified via the CONSTANT openrouteservice_url (version 4.7.2) to aquire the duration matrix
+for the submitted source and destinations points based on waypath routing.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// examplar response to show how distance matrix is structured{
+    "durations": [
+        [
+            259,
+            455
+        ],
+        [
+            205,
+            26
+        ]
+    ]
+    "destinations": [
+        {
+            "location": [
+                7.019859,
+                51.458106
+            ],
+            "name": "Severinstraße",
+            "snapped_distance": 24.9
+        },
+        {
+            "location": [
+                7.032748,
+                51.445316
+            ],
+            "name": "",
+            "snapped_distance": 12.44
+        }
+    ],
+    "sources": [
+        {
+            "location": [
+                7.007574,
+                51.475965
+            ],
+            "name": "Gladbecker Straße, B 224",
+            "snapped_distance": 0.35
+        },
+        {
+            "location": [
+                7.001853,
+                51.449557
+            ],
+            "name": "",
+            "snapped_distance": 1.98
+        }
+    ],
+    "info": {
+        "service": "matrix",
+        "engine": {
+            "version": "4.7.2",
+            "build_date": "2019-03-29T11:38:45Z"
+        },
+        "attribution": "openrouteservice.org, OpenStreetMap contributors",
+        "timestamp": 1560748456760,
+        "query": {
+            "profile": "foot-walking",
+            "units": "seconds"
+        }
+    }
+}</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>locations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>array of valid GeoJSON Features with geometry type <code>Point</code> - the coordinates are expected to follow the order <code>latitude</code>.
+WARNING: it might be possible, that the queried instance of OpenRouteService has a configuration for maximum number of allowed locations per request (i.e. 200 is default configuration),
+causing the request to fail.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sourceIndices</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the indices pointing to such points within submitted <code>locations</code>, that shall be used as source points for matrix analysis,
+as comma-separated string of indices. Required format: 'index1,index2,index3,...'. A check, whether the index string contains indices that do not match the <code>locations</code> array, is not performed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>destinationIndices</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the indices pointing to such points within submitted <code>locations</code>, that shall be used as destination points for matrix analysis,
+as comma-separated string of indices. Required format: 'index4,index5,index6,...'. A check, whether the index string contains indices that do not match the <code>locations</code> array, is not performed.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vehicleType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of vehicle to use for routing analysis;
+allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. If parameter has in invalid value, <code>PEDESTRIAN</code> is used per default.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the duration matrix between the submitted source and destination points based on waypath routing.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.intersection"><span class="type-signature">(static) </span>exports.intersection<span class="signature">(polygonFeature_A, polygonFeature_B)</span><span class="type-signature"> &rarr; {Feature|null}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1693">line 1693</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#intersect">https://turfjs.org/docs/#intersect</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#intersect">https://turfjs.org/docs/#intersect</a> to compute the <code>intersection</code> between two polygonal GeoJSON features.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonFeature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of type <code>Polygon</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonFeature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of type <code>Polygon</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns a GeoJSON feature representing the point(s) they share (in case of a <code>Point</code> or <code>MultiPoint</code> ),
+the borders they share (in case of a <code>LineString</code> or a <code>MultiLineString</code> ), the area they share (in case of <code>Polygon</code> or <code>MultiPolygon</code> ).
+If they do not share any point, returns <code>null</code></p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature</span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.intersects"><span class="type-signature">(static) </span>exports.intersects<span class="signature">(feature_A, feature_B)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1676">line 1676</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#booleanDisjoint">https://turfjs.org/docs/#booleanDisjoint</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#booleanDisjoint">https://turfjs.org/docs/#booleanDisjoint</a> and negates the result to check if the submitted GeoJSON features <code>intersect</code> each other.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns <code>true</code>, if both features intersect each other.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.isochrones_byDistance"><span class="type-signature">(async, static) </span>exports.isochrones_byDistance<span class="signature">(startingPoints, vehicleType, travelDistanceInMeters, dissolve, deactivateLog, avoid_features)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1527">line 1527</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>openrouteservice_url CONSTANT</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Performs a GET request against <code>/isochrones</code> endpoint of the openrouteservice instance
+specified via the CONSTANT openrouteservice_url (version 4.7.2) to aquire the reachability isochrones by distance (equidistance)
+starting from the submitted points based on waypath routing.
+If the number of <code>startingPoints</code> is greater than allowed number of max locations ({@see maxLocationsForORSRequest}), <code>startingPoints</code> will be plit up and multiple requests will be made. Results will be combined to a single FeatureCollection.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>startingPoints</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Feature.&lt;Point>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>array of valid GeoJSON Features with geometry type <code>Point</code> - the coordinates are expected to follow the order <code>latitude</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vehicleType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of vehicle to use for routing analysis;
+allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. If parameter has in invalid value, <code>PEDESTRIAN</code> is used per default.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>travelDistanceInMeters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the travel distance to compute the isochrones (equidistance) in meters</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dissolve</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>deactivateLog</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>avoid_features</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>may specify a featureType of routing network that shall be avoided. possible values are <code>tollways, ferries, tunnels, pavedroads, unpavedroads, tracks, fords, steps, hills</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.isochrones_byTime"><span class="type-signature">(async, static) </span>exports.isochrones_byTime<span class="signature">(startingPoints, vehicleType, travelTimeInSeconds, customMaxSpeedInKilometersPerHour, dissolve, deactivateLog, avoid_features)</span><span class="type-signature"> &rarr; {FeatureCollection.&lt;Polygon>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1374">line 1374</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>openrouteservice_url CONSTANT</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Performs a GET request against <code>/isochrones</code> endpoint of the openrouteservice instance
+specified via the CONSTANT openrouteservice_url (version 4.7.2) to aquire the reachability isochrones by time
+starting from the submitted points based on waypath routing.
+If the number of <code>startingPoints</code> is greater than allowed number of max locations ({@see maxLocationsForORSRequest}), <code>startingPoints</code> will be plit up and multiple requests will be made. Results will be combined to a single FeatureCollection.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>startingPoints</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Feature.&lt;Point>></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>array of valid GeoJSON Features with geometry type <code>Point</code> - the coordinates are expected to follow the order <code>latitude</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vehicleType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of vehicle to use for routing analysis;
+allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. If parameter has in invalid value, <code>PEDESTRIAN</code> is used per default.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>travelTimeInSeconds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the travel time to compute the isochrones in seconds</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>customMaxSpeedInKilometersPerHour</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a custom maximum speed to use for isochrone computation or <code>null</code> to use defaults from OpenRouteService</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dissolve</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>if multiple starting points were specified this optional parameter controls whether the returned isochrones shall be dissolved or not - default value is false</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>deactivateLog</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>set to true to deactivate log statements (i.e. when calling the method for thousands of starting points separately) - default value is false</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>avoid_features</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">null</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>may specify a featureType of routing network that shall be avoided. possible values are <code>tollways, ferries, tunnels, pavedroads, unpavedroads, tracks, fords, steps, hills</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the reachability isochrones as GeoJSON FeatureCollection; if multiple starting points were specified the resulting isochrones for each point are dissolved as far as possible.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">FeatureCollection.&lt;Polygon></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.nearestPoint_directDistance"><span class="type-signature">(static) </span>exports.nearestPoint_directDistance<span class="signature">(targetPoint, pointCollection)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1708">line 1708</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#nearestPoint">https://turfjs.org/docs/#nearestPoint</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#nearestPoint">https://turfjs.org/docs/#nearestPoint</a> to identify the nearest point of a point collection.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetPoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Point</code>, for which the nearest point will be searched</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pointCollection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON FeatureCollection of features with geometry type <code>Point</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the nearest GeoJSON Point Feature with the shortest direct distance to <code>targetPoint</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.nearestPoint_waypathDistance"><span class="type-signature">(async, static) </span>exports.nearestPoint_waypathDistance<span class="signature">(targetPoint, pointCollection, vehicleType)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1738">line 1738</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://turfjs.org/docs/#nearestPoint_directDistance">https://turfjs.org/docs/#nearestPoint_directDistance</a></li>
+        
+            <li><a href="https://turfjs.org/docs/#distance_waypath_kilometers">https://turfjs.org/docs/#distance_waypath_kilometers</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Identifies the nearest point of a <code>pointCollection</code> which has the shortest waypath distance to <code>targetPoint</code>. In contrast to method nearestPoint_directDistance,
+this method computes the distance based on waypaths of the corresponding <code>vehicleType</code>. It makes use of method <code>distance_waypath_kilometers</code>, which queries
+Open Route Service for waypath routing between two points.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetPoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Point</code>, for which the nearest point will be searched</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pointCollection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON FeatureCollection of features with geometry type <code>Point</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vehicleType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the type of vehicle to use for routing analysis;
+allowed values are <code>PEDESTRIAN</code>,<code>BIKE</code>, <code>CAR</code>. If parameter has in invalid value, <code>PEDESTRIAN</code> is used per default.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the nearest GeoJSON Point Feature with the shortest waypath distance to <code>targetPoint</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.nearestPointOnLine_directDistance"><span class="type-signature">(static) </span>exports.nearestPointOnLine_directDistance<span class="signature">(targetPoint, lineString)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1800">line 1800</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a> to identify the nearest point on the submitted line.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetPoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Point</code>, for which the nearest point will be searched</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lineString</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;(LineString|MultiLineString)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature  with geometry type <code>LineString</code> or <code>MultiLineString</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the nearest GeoJSON Point Feature with the shortest direct distance to <code>targetPoint</code>. Furthermore it contains the property <code>dist</code>, which
+contains the direct distance to <code>targetPoint</code> in kilometers.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.nearestPointOnLines_directDistance"><span class="type-signature">(static) </span>exports.nearestPointOnLines_directDistance<span class="signature">(targetPoint, lineStringCollection)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1823">line 1823</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a> to identify the nearest point for the nearest line of the submitted lines.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetPoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Point</code>, for which the nearest point will be searched</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>lineStringCollection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FeatureCollection.&lt;(LineString|MultiLineString)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON FeatureCollection of features with geometry type <code>LineString</code> or <code>MultiLineString</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the nearest GeoJSON Point Feature with the shortest direct distance to <code>targetPoint</code>. Furthermore it contains the property <code>dist</code>, which
+contains the direct distance to <code>targetPoint</code> in kilometers.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.nearestPointOnPolygon_directDistance"><span class="type-signature">(static) </span>exports.nearestPointOnPolygon_directDistance<span class="signature">(targetPoint, polygon)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1866">line 1866</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a></li>
+        
+            <li><a href="https://turfjs.org/docs/#polygonToLine">https://turfjs.org/docs/#polygonToLine</a></li>
+        
+            <li>nearestPointOnLine_directDistance</li>
+        
+            <li>nearestPointOnLines_directDistance</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Utilizes <code>turf</code> functions <a href="https://turfjs.org/docs/#polygonToLine">https://turfjs.org/docs/#polygonToLine</a> to split up the Polygon|Multipolygon to LineStrings and
+<a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a> to identify the nearest point on the lines of the polygon.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetPoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Point</code>, for which the nearest point will be searched</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>polygon</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;(Polygon|MultiPolygon)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Polygon</code> or <code>MultiPolygon</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the nearest GeoJSON Point Feature with the shortest direct distance to <code>targetPoint</code>. Furthermore it contains the property <code>dist</code>, which
+contains the direct distance to <code>targetPoint</code> in kilometers.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.nearestPointOnPolygons_directDistance"><span class="type-signature">(static) </span>exports.nearestPointOnPolygons_directDistance<span class="signature">(targetPoint, polygonCollection)</span><span class="type-signature"> &rarr; {Feature.&lt;Point>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1904">line 1904</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a></li>
+        
+            <li><a href="https://turfjs.org/docs/#polygonToLine">https://turfjs.org/docs/#polygonToLine</a></li>
+        
+            <li>nearestPointOnLine_directDistance</li>
+        
+            <li>nearestPointOnLines_directDistance</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Utilizes <code>turf</code> functions <a href="https://turfjs.org/docs/#polygonToLine">https://turfjs.org/docs/#polygonToLine</a> to split up the input Polygons|Multipolygons to LineStrings and
+<a href="https://turfjs.org/docs/#nearestPointOnLine">https://turfjs.org/docs/#nearestPointOnLine</a> to identify the nearest point on the lines of the polygons.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>targetPoint</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Point></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature with geometry type <code>Point</code>, for which the nearest point will be searched</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonCollection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;(Polygon|MultiPolygon)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON FeatureCollection of features with geometry type <code>Polygon</code> or <code>MultiPolygon</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns the nearest GeoJSON Point Feature with the shortest direct distance to <code>targetPoint</code>. Furthermore it contains the property <code>dist</code>, which
+contains the direct distance to <code>targetPoint</code> in kilometers.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;Point></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.overlap"><span class="type-signature">(static) </span>exports.overlap<span class="signature">(feature_A, feature_B)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1941">line 1941</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#booleanOverlap">https://turfjs.org/docs/#booleanOverlap</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#booleanOverlap">https://turfjs.org/docs/#booleanOverlap</a> to check if the submitted GeoJSON features overlaop each other.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns <code>true</code>, if <code>feature_A</code> overlaps partially with <code>feature_B</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.union"><span class="type-signature">(static) </span>exports.union<span class="signature">(polygonFeature_A, polygonFeature_B)</span><span class="type-signature"> &rarr; {Feature.&lt;(Polygon|MultiPolygon)>|null}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2036">line 2036</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#union">https://turfjs.org/docs/#union</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#union">https://turfjs.org/docs/#union</a> to compute the <code>union</code> of two or more polygonal GeoJSON features.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonFeature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;(Polygon|MultiPolygon)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of type <code>Polygon</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>polygonFeature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;(Polygon|MultiPolygon)></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of type <code>Polygon</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>the GeoJSON feature of type <code>MultiPolygon</code> representing the <code>union</code> of the submitted features or <code>null</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Feature.&lt;(Polygon|MultiPolygon)></span>
+|
+
+<span class="param-type">null</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.within"><span class="type-signature">(static) </span>exports.within<span class="signature">(feature_A, feature_B)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2050">line 2050</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>turf CONSTANT</li>
+        
+            <li><a href="https://turfjs.org/docs/#booleanWithin">https://turfjs.org/docs/#booleanWithin</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Encapsulates <code>turf</code> function <a href="https://turfjs.org/docs/#booleanWithin">https://turfjs.org/docs/#booleanWithin</a> to check if the submitted GeoJSON feature <code>feature_A</code> lies within <code>feature_B</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a GeoJSON feature of any type</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns <code>true</code>, if <code>feature_A</code> lies within <code>feature_B</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".exports.within_usingBBOX"><span class="type-signature">(static) </span>exports.within_usingBBOX<span class="signature">(feature_A, feature_B)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line2072">line 2072</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>bbox_feature</li>
+        
+            <li>area</li>
+        
+            <li><a href="https://turfjs.org/docs/#intersect">https://turfjs.org/docs/#intersect</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>This method is an alternative implementation of a spatial <code>within</code> function for spatial features.
+First of all, it computes bounding boxes of the relevant features to speed up the spatial comparison.
+Furthermore, instead of checking whether <code>feature_A</code> lies completely within <code>feature_B</code>,
+it inspects whether the bounding boxes overlap for more than 90.0%. If the features's geometries might contain faulty coordinates for whatever reason that would
+cause a strict spatial <code>within</code> comparison to output <code>false</code>, this alternative approach ensures that such small coordinate failures will still
+result in a positive <code>within</code> check.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_A</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a base indicator (input) feature as GeoJSON feature</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feature_B</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Feature.&lt;Polygon></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>a target feature as GeoJSON feature (for which indicator results shall be computed)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>returns <code>true</code> if the <code>feature_A</code> lies within <code>feature_B</code>
+(precisely, if their bounding boxes overlap for more than 90.0%); <code>false</code> otherwise</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Jul 30 2019 15:02:59 GMT+0200 (Mitteleuropäische Sommerzeit) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

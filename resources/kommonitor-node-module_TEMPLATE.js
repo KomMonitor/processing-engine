@@ -5,6 +5,30 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+* This constant may be used to perform spatial analysis and geometric operation tasks.
+* A full-featured API documentation of Turf.js library can be found at {@link http://turfjs.org/}.
+* This template offers several API methods that utilize Turf.js to implement typical geospatial operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link http://turfjs.org/}
+* @see {@link https://github.com/Turfjs/turf}
+* @memberof CONSTANTS
+* @constant
+*/
+const turf = require('@turf/turf');
+
+/**
+* This constant may be used to perform statistical computations.
+* A full-featured API documentation of JStat.js library can be found at {@link http://jstat.org/}.
+* This template offers several API methods that utilize JStst.js to implement typical statistical operations.
+* If required a user can implement custom functions, in which this constant can be called directly.
+* @see {@link https://github.com/jstat/jstat}
+* @see {@link https://jstat.github.io/overview.html}
+* @memberof CONSTANTS
+* @constant
+*/
+const jStat = require('jStat').jStat;
+
+/**
 * Module that contains various helper methods (spatial GIS functions and statistical functions)
 * to simplify script writing
 */
@@ -56,7 +80,10 @@ const aggregationType = "AVERAGE";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // i.e. then modify the features of targetSpatialUnit_geoJSON and return it
 
+
+  return targetSpatialUnit_geoJSON;
 };
 
 /**
@@ -139,7 +166,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
@@ -199,7 +226,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
   KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features. Each indicator feature will be weighted by its size (area in squareMeters).");
+  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features.");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
@@ -213,7 +240,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);

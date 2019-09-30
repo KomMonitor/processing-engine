@@ -25,7 +25,7 @@ app.use(serveStatic("public"));
 
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
-var serverPort = 8086;
+var serverPort = process.env.PORT;
 
 // swaggerRouter configuration
 var options = {

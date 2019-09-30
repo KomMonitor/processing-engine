@@ -55,13 +55,12 @@ const aggregationType = "AVERAGE";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
-  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  // retrieve required baseIndicator using its meaningful name
+  // retrieve required georesources using its meaningful name
   var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
   var schulen = KmHelper.getGeoresourceByName("Grundschulen", georesourcesMap);
 
-  // divide by 1000 for meters-->kilometers
+  // retrieve process parameter for maximum distance
   var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
   KmHelper.log("max distance parameter in m: " + maxDistance);
 
@@ -231,7 +230,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
@@ -306,7 +305,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.centroid(indicatorFeature);
+      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
       if(KmHelper.within(centerPoint, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
