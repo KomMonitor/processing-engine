@@ -17,10 +17,11 @@ app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 
 const corsOptions = {
   // exposedHeaders: 'Access-Control-Allow-Origin,Location,Connection,Content-Type,Date,Transfer-Encoding'
-  exposedHeaders: ['Access-Control-Allow-Origin','Location','Connection','Content-Type','Date','Transfer-Encoding','Origin','X-Requested-With', 'Accept'],
-  origin: "*"
+  exposedHeaders: ['Access-Control-Allow-Origin','Location','Connection','Content-Type','Date','Transfer-Encoding','Origin','X-Requested-With', 'Accept']
+  // origin: "*"
 };
 app.use(cors(corsOptions));
+// app.use(cors());
 app.use(serveStatic("public"));
 
 var swaggerTools = require('swagger-tools');
