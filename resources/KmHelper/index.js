@@ -1462,6 +1462,9 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
     if (dissolve){
       return exports.dissolve(resultIsochrones, "value");
     }
+    else{
+      return resultIsochrones;
+    }
   } // end else
 };
 
@@ -1614,6 +1617,9 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
     // if dissolve is true then dissolve results
     if (dissolve){
       return exports.dissolve(resultIsochrones, "value");
+    }
+    else{
+      return resultIsochrones;
     }
   } // end else
 
