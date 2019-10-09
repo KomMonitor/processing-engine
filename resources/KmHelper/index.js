@@ -892,17 +892,36 @@ exports.centroid = function (geoJSON){
   return turf.centroid(geoJSON);
 };
 
+// /**
+// * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointOnFeature} to compute the a point guaranteed to be on the surface of submitted features.
+// * @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+// * @returns {Feature<Point>} the GeoJSON point feature on the surface of the submitted features.
+// * @see turf CONSTANT
+// * @see {@link https://turfjs.org/docs/#pointOnFeature}
+// * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+// * @function
+// */
+// exports.pointOnFeature = function (geoJSON){
+//   return turf.pointOnFeature(geoJSON);
+// };
+
 /**
-* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointOnFeature} to compute the a point guaranteed to be on the surface of submitted features.
-* @param {GeoJSON} geoJSON - any form of valid GeoJSON object (e.g. a single feature, or a FeatureCollection).
+* Encapsulates {@linkcode turf} functions {@linkcode https://turfjs.org/docs/#buffer} {@linkcode https://turfjs.org/docs/#pointOnFeature} to compute the a point guaranteed to be on the surface of submitted feature.
+* It buffers the feature with negative radius and then performs pointOnfeature method to ensure that the computet point is definitly within feature. Only pointOnFeature sometimes places point on border and - due to coordinate rounding etc. - point might be within other feature...
+* @param {GeoJSON} geoJSON - valid GeoJSON object.
 * @returns {Feature<Point>} the GeoJSON point feature on the surface of the submitted features.
 * @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#buffer}
 * @see {@link https://turfjs.org/docs/#pointOnFeature}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
 * @function
 */
 exports.pointOnFeature = function (geoJSON){
-  return turf.pointOnFeature(geoJSON);
+  // var triangles = turf.tesselate(polygonFeature);
+
+  var buffered = turf.buffer(geoJSON, -0.03, {units: 'kilometers'});
+
+  return turf.pointOnFeature(buffered);
 };
 
 /**
