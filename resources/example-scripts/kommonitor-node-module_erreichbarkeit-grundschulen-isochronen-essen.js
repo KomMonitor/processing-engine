@@ -64,8 +64,8 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
-  var schulen = KmHelper.getGeoresourceByName("Schulen", georesourcesMap);
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var schulen = KmHelper.getGeoresourceById("6018b011-042f-4ab4-a27e-9a1deff02ec9", georesourcesMap);
 
   // divide by 1000 for meters-->kilometers
   var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);

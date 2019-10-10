@@ -36,16 +36,19 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 const aggregationType = "AVERAGE";
 
 // CUSTOM CONSTANTS
-const freiflaecheTypeAttrName = "code2013";
-const freiflaecheTypeAttrTargetValueArray = ["250", "320", "321", "322", "323", "324", "325", "326", "327", "328", "329",
-    "330", "331", "332", "333", "334", "335", "336", "337", "338", "339", "340", "341", "342", "343", "344", "345", "346", "347", "348", "349",
-    "350", "351", "352", "353", "354", "355", "356", "357", "358", "359", "360", "361", "362", "363", "364", "365", "367", "368", "369",
-    "370", "371", "372", "373", "374", "375", "376", "377", "378", "379", "380", "381", "382", "383", "384", "385",
-    "400", "401", "402", "403", "404", "405", "406", "407", "408", "409", "410", "411", "412", "413", "414", "415", "416", "417", "418", "419",
-    "420", "421", "422", "423", "424", "425", "426", "427", "428", "429", "430", "431", "432", "433", "434", "435", "436", "437", "438", "439",
-    "440", "441", "442", "443", "444", "445", "446", "447", "448", "449", "450", "451", "452", "453", "454", "455", "456", "457", "458", "459",
-    "460", "461", "462", "463", "464", "465", "466", "467", "468", "469", "470", "471", "472", "473", "474", "475", "476", "477", "478", "479",
-    "480", "481", "482", "483", "484", "485", "486", "487", "488", "489", "490"];
+const freiflaecheTypeAttrName = "code2015";
+const freiflaecheTypeAttrTargetValueArray = ["270", "272", "273", "280", "282", "290", "292", "301", "305", "306", "307", "323", "325",
+    "330", "331", "351", "352", "353", "354", "361", "362", "363", "370", "400", "410",
+    "420", "431", "501", "502", "503"];
+// const freiflaecheTypeAttrTargetValueWeightMap = new Map();
+// freiflaecheTypeAttrTargetValueArray.forEach(function(typeValue){
+//   if (typeValue === "370"){
+//     freiflaecheTypeAttrTargetValueWeightMap.set(typeValue, 0.5);
+//   }
+//   else{
+//     freiflaecheTypeAttrTargetValueWeightMap.set(typeValue, 1);
+//   }
+// });
 const wohnflaecheAttributeName = "GF";
 
 
@@ -72,8 +75,8 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
-  var rnk = KmHelper.getGeoresourceByName("Realnutzungskartierung", georesourcesMap);
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var rnk = KmHelper.getGeoresourceById("619de1fd-c706-42d4-99db-f9b9972e110f", georesourcesMap);
 
   var radius_kleineFlaechen = KmHelper.getProcessParameterByName_asNumber("RadiusKleineFreiflaechen", processParameters);
   var radius_grosseFlaechen = KmHelper.getProcessParameterByName_asNumber("RadiusGrosseFreiflaechen", processParameters);
@@ -141,8 +144,8 @@ rnk.features.forEach(function(feature) {
 });
 
 
-KmHelper.log("Compute area for each building as proxy for wohnfläche");
-wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
+// KmHelper.log("Compute area for each building as proxy for wohnfläche");
+// wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
 
 KmHelper.log("get centroids of buildings");
 var wohngeb_centroids = new Array();
@@ -187,7 +190,7 @@ var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
 var counter = 0;
 	for (var [mapKey, mapObject] of wohngebIsochronesMap){
 
-		wohngebFeature = mapObject["wohngebFeature"];
+		var wohngebFeature = mapObject["wohngebFeature"];
 
     // isochrones by distance of smaller and bigger radius using foot-walking as GeoJSON feature collection
     var isochrone_wohngeb_smallRadius = mapObject["isochrone_small"];
@@ -232,8 +235,6 @@ var counter = 0;
           // add wohnflaeche to wohnflCovered
           spatialUnitFeat.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
         }
-
-
         break;
   		}
     }
