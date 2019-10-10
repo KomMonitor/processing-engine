@@ -33,7 +33,7 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
 
 
 
@@ -57,12 +57,84 @@ const aggregationType = "SUM";
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
+  // retrieve required baseIndicator
+  var ewzGeoJSON = KmHelper.getBaseIndicatorById('d6f447c1-5432-4405-9041-7d5b05fd9ece', baseIndicatorsMap);
+  var arbeitsloseGeoJSON = KmHelper.getBaseIndicatorById('f3b1dd32-f94e-4cc6-a7a3-6827d600629e', baseIndicatorsMap);
+
+  KmHelper.log("Retrieved required baseIndicators successfully");
+
+  // now we compute the new indicator
+  KmHelper.log("Iterate over base indicators and save intermediate values within a map object");
+
+  /**
+  * create a map to store indicator values for each feature of the target spatial unit
+  * by using such a map object, we can ensure, that we only iterate ONCE over each bease indicator
+  * and also can only iterate ONCE over each target spatial unit feature at the end to compute the indicator
+  */
+  var map = new Map();
+
+  KmHelper.log("Process base indicator 'Gesamteinwohnerzahl'");
+
+  /**
+  * iterate over each feature of the baseIndicator and use its indicator value to modify map object
+  * NOTE use spatialUnitFeatureId as key to be able to identify entries by their unique feature id!
+  */
+  ewzGeoJSON.features.forEach(function(feature) {
+    // get the unique featureID of the spatial unit feature as String
+    var featureId = KmHelper.getSpatialUnitFeatureIdValue(feature);
+    // get the time series value of the base indicator feature for the requested target date (with its required prefix!)
+    var einwohnerzahl = KmHelper.getIndicatorValue(feature, targetDate);
+
+    if(einwohnerzahl === undefined || einwohnerzahl === null){
+      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for targetDate '" + targetDate + "'");
+      KmHelper.log("WARNING: the feature value will thus be set to '0' and computation will continue");
+      einwohnerzahl = 0;
+    }
+
+    var mapObject = {
+      featureId: featureId,
+      indicatorValue: undefined,
+      ewz: einwohnerzahl
+    };
+
+    // modify map object (i.e. set value initially, or perform calculations and store modified value)
+    // key should be unique featureId of the spatial unit feature
+    map.set(featureId, mapObject);
+  });
+
+  KmHelper.log("Process base indicator 'Arbeitslose'");
+
+  /**
+  * iterate over each feature of the baseIndicator and use its indicator value to modify map object
+  * NOTE use spatialUnitFeatureId as key to be able to identify entries by their unique feature id!
+  */
+  arbeitsloseGeoJSON.features.forEach(function(feature) {
+    // get the unique featureID of the spatial unit feature as String
+    var featureId = KmHelper.getSpatialUnitFeatureIdValue(feature);
+    // get the time series value of the base indicator feature for the requested target date (with its required prefix!)
+    var anzahlArbeitslose = KmHelper.getIndicatorValue(feature, targetDate);
+
+    if(anzahlArbeitslose === undefined || anzahlArbeitslose === null){
+      KmHelper.log("WARNING: the feature with featureID '" + featureId + "' does not contain a time series value for targetDate '" + targetDate + "'");
+      KmHelper.log("WARNING: the feature value will thus be set to '0' and computation will continue");
+      anzahlArbeitslose = 0;
+    }
+
+    // modify map object (i.e. set value initially, or perform calculations and store modified value)
+    // key should be unique featureId of the spatial unit feature
+    var mapEntry = map.get(featureId);
+
+    var ewz = mapEntry.ewz;
+
+    var anteilArbeitslose_percent = (anzahlArbeitslose / ewz) * 100;
+    mapEntry.indicatorValue = anteilArbeitslose_percent;
+    map.set(featureId, mapEntry);
+  });
+
   var numFeatures = targetSpatialUnit_geoJSON.features.length;
 
   // now we compute the new indicator
   KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
-
-  var testIndex = 0;
 
   // iterate once over target spatial unit features and compute indicator utilizing map entries
   var spatialUnitIndex = 0;
@@ -70,17 +142,19 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
   targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
 
-    if(spatialUnitFeature.geometry === undefined || spatialUnitFeature.geometry === null){
-      KmHelper.log("Test");
-      testIndex ++;
-      return;
-    }
+    // get spatialUnit feature id as string --> use it to get associated map entry
+    var spatialUnitFeatureId = KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature);
 
-    // compute area of spatial unit feature in m²
-    var featureArea = KmHelper.area(spatialUnitFeature);
+    var mapEntry = map.get(spatialUnitFeatureId);
+
+    var ewz = mapEntry.ewz;
+    var indicatorValue = mapEntry.indicatorValue;
+
+    // set aggregationWeight as number of citizens
+    KmHelper.setAggregationWeight(spatialUnitFeature, ewz);
 
     // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, featureArea);
+    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
 
   	spatialUnitIndex ++;
 
@@ -91,8 +165,6 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   });
 
   KmHelper.log("Computation of indicator finished");
-
-  KmHelper.log("Number of faulty geometries: " + testIndex);
 
   return targetSpatialUnit_geoJSON;
 
@@ -143,7 +215,6 @@ function disaggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_
   // disaggregate indicator
 
 };
-
 
 /**
 * Aggregate features from {@linkcode indicator_geoJSON} to target features of {@linkcode targetSpatialUnit_geoJSON}

@@ -60,8 +60,8 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
-  var supermaerkteFeatures = KmHelper.getGeoresourceByName("Lebensmittelnahversorgung", georesourcesMap);
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var supermaerkteFeatures = KmHelper.getGeoresourceById("d6dfd9ef-8918-4336-8525-e7fe0debb97b", georesourcesMap);
 
   // divide by 1000 for meters-->kilometers
   var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
@@ -242,6 +242,15 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
 
+  // first replace indicatorFeature geoimetry by their pointOnSurface
+  for (var index = 0; index < indicatorFeatures.length; index++){
+    var indicatorFeature = indicatorFeatures[index];
+    var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
+
+    indicatorFeature.geometry = centerPoint.geometry;
+  }
+
+  // spatial within check to aggregate
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
@@ -250,8 +259,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
-      if(KmHelper.within(centerPoint, targetFeature)){
+      if(KmHelper.within(indicatorFeature, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
@@ -269,7 +277,6 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
           }
   		}
   	}
-
 
   	// compute average for share
     if(baseIndicatorTotalWeight === 0){
@@ -311,13 +318,22 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
   KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features. Each indicator feature will be weighted by its size (area in squareMeters).");
+  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features.");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
 
+  // first replace indicatorFeature geoimetry by their pointOnSurface
+  for (var index = 0; index < indicatorFeatures.length; index++){
+    var indicatorFeature = indicatorFeatures[index];
+    var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
+
+    indicatorFeature.geometry = centerPoint.geometry;
+  }
+
+  // spatial within check for aggregation
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
@@ -325,8 +341,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
-      if(KmHelper.within(centerPoint, targetFeature)){
+      if(KmHelper.within(indicatorFeature, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
@@ -347,6 +362,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   return targetSpatialUnit_geoJSON;
 };
+
 
 module.exports.computeIndicator = computeIndicator;
 module.exports.aggregateIndicator = aggregateIndicator;

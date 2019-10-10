@@ -37,6 +37,7 @@ const aggregationType = "AVERAGE";
 
 // CUSTOM CONSTANTS
 const wohnflaecheAttributeName = "GF";
+const kategorieAttributeName = "Kategorie";
 
 
 
@@ -62,17 +63,45 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
   // retrieve required baseIndicator using its meaningful name
-  var wohngeb = KmHelper.getGeoresourceByName("Wohngebäude", georesourcesMap);
-  var spielplaetze = KmHelper.getGeoresourceByName("Spielplätze", georesourcesMap);
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var spielplaetze = KmHelper.getGeoresourceById("8c637fbd-abb1-41d6-990a-8b3d8f6e4215", georesourcesMap);
+
+  var spielpl_A_features = [];
+  var spielpl_B_features = [];
+  var spielpl_Z_features = [];
+
+  spielplaetze.features.forEach(function(feature){
+    var categoryValue = feature.properties[kategorieAttributeName];
+
+    if (categoryValue === "A"){
+      spielpl_A_features.push(feature);
+    }
+    else if (categoryValue === "Z"){
+      spielpl_Z_features.push(feature);
+    }
+    else{
+      spielpl_B_features.push(feature);
+    }
+  });
 
   // divide by 1000 for meters-->kilometers
-  var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
-  KmHelper.log("max distance parameter in m: " + maxDistance);
+  var maxDistance_A = KmHelper.getProcessParameterByName_asNumber("MaxDistance_A", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance_A);
+  var maxDistance_Z = KmHelper.getProcessParameterByName_asNumber("MaxDistance_Z", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance_Z);
+  var maxDistance_B = KmHelper.getProcessParameterByName_asNumber("MaxDistance_B", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance_B);
 
 KmHelper.log("create distance isochrones for spielplaetze");
 
 // isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
-var isochrones_spielplaetze = await KmHelper.isochrones_byDistance(spielplaetze.features, "PEDESTRIAN", maxDistance, true);
+var isochrones_spielplaetze_A = await KmHelper.isochrones_byDistance(spielpl_A_features, "PEDESTRIAN", maxDistance_A, true);
+var isochrones_spielplaetze_B = await KmHelper.isochrones_byDistance(spielpl_B_features, "PEDESTRIAN", maxDistance_B, true);
+var isochrones_spielplaetze_Z = await KmHelper.isochrones_byDistance(spielpl_Z_features, "PEDESTRIAN", maxDistance_Z, true);
+
+var isochrones_spielplaetze = isochrones_spielplaetze_A;
+isochrones_spielplaetze.features = isochrones_spielplaetze.features.concat(isochrones_spielplaetze_B.features);
+isochrones_spielplaetze.features = isochrones_spielplaetze.features.concat(isochrones_spielplaetze_Z.features);
 
 KmHelper.log("Compute area for each building as proxy for wohnfläche");
 wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
@@ -225,6 +254,15 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
 
+  // first replace indicatorFeature geoimetry by their pointOnSurface
+  for (var index = 0; index < indicatorFeatures.length; index++){
+    var indicatorFeature = indicatorFeatures[index];
+    var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
+
+    indicatorFeature.geometry = centerPoint.geometry;
+  }
+
+  // spatial within check to aggregate
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
@@ -233,8 +271,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
-      if(KmHelper.within(centerPoint, targetFeature)){
+      if(KmHelper.within(indicatorFeature, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
@@ -252,7 +289,6 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
           }
   		}
   	}
-
 
   	// compute average for share
     if(baseIndicatorTotalWeight === 0){
@@ -294,13 +330,22 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   KmHelper.log("Aggregate indicator for targetDate " + targetDate + " for a total amount of " + targetSpatialUnit_geoJSON.features.length + " target features. Computing SUM values.");
   KmHelper.log("Aggregate from a total number of " + indicator_geoJSON.features.length + " baseFeatures");
-  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features. Each indicator feature will be weighted by its size (area in squareMeters).");
+  KmHelper.log("Aggregating by comparing the centroids of each indicator feature to target spatial unit features.");
 
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
 
   var totalAggregatedIndicatorFeatures = 0;
 
+  // first replace indicatorFeature geoimetry by their pointOnSurface
+  for (var index = 0; index < indicatorFeatures.length; index++){
+    var indicatorFeature = indicatorFeatures[index];
+    var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
+
+    indicatorFeature.geometry = centerPoint.geometry;
+  }
+
+  // spatial within check for aggregation
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
@@ -308,8 +353,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
-      if(KmHelper.within(centerPoint, targetFeature)){
+      if(KmHelper.within(indicatorFeature, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
