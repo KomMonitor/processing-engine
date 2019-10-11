@@ -21,6 +21,7 @@ const corsOptions = {
   origin: "*"
 };
 app.use(cors(corsOptions));
+// app.use(cors());
 app.use(serveStatic("public"));
 
 var swaggerTools = require('swagger-tools');

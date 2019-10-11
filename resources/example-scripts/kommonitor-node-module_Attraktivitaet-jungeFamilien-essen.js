@@ -33,7 +33,7 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
 
 
 
@@ -57,45 +57,99 @@ const aggregationType = "SUM";
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  var numFeatures = targetSpatialUnit_geoJSON.features.length;
 
-  // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+  // make a map object mapping the featureName to the numbrToBeCOmputet
+  // iterate one time over each subindicator
+    // add number multiplied by weight to map object
 
-  var testIndex = 0;
+  // iterate one time over targetSpatialUnit id, identify map entry for each feature and  compute and set value / (sum weights)
 
-  // iterate once over target spatial unit features and compute indicator utilizing map entries
-  var spatialUnitIndex = 0;
-  // create progress log after each 10th percent of features
-  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
-  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+  var map = new Map();
 
-    if(spatialUnitFeature.geometry === undefined || spatialUnitFeature.geometry === null){
-      KmHelper.log("Test");
-      testIndex ++;
-      return;
-    }
+  // retrieve required baseIndicator using its meaningful name
+  var supermaerkte = KmHelper.getBaseIndicatorById('05ea8533-a792-401c-a79a-b3bb975047c0', baseIndicatorsMap);
+  var freiraum = KmHelper.getBaseIndicatorById('1f5906e2-60c8-4647-abef-231723e65205', baseIndicatorsMap);
+  var grundschulen = KmHelper.getBaseIndicatorById('76f9d771-7405-498b-9b39-1e2f565cce27', baseIndicatorsMap);
+  var kitas = KmHelper.getBaseIndicatorById('40d6eb29-efd5-4f7c-953d-b115e4438774', baseIndicatorsMap);
+  var spielplaetze = KmHelper.getBaseIndicatorById('a835507e-8c81-41b9-b339-0a554dca3fd3', baseIndicatorsMap);
 
-    // compute area of spatial unit feature in m²
-    var featureArea = KmHelper.area(spatialUnitFeature);
 
-    // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, featureArea);
+  // divide by 1000 for meters-->kilometers
+  var gewicht_supermaerkte = KmHelper.getProcessParameterByName_asNumber("GewichtLebensmittelgeschaefte", processParameters);
+    KmHelper.log("Parsed weight of supermarkets: " + gewicht_supermaerkte);
+  var gewicht_freiraum = KmHelper.getProcessParameterByName_asNumber("GewichtFreiraum", processParameters);
+  KmHelper.log("Parsed weight of free areas: " + gewicht_freiraum);
+  var gewicht_grundschulen = KmHelper.getProcessParameterByName_asNumber("GewichtGrundschulen", processParameters);
+  KmHelper.log("Parsed weight of preliminary schools: " + gewicht_grundschulen);
+  var gewicht_kitas = KmHelper.getProcessParameterByName_asNumber("GewichtKitas", processParameters);
+  KmHelper.log("Parsed weight of kitas: " + gewicht_kitas);
+  var gewicht_spielplaetze = KmHelper.getProcessParameterByName_asNumber("GewichtSpielplaetze", processParameters);
+  KmHelper.log("Parsed weight of playgrounds: " + gewicht_spielplaetze);
 
-  	spatialUnitIndex ++;
+  var weightSum = gewicht_supermaerkte + gewicht_freiraum + gewicht_grundschulen + gewicht_kitas + gewicht_spielplaetze;
 
-    // only log after certain progress
-    if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+  KmHelper.log("Sum of weights should be equal to 1. It is " + weightSum);
+
+  KmHelper.log("fill map by iterating over each base indicator");
+  KmHelper.log("processing supermarkets");
+  supermaerkte.features.forEach(function(feature) {
+    if(! KmHelper.isNoDataValue(KmHelper.getIndicatorValue(feature, targetDate))){
+        map.set(""+KmHelper.getSpatialUnitFeatureIdValue(feature), Number(KmHelper.getIndicatorValue(feature, targetDate)) * gewicht_supermaerkte);
     }
   });
 
+  KmHelper.log("processing free areas");
+  freiraum.features.forEach(function(feature) {
+    if(! KmHelper.isNoDataValue(KmHelper.getIndicatorValue(feature, targetDate))){
+      var value = map.get(""+KmHelper.getSpatialUnitFeatureIdValue(feature)) || 0; // or 0 if not present
+      map.set(""+KmHelper.getSpatialUnitFeatureIdValue(feature), value + Number(KmHelper.getIndicatorValue(feature, targetDate)) * gewicht_freiraum);
+    }
+  });
+
+KmHelper.log("processing preliminary schools");
+  grundschulen.features.forEach(function(feature) {
+    if(! KmHelper.isNoDataValue(KmHelper.getIndicatorValue(feature, targetDate))){
+      var value = map.get(""+KmHelper.getSpatialUnitFeatureIdValue(feature)) || 0; // or 0 if not present
+      map.set(""+KmHelper.getSpatialUnitFeatureIdValue(feature), value + Number(KmHelper.getIndicatorValue(feature, targetDate)) * gewicht_grundschulen);
+    }
+  });
+
+KmHelper.log("processing kitas");
+  kitas.features.forEach(function(feature) {
+    if(! KmHelper.isNoDataValue(KmHelper.getIndicatorValue(feature, targetDate))){
+      var value = map.get(""+KmHelper.getSpatialUnitFeatureIdValue(feature)) || 0; // or 0 if not present
+      map.set(""+KmHelper.getSpatialUnitFeatureIdValue(feature), value + Number(KmHelper.getIndicatorValue(feature, targetDate)) * gewicht_kitas);
+    }
+  });
+
+KmHelper.log("processing playgrounds");
+  spielplaetze.features.forEach(function(feature) {
+    if(! KmHelper.isNoDataValue(KmHelper.getIndicatorValue(feature, targetDate))){
+      var value = map.get(""+KmHelper.getSpatialUnitFeatureIdValue(feature)) || 0; // or 0 if not present
+      map.set(""+KmHelper.getSpatialUnitFeatureIdValue(feature), value + Number(KmHelper.getIndicatorValue(feature, targetDate)) * gewicht_spielplaetze);
+    }
+  });
+
+KmHelper.log("compute targetIndicator for " + targetSpatialUnit_geoJSON.features.length + " target spatial unit features");
+
+var spatialUnitIndex = 0;
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+
+  // set aggregationWeight as feature's area
+  KmHelper.setAggregationWeight(spatialUnitFeature, KmHelper.area(spatialUnitFeature));
+
+  var value = Number(map.get(""+KmHelper.getSpatialUnitFeatureIdValue(spatialUnitFeature)));
+  var result = Number(value / weightSum);
+
+KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, result);
+
+	spatialUnitIndex ++;
+	KmHelper.log("Computed spatialUnitFeature number " + spatialUnitIndex);
+});
+
   KmHelper.log("Computation of indicator finished");
 
-  KmHelper.log("Number of faulty geometries: " + testIndex);
-
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**

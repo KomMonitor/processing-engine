@@ -33,8 +33,9 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
 
+const wohnflaecheAttributeName = "GF";
 
 
 /**
@@ -56,46 +57,117 @@ const aggregationType = "SUM";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  var numFeatures = targetSpatialUnit_geoJSON.features.length;
+  // retrieve required baseIndicator using its meaningful name
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var supermaerkteFeatures = KmHelper.getGeoresourceById("d6dfd9ef-8918-4336-8525-e7fe0debb97b", georesourcesMap);
 
-  // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+  // divide by 1000 for meters-->kilometers
+  var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance);
 
-  var testIndex = 0;
+  var supermaerkte = [];
 
-  // iterate once over target spatial unit features and compute indicator utilizing map entries
-  var spatialUnitIndex = 0;
-  // create progress log after each 10th percent of features
-  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
-  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+  KmHelper.log("Filter for only supermarkets");
 
-    if(spatialUnitFeature.geometry === undefined || spatialUnitFeature.geometry === null){
-      KmHelper.log("Test");
-      testIndex ++;
-      return;
-    }
-
-    // compute area of spatial unit feature in m²
-    var featureArea = KmHelper.area(spatialUnitFeature);
-
-    // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, featureArea);
-
-  	spatialUnitIndex ++;
-
-    // only log after certain progress
-    if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
-    }
+  supermaerkteFeatures.features.forEach(function(feature) {
+    	supermaerkte.push(feature);
   });
+
+KmHelper.log("create distance isochrones for supermarkets");
+
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_supermaerkte = await KmHelper.isochrones_byDistance(supermaerkte, "PEDESTRIAN", maxDistance, false);
+
+
+KmHelper.log("get centroids of buildings");
+var wohngeb_centroids = new Array();
+wohngeb.features.forEach(function(feature){
+  wohngeb_centroids.push(KmHelper.center_mass(feature, feature.properties));
+});
+
+KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
+
+// initial values for later comparison
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+	spatialUnitFeature.properties.wohnflTotal = 0;
+	spatialUnitFeature.properties.wohnflCovered = 0;
+});
+
+// check for three supermarkets!
+var numCoveredSupermaerkte = 0;
+var targetNumSupermaerkte = 3;
+
+var wohngebLength = wohngeb_centroids.length;
+// create progress log after each 10th percent of features
+var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+    //reset number of covered supermärkten
+    numCoveredSupermaerkte = 0;
+
+		var wohngebFeature = wohngeb_centroids[pointIndex];
+
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
+
+      if (KmHelper.within(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+
+  			// for each isochrones_supermaerkte feature check if wohngebFeature lies within it
+  			for (var isochroneIndex = 0; isochroneIndex < isochrones_supermaerkte.features.length; isochroneIndex++){
+
+  				var isochrone_supermarkt_feature = isochrones_supermaerkte.features[isochroneIndex];
+
+  				if(KmHelper.within(wohngebFeature, isochrone_supermarkt_feature)){
+
+            numCoveredSupermaerkte++;
+
+            if(numCoveredSupermaerkte === targetNumSupermaerkte){
+              // add wohnflaeche to wohnflCovered
+              spatialUnitFeat.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+
+              break;
+            }
+
+
+  				}
+  			}
+
+        break;
+  		}
+    }
+
+    if(pointIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Compared '" + pointIndex + "' of total '" + wohngebLength + "' buildings to supermarkt isochrones.");
+    }
+	}
+
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+    if(spatialUnitFeature.properties.wohnflTotal === 0){
+      // no living building in this feature --> thus set value to NoData as it cannot be compared to features that have living buildings, which are not covered!
+        spatialUnitFeature = KmHelper.setIndicatorValue_asNoData(spatialUnitFeature, targetDate);
+    }
+    else{
+      var indicatorValue = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal;
+      spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+    }
+
+    // set Wohnfläche as aggregation weight
+    spatialUnitFeature = KmHelper.setAggregationWeight(spatialUnitFeature, spatialUnitFeature.properties.wohnflTotal);
+
+    // delete temporary helper properties
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
+  });
+
 
   KmHelper.log("Computation of indicator finished");
 
-  KmHelper.log("Number of faulty geometries: " + testIndex);
-
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**

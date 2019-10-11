@@ -158,6 +158,15 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
   targetDate = KmHelper.getTargetDateWithPropertyPrefix(targetDate);
   KmHelper.log('Target Date with prefix: ' + targetDate);
 
+  // first replace indicatorFeature geoimetry by their pointOnSurface
+  for (var index = 0; index < indicatorFeatures.length; index++){
+    var indicatorFeature = indicatorFeatures[index];
+    var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
+
+    indicatorFeature.geometry = centerPoint.geometry;
+  }
+
+  // spatial within check to aggregate
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
@@ -166,8 +175,7 @@ function aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJ
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
-      if(KmHelper.within(centerPoint, targetFeature)){
+      if(KmHelper.within(indicatorFeature, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;
@@ -233,6 +241,15 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   var totalAggregatedIndicatorFeatures = 0;
 
+  // first replace indicatorFeature geoimetry by their pointOnSurface
+  for (var index = 0; index < indicatorFeatures.length; index++){
+    var indicatorFeature = indicatorFeatures[index];
+    var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
+
+    indicatorFeature.geometry = centerPoint.geometry;
+  }
+
+  // spatial within check for aggregation
   targetSpatialUnit_geoJSON.features.forEach(function(targetFeature){
 
   	targetFeature.properties[targetDate] = 0;
@@ -240,8 +257,7 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   	for (var index = 0; index < indicatorFeatures.length; index++){
   		var indicatorFeature = indicatorFeatures[index];
-      var centerPoint = KmHelper.pointOnFeature(indicatorFeature);
-      if(KmHelper.within(centerPoint, targetFeature)){
+      if(KmHelper.within(indicatorFeature, targetFeature)){
   			// remove from array and decrement index
   			indicatorFeatures.splice(index, 1);
         index--;

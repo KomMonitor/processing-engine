@@ -33,7 +33,12 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
+
+// CUSTOM CONSTANTS
+const wohnflaecheAttributeName = "GF";
+const schoolTypeAttrName = "S_SCHULFOR";
+const schoolTypeAttrTargetValue = "Grundschule";
 
 
 
@@ -56,46 +61,111 @@ const aggregationType = "SUM";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  var numFeatures = targetSpatialUnit_geoJSON.features.length;
+  // retrieve required baseIndicator using its meaningful name
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var schulen = KmHelper.getGeoresourceById("6018b011-042f-4ab4-a27e-9a1deff02ec9", georesourcesMap);
 
-  // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+  // divide by 1000 for meters-->kilometers
+  var maxDistance = KmHelper.getProcessParameterByName_asNumber("MaxDistance", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance);
 
-  var testIndex = 0;
+  var grundschulen = [];
 
-  // iterate once over target spatial unit features and compute indicator utilizing map entries
-  var spatialUnitIndex = 0;
-  // create progress log after each 10th percent of features
-  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
-  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+  KmHelper.log("Filter for only preliminary schools");
 
-    if(spatialUnitFeature.geometry === undefined || spatialUnitFeature.geometry === null){
-      KmHelper.log("Test");
-      testIndex ++;
-      return;
+  schulen.features.forEach(function(feature) {
+
+    if(feature.properties[schoolTypeAttrName] === schoolTypeAttrTargetValue){
+    	grundschulen.push(feature);
     }
 
-    // compute area of spatial unit feature in m²
-    var featureArea = KmHelper.area(spatialUnitFeature);
-
-    // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, featureArea);
-
-  	spatialUnitIndex ++;
-
-    // only log after certain progress
-    if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
-    }
   });
+
+KmHelper.log("create distance isochrones for preliminary schools");
+
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_grundschulen = await KmHelper.isochrones_byDistance(grundschulen, "PEDESTRIAN", maxDistance, true);
+
+// KmHelper.log("Compute area for each building as proxy for wohnfläche");
+// wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
+
+KmHelper.log("get centroids of buildings");
+var wohngeb_centroids = new Array();
+wohngeb.features.forEach(function(feature){
+  wohngeb_centroids.push(KmHelper.center_mass(feature, feature.properties));
+});
+
+KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
+
+// initial values for later comparison
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+	spatialUnitFeature.properties.wohnflTotal = 0;
+	spatialUnitFeature.properties.wohnflCovered = 0;
+});
+
+
+var wohngebLength = wohngeb_centroids.length;
+// create progress log after each 10th percent of features
+var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+		var wohngebFeature = wohngeb_centroids[pointIndex];
+
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
+
+      if (KmHelper.within(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += wohngebFeature.properties[wohnflaecheAttributeName];
+
+  			// for each isochrones_grundschulen feature check if wohngebFeature lies within it
+  			for (var isochroneIndex = 0; isochroneIndex < isochrones_grundschulen.features.length; isochroneIndex++){
+
+  				var isochrone_grundschule_feature = isochrones_grundschulen.features[isochroneIndex];
+
+  				if(KmHelper.within(wohngebFeature, isochrone_grundschule_feature)){
+  					// add wohnflaeche to wohnflCovered
+            wohngebFeature.properties[wohnflaecheAttributeName]
+  					spatialUnitFeat.properties.wohnflCovered += wohngebFeature.properties[wohnflaecheAttributeName];
+
+  					break;
+  				}
+  			}
+
+        break;
+  		}
+    }
+
+    if(pointIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Compared '" + pointIndex + "' of total '" + wohngebLength + "' buildings to school isochrones.");
+    }
+	}
+
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+    if(spatialUnitFeature.properties.wohnflTotal === 0){
+      // no living building in this feature --> thus set value to NoData as it cannot be compared to features that have living buildings, which are not covered!
+        spatialUnitFeature = KmHelper.setIndicatorValue_asNoData(spatialUnitFeature, targetDate);
+    }
+    else{
+      var indicatorValue = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal;
+      spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+    }
+
+    // set Wohnfläche as aggregation weight
+    spatialUnitFeature = KmHelper.setAggregationWeight(spatialUnitFeature, spatialUnitFeature.properties.wohnflTotal);
+
+    // delete temporary helper properties
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
+  });
+
 
   KmHelper.log("Computation of indicator finished");
 
-  KmHelper.log("Number of faulty geometries: " + testIndex);
-
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**

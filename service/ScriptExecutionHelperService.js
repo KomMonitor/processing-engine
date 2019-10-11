@@ -148,13 +148,18 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         fs.unlinkSync("./tmp/tmp.js");
       }
       catch(error){
-        // if error occured then clean up temp files and temp node module
-        delete require.cache[require.resolve('../tmp/tmp.js')];
 
-        // delete temporarily stored nodeModule file synchronously
-        fs.unlinkSync("./tmp/tmp.js");
+        try{
+          // if error occured then clean up temp files and temp node module
+
+          // delete temporarily stored nodeModule file synchronously
+          delete require.cache[require.resolve('../tmp/tmp.js')];
+          fs.unlinkSync("./tmp/tmp.js");
+        }
+        catch (error){
+          console.error("Catched Error while calling indicator computation method from custom script. Error is: " + error);
+        }
         console.error("Error while calling indicator computation method from custom script. Error is: " + error);
-        throw error;
       }
 
       progressHelper.persistProgress(job.id, "defaultComputation", 80);
@@ -236,13 +241,17 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
         fs.unlinkSync("./tmp/tmp.js");
       }
       catch(error){
-        // if error occured then clean up temp files and temp node module
-        delete require.cache[require.resolve('../tmp/tmp.js')];
+        try{
+          // if error occured then clean up temp files and temp node module
 
-        // delete temporarily stored nodeModule file synchronously
-        fs.unlinkSync("./tmp/tmp.js");
+          // delete temporarily stored nodeModule file synchronously
+          delete require.cache[require.resolve('../tmp/tmp.js')];
+          fs.unlinkSync("./tmp/tmp.js");
+        }
+        catch (error){
+          console.error("Catched Error while calling indicator computation method from custom script. Error is: " + error);
+        }
         console.error("Error while calling indicator computation method from custom script. Error is: " + error);
-        throw error;
       }
 
       return responseGeoJson;

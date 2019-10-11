@@ -33,7 +33,11 @@ const aggregationTypeEnum = ["SUM", "AVERAGE"];
 * @memberof CONSTANTS
 * @constant
 */
-const aggregationType = "SUM";
+const aggregationType = "AVERAGE";
+
+// CUSTOM CONSTANTS
+const wohnflaecheAttributeName = "GF";
+const kategorieAttributeName = "Kategorie";
 
 
 
@@ -56,46 +60,126 @@ const aggregationType = "SUM";
 */
 async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, processParameters){
   // compute indicator for targetDate and targetSpatialUnitFeatures
+  // compute indicator for targetDate and targetSpatialUnitFeatures
 
-  var numFeatures = targetSpatialUnit_geoJSON.features.length;
+  // retrieve required baseIndicator using its meaningful name
+  var wohngeb = KmHelper.getGeoresourceById("00b462d7-8903-40e9-8222-10f534afcbb6", georesourcesMap);
+  var spielplaetze = KmHelper.getGeoresourceById("8c637fbd-abb1-41d6-990a-8b3d8f6e4215", georesourcesMap);
 
-  // now we compute the new indicator
-  KmHelper.log("Compute indicator for a total amount of " + numFeatures + " features");
+  var spielpl_A_features = [];
+  var spielpl_B_features = [];
+  var spielpl_Z_features = [];
 
-  var testIndex = 0;
+  spielplaetze.features.forEach(function(feature){
+    var categoryValue = feature.properties[kategorieAttributeName];
 
-  // iterate once over target spatial unit features and compute indicator utilizing map entries
-  var spatialUnitIndex = 0;
-  // create progress log after each 10th percent of features
-  var logProgressIndexSeparator = Math.round(numFeatures / 100 * 10);
-  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
-
-    if(spatialUnitFeature.geometry === undefined || spatialUnitFeature.geometry === null){
-      KmHelper.log("Test");
-      testIndex ++;
-      return;
+    if (categoryValue === "A"){
+      spielpl_A_features.push(feature);
     }
-
-    // compute area of spatial unit feature in m²
-    var featureArea = KmHelper.area(spatialUnitFeature);
-
-    // set indicator value for spatialUnitFeature
-    spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, featureArea);
-
-  	spatialUnitIndex ++;
-
-    // only log after certain progress
-    if(spatialUnitIndex % logProgressIndexSeparator === 0){
-        KmHelper.log("PROGRESS: Computed '" + spatialUnitIndex + "' of total '" + numFeatures + "' features.");
+    else if (categoryValue === "Z"){
+      spielpl_Z_features.push(feature);
+    }
+    else{
+      spielpl_B_features.push(feature);
     }
   });
 
+  // divide by 1000 for meters-->kilometers
+  var maxDistance_A = KmHelper.getProcessParameterByName_asNumber("MaxDistance_A", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance_A);
+  var maxDistance_Z = KmHelper.getProcessParameterByName_asNumber("MaxDistance_Z", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance_Z);
+  var maxDistance_B = KmHelper.getProcessParameterByName_asNumber("MaxDistance_B", processParameters);
+  KmHelper.log("max distance parameter in m: " + maxDistance_B);
+
+KmHelper.log("create distance isochrones for spielplaetze");
+
+// isochrones by distance of 1000 m using foot-walking as GeoJSON feature collection
+var isochrones_spielplaetze_A = await KmHelper.isochrones_byDistance(spielpl_A_features, "PEDESTRIAN", maxDistance_A, true);
+var isochrones_spielplaetze_B = await KmHelper.isochrones_byDistance(spielpl_B_features, "PEDESTRIAN", maxDistance_B, true);
+var isochrones_spielplaetze_Z = await KmHelper.isochrones_byDistance(spielpl_Z_features, "PEDESTRIAN", maxDistance_Z, true);
+
+var isochrones_spielplaetze = isochrones_spielplaetze_A;
+isochrones_spielplaetze.features = isochrones_spielplaetze.features.concat(isochrones_spielplaetze_B.features);
+isochrones_spielplaetze.features = isochrones_spielplaetze.features.concat(isochrones_spielplaetze_Z.features);
+
+KmHelper.log("Compute area for each building as proxy for wohnfläche");
+wohngeb = KmHelper.area_featureCollection_asProperty(wohngeb);
+
+KmHelper.log("get centroids of buildings");
+var wohngeb_centroids = new Array();
+wohngeb.features.forEach(function(feature){
+  wohngeb_centroids.push(KmHelper.center_mass(feature, feature.properties));
+});
+
+KmHelper.log("calculating intersections between wohngeb and target spatial unit.");
+
+// initial values for later comparison
+targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+	spatialUnitFeature.properties.wohnflTotal = 0;
+	spatialUnitFeature.properties.wohnflCovered = 0;
+});
+
+
+var wohngebLength = wohngeb_centroids.length;
+// create progress log after each 10th percent of features
+var logProgressIndexSeparator = Math.round(wohngebLength / 100 * 10);
+	for (var pointIndex=0; pointIndex < wohngebLength; pointIndex++){
+
+		var wohngebFeature = wohngeb_centroids[pointIndex];
+
+    for (var featureIndex=0; featureIndex < targetSpatialUnit_geoJSON.features.length; featureIndex++){
+      var spatialUnitFeat = targetSpatialUnit_geoJSON.features[featureIndex];
+
+      if (KmHelper.within(wohngebFeature, spatialUnitFeat)){
+  			// wohngeb_centroids.splice(pointIndex, 1);
+        // pointIndex--;
+  			spatialUnitFeat.properties.wohnflTotal += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+
+  			// for each isochrones_spielplaetze feature check if wohngebFeature lies within it
+  			for (var isochroneIndex = 0; isochroneIndex < isochrones_spielplaetze.features.length; isochroneIndex++){
+
+  				var isochrone_spielplatz_feature = isochrones_spielplaetze.features[isochroneIndex];
+
+  				if(KmHelper.within(wohngebFeature, isochrone_spielplatz_feature)){
+  					// add wohnflaeche to wohnflCovered
+  					spatialUnitFeat.properties.wohnflCovered += Number(wohngebFeature.properties[wohnflaecheAttributeName]);
+
+  					break;
+  				}
+  			}
+
+        break;
+  		}
+    }
+
+    if(pointIndex % logProgressIndexSeparator === 0){
+        KmHelper.log("PROGRESS: Compared '" + pointIndex + "' of total '" + wohngebLength + "' buildings to spielplatz isochrones.");
+    }
+	}
+
+  targetSpatialUnit_geoJSON.features.forEach(function(spatialUnitFeature) {
+    if(spatialUnitFeature.properties.wohnflTotal === 0){
+      // no living building in this feature --> thus set value to NoData as it cannot be compared to features that have living buildings, which are not covered!
+        spatialUnitFeature = KmHelper.setIndicatorValue_asNoData(spatialUnitFeature, targetDate);
+    }
+    else{
+      var indicatorValue = spatialUnitFeature.properties.wohnflCovered / spatialUnitFeature.properties.wohnflTotal;
+      spatialUnitFeature = KmHelper.setIndicatorValue(spatialUnitFeature, targetDate, indicatorValue);
+    }
+
+    // set Wohnfläche as aggregation weight
+    spatialUnitFeature = KmHelper.setAggregationWeight(spatialUnitFeature, spatialUnitFeature.properties.wohnflTotal);
+
+    // delete temporary helper properties
+    delete spatialUnitFeature.properties.wohnflCovered;
+    delete spatialUnitFeature.properties.wohnflTotal;
+  });
+
+
   KmHelper.log("Computation of indicator finished");
 
-  KmHelper.log("Number of faulty geometries: " + testIndex);
-
   return targetSpatialUnit_geoJSON;
-
 };
 
 /**
@@ -290,7 +374,6 @@ function aggregate_sum(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON)
 
   return targetSpatialUnit_geoJSON;
 };
-
 
 module.exports.computeIndicator = computeIndicator;
 module.exports.aggregateIndicator = aggregateIndicator;
