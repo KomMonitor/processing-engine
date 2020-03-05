@@ -26,6 +26,7 @@
     "js-yaml": "^3.3.0",
     "kmhelper": "file:resources/KmHelper",
     "nodemailer": "^6.1.1",
+    "npm-license-crawler": "^0.2.1",
     "serve-static": "^1.13.2",
     "swagger-tools": "^0.10.4",
     "temporary": "0.0.8"

@@ -1692,7 +1692,7 @@
     "licenses": "UNLICENSED",
     "private": true,
     "path": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api",
-    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\README.md"
+    "licenseFile": "C:\\Users\\CDB\\Documents\\git\\kommonitor-script-execution-api\\LICENSE"
   },
   "license-checker@25.0.1": {
     "licenses": "BSD-3-Clause",
