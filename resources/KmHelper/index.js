@@ -2091,6 +2091,21 @@ exports.within = function (feature_A, feature_B){
 };
 
 /**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointsWithinPolygon} to find all {@linkcode points} that lie within {@linkcode polygons}.
+* @param {Feauture|FeatureCollection <Point>} points - a GeoJSON feature of any type
+* @param {FeatureCollection|Geometry|Feature <(Polygon|MultiPolygon)>} polygons - a GeoJSON feature of any type
+* @returns {FeatureCollection <Point>} returns all points that lie within at least one polygon of submitted polygons as {@linkcode FeatureCollection <Point>}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#pointsWithinPolygon}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+exports.pointsWithinPolygon = function (points, polygons){
+
+  return turf.pointsWithinPolygon(points, polygons);
+};
+
+/**
 * This method is an alternative implementation of a spatial {@linkcode within} function for spatial features.
 * First of all, it computes bounding boxes of the relevant features to speed up the spatial comparison.
 * Furthermore, instead of checking whether {@linkcode feature_A} lies completely within {@linkcode feature_B},
