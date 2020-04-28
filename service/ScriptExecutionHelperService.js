@@ -82,9 +82,8 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
     return await executeDefaultComputation_withAggregationToHigherSpatialUnits(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
   }
   else{
-    if (useAggregationForHigherSpatialUnits){
-      return await executeDefaultComputation_withIndividualComputationPerSpatialUnit(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
-    }
+    return await executeDefaultComputation_withIndividualComputationPerSpatialUnit(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
+    
   }
 }
 
@@ -237,7 +236,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
       // after computing the indicator for the lowest spatial unit
       // we can now aggregate the result to all remaining superior units!
       try{
-        resultingIndicatorsMap = await computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator);
+        resultingIndicatorsMap = await computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, georesourcesMap, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator);
       }
       catch(error){
         console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
@@ -288,7 +287,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
   }
 }
 
-async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator){
+async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, georesourcesMap, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator){
   
   const spatialUnitIterator = allSpatialUnits.entries();
 
