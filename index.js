@@ -2,6 +2,10 @@
 
 require('dotenv').config();
 
+if(JSON.parse(process.env.DISABLE_LOGS)){
+  console.log = function(){};
+}
+
 var fs = require('fs'),
     path = require('path'),
     http = require('http');
