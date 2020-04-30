@@ -243,6 +243,9 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
         throw error;
       }
 
+      
+      progressHelper.persistProgress(job.id, "defaultComputation", 70);
+
       delete require.cache[require.resolve('../tmp/tmp.js')];
 
       // delete temporarily stored nodeModule file synchronously
@@ -311,8 +314,6 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
 
     nextSpatialUnit = spatialUnitIterator.next().value;
   }
-
-  progressHelper.persistProgress(job.id, "defaultComputation", 70);
   
   return resultingIndicatorsMap;
 
