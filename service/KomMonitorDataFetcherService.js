@@ -232,9 +232,18 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
     })
     .catch(error => {
       console.log("Error when fetching georesource. Error was: " + error);
-      throw error;
+      console.log("Send back empty FeatureCollection of georesource");
+      // throw error;
+      // return empty set of georesources as FeatureCollection
+      // e.g. for a daily indicator if some time periods do not have any valid georesource, then we send back an empty set of resources
+      var emptyFeatureCollection = {
+        "type" : "FeatureCollection",
+        "features" : []
+      };
+
+      return emptyFeatureCollection;
     });
-}
+};
 
 /**
  * send request against KomMonitor DataManagement API to fetch georesource metadata according to id
