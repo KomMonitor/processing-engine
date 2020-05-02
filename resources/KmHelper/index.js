@@ -534,7 +534,7 @@ exports.getIndicatorValue = function (feature, targetDate){
 
   var indicatorValue = feature.properties[targetDateWithPrefix];
 
-  if(indicatorValue){
+  if(indicatorValue != null && indicatorValue != undefined){
     return indicatorValue;
   }
   else{
