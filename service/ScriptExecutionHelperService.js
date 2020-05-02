@@ -42,6 +42,8 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
 
   for (const spatialUnitEntry of remainingSpatialUnits) {
 
+    var metadataObject_string = JSON.stringify(spatialUnitEntry[0]);
+
     // create a deep copy of the javascript object. it will have no refererences to the original Object
     // this is necessary as we intend to remove content within the computation script --> hence we need only a copy!!!
     let indicatorOnLowestSpatialUnit_geoJson_copy = JSON.parse(JSON.stringify(indicatorOnLowestSpatialUnit_geoJson));
@@ -72,13 +74,13 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
       throw error;
     }
 
-    if(resultingIndicatorsMap.has(spatialUnitEntry[0])){
-      var existingGeoJSON = resultingIndicatorsMap.get(spatialUnitEntry[0]);
+    if(resultingIndicatorsMap.has(metadataObject_string)){
+      var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
       existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJSONForSpatialUnit, targetDate);
-      resultingIndicatorsMap.set(spatialUnitEntry[0], existingGeoJSON); 
+      resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
     }
     else{
-      resultingIndicatorsMap.set(spatialUnitEntry[0], indicatorGeoJSONForSpatialUnit); 
+      resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJSONForSpatialUnit); 
     }
   }
 
@@ -151,13 +153,15 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
       try{
         var indicatorGeoJson_lowestSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
 
-        if(resultingIndicatorsMap.has(lowestSpatialUnit[0])){
-          var existingGeoJSON = resultingIndicatorsMap.get(lowestSpatialUnit[0]);
+        var metadataObject_lowestUnit_string = JSON.stringify(lowestSpatialUnit[0]);
+
+        if(resultingIndicatorsMap.has(metadataObject_lowestUnit_string)){
+          var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_lowestUnit_string);
           existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_lowestSpatialUnit, targetDate);
-          resultingIndicatorsMap.set(lowestSpatialUnit[0], existingGeoJSON); 
+          resultingIndicatorsMap.set(metadataObject_lowestUnit_string, existingGeoJSON); 
         }
         else{
-          resultingIndicatorsMap.set(lowestSpatialUnit[0], indicatorGeoJson_lowestSpatialUnit); 
+          resultingIndicatorsMap.set(metadataObject_lowestUnit_string, indicatorGeoJson_lowestSpatialUnit); 
         }
 
         progressHelper.persistProgress(job.id, "defaultComputation", 70);
@@ -306,6 +310,8 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
 
   while(nextSpatialUnit){
 
+    var metadataObject_string = JSON.stringify(nextSpatialUnit[0]);
+
     // retrieve baseIndicators
     var baseIndicatorsMap_nextSpatialUnit;
     try{
@@ -320,13 +326,13 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
 
     // we now want to append only the resulting date to n existing entry
     // f there is no existing entry, then set it initially
-    if(resultingIndicatorsMap.has(nextSpatialUnit[0])){
-      var existingGeoJSON = resultingIndicatorsMap.get(nextSpatialUnit[0]);
+    if(resultingIndicatorsMap.has(metadataObject_string)){
+      var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
       existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate);
-      resultingIndicatorsMap.set(nextSpatialUnit[0], existingGeoJSON); 
+      resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
     }
     else{
-      resultingIndicatorsMap.set(nextSpatialUnit[0], indicatorGeoJson_nextSpatialUnit); 
+      resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJson_nextSpatialUnit); 
     }        
 
     nextSpatialUnit = spatialUnitIterator.next().value;
