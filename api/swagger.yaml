@@ -298,7 +298,7 @@ definitions:
     - "defaultProcessProperties"
     - "georesourceIds"
     - "scriptId"
-    - "targetDate"
+    - "targetDates"
     - "targetIndicatorId"
     - "useAggregationForHigherSpatialUnits"
     properties:
@@ -310,11 +310,15 @@ definitions:
         type: "string"
         description: "the identifier of the target indicator that can be computed\
           \ by the associated script."
-      targetDate:
-        type: "string"
-        format: "date"
-        description: "a timestamp representing the date for which the indicator shall\
-          \ be computed according to ISO 8601 (e.g. 2018-01-30)"
+      targetDates:
+        type: "array"
+        description: "a list of target dates representing the dates for which the\
+          \ indicator shall be computed according to ISO 8601 (e.g. 2018-01-30)."
+        items:
+          type: "string"
+          format: "date"
+          description: "a timestamp representing the date for which the indicator\
+            \ shall be computed according to ISO 8601 (e.g. 2018-01-30)"
       baseIndicatorIds:
         type: "array"
         description: "a list of identifiers of base indicators that are required to\
@@ -348,7 +352,6 @@ definitions:
       - "georesourceIds"
       - "georesourceIds"
       scriptId: "scriptId"
-      targetDate: "2000-01-23"
       targetIndicatorId: "targetIndicatorId"
       baseIndicatorIds:
       - "baseIndicatorIds"
@@ -361,6 +364,9 @@ definitions:
         name: "name"
         value: "value"
       useAggregationForHigherSpatialUnits: true
+      targetDates:
+      - "2000-01-23"
+      - "2000-01-23"
   DefaultIndicatorComputationStatusResultType:
     type: "object"
     required:
