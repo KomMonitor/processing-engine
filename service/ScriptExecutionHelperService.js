@@ -250,7 +250,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
 
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
 
-        allSpatialUnits = await KomMonitorDataFetcher.fetchAvailableSpatialUnits(kommonitorDataManagementURL, targetDate);
+        allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, targetIndicatorMetadata.lowestSpatialUnitForComputation);        
 
         // after computing the indicator for the lowest spatial unit
         // we can now aggregate the result to all remaining superior units!
