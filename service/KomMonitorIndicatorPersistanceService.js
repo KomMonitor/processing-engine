@@ -134,9 +134,12 @@ exports.putIndicatorById = async function(baseUrlPath, targetIndicatorId, target
  */
 function chunkArray(array, chunk_size){
   var results = [];
+
+  // make copy - otherwise other spatial units have no date left...
+  var arrayCopy = JSON.parse(JSON.stringify(array));
   
-  while (array.length) {
-      results.push(array.splice(0, chunk_size));
+  while (arrayCopy.length) {
+      results.push(arrayCopy.splice(0, chunk_size));
   }
   
   return results;
