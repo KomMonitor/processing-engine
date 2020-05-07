@@ -2092,9 +2092,9 @@ exports.within = function (feature_A, feature_B){
 
 /**
 * Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointsWithinPolygon} to find all {@linkcode points} that lie within {@linkcode polygons}.
-* @param {Feauture|FeatureCollection <Point>} points - a GeoJSON feature of any type
-* @param {FeatureCollection|Geometry|Feature <(Polygon|MultiPolygon)>} polygons - a GeoJSON feature of any type
-* @returns {FeatureCollection <Point>} returns all points that lie within at least one polygon of submitted polygons as {@linkcode FeatureCollection <Point>}.
+* @param {Feauture|FeatureCollection} points - a GeoJSON point features
+* @param {FeatureCollection|Geometry|Feature} polygons - a GeoJSON polygon|multipolygon features
+* @returns {FeatureCollection} returns all points that lie within at least one polygon of submitted polygons as {@linkcode FeatureCollection <Point>}.
 * @see turf CONSTANT
 * @see {@link https://turfjs.org/docs/#pointsWithinPolygon}
 * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
