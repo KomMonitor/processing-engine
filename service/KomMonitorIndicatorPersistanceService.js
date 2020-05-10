@@ -57,6 +57,10 @@
 
       for (const targetDate of targetDates) {
         var targetDateWithPrefix = indicator_date_prefix + targetDate;
+
+        if(!indicatorFeature.properties.hasOwnProperty(targetDateWithPrefix)){
+          continue;
+        }
   
         if(indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
           console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties[process.env.FEATURE_NAME_PROPERTY_NAME]);
