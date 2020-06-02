@@ -8,6 +8,8 @@ var dns = require("dns");
 var tmp = require("temporary");
 var progressHelper = require("./ProgressHelperService");
 
+const KmHelper = require("kmhelper");
+
 // aquire connection details to KomMonitor data management api instance from environment variables
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
 const kommonitorDataManagementPort = process.env.KOMMONITOR_DATA_MANAGEMENT_PORT;
@@ -31,14 +33,16 @@ function identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputat
 
 }
 
-async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, idOfLowestSpatialUnit, targetDate, nodeModuleForIndicator){
+async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnitKey, targetDate, nodeModuleForIndicator){
   // first entry of resultingIndicatorsMap contains the computed indicator for the lowest spatial unit
-  var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(idOfLowestSpatialUnit);
+  var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(lowestSpatialUnitKey);
 
   // elements of remainingSpatialUnits are map items where key='metadata object holding all metadata properties' and value='features as GeoJSON string'
   console.log("start to aggregate indicators for upper spatial unit hierarchy levels.");
 
   for (const spatialUnitEntry of remainingSpatialUnits) {
+
+    var metadataObject_string = JSON.stringify(spatialUnitEntry[0]);
 
     // create a deep copy of the javascript object. it will have no refererences to the original Object
     // this is necessary as we intend to remove content within the computation script --> hence we need only a copy!!!
@@ -70,35 +74,64 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
       throw error;
     }
 
-    resultingIndicatorsMap.set(spatialUnitEntry[0], indicatorGeoJSONForSpatialUnit);
+    if(resultingIndicatorsMap.has(metadataObject_string)){
+      var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
+      existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJSONForSpatialUnit, targetDate);
+      resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+    }
+    else{
+      resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJSONForSpatialUnit); 
+    }
   }
 
   return resultingIndicatorsMap;
 }
 
-async function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties){
+async function executeDefaultComputation(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties, useAggregationForHigherSpatialUnits){
 
-    try {
-      var scriptCodeAsByteArray;
-      var georesourcesMap;
-      var allSpatialUnits;
-      var targetIndicatorMetadata;
-      try{
-        scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
-        progressHelper.persistProgress(job.id, "defaultComputation", 20);
-        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
-        progressHelper.persistProgress(job.id, "defaultComputation", 30);
-        targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
-        progressHelper.persistProgress(job.id, "defaultComputation", 40);
-        var lowestSpatialUnitForComputationName = targetIndicatorMetadata.lowestSpatialUnitForComputation;
-        allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, lowestSpatialUnitForComputationName);
-        progressHelper.persistProgress(job.id, "defaultComputation", 50);
-      }
-      catch(error){
-        console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
-        throw error;
-      }
+  if (useAggregationForHigherSpatialUnits){
+    return await executeDefaultComputation_withAggregationToHigherSpatialUnits(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties);
+  }
+  else{
+    return await executeDefaultComputation_withIndividualComputationPerSpatialUnit(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties);
+    
+  }
+}
 
+exports.executeDefaultComputation = executeDefaultComputation;
+
+async function executeDefaultComputation_withAggregationToHigherSpatialUnits (job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties){
+  try {
+    var scriptCodeAsByteArray;
+    var georesourcesMap;
+    var allSpatialUnits;
+    var targetIndicatorMetadata;
+    var lowestSpatialUnitForComputationName;
+    try{
+      scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      progressHelper.persistProgress(job.id, "defaultComputation", 20);
+      targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
+      progressHelper.persistProgress(job.id, "defaultComputation", 40);
+      lowestSpatialUnitForComputationName = targetIndicatorMetadata.lowestSpatialUnitForComputation;
+    }
+    catch(error){
+      console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      throw error;
+    }      
+
+    // require the script code as new NodeJS module
+    fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
+    var nodeModuleForIndicator = require("../tmp/tmp.js");
+    // var nodeModuleForIndicator = require("../resources/example-scripts/kommonitor-node-module_Distanz_Naheste_Grundschule.js");
+
+    // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
+    var resultingIndicatorsMap = new Map();
+
+    for (const targetDate of targetDates) {
+      georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+
+      allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, lowestSpatialUnitForComputationName);
+     
       // will look like Array [metadataObject, geoJSON]
       var lowestSpatialUnit = identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputationName);
 
@@ -115,20 +148,21 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
         console.error("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
         throw error;
       }
-      progressHelper.persistProgress(job.id, "defaultComputation", 60);
-
-      // require the script code as new NodeJS module
-      fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
-      var nodeModuleForIndicator = require("../tmp/tmp.js");
-      // var nodeModuleForIndicator = require("../resources/example-scripts/kommonitor-node-module_Distanz_Naheste_Grundschule.js");
-
-      // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
-      var resultingIndicatorsMap = new Map();
+      
       //execute script to compute indicator
       try{
         var indicatorGeoJson_lowestSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, lowestSpatialUnit[1], baseIndicatorsMap_lowestSpatialUnit, georesourcesMap, defaultProcessProperties);
 
-        resultingIndicatorsMap.set(lowestSpatialUnit[0], indicatorGeoJson_lowestSpatialUnit);
+        var metadataObject_lowestUnit_string = JSON.stringify(lowestSpatialUnit[0]);
+
+        if(resultingIndicatorsMap.has(metadataObject_lowestUnit_string)){
+          var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_lowestUnit_string);
+          existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_lowestSpatialUnit, targetDate);
+          resultingIndicatorsMap.set(metadataObject_lowestUnit_string, existingGeoJSON); 
+        }
+        else{
+          resultingIndicatorsMap.set(metadataObject_lowestUnit_string, indicatorGeoJson_lowestSpatialUnit); 
+        }
 
         progressHelper.persistProgress(job.id, "defaultComputation", 70);
 
@@ -141,52 +175,189 @@ async function executeDefaultComputation(job, scriptId, targetIndicatorId, targe
           console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
           throw error;
         }
-
-        delete require.cache[require.resolve('../tmp/tmp.js')];
-
-        // delete temporarily stored nodeModule file synchronously
-        fs.unlinkSync("./tmp/tmp.js");
       }
       catch(error){
-
-        try{
-          // if error occured then clean up temp files and temp node module
-
-          // delete temporarily stored nodeModule file synchronously
-          delete require.cache[require.resolve('../tmp/tmp.js')];
-          fs.unlinkSync("./tmp/tmp.js");
-        }
-        catch (error){
-          console.error("Catched Error while calling indicator computation method from custom script. Error is: " + error);
-        }
         console.error("Error while calling indicator computation method from custom script. Error is: " + error);
       }
-
-      progressHelper.persistProgress(job.id, "defaultComputation", 80);
-
-      // after computing the indicator for every spatial unit
-      // send PUT requests against KomMonitor data management API to persist results permanently
-      var resultArray;
-      try{
-        resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDate, resultingIndicatorsMap);
-
-      }
-      catch(error){
-        console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
-        throw error;
-      }
-
-      progressHelper.persistProgress(job.id, "defaultComputation", 90);
-
-      return resultArray;
     }
-    catch(err) {
-        console.log("Error during execution of defaultIndicatorComputation with error: " + err);
-        throw err;
+
+    try{
+      // if error occured then clean up temp files and temp node module
+
+      // delete temporarily stored nodeModule file synchronously
+      delete require.cache[require.resolve('../tmp/tmp.js')];
+      fs.unlinkSync("./tmp/tmp.js");
     }
+    catch (error){
+      console.error("Catched Error while calling indicator computation method from custom script. Error is: " + error);
+    }
+
+    progressHelper.persistProgress(job.id, "defaultComputation", 80);
+
+    // after computing the indicator for every spatial unit
+    // send PUT requests against KomMonitor data management API to persist results permanently
+    var resultArray;
+    try{
+      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+
+    }
+    catch(error){
+      console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      throw error;
+    }
+
+    progressHelper.persistProgress(job.id, "defaultComputation", 90);
+
+    return resultArray;
+  }
+  catch(err) {
+      console.log("Error during execution of defaultIndicatorComputation with error: " + err);
+      throw err;
+  }
 }
 
-exports.executeDefaultComputation = executeDefaultComputation;
+async function executeDefaultComputation_withIndividualComputationPerSpatialUnit (job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties){
+  try {
+    var scriptCodeAsByteArray;
+    var georesourcesMap;
+    var allSpatialUnits;
+    var targetIndicatorMetadata;
+    try{
+      scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      progressHelper.persistProgress(job.id, "defaultComputation", 20);
+      targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
+      progressHelper.persistProgress(job.id, "defaultComputation", 40);
+
+    }
+    catch(error){
+      console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      throw error;
+    }      
+
+    
+
+    // require the script code as new NodeJS module
+    fs.writeFileSync("./tmp/tmp.js", scriptCodeAsByteArray);
+    var nodeModuleForIndicator = require("../tmp/tmp.js");
+    // var nodeModuleForIndicator = require("../resources/example-scripts/kommonitor-node-module_Distanz_Naheste_Grundschule.js");
+
+    // result map containing entries where key="spatialUnitMetadataObject" and value="computed indicator GeoJSON"
+    var resultingIndicatorsMap = new Map();
+
+    for (const targetDate of targetDates) {
+      //execute script to compute indicator
+      try{
+
+        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+
+        allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, targetIndicatorMetadata.lowestSpatialUnitForComputation);        
+
+        // after computing the indicator for the lowest spatial unit
+        // we can now aggregate the result to all remaining superior units!
+        try{
+          resultingIndicatorsMap = await computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, georesourcesMap, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator);
+        }
+        catch(error){
+          console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
+          throw error;
+        }
+      }
+      catch(error){
+        console.error("Error while calling indicator computation method from custom script. Error is: " + error);      
+      } 
+    }
+
+    progressHelper.persistProgress(job.id, "defaultComputation", 80);
+
+    try{
+      // if error occured then clean up temp files and temp node module
+
+      // delete temporarily stored nodeModule file synchronously
+      delete require.cache[require.resolve('../tmp/tmp.js')];
+      fs.unlinkSync("./tmp/tmp.js");
+    }
+    catch (error){
+      console.error("Catched Error while removing temp indicator computation module. Error is: " + error);
+    }
+
+    // after computing the indicator for every spatial unit
+    // send PUT requests against KomMonitor data management API to persist results permanently
+    var resultArray;
+    try{
+      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+
+    }
+    catch(error){
+      console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      throw error;
+    }
+
+    progressHelper.persistProgress(job.id, "defaultComputation", 90);
+
+    return resultArray;
+  }
+  catch(err) {
+      console.log("Error during execution of defaultIndicatorComputation with error: " + err);
+      throw err;
+  }
+}
+
+async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, georesourcesMap, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator){
+  
+  const spatialUnitIterator = allSpatialUnits.entries();
+
+  var nextSpatialUnit = spatialUnitIterator.next().value;
+
+  while(nextSpatialUnit){
+
+    var metadataObject_string = JSON.stringify(nextSpatialUnit[0]);
+
+    // retrieve baseIndicators
+    var baseIndicatorsMap_nextSpatialUnit;
+    try{
+      baseIndicatorsMap_nextSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, nextSpatialUnit[0].spatialUnitId);
+    }
+    catch(error){
+      console.error("Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      throw error;
+    }
+
+    var indicatorGeoJson_nextSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, nextSpatialUnit[1], baseIndicatorsMap_nextSpatialUnit, georesourcesMap, defaultProcessProperties);
+
+    // we now want to append only the resulting date to n existing entry
+    // f there is no existing entry, then set it initially
+    if(resultingIndicatorsMap.has(metadataObject_string)){
+      var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
+      existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate);
+      resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+    }
+    else{
+      resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJson_nextSpatialUnit); 
+    }        
+
+    nextSpatialUnit = spatialUnitIterator.next().value;
+  }
+  
+  return resultingIndicatorsMap;
+
+}
+
+function appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate){
+  var map = new Map();
+
+  for (const feature of indicatorGeoJson_nextSpatialUnit.features) {
+    map.set(KmHelper.getSpatialUnitFeatureIdValue(feature),KmHelper.getIndicatorValue(feature, targetDate));
+  }
+
+  for (let index = 0; index < existingGeoJSON.features.length; index++) {
+    const feature = existingGeoJSON.features[index];
+
+    existingGeoJSON.features[index] = KmHelper.setIndicatorValue(feature, targetDate, map.get(KmHelper.getSpatialUnitFeatureIdValue(feature)));
+  }
+
+  return existingGeoJSON;
+}
+
 
 async function executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties){
 

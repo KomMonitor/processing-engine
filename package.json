@@ -26,13 +26,15 @@
     "js-yaml": "^3.3.0",
     "kmhelper": "file:resources/KmHelper",
     "nodemailer": "^6.1.1",
+    "npm-license-crawler": "^0.2.1",
     "serve-static": "^1.13.2",
     "swagger-tools": "^0.10.4",
     "temporary": "0.0.8"
   },
   "devDependencies": {
     "docdash": "^1.1.0",
-    "jsdoc": "^3.5.5",
+    "jsdoc": "^3.6.4",
+    "jshint": "^2.11.0",
     "license-checker": "^25.0.1"
   },
   "jshintConfig": {

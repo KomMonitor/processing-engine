@@ -534,7 +534,7 @@ exports.getIndicatorValue = function (feature, targetDate){
 
   var indicatorValue = feature.properties[targetDateWithPrefix];
 
-  if(indicatorValue){
+  if(indicatorValue != null && indicatorValue != undefined){
     return indicatorValue;
   }
   else{
@@ -2088,6 +2088,21 @@ exports.union = function (polygonFeature_A, polygonFeature_B){
 exports.within = function (feature_A, feature_B){
 
   return turf.booleanWithin(feature_A, feature_B);
+};
+
+/**
+* Encapsulates {@linkcode turf} function {@linkcode https://turfjs.org/docs/#pointsWithinPolygon} to find all {@linkcode points} that lie within {@linkcode polygons}.
+* @param {Feauture|FeatureCollection} points - a GeoJSON point features
+* @param {FeatureCollection|Geometry|Feature} polygons - a GeoJSON polygon|multipolygon features
+* @returns {FeatureCollection} returns all points that lie within at least one polygon of submitted polygons as {@linkcode FeatureCollection <Point>}.
+* @see turf CONSTANT
+* @see {@link https://turfjs.org/docs/#pointsWithinPolygon}
+* @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+* @function
+*/
+exports.pointsWithinPolygon = function (points, polygons){
+
+  return turf.pointsWithinPolygon(points, polygons);
 };
 
 /**

@@ -7,7 +7,7 @@
 
  const indicator_date_prefix = "DATE_";
 
- function buildPutRequestBody(targetDate, targetSpatialUnitId, indicatorGeoJson){
+ function buildPutRequestBody(targetDates, targetSpatialUnitId, indicatorGeoJson){
    // the request body has follwing structure:
 // {
 //   "indicatorValues": [
@@ -40,8 +40,7 @@
 //   ],
 //   "applicableSpatialUnit": "applicableSpatialUnit"
 // }
-
-  var targetDateWithPrefix = indicator_date_prefix + targetDate;
+  
   var indicatorFeatures = indicatorGeoJson.features;
   console.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
   var putRequestBody = {};
@@ -49,24 +48,34 @@
   putRequestBody.indicatorValues = new Array();
 
   // now for each element of inputFeatures create object and append to array
-  indicatorFeatures.forEach(function(indicatorFeature){
+  for (const indicatorFeature of indicatorFeatures) {
+  
+      var indicatorValueObject = {};
+      indicatorValueObject.spatialReferenceKey = indicatorFeature.properties[process.env.FEATURE_ID_PROPERTY_NAME];
+  
+      indicatorValueObject.valueMapping = new Array();
 
-    if(indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
-      console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties[process.env.FEATURE_NAME_PROPERTY_NAME]);
-      indicatorFeature.properties[targetDateWithPrefix] = null;
+      for (const targetDate of targetDates) {
+        var targetDateWithPrefix = indicator_date_prefix + targetDate;
+
+        if(!indicatorFeature.properties.hasOwnProperty(targetDateWithPrefix)){
+          continue;
+        }
+  
+        if(indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
+          console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties[process.env.FEATURE_NAME_PROPERTY_NAME]);
+          indicatorFeature.properties[targetDateWithPrefix] = null;
+        }
+      
+        var valueMappingObject = {};
+        valueMappingObject.indicatorValue = indicatorFeature.properties[targetDateWithPrefix];
+        valueMappingObject.timestamp = targetDate;
+        indicatorValueObject.valueMapping.push(valueMappingObject);
+        
     }
 
-    var indicatorValueObject = {};
-    indicatorValueObject.spatialReferenceKey = indicatorFeature.properties[process.env.FEATURE_ID_PROPERTY_NAME];
-
-    indicatorValueObject.valueMapping = new Array();
-    var valueMappingObject = {};
-    valueMappingObject.indicatorValue = indicatorFeature.properties[targetDateWithPrefix];
-    valueMappingObject.timestamp = targetDate;
-    indicatorValueObject.valueMapping.push(valueMappingObject);
-
     putRequestBody.indicatorValues.push(indicatorValueObject);
-  });
+  }
 
   console.log("Number of produced PUT request body features: " + putRequestBody.indicatorValues.length);
 
@@ -85,21 +94,75 @@
  *
  * returns URL pointing to created resource
  **/
-exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, targetSpatialUnitMetadata, indicatorGeoJson) {
+exports.putIndicatorById = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson) {
+
+  var maxNumberOfTargetDatesPerRequest = Number(process.env.MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST);
+
+  if(targetDates && targetDates.length < maxNumberOfTargetDatesPerRequest){
+    return await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson);
+  }
+  else{
+    // split up to multiple requsts
+    var chunkedTargetDatesArray = chunkArray(targetDates, maxNumberOfTargetDatesPerRequest);
+
+    /*
+    var resultObject = {};
+        resultObject.indicatorId = targetIndicatorId;
+        resultObject.indicatorName = targetIndicatorName;
+        resultObject.spatialUnitId = targetSpatialUnitId;
+        resultObject.spatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
+        resultObject.targetDates = targetDates;
+        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + targetIndicatorId + "/" + targetSpatialUnitId;
+    */
+    var resultObject;
+    for (const targetDates_chunked of chunkedTargetDatesArray) {
+      if(!resultObject){
+        resultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
+      }
+      else{
+        var tmpResultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
+        resultObject.targetDates = targetDates; 
+      }
+    }
+    return resultObject;
+  }
+
+  
+};
+
+/**
+ * Returns an array with arrays of the given size.
+ *
+ * @param array {Array} Array to split
+ * @param chunkSize {Integer} Size of every group
+ */
+function chunkArray(array, chunk_size){
+  var results = [];
+
+  // make copy - otherwise other spatial units have no date left...
+  var arrayCopy = JSON.parse(JSON.stringify(array));
+  
+  while (arrayCopy.length) {
+      results.push(arrayCopy.splice(0, chunk_size));
+  }
+  
+  return results;
+}
+
+function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
   var targetSpatialUnitId = targetSpatialUnitMetadata.spatialUnitId;
   var targetSpatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
-  console.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
+  console.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetSpatialUnitId " + targetSpatialUnitId + " and targetDates " + targetDates );
 
-  var year = targetDateHelper.getYearFromTargetDate(targetDate);
-  var month = targetDateHelper.getMonthFromTargetDate(targetDate);
-  var day = targetDateHelper.getDayFromTargetDate(targetDate);
-
-  var putRequestBody = buildPutRequestBody(targetDate, targetSpatialUnitName, indicatorGeoJson);
+  var putRequestBody = buildPutRequestBody(targetDates, targetSpatialUnitName, indicatorGeoJson);
 
   //PUT /indicators/{indicatorId}
   return axios.put(baseUrlPath + "/indicators/" + targetIndicatorId,
         putRequestBody,
-        {headers: {"Content-Type": "application/json"}})
+        {headers: {"Content-Type": "application/json"},
+         maxContentLength: Infinity,
+         maxBodyLength: Infinity
+        })
     .then(response => {
       // response.data should be the respective GeoJSON as String
       console.log("Received response code " + response.status);
@@ -109,8 +172,8 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndica
         resultObject.indicatorName = targetIndicatorName;
         resultObject.spatialUnitId = targetSpatialUnitId;
         resultObject.spatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
-        resultObject.targetDate = targetDate;
-        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + targetIndicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day;
+        resultObject.targetDates = targetDates;
+        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + targetIndicatorId + "/" + targetSpatialUnitId;
 
         return resultObject;
       }
@@ -119,10 +182,11 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndica
         throw Error("Error when persisting indicator. Response code " + response.status + ". Status text: " + response.statusText);
     })
     .catch(error => {
-      console.log("Error when fetching indicator. Error was: " + error);
+      console.log("Error when PUTing indicator. Error was: " + error);
       throw error;
     });
 }
+  
 
 /**
  * send PUT request against KomMonitor DataManagement API to update indicators according to spatialUnitIds
@@ -131,11 +195,11 @@ exports.putIndicatorById = function(baseUrlPath, targetIndicatorId, targetIndica
  * targetIndicatorId String unique identifier of the indicator
  * targetIndicatorName String name of the indicator
  * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
- * indicatorSpatialUnitsMap Map map of indicator entries, where key="targetSpatialUnitMetadataObject" and value="indicatorGeoJson"
+ * indicatorSpatialUnitsMap Map map of indicator entries, where key="targetSpatialUnitMetadataObject_asString" and value="indicatorGeoJson"
  *
  * returns array of URLs pointing to created resources
  **/
-exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, indicatorSpatialUnitsMap) {
+exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, indicatorSpatialUnitsMap) {
   console.log("Sending PUT requests to persist indicators within KomMonitor data management API");
 
   var responseArray = new Array();
@@ -145,7 +209,7 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
   // for (let indicatorSpatialUnitsEntry of iterator) {
   for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
     try{
-      var resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDate, indicatorSpatialUnitsEntry[0], indicatorSpatialUnitsEntry[1]);
+      var resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
       responseArray.push(resultUrl);
     }
     catch(error){

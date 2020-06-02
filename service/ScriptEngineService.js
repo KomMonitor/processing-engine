@@ -85,17 +85,19 @@
         // here perform default computation
         var scriptId = job.data.scriptId;
         var targetIndicatorId = job.data.targetIndicatorId;
-        var targetDate = job.data.targetDate;
+        var targetDates = job.data.targetDates;
         var baseIndicatorIds = job.data.baseIndicatorIds;
         var georesourceIds = job.data.georesourceIds;
         var defaultProcessProperties = job.data.defaultProcessProperties;
+        var useAggregationForHigherSpatialUnits = job.data.useAggregationForHigherSpatialUnits;
 
         console.log(`Submitted job data scriptId: ` + scriptId);
         console.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
-        console.log(`Submitted job data targetDate: ` + targetDate);
+        console.log(`Submitted job data targetDates array: ` + targetDates);
         console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
         console.log(`Submitted job data georesourceIds: ` + georesourceIds);
         console.log(`Number of submitted job data defaultProcessProperties: ` + defaultProcessProperties.length);
+        console.log(`Submitted job data useAggregationForHigherSpatialUnits: ` + useAggregationForHigherSpatialUnits);
 
         defaultProcessProperties.forEach(function(property) {
           console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
@@ -106,7 +108,7 @@
         console.log("Successfully parsed request input parameters");
 
         console.log("Start indicator computation to persit the results within KomMonitor data management service.");
-        var resultArray = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDate, baseIndicatorIds, georesourceIds, defaultProcessProperties);
+        var resultArray = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties, useAggregationForHigherSpatialUnits);
 
         console.log("attaching result to job");
         job.data.result = resultArray;
