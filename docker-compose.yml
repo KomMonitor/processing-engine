@@ -18,12 +18,10 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - KOMMONITOR_DATA_MANAGEMENT_HOST=kommonitor-data-management-api
-      - KOMMONITOR_DATA_MANAGEMENT_PORT=8085
-      - KOMMONITOR_DATA_MANAGEMENT_BASEPATH=/management
+      - KOMMONITOR_DATA_MANAGEMENT_URL=https://kommonitor.muelheim-ruhr.de/management
       - GEOMETRY_SIMPLIFICATION_PARAMETER_NAME=simplifyGeometries
       - GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE=original
-      - OPEN_ROUTE_SERVICE_URL=openrouteservice
+      - OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de
       - FEATURE_ID_PROPERTY_NAME=ID
       - FEATURE_NAME_PROPERTY_NAME=NAME
   redis:

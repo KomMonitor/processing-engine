@@ -11,14 +11,9 @@ var progressHelper = require("./ProgressHelperService");
 const KmHelper = require("kmhelper");
 
 // aquire connection details to KomMonitor data management api instance from environment variables
-const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
-const kommonitorDataManagementPort = process.env.KOMMONITOR_DATA_MANAGEMENT_PORT;
-const kommonitorDataManagementBasepath = process.env.KOMMONITOR_DATA_MANAGEMENT_BASEPATH;
+const kommonitorDataManagementURL = process.env.KOMMONITOR_DATA_MANAGEMENT_URL;
 
-dns.lookup(kommonitorDataManagementHost, console.log);
-
-// construct fixed starting URL to make requests against running KomMonitor data management api
-const kommonitorDataManagementURL = "http://" + kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
+// dns.lookup(kommonitorDataManagementUrl, console.log);
 
 console.log("created the following base URL path to connect to KomMonitor Data Management API: " + kommonitorDataManagementURL);
 
