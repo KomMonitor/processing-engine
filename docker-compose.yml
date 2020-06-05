@@ -24,6 +24,8 @@ services:
       - OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de
       - FEATURE_ID_PROPERTY_NAME=ID
       - FEATURE_NAME_PROPERTY_NAME=NAME
+      - DISABLE_LOGS=false
+      - MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST=45
   redis:
     image: redis:alpine
     networks:
