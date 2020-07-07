@@ -1,8 +1,8 @@
 version: '2.1'
 
-networks:
-  kommonitor:
-      name: kommonitor-network
+# networks:
+#   kommonitor:
+#       name: kommonitor-network
 
 services:
   kommonitor-processing-engine:
@@ -10,9 +10,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-     - "8086:8086"
-    networks:
-     - kommonitor
+     - "0.0.0.0:8086:8086"
+    # networks:
+    #  - kommonitor
     depends_on:
      - redis
     environment:
@@ -26,7 +26,33 @@ services:
       - FEATURE_NAME_PROPERTY_NAME=NAME
       - DISABLE_LOGS=false
       - MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST=45
+  kommonitor-processing-scheduler:
+    image: kommonitor-processing-scheduler
+    # networks:
+    #  - kommonitor
+    environment:
+      - KOMMONITOR_DATA_MANAGEMENT_URL=http://KomMonitor:Monitor2019Kom@kommonitor.fbg-hsbo.de/management
+      - KOMMONITOR_PROCESSING_ENGINE_URL=http://kommonitor-processing-engine:8086/processing
+      - CRON_PATTERN_FOR_SCHEDULING=*/10 * * * * *
+      - SETTING_AGGREGATE_SPATIAL_UNITS=false
+      - TRIGGER_COMPUTATION_OF_PAST_TIMESTAMPS_OVERWRITING_EXISTING_VALUES=false
+      - NUMBER_OF_DAYS_FOR_OVERWRITING_EXISTING_VALUES=7
+      - DISABLE_LOGS=false
+      - USE_LATEST_POSSIBLE_BASE_INDICATOR_DATE_INSTEAD_OF_COMMON_DATE=false
+  # kommonitor-data-management:
+  #   image: kommonitor-data-management
+  #   networks:
+  #    - kommonitor
+  #   environment:
+  #     - KOMMONITOR_DATA_MANAGEMENT_URL=http://localhost:8085/management
+  #     - KOMMONITOR_PROCESSING_ENGINE_URL=http://localhost:8086/processing
+  #     - CRON_PATTERN_FOR_SCHEDULING=10 * * * * *
+  #     - SETTING_AGGREGATE_SPATIAL_UNITS=false
+  #     - TRIGGER_COMPUTATION_OF_PAST_TIMESTAMPS_OVERWRITING_EXISTING_VALUES=false
+  #     - NUMBER_OF_DAYS_FOR_OVERWRITING_EXISTING_VALUES=7
+  #     - DISABLE_LOGS=false
+  #     - USE_LATEST_POSSIBLE_BASE_INDICATOR_DATE_INSTEAD_OF_COMMON_DATE=false
   redis:
     image: redis:alpine
-    networks:
-     - kommonitor
+    # networks:
+    #  - kommonitor

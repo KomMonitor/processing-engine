@@ -4,7 +4,6 @@
   "description": "erster Entwurf einer Script Execution Engine API, die Script COde ausführen kann.",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
     "start": "node index.js"
   },
   "keywords": [
