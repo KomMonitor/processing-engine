@@ -561,7 +561,7 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
 
   var resultArray = [];
 
-  for (feature of featureCollection.features){
+  for (var feature of featureCollection.features){
     var indicatorValue = feature.properties[targetDateWithPrefix];
 
     if(indicatorValue){
@@ -572,8 +572,39 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
     }
   }
 
-  if(! resultArray.length > 0){
+  if(! (resultArray.length > 0)){
     console.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
+    return null;
+  }
+
+  return resultArray;
+};
+
+/**
+* Aquire the array of property values for the specified {@linkcode propertyName}.
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing at least one property with the submitted {@linkcode propertyName}
+* @param {string} propertyName - string representing the propertyName for which the value array shall be extracted
+* @returns {Array<Object>|null} returns the property values of all features of the {@linkcode featureCollection} for the specified {@linkcode propertyName} or {@linkcode null} if the features do not contain the propertyName.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.getPropertyValueArray = function (featureCollection, propertyName){
+
+  var resultArray = [];
+
+  for (var feature of featureCollection.features){
+    var propertyValue = feature.properties[propertyName];
+
+    if(propertyValue){
+      resultArray.push(propertyValue);
+    }
+    else{
+      console.log("A feature did not contain a property value for the propertyName " + propertyName + ". Feature was: " + feature);
+    }
+  }
+
+  if(! (resultArray.length > 0)){
+    console.log("No feature of the featureCollection contains a property value for the specified propertyName " + propertyName + ". Thus return null.");
     return null;
   }
 
@@ -2145,6 +2176,18 @@ exports.within_usingBBOX = function (feature_A, feature_B){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // JSTAT statistical methods                                                                                                                                         //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#sum} to compute the sum value of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the sum value shall be computed
+* @returns {number} returns the sum value of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#sum}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.sum = function (populationArray){
+  return jStat.sum(populationArray);
+};
 
 /**
 * Encapsulates jStat's function {@link https://jstat.github.io/all.html#covariance} to compute the covariance value of the submitted value arrays
