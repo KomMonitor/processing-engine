@@ -4,8 +4,6 @@ var KomMonitorDataFetcher = require('./KomMonitorDataFetcherService');
 var KomMonitorIndicatorPersister = require('./KomMonitorIndicatorPersistanceService');
 // module for reading/writing from/to hard drive
 var fs = require("fs");
-var dns = require("dns");
-var tmp = require("temporary");
 var progressHelper = require("./ProgressHelperService");
 
 const KmHelper = require("kmhelper");
@@ -14,8 +12,6 @@ const KmHelper = require("kmhelper");
 const kommonitorDataManagementHost = process.env.KOMMONITOR_DATA_MANAGEMENT_HOST;
 const kommonitorDataManagementPort = process.env.KOMMONITOR_DATA_MANAGEMENT_PORT;
 const kommonitorDataManagementBasepath = process.env.KOMMONITOR_DATA_MANAGEMENT_BASEPATH;
-
-dns.lookup(kommonitorDataManagementHost, console.log);
 
 // construct fixed starting URL to make requests against running KomMonitor data management api
 const kommonitorDataManagementURL = "http://" + kommonitorDataManagementHost + ":" + kommonitorDataManagementPort + kommonitorDataManagementBasepath;
