@@ -313,17 +313,23 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
       throw error;
     }
 
-    var indicatorGeoJson_nextSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, nextSpatialUnit[1], baseIndicatorsMap_nextSpatialUnit, georesourcesMap, defaultProcessProperties);
+    try{
+      var indicatorGeoJson_nextSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, nextSpatialUnit[1], baseIndicatorsMap_nextSpatialUnit, georesourcesMap, defaultProcessProperties);
 
-    // we now want to append only the resulting date to n existing entry
-    // f there is no existing entry, then set it initially
-    if(resultingIndicatorsMap.has(metadataObject_string)){
-      var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
-      existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate);
-      resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+      // we now want to append only the resulting date to n existing entry
+      // f there is no existing entry, then set it initially
+      if(resultingIndicatorsMap.has(metadataObject_string)){
+        var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
+        existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate);
+        resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+      }
+      else{
+        resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJson_nextSpatialUnit); 
+      }    
     }
-    else{
-      resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJson_nextSpatialUnit); 
+    catch(error){
+      console.error("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
+      console.log("Remaining spatial unit computation will continue.");
     }        
 
     nextSpatialUnit = spatialUnitIterator.next().value;
