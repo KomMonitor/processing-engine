@@ -18,7 +18,7 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - KOMMONITOR_DATA_MANAGEMENT_URL=https://kommonitor.muelheim-ruhr.de/management
+      - KOMMONITOR_DATA_MANAGEMENT_URL=https://localhost:8085/management
       - GEOMETRY_SIMPLIFICATION_PARAMETER_NAME=simplifyGeometries
       - GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE=original
       - OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de
@@ -31,8 +31,8 @@ services:
     # networks:
     #  - kommonitor
     environment:
-      - KOMMONITOR_DATA_MANAGEMENT_URL=http://KomMonitor:Monitor2019Kom@kommonitor.fbg-hsbo.de/management
-      - KOMMONITOR_PROCESSING_ENGINE_URL=http://kommonitor-processing-engine:8086/processing
+      - KOMMONITOR_DATA_MANAGEMENT_URL=http://localhost:8085/management
+      - KOMMONITOR_PROCESSING_ENGINE_URL=http://localhost:8086/processing
       - CRON_PATTERN_FOR_SCHEDULING=*/10 * * * * *
       - SETTING_AGGREGATE_SPATIAL_UNITS=false
       - TRIGGER_COMPUTATION_OF_PAST_TIMESTAMPS_OVERWRITING_EXISTING_VALUES=false
