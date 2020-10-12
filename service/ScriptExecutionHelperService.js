@@ -50,29 +50,34 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
     }
     catch(error){
       console.error("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " within dataManagement API for defaultIndicatorComputation. Error is: " + error);
-      throw error;
+      console.error("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
+      console.log("Remaining spatial unit computation will continue.");  
     }
 
     //TODO FIXME use direct lower spatial unit instead of lowest for better performance?
     console.log("Aggregating indicator on targetSpatialUnit with id " + targetSpatialUnitId);
 
-    var indicatorGeoJSONForSpatialUnit;
-    try{
-      indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson_copy);
-    }
-    catch(error){
-      console.error("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
-      throw error;
-    }
+    if(targetSpatialUnitGeoJson){
+      var indicatorGeoJSONForSpatialUnit;
+      try{
+        indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson_copy);
+      }
+      catch(error){
+        console.error("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
+        console.error("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
+        console.log("Remaining spatial unit computation will continue."); 
+      }
 
-    if(resultingIndicatorsMap.has(metadataObject_string)){
-      var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
-      existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJSONForSpatialUnit, targetDate);
-      resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+      if(resultingIndicatorsMap.has(metadataObject_string)){
+        var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
+        existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJSONForSpatialUnit, targetDate);
+        resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+      }
+      else{
+        resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJSONForSpatialUnit); 
+      }
     }
-    else{
-      resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJSONForSpatialUnit); 
-    }
+    
   }
 
   return resultingIndicatorsMap;
@@ -310,27 +315,30 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
     }
     catch(error){
       console.error("Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
-      throw error;
-    }
-
-    try{
-      var indicatorGeoJson_nextSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, nextSpatialUnit[1], baseIndicatorsMap_nextSpatialUnit, georesourcesMap, defaultProcessProperties);
-
-      // we now want to append only the resulting date to n existing entry
-      // f there is no existing entry, then set it initially
-      if(resultingIndicatorsMap.has(metadataObject_string)){
-        var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
-        existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate);
-        resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
-      }
-      else{
-        resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJson_nextSpatialUnit); 
-      }    
-    }
-    catch(error){
       console.error("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
-      console.log("Remaining spatial unit computation will continue.");
-    }        
+      console.log("Remaining spatial unit computation will continue.");      
+    }
+
+    if(baseIndicatorsMap_nextSpatialUnit){
+      try{
+        var indicatorGeoJson_nextSpatialUnit = await nodeModuleForIndicator.computeIndicator(targetDate, nextSpatialUnit[1], baseIndicatorsMap_nextSpatialUnit, georesourcesMap, defaultProcessProperties);
+  
+        // we now want to append only the resulting date to n existing entry
+        // f there is no existing entry, then set it initially
+        if(resultingIndicatorsMap.has(metadataObject_string)){
+          var existingGeoJSON = resultingIndicatorsMap.get(metadataObject_string);
+          existingGeoJSON = appendIndicatorValuesForDate(existingGeoJSON, indicatorGeoJson_nextSpatialUnit, targetDate);
+          resultingIndicatorsMap.set(metadataObject_string, existingGeoJSON); 
+        }
+        else{
+          resultingIndicatorsMap.set(metadataObject_string, indicatorGeoJson_nextSpatialUnit); 
+        }    
+      }
+      catch(error){
+        console.error("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
+        console.log("Remaining spatial unit computation will continue.");
+      } 
+    }      
 
     nextSpatialUnit = spatialUnitIterator.next().value;
   }
