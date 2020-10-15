@@ -286,8 +286,110 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         reject(response);
       });
   });
-}
+};
 
+/**
+ * retrieve status information about existing customizable indicator computation jobs.
+ * retrieve status information about existing customizable indicator computation jobs.
+ *
+ * returns List
+ **/
+exports.getCustomizableIndicatorComputationJobOverview = async function() {
+    var allJobs = [];
+
+    var jobs_successful = await getCustomizedIndicatorJobs("succeeded");
+    var jobs_failed = await getCustomizedIndicatorJobs("failed");
+    var jobs_waiting = await getCustomizedIndicatorJobs("waiting");
+    var jobs_delayed = await getCustomizedIndicatorJobs("delayed");
+    var jobs_active = await getCustomizedIndicatorJobs("active");
+
+    allJobs = allJobs.concat(jobs_successful);
+    allJobs = allJobs.concat(jobs_failed);
+    allJobs = allJobs.concat(jobs_waiting);
+    allJobs = allJobs.concat(jobs_delayed);
+    allJobs = allJobs.concat(jobs_active);
+
+    // sort by job id
+    allJobs.sort(function (jobA, jobB) {
+      return jobA.id - jobB.id;
+    });
+
+    var jobOverviewArray = toSwaggerJobOverviewArray_customized(allJobs);
+
+    return jobOverviewArray;
+};
+
+/**
+ * see https://github.com/bee-queue/bee-queue#queuegetjobstype-page-cb 
+ * @param {see } statusType 
+ */
+var getCustomizedIndicatorJobs = function(statusType){
+  if (statusType === "succeeded" || statusType === "failed"){
+    return customizedComputationQueue.getJobs(statusType, {size: 100000}).then((jobs) => {
+      return jobs;
+    });
+  }
+  else{
+    return customizedComputationQueue.getJobs(statusType, {start: 0, end: 100000}).then((jobs) => {
+      return jobs;
+    });
+  }
+};
+
+/**
+ * see https://github.com/bee-queue/bee-queue#queuegetjobstype-page-cb 
+ * @param {see } statusType 
+ */
+var getDefaultIndicatorJobs = function(statusType){
+  if (statusType === "succeeded" || statusType === "failed"){
+    return defaultComputationQueue.getJobs(statusType, {size: 100000}).then((jobs) => {
+      return jobs;
+    });
+  }
+  else{
+    return defaultComputationQueue.getJobs(statusType, {start: 0, end: 100000}).then((jobs) => {
+      return jobs;
+    });
+  }
+};
+
+var toSwaggerJobOverviewArray_customized  = function(beeQueueJobs){
+  var swaggerJobs = beeQueueJobs.map(function(beeQueueJob) {
+    var swaggerJob = {};
+    swaggerJob.jobId = beeQueueJob.id;
+    swaggerJob.status = beeQueueJob.status;
+    try {
+      swaggerJob.progress = progressHelper.readProgress(beeQueueJob.id, "customizedComputation"); 
+    } catch (error) {
+      console.error("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
+      console.error("Error was: " + error);
+    }
+    swaggerJob.error = beeQueueJob.data.error;
+
+    return swaggerJob;
+  });
+
+  return swaggerJobs;
+};
+
+var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
+  var swaggerJobs = beeQueueJobs.map(function(beeQueueJob) {
+    var swaggerJob = {};
+    swaggerJob.jobId = beeQueueJob.id;
+    swaggerJob.status = beeQueueJob.status;
+    try {
+      swaggerJob.progress = progressHelper.readProgress(beeQueueJob.id, "defaultComputation"); 
+    } catch (error) {
+      console.error("Error while fetching progress for default computation job with id " + beeQueueJob.id);
+      console.error("Error was: " + error);
+    }
+    swaggerJob.error = beeQueueJob.data.error;
+
+    return swaggerJob;
+  });
+
+  return swaggerJobs;
+};
 
 /**
  * retrieve status information and/or results about executing default indicator computation.
@@ -346,7 +448,38 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         reject(response);
       });
   });
-}
+};
+
+/**
+ * retrieve status information about existing default indicator computation jobs.
+ * retrieve status information about existing deafult indicator computation jobs.
+ *
+ * returns List
+ **/
+exports.getDefaultIndicatorComputationJobOverview = async function() {
+    var allJobs = [];
+
+    var jobs_successful = await getDefaultIndicatorJobs("succeeded");
+    var jobs_failed = await getDefaultIndicatorJobs("failed");
+    var jobs_waiting = await getDefaultIndicatorJobs("waiting");
+    var jobs_delayed = await getDefaultIndicatorJobs("delayed");
+    var jobs_active = await getDefaultIndicatorJobs("active");
+
+    allJobs = allJobs.concat(jobs_successful);
+    allJobs = allJobs.concat(jobs_failed);
+    allJobs = allJobs.concat(jobs_waiting);
+    allJobs = allJobs.concat(jobs_delayed);
+    allJobs = allJobs.concat(jobs_active);
+
+    // sort by job id
+    allJobs.sort(function (jobA, jobB) {
+      return jobA.id - jobB.id;
+    });
+
+    var jobOverviewArray = toSwaggerJobOverviewArray_default(allJobs);
+
+    return jobOverviewArray;
+};
 
 
 /**
