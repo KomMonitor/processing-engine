@@ -322,10 +322,29 @@ definitions:
         type: "string"
         description: "an error message if an error occured during indicator computation.\
           \ It is only included in the response object if an error occured."
+      jobData:
+        $ref: "#/definitions/CustomizableIndicatorComputationInputType"
     description: "status information about the execution of the target indicator.\
       \ If the result was computed then it is also included within the response object."
     example:
       jobId: "jobId"
+      jobData:
+        targetSpatialUnitId: "targetSpatialUnitId"
+        georesourceIds:
+        - "georesourceIds"
+        - "georesourceIds"
+        scriptId: "scriptId"
+        customProcessProperties:
+        - dataType: "string"
+          name: "name"
+          value: "value"
+        - dataType: "string"
+          name: "name"
+          value: "value"
+        targetDate: "2000-01-23"
+        baseIndicatorIds:
+        - "baseIndicatorIds"
+        - "baseIndicatorIds"
       result_geoJSON: "result_geoJSON"
       progress: 0.80082819046101150206595775671303272247314453125
       error: "error"
@@ -437,10 +456,32 @@ definitions:
         type: "string"
         description: "an error message if an error occured during indicator computation.\
           \ It is only included in the response object if an error occured."
+      jobData:
+        $ref: "#/definitions/DefaultIndicatorComputationInputType"
     description: "status information about the default execution of the target indicator."
     example:
       jobId: "jobId"
       result_url: "result_url"
+      jobData:
+        georesourceIds:
+        - "georesourceIds"
+        - "georesourceIds"
+        scriptId: "scriptId"
+        targetIndicatorId: "targetIndicatorId"
+        baseIndicatorIds:
+        - "baseIndicatorIds"
+        - "baseIndicatorIds"
+        defaultProcessProperties:
+        - dataType: "string"
+          name: "name"
+          value: "value"
+        - dataType: "string"
+          name: "name"
+          value: "value"
+        useAggregationForHigherSpatialUnits: true
+        targetDates:
+        - "2000-01-23"
+        - "2000-01-23"
       progress: 0.80082819046101150206595775671303272247314453125
       error: "error"
       status: "ACCEPTED"

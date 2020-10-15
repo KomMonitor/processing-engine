@@ -262,6 +262,10 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
           response.result_geoJSON_base64 = fs.readFileSync(tmpFilePath, 'utf8');
 
         response.error = job.data.error;
+        response.jobData = job.data;
+        response.jobData.error = undefined;
+        response.jobData.result = undefined;
+
 
         console.log("returning response object for job with id " + job.id + ". It has status " + job.status + "");
         // console.log(response);
@@ -279,6 +283,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.progress = undefined;
         response.result_geoJSON_base64 = undefined;
         response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";
+        swaggerJob.jobData = undefined;
 
         console.log("returning following response object for job with id " + jobId);
         console.log(response);
@@ -365,6 +370,9 @@ var toSwaggerJobOverviewArray_customized  = function(beeQueueJobs){
       console.error("Error was: " + error);
     }
     swaggerJob.error = beeQueueJob.data.error;
+    swaggerJob.jobData = beeQueueJob.data;
+    swaggerJob.jobData.error = undefined;
+    swaggerJob.jobData.result = undefined;
 
     return swaggerJob;
   });
@@ -384,6 +392,9 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
       console.error("Error was: " + error);
     }
     swaggerJob.error = beeQueueJob.data.error;
+    swaggerJob.jobData = beeQueueJob.data;
+    swaggerJob.jobData.error = undefined;
+    swaggerJob.jobData.result = undefined;
 
     return swaggerJob;
   });
@@ -424,6 +435,9 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.progress = progressHelper.readProgress(job.id, "defaultComputation");;
         response.result_urls = job.data.result;
         response.error = job.data.error;
+        response.jobData = job.data;
+        response.jobData.error = undefined;
+        response.jobData.result = undefined;
 
         console.log("returning following response object for job with id ${job.id}");
         console.log(response);
@@ -440,7 +454,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.status = undefined;
         response.progress = undefined;
         response.result_urls = undefined;
-        response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";
+        response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";        
 
         console.log("returning following response object for job with id " + jobId);
         console.log(response);
