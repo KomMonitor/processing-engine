@@ -4,6 +4,7 @@
  const axios = require("axios");
 
  const targetDateHelper = require("./TargetDateHelperService");
+ const encryptionHelper = require("./EncryptionHelperService");
 
  const simplifyGeometryParameterName = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_NAME;
  const simplifyGeometryParameterValue = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE;
@@ -24,6 +25,7 @@ exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
   return axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode")
     .then(response => {
       // response.data should be the script as byte[]
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       return response.data;
     })
     .catch(error => {
@@ -52,6 +54,7 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) 
   return axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
     .then(response => {
       // response.data should be the respective GeoJSON as String
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       return response.data;
     })
     .catch(error => {
@@ -79,6 +82,7 @@ exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
   return axios.get(baseUrlPath + "/spatial-units")
     .then(response => {
       // response.data should be the respective array of metadata entries as JSON
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       return response.data;
     })
     .catch(error => {
@@ -228,6 +232,7 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
   return axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
     .then(response => {
       // response.data should be the respective GeoJSON as String
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       return response.data;
     })
     .catch(error => {
@@ -260,6 +265,7 @@ exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
   return axios.get(baseUrlPath + "/georesources/" + georesourceId)
     .then(response => {
       // response.data should be the respective georesource metadata JSON object
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       return response.data;
     })
     .catch(error => {
@@ -328,6 +334,7 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
   return axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
     .then(response => {
       // response.data should be the respective GeoJSON as String
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       return response.data;
     })
     .catch(error => {
@@ -353,6 +360,7 @@ exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
   return axios.get(baseUrlPath + "/indicators/" + indicatorId)
     .then(response => {
       // response.data should be the respective indicator metadata JSON object
+      response = encryptionHelper.decryptAPIResponseIfRequired(response);
       console.log("got indicatorMetadata response object: " + response);
       console.log("Response has status: " + response.status);
       console.log("Response has data: " + response.data);
