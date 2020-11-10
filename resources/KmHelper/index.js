@@ -2251,7 +2251,7 @@ exports.max = function (populationArray){
 };
 
 /**
-* Implements a min max normalization value of the submitted value array using the formula {@linkcode (value - min) / (max - min); }
+* Implements a min max normalization value of the submitted value using the formula {@linkcode (value - min) / (max - min); }
 * @param {Number} min - the min value used in upper normalization formula
 * @param {Number} max - the max value used in upper normalization formula
 * @param {Number} value - the value to be normalized
@@ -2286,6 +2286,58 @@ exports.minMaxNormalization_wholeValueArray = function (populationArray){
   }
 
   return normalizedArray;
+};
+
+/**
+* Implements an inverted min max normalization value of the submitted value using the formula {@linkcode 1 - ((value - min) / (max - min)); }
+* @param {Number} min - the min value used in upper normalization formula
+* @param {Number} max - the max value used in upper normalization formula
+* @param {Number} value - the value to be normalized
+* @returns {number} returns the inverted normalized value
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.minMaxNormalization_inverted_singleValue = function (min, max, value){
+ 
+  var normalizedValue = 1 - ((Number(value) - Number(min)) / (Number(max) - Number(min)));
+  return normalizedValue;
+};
+
+/**
+* Implements an inverted min max normalization value array of the submitted value array using the formula {@linkcode 1 - ((value - min) / (max - min)); }
+* @param {Array.<number>} populationArray - an array of numeric values for which the min max normalized value array shall be computed (will be piped through function {@linkcode convertPropertyArrayToNumberArray()} to ensure that only numeric values are submitted)
+* @returns {number} returns the inverted normalized value array of the submitted value array
+* @see {@link https://jstat.github.io/all.html#geomean}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.minMaxNormalization_inverted_wholeValueArray = function (populationArray){
+  populationArray = exports.convertPropertyArrayToNumberArray(populationArray);
+
+  var min = exports.min(populationArray);
+  var max = exports.max(populationArray);
+
+  var normalizedArray = [];
+
+  for (const value of populationArray) {
+    normalizedArray.push(exports.minMaxNormalization_inverted_singleValue(min, max, value));
+  }
+
+  return normalizedArray;
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#rank} to compute the rank array of the submitted value array
+* @param {Array.<number>} populationArray - an array of numeric values for which the mean shall be computed (will be piped through function {@linkcode convertPropertyArrayToNumberArray()} to ensure that only numeric values are submitted)
+* @returns {number} returns the ranks of the submitted array of numeric values
+* @see {@link https://jstat.github.io/all.html#rank}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.rank = function (populationArray){
+  populationArray = exports.convertPropertyArrayToNumberArray(populationArray);
+
+  return jStat.rank(populationArray);
 };
 
 /**
