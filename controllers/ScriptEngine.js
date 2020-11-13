@@ -14,9 +14,29 @@ module.exports.getCustomizableIndicatorComputation = function getCustomizableInd
     });
 };
 
+module.exports.getCustomizableIndicatorComputationJobOverview = function getCustomizableIndicatorComputationJobOverview (req, res, next) {
+  ScriptEngine.getCustomizableIndicatorComputationJobOverview()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.getDefaultIndicatorComputation = function getDefaultIndicatorComputation (req, res, next) {
   var jobId = req.swagger.params['jobId'].value;
   ScriptEngine.getDefaultIndicatorComputation(jobId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.getDefaultIndicatorComputationJobOverview = function getDefaultIndicatorComputationJobOverview (req, res, next) {
+  ScriptEngine.getDefaultIndicatorComputationJobOverview()
     .then(function (response) {
       utils.writeJson(res, response);
     })
