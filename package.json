@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kommonitor/processing-engine.git"
+  },
   "keywords": [
     "swagger"
   ],
@@ -24,10 +28,12 @@
     "express": "^4.16.4",
     "jStat": "^1.7.1",
     "js-yaml": "^3.3.0",
+    "keycloak-js": "10.0.1",
     "kmhelper": "file:resources/KmHelper",
     "nodemailer": "^6.1.1",
     "serve-static": "^1.13.2",
-    "swagger-tools": "^0.10.4"
+    "swagger-tools": "^0.10.4",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "docdash": "^1.1.0",

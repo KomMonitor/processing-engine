@@ -1,0 +1,10 @@
+{
+  "realm": "kommonitor",
+  "auth-server-url": "http://localhost:8080/auth/",
+  "ssl-required": "external",
+  "resource": "kommonitor-processing-engine",
+  "public-client": true,
+  "confidential-port": 0,
+  "keycloak-adminRights-username": "processor",
+  "keycloak-adminRights-userpassword": "processor"
+}
