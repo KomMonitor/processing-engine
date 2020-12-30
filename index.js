@@ -6,6 +6,16 @@ if(JSON.parse(process.env.DISABLE_LOGS)){
   console.log = function(){};
 }
 
+/*
+* initialise keycloak dependant URLs to management endpoints
+*/
+process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD = process.env.KOMMONITOR_DATA_MANAGEMENT_URL;
+process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET = process.env.KOMMONITOR_DATA_MANAGEMENT_URL;
+// if keycloak is not enabled we must use the public endpoints of management component for GET requests.
+if (! JSON.parse(process.env.KEYCLOAK_ENABLED)){
+  process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET = process.env.KOMMONITOR_DATA_MANAGEMENT_URL + "/public";
+}
+
 var fs = require('fs'),
     path = require('path'),
     http = require('http');

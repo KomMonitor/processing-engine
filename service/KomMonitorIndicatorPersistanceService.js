@@ -4,6 +4,7 @@
  const axios = require("axios");
 
  const targetDateHelper = require("./TargetDateHelperService");
+ const keycloakHelper = require("./KeycloakHelperService");
 
  const indicator_date_prefix = "DATE_";
 
@@ -149,20 +150,22 @@ function chunkArray(array, chunk_size){
   return results;
 }
 
-function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
+async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
   var targetSpatialUnitId = targetSpatialUnitMetadata.spatialUnitId;
   var targetSpatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
   console.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetSpatialUnitId " + targetSpatialUnitId + " and targetDates " + targetDates );
 
   var putRequestBody = buildPutRequestBody(targetDates, targetSpatialUnitName, indicatorGeoJson);
 
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  config.headers["Content-Type"] = "application/json";
+  config.maxContentLength = Infinity;
+  config.maxBodyLength = Infinity;
+
   //PUT /indicators/{indicatorId}
-  return axios.put(baseUrlPath + "/indicators/" + targetIndicatorId,
+  return await axios.put(baseUrlPath + "/indicators/" + targetIndicatorId,
         putRequestBody,
-        {headers: {"Content-Type": "application/json"},
-         maxContentLength: Infinity,
-         maxBodyLength: Infinity
-        })
+        config)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       console.log("Received response code " + response.status);

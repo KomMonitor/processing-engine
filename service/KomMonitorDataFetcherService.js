@@ -5,6 +5,7 @@
 
  const targetDateHelper = require("./TargetDateHelperService");
  const encryptionHelper = require("./EncryptionHelperService");
+ const keycloakHelper = require("./KeycloakHelperService");
 
  const simplifyGeometryParameterName = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_NAME;
  const simplifyGeometryParameterValue = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE;
@@ -18,11 +19,13 @@
  *
  * returns script code of a NodeJS module as string
  **/
-exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
+exports.fetchScriptCodeById = async function(baseUrlPath, scriptId) {
   console.log("fetching script code from KomMonitor data management API for id " + scriptId);
 
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
+
   //GET /process-scripts/{scriptId}/scriptCode
-  return axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode")
+  return await axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode", config)
     .then(response => {
       // response.data should be the script as byte[]
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
@@ -43,15 +46,17 @@ exports.fetchScriptCodeById = function(baseUrlPath, scriptId) {
  *
  * returns spatial unit as GeoJSON string
  **/
-exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) {
+exports.fetchSpatialUnitById = async function(baseUrlPath, spatialUnitId, targetDate) {
   console.log("fetching spatial unit from KomMonitor data management API for id " + spatialUnitId + " and targetDate " + targetDate);
+
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /spatial-units/{spatialUnitId}/{year}/{month}/{day}
-  return axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
+  return await axios.get(baseUrlPath + "/spatial-units/" + spatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString, config)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
@@ -71,15 +76,17 @@ exports.fetchSpatialUnitById = function(baseUrlPath, spatialUnitId, targetDate) 
  *
  * returns spatial units metadata entries as an array
  **/
-exports.fetchSpatialUnitsMetadata = function(baseUrlPath, targetDate) {
+exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
   console.log("fetching available spatial units metadata from KomMonitor data management API for targetDate " + targetDate);
+
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
   //GET /spatial-units
-  return axios.get(baseUrlPath + "/spatial-units")
+  return await axios.get(baseUrlPath + "/spatial-units", config)
     .then(response => {
       // response.data should be the respective array of metadata entries as JSON
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
@@ -221,15 +228,17 @@ exports.fetchAvailableSpatialUnits = fetchAvailableSpatialUnits;
  *
  * returns georesource as GeoJSON string
  **/
-exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) {
+exports.fetchGeoresourceById = async function(baseUrlPath, georesourceId, targetDate) {
   console.log("fetching georesource from KomMonitor data management API for id " + georesourceId + " and targetDate " + targetDate);
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
+
   //GET /georesources/{georesouceId}/{year}/{month}/{day}
-  return axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
+  return await axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString, config)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
@@ -258,11 +267,13 @@ exports.fetchGeoresourceById = function(baseUrlPath, georesourceId, targetDate) 
  *
  * returns georesource metadata
  **/
-exports.fetchGeoresourceMetadataById = function(baseUrlPath, georesourceId) {
+exports.fetchGeoresourceMetadataById = async function(baseUrlPath, georesourceId) {
   console.log("fetching georesource metadata from KomMonitor data management API for id " + georesourceId);
 
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
+
   //GET /georesources/{georesouceId}
-  return axios.get(baseUrlPath + "/georesources/" + georesourceId)
+  return await axios.get(baseUrlPath + "/georesources/" + georesourceId, config)
     .then(response => {
       // response.data should be the respective georesource metadata JSON object
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
@@ -323,15 +334,17 @@ exports.fetchGeoresourcesByIds = async function(baseUrlPath, georesourceIds, tar
  *
  * returns indicator as GeoJSON string
  **/
-exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId) {
+exports.fetchIndicatorById = async function(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId) {
   console.log("fetching indicator from KomMonitor data management API for id " + indicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
+
   //GET /indicators/{indicatorId}/{targetSpatialUnitId}/{year}/{month}/{day}
-  return axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString)
+  return await axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString, config)
     .then(response => {
       // response.data should be the respective GeoJSON as String
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
@@ -351,13 +364,15 @@ exports.fetchIndicatorById = function(baseUrlPath, indicatorId, targetDate, targ
  *
  * returns indicator metadata
  **/
-exports.fetchIndicatorMetadataById = function(baseUrlPath, indicatorId) {
+exports.fetchIndicatorMetadataById = async function(baseUrlPath, indicatorId) {
   console.log("fetching indicator metadata from KomMonitor data management API for id " + indicatorId);
 
   console.log("Perform GET request against: " + baseUrlPath + "/indicators/" + indicatorId);
 
+  var config = await keycloakHelper.getKeycloakAxiosConfig();
+
   //GET /indicators/{indicatorId}
-  return axios.get(baseUrlPath + "/indicators/" + indicatorId)
+  return await axios.get(baseUrlPath + "/indicators/" + indicatorId, config)
     .then(response => {
       // response.data should be the respective indicator metadata JSON object
       response = encryptionHelper.decryptAPIResponseIfRequired(response);

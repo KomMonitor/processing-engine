@@ -8,10 +8,8 @@ var progressHelper = require("./ProgressHelperService");
 
 const KmHelper = require("kmhelper");
 
-// aquire connection details to KomMonitor data management api instance from environment variables
-const kommonitorDataManagementURL = process.env.KOMMONITOR_DATA_MANAGEMENT_URL;
-
-console.log("created the following base URL path to connect to KomMonitor Data Management API: " + kommonitorDataManagementURL);
+console.log("created the following base URL path to perform GET requests to KomMonitor Data Management API: " + process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET);
+console.log("created the following base URL path to perform CRUD requests to KomMonitor Data Management API: " + process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD);
 
 function identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputationName){
 
@@ -46,7 +44,7 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
     console.log("fetch spatialUnit as geoJSON with id " + targetSpatialUnitId + " for targetDate " + targetDate + " from dataManagement API for defaultIndicatorComputation.");
 
     try{
-      targetSpatialUnitGeoJson = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+      targetSpatialUnitGeoJson = await KomMonitorDataFetcher.fetchSpatialUnitById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetSpatialUnitId, targetDate);
     }
     catch(error){
       console.error("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " within dataManagement API for defaultIndicatorComputation. Error is: " + error);
@@ -104,9 +102,9 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
     var targetIndicatorMetadata;
     var lowestSpatialUnitForComputationName;
     try{
-      scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, scriptId);
       progressHelper.persistProgress(job.id, "defaultComputation", 20);
-      targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
+      targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetIndicatorId);
       progressHelper.persistProgress(job.id, "defaultComputation", 40);
       lowestSpatialUnitForComputationName = targetIndicatorMetadata.lowestSpatialUnitForComputation;
     }
@@ -124,9 +122,9 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
     var resultingIndicatorsMap = new Map();
 
     for (const targetDate of targetDates) {
-      georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+      georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, georesourceIds, targetDate);
 
-      allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, lowestSpatialUnitForComputationName);
+      allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetDate, lowestSpatialUnitForComputationName);
      
       // will look like Array [metadataObject, geoJSON]
       var lowestSpatialUnit = identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputationName);
@@ -138,7 +136,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
       // retrieve baseIndicators for initial (lowest) spatial unit
       var baseIndicatorsMap_lowestSpatialUnit;
       try{
-        baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
+        baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
       }
       catch(error){
         console.error("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
@@ -194,7 +192,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
     // send PUT requests against KomMonitor data management API to persist results permanently
     var resultArray;
     try{
-      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
 
     }
     catch(error){
@@ -219,9 +217,9 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
     var allSpatialUnits;
     var targetIndicatorMetadata;
     try{
-      scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+      scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, scriptId);
       progressHelper.persistProgress(job.id, "defaultComputation", 20);
-      targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(kommonitorDataManagementURL, targetIndicatorId);
+      targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetIndicatorId);
       progressHelper.persistProgress(job.id, "defaultComputation", 40);
 
     }
@@ -244,9 +242,9 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
       //execute script to compute indicator
       try{
 
-        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, georesourceIds, targetDate);
 
-        allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(kommonitorDataManagementURL, targetDate, targetIndicatorMetadata.lowestSpatialUnitForComputation);        
+        allSpatialUnits = await KomMonitorDataFetcher.fetchTargetSpatialUnitAndHigher(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetDate, targetIndicatorMetadata.lowestSpatialUnitForComputation);        
 
         // after computing the indicator for the lowest spatial unit
         // we can now aggregate the result to all remaining superior units!
@@ -280,7 +278,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
     // send PUT requests against KomMonitor data management API to persist results permanently
     var resultArray;
     try{
-      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(kommonitorDataManagementURL, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
 
     }
     catch(error){
@@ -311,7 +309,7 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
     // retrieve baseIndicators
     var baseIndicatorsMap_nextSpatialUnit;
     try{
-      baseIndicatorsMap_nextSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, nextSpatialUnit[0].spatialUnitId);
+      baseIndicatorsMap_nextSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, baseIndicatorIds, targetDate, nextSpatialUnit[0].spatialUnitId);
     }
     catch(error){
       console.error("Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
@@ -375,16 +373,16 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       // throw Error();
 
       try{
-        scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(kommonitorDataManagementURL, scriptId);
+        scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, scriptId);
         // job.data.progress = 20;
         progressHelper.persistProgress(job.id, "customizedComputation", 20);
-        baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(kommonitorDataManagementURL, baseIndicatorIds, targetDate, targetSpatialUnitId);
+        baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, baseIndicatorIds, targetDate, targetSpatialUnitId);
         // job.data.progress = 30;
         progressHelper.persistProgress(job.id, "customizedComputation", 30);
-        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(kommonitorDataManagementURL, georesourceIds, targetDate);
+        georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, georesourceIds, targetDate);
         // job.data.progress = 40;
         progressHelper.persistProgress(job.id, "customizedComputation", 40);
-        targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(kommonitorDataManagementURL, targetSpatialUnitId, targetDate);
+        targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetSpatialUnitId, targetDate);
         // job.data.progress = 50;
         progressHelper.persistProgress(job.id, "customizedComputation", 50);
       }
