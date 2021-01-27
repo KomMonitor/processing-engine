@@ -581,6 +581,68 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
 };
 
 /**
+* Aquire a map of all indicator id and value pairs for the specified {@linkcode targetDate}, where key=id and value=indicatorValue.
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate - string representing the target date for which the indicator id value map shall be extracted, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @returns {Map.<string, number>|null} returns map of all indicator id and value pairs for the specified {@linkcode targetDate}, where key=id and value=indicatorValue; or {@linkcode null} if the features do not contain an indicator value for the specified date.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.getIndicatorIdValueMap = function (featureCollection, targetDate){
+  var targetDateWithPrefix;
+  if(targetDate.includes(indicator_date_prefix)){
+      targetDateWithPrefix = targetDate;
+  }
+  else{
+      targetDateWithPrefix = exports.getTargetDateWithPropertyPrefix(targetDate);
+  }
+
+  var resultMap = new Map();
+
+  for (var feature of featureCollection.features){
+    var indicatorValue = feature.properties[targetDateWithPrefix];
+    var featureId = exports.getSpatialUnitFeatureIdValue(feature);
+
+    if(indicatorValue){      
+      resultMap.set(featureId, indicatorValue);
+    }
+    else{
+      console.log("A feature did not contain an indicator value for the targetDate " + targetDate + ". Feature was: " + feature);
+    }
+  }
+
+  if(! (resultMap.size > 0)){
+    console.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
+    return null;
+  }
+
+  return resultMap;
+};
+
+/**
+* Aquire the array of indicator values for the specified {@linkcode targetDate}.
+* @param {Map.<string, number>} indicatorIdValueMap - map of all indicator id and value pairs where key=id and value=indicatorValue
+* @returns {Array<number>} returns all numeric indicator values of all features of the {@linkcode indicatorIdValueMap}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.getIndicatorValueArray_fromIdValueMap = function (indicatorIdValueMap){
+
+  var resultArray = [];
+
+  indicatorIdValueMap.forEach(function(value, key, map){
+    if(value){
+      resultArray.push(value);
+    }
+    else{
+      console.log("A feature from indicator id value map did not contain an indicator value. Feature has ID: " + key);
+    }    
+  });
+
+  return resultArray;
+};
+
+/**
 * Aquire the array of property values for the specified {@linkcode propertyName}.
 * @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing at least one property with the submitted {@linkcode propertyName}
 * @param {string} propertyName - string representing the propertyName for which the value array shall be extracted
@@ -666,6 +728,31 @@ exports.setIndicatorValue_asNoData = function (feature, targetDate){
   feature.properties[targetDateWithPrefix] = null;
 
   return feature;
+};
+
+/**
+* Set the {@linkcode feature}'s indicator value for all features of the {@linkcode targetFeatureCollection} for the specified {@linkcode targetDate} with the respective indicator value from the input {@linkcode indicatorIdValueMap}.
+* @param {Feature} targetFeatureCollection - a valid GeoJSON FeatureCollection containing all target features
+* @param {string} targetDate - string representing the target date for which the indicator value shall be set, following the pattern {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01}
+* @param {number} indicatorIdValueMap - a map of indicator features (key=featureId, value=indicatorValue) whose values shall be set as the respective target features indicator value for the specified {@linkcode targetDate}
+* @returns {Feature} returns the GeoJSON FeatureCollection
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.setIndicatorValues_fromIdValueMap = function (targetFeatureCollection, targetDate, indicatorIdValueMap){
+
+  for (var feature of targetFeatureCollection.features) {
+    var featureId = exports.getSpatialUnitFeatureIdValue(feature);
+
+    if(indicatorIdValueMap.has(featureId)){
+      feature = exports.setIndicatorValue(feature, targetDate, indicatorIdValueMap.get(featureId));
+    }
+    else{
+      feature = exports.setIndicatorValue_asNoData(feature, targetDate);
+    }
+  } 
+
+  return targetFeatureCollection;
 };
 
 /**
@@ -2178,7 +2265,7 @@ exports.within_usingBBOX = function (feature_A, feature_B){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
-* Takes a property array of arbitrary input objects and returns a valueArray of numeric values which have been convertet to a number by {@linkcode Number(value)}. 
+* Takes a property array of arbitrary input objects and returns a valueArray of numeric values which have been converted to a number by {@linkcode Number(value)}. 
 * Any property value of the input array, whose conversion results in Number.NaN using the check {@linkcode Number.isNan(Number(value))} or is boolean will be completely removed from the array
 * Thus the resulting array may have fewer entries than the original array.
 * @param {Array.<Object>} propertyArray - an array of arbitrary values (can be String, number, boolean, object)
@@ -2204,6 +2291,36 @@ exports.convertPropertyArrayToNumberArray = function(propertyArray){
   }
 
   return numericArray;
+};
+
+/**
+* Takes a map of indicator feature id and value pairs and returns a map containing only entries with numeric indicator values which have been converted to a number by {@linkcode Number(value)}. 
+* Any property value of the input map entries, whose conversion results in Number.NaN using the check {@linkcode Number.isNan(Number(value))} or is boolean will be completely removed from the map
+* Thus the resulting may may have fewer entries than the original map.
+* @param {Map.<string, Object>} indicatorIdValueMap - a map of indicator ID and value pairs, where key=ID and value=indicatorValue 
+* @returns {Map.<string, number>} returns the map of all input map entries whose values were successfully converted to a number. responseMap.size may be smaller than inputMap.size, if inputMap contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.convertPropertyMapToNumberMap_fromIdValueMap = function(indicatorIdValueMap){
+  var resultMap = new Map();
+
+  // assume that rankedIndicatorValues.length == indicatorIdValueMap.size
+  indicatorIdValueMap.forEach(function(value, key, map){
+    if (value === true | value === false){
+      // skip
+      continue;
+    }
+    else if (Number.isNaN(Number(value))){
+      // skip
+      continue;
+    }
+    else{
+      resultMap.set(key, Number(value));
+    }
+  });
+
+  return resultMap;
 };
 
 /**
@@ -2269,7 +2386,6 @@ exports.minMaxNormalization_singleValue = function (min, max, value){
 * Implements a min max normalization value array of the submitted value array using the formula {@linkcode (value - min) / (max - min); }
 * @param {Array.<number>} populationArray - an array of numeric values for which the min max normalized value array shall be computed (will be piped through function {@linkcode convertPropertyArrayToNumberArray()} to ensure that only numeric values are submitted)
 * @returns {number} returns the normalized value array of the submitted value array
-* @see {@link https://jstat.github.io/all.html#geomean}
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
 */
@@ -2307,7 +2423,6 @@ exports.minMaxNormalization_inverted_singleValue = function (min, max, value){
 * Implements an inverted min max normalization value array of the submitted value array using the formula {@linkcode 1 - ((value - min) / (max - min)); }
 * @param {Array.<number>} populationArray - an array of numeric values for which the min max normalized value array shall be computed (will be piped through function {@linkcode convertPropertyArrayToNumberArray()} to ensure that only numeric values are submitted)
 * @returns {number} returns the inverted normalized value array of the submitted value array
-* @see {@link https://jstat.github.io/all.html#geomean}
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
 */
@@ -2327,9 +2442,92 @@ exports.minMaxNormalization_inverted_wholeValueArray = function (populationArray
 };
 
 /**
+* Implements a min max normalization algorithm using the formula {@linkcode (value - min) / (max - min); } for an indicator id value map.
+* @param {Map.<string, number>} indicatorIdValueMap - map of all indicator id and value pairs where key=id and value=indicatorValue
+* @returns {Map.<string, number>} returns the same map object, but instead of the original indicator value the respective normalized value is set as map value for each id value map entry.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.minMaxNormalization_fromIdValueMap = function (indicatorIdValueMap){
+
+  var resultMap = new Map();
+
+  var numericEntriesMap = exports.convertPropertyMapToNumberMap_fromIdValueMap(indicatorIdValueMap);
+
+  var indicatorValues = exports.getIndicatorValueArray_fromIdValueMap(numericEntriesMap);
+
+  indicatorValues = exports.convertPropertyArrayToNumberArray(indicatorValues);
+
+  var min = exports.min(indicatorValues);
+  var max = exports.max(indicatorValues);
+
+  var normalizedArray = [];
+
+  for (const value of indicatorValues) {
+    normalizedArray.push(exports.minMaxNormalization_singleValue(min, max, value));
+  }
+
+  if(normalizedArray.length != numericEntriesMap.size){
+    exports.log("Error deteced during 'minMaxNormalization_fromIdValueMap'. The size of input id value map is not equal to the size of the computed normalization array. Hence cannot continue compute normalization values for whole map. Some values may not be numeric, and thus get lost in between?");
+  }
+
+  var index=0;
+
+  // assume that rankedIndicatorValues.length == numericEntriesMap.size
+  numericEntriesMap.forEach(function(value, key, map){
+    resultMap.set(key, normalizedArray[index]);
+    index++; 
+  });
+
+  return resultMap;
+};
+
+/**
+* Implements an inverted min max normalization algorithm using the formula {@linkcode 1 - ((value - min) / (max - min)); } for an indicator id value map.
+* @param {Map.<string, number>} indicatorIdValueMap - map of all indicator id and value pairs where key=id and value=indicatorValue
+* @returns {Map.<string, number>} returns the same map object, but instead of the original indicator value the respective normalized value is set as map value for each id value map entry.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.minMaxNormalization_inverted_fromIdValueMap = function (indicatorIdValueMap){
+
+  var resultMap = new Map();
+
+  var numericEntriesMap = exports.convertPropertyMapToNumberMap_fromIdValueMap(indicatorIdValueMap);
+
+  var indicatorValues = exports.getIndicatorValueArray_fromIdValueMap(numericEntriesMap);
+
+  indicatorValues = exports.convertPropertyArrayToNumberArray(indicatorValues);
+
+  var min = exports.min(indicatorValues);
+  var max = exports.max(indicatorValues);
+
+  var normalizedArray = [];
+
+  for (const value of indicatorValues) {
+    normalizedArray.push(exports.minMaxNormalization_inverted_singleValue(min, max, value));
+  }
+
+  if(normalizedArray.length != numericEntriesMap.size){
+    exports.log("Error deteced during 'minMaxNormalization_inverted_fromIdValueMap'. The size of input id value map is not equal to the size of the computed normalization array. Hence cannot continue compute normalization values for whole map. Some values may not be numeric, and thus get lost in between?");
+  }
+
+  var index=0;
+
+  // assume that rankedIndicatorValues.length == numericEntriesMap.size
+  numericEntriesMap.forEach(function(value, key, map){
+    resultMap.set(key, normalizedArray[index]);
+    index++; 
+  });
+
+  return resultMap;
+};
+
+
+/**
 * Encapsulates jStat's function {@link https://jstat.github.io/all.html#rank} to compute the rank array of the submitted value array
 * @param {Array.<number>} populationArray - an array of numeric values for which the mean shall be computed (will be piped through function {@linkcode convertPropertyArrayToNumberArray()} to ensure that only numeric values are submitted)
-* @returns {number} returns the ranks of the submitted array of numeric values
+* @returns {Array.<number>} returns the ranks of the submitted array of numeric values
 * @see {@link https://jstat.github.io/all.html#rank}
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
@@ -2338,6 +2536,40 @@ exports.rank = function (populationArray){
   populationArray = exports.convertPropertyArrayToNumberArray(populationArray);
 
   return jStat.rank(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#rank} to compute the corresponding ranks of the submitted indicator values for an indicator id value map.
+* @param {Map.<string, number>} indicatorIdValueMap - map of all indicator id and value pairs where key=id and value=indicatorValue
+* @returns {Map.<string, number>} returns the same map object, but instead of the original indicator value the respective rank is set as map value for each id value map entry.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.rank_fromIdValueMap = function (indicatorIdValueMap){
+
+  var resultMap = new Map();
+
+  var numericEntriesMap = exports.convertPropertyMapToNumberMap_fromIdValueMap(indicatorIdValueMap);
+
+  var indicatorValues = exports.getIndicatorValueArray_fromIdValueMap(numericEntriesMap);
+
+  indicatorValues = exports.convertPropertyArrayToNumberArray(indicatorValues);
+
+  var rankedIndicatorValues = jStat.rank(indicatorValues);
+
+  if(rankedIndicatorValues.length != numericEntriesMap.size){
+    exports.log("Error deteced during 'rank_fromIdValueMap'. The size of input id value map is not equal to the size of the computed ranked array. Hence cannot continue compute rank values for whole map. Some values may not be numeric, and thus get lost in between?");
+  }
+
+  var index=0;
+
+  // assume that rankedIndicatorValues.length == numericEntriesMap.size
+  numericEntriesMap.forEach(function(value, key, map){
+    resultMap.set(key, rankedIndicatorValues[index]);
+    index++; 
+  });
+
+  return resultMap;
 };
 
 /**
@@ -2355,6 +2587,49 @@ exports.geomean = function (populationArray){
 };
 
 /**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#geomean} to compute the geometric mean value of the submitted array of indicator id and value map objects
+* @param {Array.<Map.<string, number>>} indicatorIdValueMapArray - an array of map objects containing indicator feature ID and numeric value pairs (will be piped through function {@linkcode convertPropertyMapToNumberMap_fromIdValueMap} to ensure that only numeric values are submitted)
+* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed geometric mean value of the submitted array of indicator id and value map objects
+* @see {@link https://jstat.github.io/all.html#geomean}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.geomean_fromIdValueMap = function (indicatorIdValueMapArray){
+  var resultMap = new Map();
+
+  numericMapArray = [];
+  for (const map of indicatorIdValueMapArray) {
+    numericMapArray.push(exports.convertPropertyMapToNumberMap_fromIdValueMap(map)); 
+  }
+
+  var refSize = numericMapArray[0].size;
+  for (const map of numericMapArray) {
+    if (map.size != refSize){
+      exports.log("Problem detected while computing geomean from indicatorIdValueMapArray. The sizes of the input base indicator map entries are not equal. Results might not be correct. Will continue computation.");
+    }
+  }
+
+  // iterate over the first map entries; collect all values of all baseIndicators for each feature
+  // compute mean and set it in result map
+  var refMap = numericMapArray[0]; 
+  refMap.forEach(function(value, key, map){
+
+    var baseIndicatorValues = [];
+
+    for (const numericMap of numericMapArray) {
+      // collect sub indicator values
+      if(numericMap.has(key)){
+        baseIndicatorValues.push(numericMap.get(key));
+      } 
+    }
+
+    resultMap.set(key, jStat.geomean(baseIndicatorValues));
+  });
+
+  return resultMap;
+};
+
+/**
 * Encapsulates jStat's function {@link https://jstat.github.io/all.html#mean} to compute the mean value of the submitted value array
 * @param {Array.<number>} populationArray - an array of numeric values for which the mean shall be computed (will be piped through function {@linkcode convertPropertyArrayToNumberArray()} to ensure that only numeric values are submitted)
 * @returns {number} returns the mean value of the submitted array of numeric values
@@ -2366,6 +2641,49 @@ exports.mean = function (populationArray){
   populationArray = exports.convertPropertyArrayToNumberArray(populationArray);
 
   return jStat.mean(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#mean} to compute the mean value of the submitted array of indicator id and value map objects
+* @param {Array.<Map.<string, number>>} indicatorIdValueMapArray - an array of map objects containing indicator feature ID and numeric value pairs (will be piped through function {@linkcode convertPropertyMapToNumberMap_fromIdValueMap} to ensure that only numeric values are submitted)
+* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed mean value of the submitted array of indicator id and value map objects
+* @see {@link https://jstat.github.io/all.html#mean}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.mean_fromIdValueMap = function (indicatorIdValueMapArray){
+  var resultMap = new Map();
+
+  numericMapArray = [];
+  for (const map of indicatorIdValueMapArray) {
+    numericMapArray.push(exports.convertPropertyMapToNumberMap_fromIdValueMap(map)); 
+  }
+
+  var refSize = numericMapArray[0].size;
+  for (const map of numericMapArray) {
+    if (map.size != refSize){
+      exports.log("Problem detected while computing geomean from indicatorIdValueMapArray. The sizes of the input base indicator map entries are not equal. Results might not be correct. Will continue computation.");
+    }
+  }
+
+  // iterate over the first map entries; collect all values of all baseIndicators for each feature
+  // compute mean and set it in result map
+  var refMap = numericMapArray[0]; 
+  refMap.forEach(function(value, key, map){
+
+    var baseIndicatorValues = [];
+
+    for (const numericMap of numericMapArray) {
+      // collect sub indicator values
+      if(numericMap.has(key)){
+        baseIndicatorValues.push(numericMap.get(key));
+      } 
+    }
+
+    resultMap.set(key, jStat.mean(baseIndicatorValues));
+  });
+
+  return resultMap;
 };
 
 /**
@@ -2408,6 +2726,49 @@ exports.min = function (populationArray){
   populationArray = exports.convertPropertyArrayToNumberArray(populationArray);
 
   return jStat.min(populationArray);
+};
+
+/**
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#min} to compute the min value of the submitted array of indicator id and value map objects
+* @param {Array.<Map.<string, number>>} indicatorIdValueMapArray - an array of map objects containing indicator feature ID and numeric value pairs (will be piped through function {@linkcode convertPropertyMapToNumberMap_fromIdValueMap} to ensure that only numeric values are submitted)
+* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed min value of the submitted array of indicator id and value map objects
+* @see {@link https://jstat.github.io/all.html#min}
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.min_fromIdValueMap = function (indicatorIdValueMapArray){
+  var resultMap = new Map();
+
+  numericMapArray = [];
+  for (const map of indicatorIdValueMapArray) {
+    numericMapArray.push(exports.convertPropertyMapToNumberMap_fromIdValueMap(map)); 
+  }
+
+  var refSize = numericMapArray[0].size;
+  for (const map of numericMapArray) {
+    if (map.size != refSize){
+      exports.log("Problem detected while computing geomean from indicatorIdValueMapArray. The sizes of the input base indicator map entries are not equal. Results might not be correct. Will continue computation.");
+    }
+  }
+
+  // iterate over the first map entries; collect all values of all baseIndicators for each feature
+  // compute mean and set it in result map
+  var refMap = numericMapArray[0]; 
+  refMap.forEach(function(value, key, map){
+
+    var baseIndicatorValues = [];
+
+    for (const numericMap of numericMapArray) {
+      // collect sub indicator values
+      if(numericMap.has(key)){
+        baseIndicatorValues.push(numericMap.get(key));
+      } 
+    }
+
+    resultMap.set(key, jStat.min(baseIndicatorValues));
+  });
+
+  return resultMap;
 };
 
 /**
