@@ -2587,9 +2587,9 @@ exports.geomean = function (populationArray){
 };
 
 /**
-* Encapsulates jStat's function {@link https://jstat.github.io/all.html#geomean} to compute the geometric mean value of the submitted array of indicator id and value map objects
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#geomean} to compute the geometric mean value of the submitted array of indicator id and value map objects. Only values for those features will be computed, that have an input value for all entries of the input {@link indicatorIdValueMapArray}.
 * @param {Array.<Map.<string, number>>} indicatorIdValueMapArray - an array of map objects containing indicator feature ID and numeric value pairs (will be piped through function {@linkcode convertPropertyMapToNumberMap_fromIdValueMap} to ensure that only numeric values are submitted)
-* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed geometric mean value of the submitted array of indicator id and value map objects
+* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed geometric mean value of the submitted array of indicator id and value map objects. Only values for those features will be computed, that have an input value for all entries of the input {@link indicatorIdValueMapArray}.
 * @see {@link https://jstat.github.io/all.html#geomean}
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
@@ -2623,7 +2623,13 @@ exports.geomean_fromIdValueMap = function (indicatorIdValueMapArray){
       } 
     }
 
-    resultMap.set(key, jStat.geomean(baseIndicatorValues));
+    /*
+    If not all baseIndicator have the required value, then DO NOT SET the value at all!
+    It seems to be the most transparent solution
+    */
+    if(baseIndicatorValues.length === numericMapArray.length){
+      resultMap.set(key, jStat.geomean(baseIndicatorValues));
+    }    
   });
 
   return resultMap;
@@ -2644,9 +2650,9 @@ exports.mean = function (populationArray){
 };
 
 /**
-* Encapsulates jStat's function {@link https://jstat.github.io/all.html#mean} to compute the mean value of the submitted array of indicator id and value map objects
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#mean} to compute the mean value of the submitted array of indicator id and value map objects. Only values for those features will be computed, that have an input value for all entries of the input {@link indicatorIdValueMapArray}.
 * @param {Array.<Map.<string, number>>} indicatorIdValueMapArray - an array of map objects containing indicator feature ID and numeric value pairs (will be piped through function {@linkcode convertPropertyMapToNumberMap_fromIdValueMap} to ensure that only numeric values are submitted)
-* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed mean value of the submitted array of indicator id and value map objects
+* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed mean value of the submitted array of indicator id and value map objects. Only values for those features will be computed, that have an input value for all entries of the input {@link indicatorIdValueMapArray}.
 * @see {@link https://jstat.github.io/all.html#mean}
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
@@ -2680,7 +2686,13 @@ exports.mean_fromIdValueMap = function (indicatorIdValueMapArray){
       } 
     }
 
+    /*
+    If not all baseIndicator have the required value, then DO NOT SET the value at all!
+    It seems to be the most transparent solution
+    */
+   if(baseIndicatorValues.length === numericMapArray.length){
     resultMap.set(key, jStat.mean(baseIndicatorValues));
+  } 
   });
 
   return resultMap;
@@ -2729,9 +2741,9 @@ exports.min = function (populationArray){
 };
 
 /**
-* Encapsulates jStat's function {@link https://jstat.github.io/all.html#min} to compute the min value of the submitted array of indicator id and value map objects
+* Encapsulates jStat's function {@link https://jstat.github.io/all.html#min} to compute the min value of the submitted array of indicator id and value map objects. Only values for those features will be computed, that have an input value for all entries of the input {@link indicatorIdValueMapArray}.
 * @param {Array.<Map.<string, number>>} indicatorIdValueMapArray - an array of map objects containing indicator feature ID and numeric value pairs (will be piped through function {@linkcode convertPropertyMapToNumberMap_fromIdValueMap} to ensure that only numeric values are submitted)
-* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed min value of the submitted array of indicator id and value map objects
+* @returns {Map.<string, number>} returns a map containing the indicator feature id and computed min value of the submitted array of indicator id and value map objects. Only values for those features will be computed, that have an input value for all entries of the input {@link indicatorIdValueMapArray}.
 * @see {@link https://jstat.github.io/all.html#min}
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
@@ -2765,7 +2777,13 @@ exports.min_fromIdValueMap = function (indicatorIdValueMapArray){
       } 
     }
 
+    /*
+    If not all baseIndicator have the required value, then DO NOT SET the value at all!
+    It seems to be the most transparent solution
+    */
+   if(baseIndicatorValues.length === numericMapArray.length){
     resultMap.set(key, jStat.min(baseIndicatorValues));
+    } 
   });
 
   return resultMap;
