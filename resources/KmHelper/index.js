@@ -2278,12 +2278,8 @@ exports.convertPropertyArrayToNumberArray = function(propertyArray){
 
   for (const value of propertyArray) {
     if (value === true | value === false){
-      // skip
-      continue;
     }
     else if (Number.isNaN(Number(value))){
-      // skip
-      continue;
     }
     else{
       numericArray.push(Number(value));
@@ -2308,12 +2304,8 @@ exports.convertPropertyMapToNumberMap_fromIdValueMap = function(indicatorIdValue
   // assume that rankedIndicatorValues.length == indicatorIdValueMap.size
   indicatorIdValueMap.forEach(function(value, key, map){
     if (value === true | value === false){
-      // skip
-      continue;
     }
     else if (Number.isNaN(Number(value))){
-      // skip
-      continue;
     }
     else{
       resultMap.set(key, Number(value));
