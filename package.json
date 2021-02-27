@@ -14,7 +14,7 @@
     "KomMonitor"
   ],
   "license": "Apache-2.0",
-  "private": false,
+  "private": true,
   "dependencies": {
     "@turf/turf": "^5.1.6",
     "axios": "^0.18.0",
