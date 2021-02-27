@@ -1,7 +1,7 @@
 {
-  "name": "kommonitor-script-execution-engine-api",
-  "version": "0.0.1",
-  "description": "erster Entwurf einer Script Execution Engine API, die Script COde ausführen kann.",
+  "name": "kommonitor-processing-engine",
+  "version": "0.9.5",
+  "description": "KomMonitor processing engine that performs indicator computation based on base indicators or other spatial resources.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,10 +11,10 @@
     "url": "https://github.com/kommonitor/processing-engine.git"
   },
   "keywords": [
-    "swagger"
+    "KomMonitor"
   ],
   "license": "Apache-2.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@turf/turf": "^5.1.6",
     "axios": "^0.18.0",
@@ -40,7 +40,8 @@
     "jsdoc": "^3.6.4",
     "jshint": "^2.11.0",
     "license-checker": "^25.0.1",
-    "npm-license-crawler": "^0.2.1"
+    "npm-license-crawler": "^0.2.1",
+    "npm-release": "^1.0.0"
   },
   "jshintConfig": {
     "undef": true,
