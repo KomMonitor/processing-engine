@@ -36,7 +36,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 // app.use(cors());
-app.use(serveStatic("public"));
+app.use(serveStatic("docs"));
 
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
