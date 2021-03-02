@@ -4,6 +4,7 @@
   "description": "KomMonitor processing engine that performs indicator computation based on base indicators or other spatial resources.",
   "main": "index.js",
   "scripts": {
+    "prestart": "jsdoc -c jsdoc.json",
     "start": "node index.js"
   },
   "repository": {
