@@ -2,6 +2,8 @@
 
 This guide contains helpful information on how to write and manage custom indicator computation scripts for the **KomMonitor Processing Engine**.
 
+Find the up-to-date API method descriptions as `jsdoc` at [https://kommonitor.github.io/processing-engine/](https://kommonitor.github.io/processing-engine/).
+
 **Table of Content**
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
@@ -41,6 +43,8 @@ This guide contains helpful information on how to write and manage custom indica
 The **KomMonitor** data infrastructure is designed to consume custom Node module scripts written in JavaScript programming language that follow a dedicated **Script TEMPLATE**. The **TEMPLATE** hereby defines special methods that need to be implemented/adjusted for each indicator. Such custom indicator computation script code can then be persisted within the **KomMonitor Data Management** component together with metadata about the associated target indicator, required base indicators, georesources and (variable) process parameters. Then, the NodeJS **KomMonitor Processing Engine** is able to integrate the script on-the-fly and call and execute the predefined methods.
 
 To simplify matters, a `KmHelper` module is maintained and integrated into the **Script TEMPLATE**, that offers various geospatial and statistical as well as generic helper methods. So, as a script writer, you may intensively use this `KmHelper` module. Most operations (especially the geospatial operations) hereby work on *GeoJSON objects*, either by processing whole *GeoJSON FeatureCollections* or arrays of *GeoJSON Features* or by producing GeoJSON output (again either as whole *FeatureCollection* or as single *Feature* or an array of *Features*).
+
+Find the up-to-date API method descriptions as `jsdoc` at [https://kommonitor.github.io/processing-engine/](https://kommonitor.github.io/processing-engine/).
 
 The following sections give details and hints on how to write custom **KomMonitor indicator computation scripts** based on the **TEMPLATE** and making use of the `KmHelper` module. If you are already acquainted to the basic concepts and have read this guide at least once, you may inspect the [Checklist](#checklist-for-new-scripts)
 First the `KmHelper` module will be introduced in detail. Then the actual implementation of new computation scripts is focused by explaining the **TEMPLATE** structure and pointing out how to process base indicators, georesources and process parameters in order to compute the target indicator. Finally some exemplar scripts are presented that may serve as reference scripts (e.g. to apply code parts to new indicator scripts.

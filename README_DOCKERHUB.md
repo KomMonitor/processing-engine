@@ -1,3 +1,31 @@
+# KomMonitor Script Execution REST API
+This NodeJS project is part of the [KomMonitor](http://kommonitor.de) spatial data infrastructure. As a processing component it provides a job-based computation of indicators based on georesources and other indicators within custom scripts.
+
+## Quick Links And Further Information on KomMonitor
+   - [DockerHub repositories of KomMonitor Stack](https://hub.docker.com/orgs/kommonitor/repositories)
+   - [Github Repositories of KomMonitor Stack](https://github.com/KomMonitor)
+   - [Github Wiki for KomMonitor Guidance and central Documentation](https://github.com/KomMonitor/KomMonitor-Docs/wiki)
+   - [Technical Guidance](https://github.com/KomMonitor/KomMonitor-Docs/wiki/Technische-Dokumentation) and [Deployment Information](https://github.com/KomMonitor/KomMonitor-Docs/wiki/Setup-Guide) for complete KomMonitor stack on Github Wiki
+   - [KomMonitor Website](https://kommonitor.de/) 
+
+## Overview
+This **Processig Engine API** aims to provide REST API functions to trigger and query process execution via so called jobs that shall be executed asynchronously. Hereby, it consumes various data (i.e. custom scripts including process parameters, georesources, other indicators and spatial units) from the **KomMonitor Data Management** component to compute target indicators for target spatial units and target timestamps. In general, there are two types of processing operations:
+
+1. **<u>default computation of indicators</u>**: compute a target indicator for a target timestamp on the lowest spatial unit available, automatically aggregate the results to all superior spatial units (i.e. from building blocks to quarters, to city districts, etc.) and persist the results for each spatial unit within the **KomMonitor Data Management** component. Hence this function shall be used to semi-automatically continue the timeseries for computable target indicators. This implies that all base data (base indicators and georesources used within the computation process) have available data for the target timestamp.  
+2. **<u>customized indicator computation</u>**: in contrast to the **default computation of indicators** the **customized** computation only computes the result for a target indicator for a dedicated single target spatial unit and target timestamp. Furthermore, the result will not be persisted within the **KomMonitor Data Management** component, but will only be available temporarily (i.e. 2 hours). This function is meant for expert users, who want to try out a different set of process parameters to tweak the indicator computation. Indicator computation might offer certain adjustable process parameters (i.e. maximum distances for buffer/isochrone calculation, filter values, etc.) within this context. For **default computation** (continuation of timeseries) each process parameter has a *default value*. In the **customizable indicator computation** users can change the process parameters to *individual values*, compute the **customized** indicator and compare the result with the **original default computation**.
+
+## Dependencies to other KomMonitor Components
+KomMonitor Processing Engine requires 
+   - a running instance of KomMonitor **Data Management** for main data retrieval and indicator data modification with results of indicator computation jobs
+   - a running instance of **Open Route Service** in oder to compute on-the-fly reachability isochrones and distance matrices during indicator computaton (only relevant if associated computation methods will be really used).
+   - an optional and configurable connection to a running **Keycloak** server, if role-based data access is activated via configuration of KomMonitor stack
+
+## Exemplar docker-compose File with explanatory comments
+
+Only contains subset of whole KomMonitor stack to focus on the config parameters of this component
+
+```yml
+
 version: '2.1'
 
 networks:
@@ -85,3 +113,21 @@ services:
 
 volumes:
  processing_jobstatus:
+
+
+```
+
+
+## Contact
+|    Name   |   Organization    |    Mail    |
+| :-------------: |:-------------:| :-----:|
+| Christian Danowski-Buhren | Bochum University of Applied Sciences | christian.danowski-buhren@hs-bochum.de |
+| Andreas Wytzisk  | Bochum University of Applied Sciences | Andreas-Wytzisk@hs-bochum.de |
+
+## Credits and Contributing Organizations
+- Department of Geodesy, Bochum University of Applied Sciences
+- Department for Cadastre and Geoinformation, Essen
+- Department for Geodata Management, Surveying, Cadastre and Housing Promotion, Mülheim an der Ruhr
+- Department of Geography, Ruhr University of Bochum
+- 52°North GmbH, Münster
+- Kreis Recklinghausen
