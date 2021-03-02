@@ -25,6 +25,7 @@
     "cors": "^2.8.4",
     "cron-file-cleaner": "^1.1.0",
     "crypto-js": "^4.0.0",
+    "docdash": "^1.1.0",
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
     "jStat": "^1.7.1",
@@ -36,8 +37,7 @@
     "swagger-tools": "^0.10.4",
     "querystring": "^0.2.0"
   },
-  "devDependencies": {
-    "docdash": "^1.1.0",
+  "devDependencies": {    
     "jsdoc": "^3.6.4",
     "jshint": "^2.11.0",
     "license-checker": "^25.0.1",

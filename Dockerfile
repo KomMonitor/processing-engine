@@ -4,7 +4,7 @@ COPY . /code
 WORKDIR /code
 RUN npm install --production
 
-#install jsdoc globally in order to execute 'jsdoc' on command line
+#install jsdoc globally in order to execute 'jsdoc' on command line 
 RUN npm install -g jsdoc@"^3.6.4" 
 
 # generate up-to-date KmHelper API docs
