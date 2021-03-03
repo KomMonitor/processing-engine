@@ -113,6 +113,7 @@ services:
 
 volumes:
  processing_jobstatus:
+ postgres_data:
 
 
 ```

@@ -39,7 +39,7 @@ This **Processig Engine API** aims to provide REST API functions to trigger and 
 1. **<u>default computation of indicators</u>**: compute a target indicator for a target timestamp on the lowest spatial unit available, automatically aggregate the results to all superior spatial units (i.e. from building blocks to quarters, to city districts, etc.) and persist the results for each spatial unit within the **KomMonitor Data Management** component. Hence this function shall be used to semi-automatically continue the timeseries for computable target indicators. This implies that all base data (base indicators and georesources used within the computation process) have available data for the target timestamp.  
 2. **<u>customized indicator computation</u>**: in contrast to the **default computation of indicators** the **customized** computation only computes the result for a target indicator for a dedicated single target spatial unit and target timestamp. Furthermore, the result will not be persisted within the **KomMonitor Data Management** component, but will only be available temporarily (i.e. 2 hours). This function is meant for expert users, who want to try out a different set of process parameters to tweak the indicator computation. Indicator computation might offer certain adjustable process parameters (i.e. maximum distances for buffer/isochrone calculation, filter values, etc.) within this context. For **default computation** (continuation of timeseries) each process parameter has a *default value*. In the **customizable indicator computation** users can change the process parameters to *individual values*, compute the **customized** indicator and compare the result with the **original default computation**.
 
-The described REST operations are specified using [Swagger/OpenAPI v2](https://swagger.io). The corresponding ```swagger.yaml``` containing the REST API specification is located at ```api/swagger.yaml```. To inspect the REST API you may use the online [Swagger Editor](https://editor.swagger.io/) or, having access to a running instance of the **KomMonitor Data Management REST API** simply navigate to ```<pathToDeyployedInstance>/docs```, e.g. ```localhost:8086/docs```.
+The described REST operations are specified using [Swagger/OpenAPI v2](https://swagger.io). The corresponding ```swagger.yaml``` containing the REST API specification is located at ```api/swagger.yaml```. To inspect the REST API you may use the online [Swagger Editor](https://editor.swagger.io/) or, having access to a running instance of the **KomMonitor Processing Engine REST API** simply navigate to ```<pathToDeyployedInstance>/docs```, e.g. ```localhost:8086/docs```.
 
 The service is implemented as a NodeJS server application. The custom scripts to compute indicators have to be implemented in JavaScript. Please read the section [Indicator Script Development](#indicator-script-development) to get an idea on how to write such indicator computation scripts based on a *script template* and a Node *helper module* offering several helper methods.
 
@@ -206,6 +206,7 @@ services:
 
 volumes:
  processing_jobstatus:
+ postgres_data:
 
 
 ```
