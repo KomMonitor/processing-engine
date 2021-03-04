@@ -3218,7 +3218,103 @@ exports.changeRelative_referenceDate_percent = function(featureCollection, targe
 * @function
 */
 exports.trend_consecutive_nYears = function(featureCollection, targetDate, numberOfYears){
-  
+  var dates = [];
+
+  for(var index=numberOfYears - 1; index >= 1; index++){
+    dates.push(exports.getSubstractNYearsDate_asString(targetDate, index));
+  }
+  dates.push(targetDate);
+
+  var resultMap = new Map();
+
+  for (const feature of featureCollection) {
+    resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), exports.computeTrend(feature, dates));
+  }
+
+  return resultMap;
+};
+
+/**
+ * Computes the trend value for the feature considering the submitted array of consecutive dates
+ * @param {Feature} feature - a valid GeoJSON Feature, that must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+ * @param {Array<string>} dates array of dates for which the trend value shall be computed as string of format {@linkcode YYYY-MM-DD} in increasing order, i.e. ["2015-12-31", "2016-12-31", "2017-12-31"]
+ * @returns {number} returns the trend value of the feature considering the concrete consecutive years of dates array. or {@linkcode null} if any date of dates array is not included within feature
+  * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+  * @function
+ */
+exports.computeTrend = function(feature, dates){
+  // make sure that feature has relevant date properties
+
+  var indicatorValueArray = [];
+
+  // build array of indicator values corresponding to dates array
+  for (const date of dates) {
+    var indicatorValue = exports.getIndicatorValue(feature, date);
+    if (indicatorValue && ! exports.isNoDataValue && ! Number.isNaN(indicatorValue)){
+      indicatorValueArray.push(indicatorValue);
+    }
+  }
+
+  // make sure that feature has relevant date properties
+  if (dates.length != indicatorValueArray.length){
+    return null;
+  }
+
+  var yearsArray = [];
+
+  for (const date of dates) {
+    yearsArray.push((new Date(date)).getFullYear());
+  }
+
+  // compute linear regression slope
+  var linearRegressionSlope = exports.computeLinearRegressionSlope(indicatorValueArray, yearsArray);
+  var trend_percent = 100 * (linearRegressionSlope / exports.getIndicatorValue(feature, dates[0]));
+  return trend_percent;
+};
+
+/**
+ * Computes the linear regression slope from an indicator value array and a temporal array of consecutive years; both arrays must have the same element length
+ * @param {Array<number>} indicatorValueArray numeric indicator value array representing the time-series in increasing order
+ * @param {Array<number>} yearsArray numeric value array containing consecutive years in increasing order, i.e. [2015,2016,2017,2018,2019] 
+ * @returns {number} returns the pearson correlation of the two input arrays or {@linkcode null} if the input arrays do not have the same length or contain non-numeric values
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.computeLinearRegressionSlope = function(indicatorValueArray, yearsArray){
+  if(indicatorValueArray.length != yearsArray.length){
+    exports.log("Error during Pearson Correlation. Lenghts of input arrays is not equal.");
+    return null;
+  }
+
+  indicatorValueArray = exports.convertPropertyArrayToNumberArray(indicatorValueArray);
+  yearsArray = exports.convertPropertyArrayToNumberArray(yearsArray);
+
+  if(indicatorValueArray.length != yearsArray.length){
+    exports.log("Error during Pearson Correlation. input array(s) contain non-numeric values.");
+    return null;
+  }
+
+  var A_mean = exports.mean(indicatorValueArray);
+  var B_mean = exports.mean(yearsArray);
+  var sumAB = 0;
+  var sumA2 = 0;
+
+  for(var i=0; i<indicatorValueArray; i++) {
+
+    if(indicatorValueArray[i] && yearsArray[i]){
+      var a_NextValue = indicatorValueArray[i] - A_mean;
+      var b_NextValue = yearsArray[i] - B_mean;
+
+      sumAB += Number(a_NextValue * b_NextValue);
+      sumA2 += Number(a_NextValue * a_NextValue);
+
+    }
+  }
+
+  var answer = sumAB / sumA2;
+
+  return answer;
+
 };
 
 
@@ -3251,8 +3347,8 @@ exports.continuity_consecutive_nYears = function(featureCollection, targetDate, 
 
 /**
  * Computes the continuity value for the feature considering the submitted array of consecutive dates
- * @param {*} feature - a valid GeoJSON Feature, that must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
- * @param {*} dates array of dates for which the continuity value shall be computed as string of format {@linkcode YYYY-MM-DD}
+ * @param {Feature} feature - a valid GeoJSON Feature, that must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+ * @param {Array<string>} dates array of dates for which the continuity value shall be computed as string of format {@linkcode YYYY-MM-DD} in increasing order, i.e. ["2015-12-31", "2016-12-31", "2017-12-31"]
  * @returns {number} returns the continuity value of the feature considering the concrete consecutive years of dates array. or {@linkcode null} if any date of dates array is not included within feature
   * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
   * @function
@@ -3287,8 +3383,8 @@ exports.computeContinuity = function(feature, dates){
 
 /**
  * Computes the pearson correlation from two numeric input arrays that must have the same element length
- * @param {*} valueArray_A numeric value array
- * @param {*} valueArray_B numeric value array
+ * @param {Array<number>} valueArray_A numeric value array
+ * @param {Array<number>} valueArray_B numeric value array
  * @returns {number} returns the pearson correlation of the two input arrays or {@linkcode null} if the input arrays do not have the same length or contain non-numeric values
  * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
  * @function
