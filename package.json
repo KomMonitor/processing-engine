@@ -37,7 +37,7 @@
     "swagger-tools": "^0.10.4",
     "querystring": "^0.2.0"
   },
-  "devDependencies": {    
+  "devDependencies": {
     "jsdoc": "^3.6.4",
     "jshint": "^2.11.0",
     "license-checker": "^25.0.1",
