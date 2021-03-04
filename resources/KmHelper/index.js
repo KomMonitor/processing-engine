@@ -2922,3 +2922,258 @@ exports.zScore_byPopulationArray = function (value, populationArray, computeSamp
     return jStat.zscore(value, populationArray);
   }
 };
+
+/**
+ * Converts a Javascript Date object into string of pattern 'YYYY-MM-DD'
+ * @param {*} date  a Javascript Date object (e.g. initialized by new Date())
+* @returns {string} the date in the format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2017-01-01}
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.formatDateAsString = function(date){
+  var dateString = "";
+  dateString += date.getFullYear() + "-";
+
+  var month = date.getMonth() + 1;
+  if(month < 10){
+      month = "0" + month;
+  }
+
+  var day = date.getDate();
+  if(day < 10){
+      day = "0" + day;
+  }
+
+  dateString += month + "-" + day;
+
+  return dateString;
+}
+
+/**
+ * Subtracts n months from the reference date
+ * @param {string} referenceDateString the reference date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+ * @param {number} numberOfMonths the number of months to subtract from the submitted reference date
+ * @returns {string} the new date (referenceDate minus numberOfMonths) in the format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2017-12-01}
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.getSubstractNMonthsDate_asString = function(referenceDateString, numberOfMonths){
+
+  var refDate = new Date(referenceDateString);
+
+  var newDate = refDate.setMonth(refDate.getMonth - Number(numberOfMonths));
+
+  return exports.formatDateAsString(newDate);
+};
+
+/**
+ * Subtracts n days from the reference date
+ * @param {string} referenceDateString the reference date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+ * @param {number} numberOfDays the number of days to subtract from the submitted reference date
+ * @returns {string} the new date (referenceDate minus numberOfDays) in the format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2017-12-15}
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.getSubstractNDaysDate_asString = function(referenceDateString, numberOfDays){
+
+  var refDate = new Date(referenceDateString);
+
+  var newDate = refDate.setDate(refDate.getDate - Number(numberOfDays));
+
+  return exports.formatDateAsString(newDate);
+};
+
+/**
+ * Subtracts n years from the reference date
+ * @param {string} referenceDateString the reference date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+ * @param {number} numberOfYears the number of years to subtract from the submitted reference date
+ * @returns {string} the new date (referenceDate minus numberOfYears) in the format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2017-01-01}
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.getSubstractNYearsDate_asString = function(referenceDateString, numberOfYears){
+
+  var refDate = new Date(referenceDateString);
+
+  var newDate = refDate.setFullYear(refDate.getFullYear() - Number(numberOfYears));
+
+  return exports.formatDateAsString(newDate);
+};
+
+/**
+ * Computes the absolute difference/change of indicator values between the submitted dates (if both are present in the dataset) using 
+ * the formula {@linkcode value[targetDate] - value[compareDate]} 
+ * @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+ * @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+ * @param {string} compareDate the compare date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2015-01-01} to who the indicator value difference/change shall be computed 
+ * @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.getChange_absolute = function(featureCollection, targetDate, compareDate){
+  // get a map object with id-value pairs for the featureCollection 
+  var indicator_idValueMap_targetDate = KmHelper.getIndicatorIdValueMap(featureCollection, targetDate);
+
+  // map for compareDate can be null 
+  var indicator_idValueMap_compareDate = KmHelper.getIndicatorIdValueMap(featureCollection, compareDate);
+
+  // return empty map, if no value exists for the compare date
+  if(indicator_idValueMap_compareDate == null || indicator_idValueMap_compareDate.size() == 0){
+    return new Map();
+  }
+
+  var resultMap = new Map();
+
+  // assume that rankedIndicatorValues.length == numericEntriesMap.size
+  indicator_idValueMap_targetDate.forEach(function(value, key, map){
+    var compareValue = indicator_idValueMap_compareDate.get(key);
+
+    if(! exports.isNoDataValue(compareValue) && ! exports.isNoDataValue(value)){
+      var resultValue = Number(value) - Number(compareValue);
+      resultMap.set(key, resultValue);
+    }
+  });
+
+  return resultMap;
+}
+
+/**
+ * Computes the relative difference/change in percent of indicator values between the submitted dates (if both are present in the dataset) using 
+ * the formula {@linkcode 100 * ((  value[targetDate] -  value[compareDate] ) /  value[compareDate])}  
+ * @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+ * @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+ * @param {string} compareDate the compare date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2015-01-01} to who the indicator value difference/change shall be computed 
+ * @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose changeValues in percent were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+ * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+ * @function
+ */
+exports.getChange_relative_percent = function(featureCollection, targetDate, compareDate){
+  // get a map object with id-value pairs for the featureCollection 
+  var indicator_idValueMap_targetDate = KmHelper.getIndicatorIdValueMap(featureCollection, targetDate);
+
+  // map for compareDate can be null 
+  var indicator_idValueMap_compareDate = KmHelper.getIndicatorIdValueMap(featureCollection, compareDate);
+
+  // return empty map, if no value exists for the compare date
+  if(indicator_idValueMap_compareDate == null || indicator_idValueMap_compareDate.size() == 0){
+    return new Map();
+  }
+
+  var resultMap = new Map();
+
+  // assume that rankedIndicatorValues.length == numericEntriesMap.size
+  indicator_idValueMap_targetDate.forEach(function(value, key, map){
+    var compareValue = indicator_idValueMap_compareDate.get(key);
+
+    if(! exports.isNoDataValue(compareValue) && ! exports.isNoDataValue(value)){
+      if(Number(compareValue) == 0){
+        resultMap.set(key, null);
+      }
+      var resultValue = 100 * ((Number(value) - Number(compareValue)) / Number(compareValue));
+      resultMap.set(key, resultValue);
+    }
+  });
+
+  return resultMap;
+}
+
+
+/**
+* computes the new indicator for an absolute change compared to number of previous years
+* internally tests are run, e.g. if a previous year is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfYears the number of years to subtract from the submitted reference date
+* @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.changeAbsolute_n_years = function(featureCollection, targetDate, numberOfYears){
+  var compareDate = exports.getSubstractNYearsDate_asString(targetDate, numberOfYears);
+
+  return exports.getChange_absolute(featureCollection, targetDate, compareDate);
+};
+
+
+/**
+* computes the new indicator for an absolute change compared to number of previous months
+* internally tests are run, e.g. if a previous month is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfMonths the number of months to subtract from the submitted reference date
+* @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.changeAbsolute_n_months = function(featureCollection, targetDate, numberOfMonths){
+  var compareDate = exports.getSubstractNMonthsDate_asString(targetDate, numberOfMonths);
+
+  return exports.getChange_absolute(featureCollection, targetDate, compareDate);
+};
+
+/**
+* computes the new indicator for an absolute change compared to number of previous days
+* internally tests are run, e.g. if a previous day is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfDays the number of days to subtract from the submitted reference date
+* @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.changeAbsolute_n_days = function(featureCollection, targetDate, numberOfDays){
+  var compareDate = exports.getSubstractNDaysDate_asString(targetDate, numberOfDays);
+
+  return exports.getChange_absolute(featureCollection, targetDate, compareDate);
+};
+
+/**
+* computes the new indicator for a relative change in percent compared to number of previous years
+* internally tests are run, e.g. if a previous year is available or not 
+* {@linkcode NOTE: if the indicator value for compareDate is '0' then the resulting value will be st as NoData value ('null')}
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfYears the number of years to subtract from the submitted reference date
+* @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose relative changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.changeRelative_n_years_percent = function(featureCollection, targetDate, numberOfYears){
+  var compareDate = exports.getSubstractNYearsDate_asString(targetDate, numberOfYears);
+
+  return exports.getChange_relative_percent(featureCollection, targetDate, compareDate);
+};
+
+/**
+* computes the new indicator for a relative change in percent compared to number of previous months
+* internally tests are run, e.g. if a previous month is available or not 
+* {@linkcode NOTE: if the indicator value for compareDate is '0' then the resulting value will be st as NoData value ('null')}
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfMonth the number of months to subtract from the submitted reference date
+* @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose relative changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.changeRelative_n_month_percent = function(featureCollection, targetDate, numberOfMonth){
+  var compareDate = exports.getSubstractNMonthsDate_asString(targetDate, numberOfMonth);
+
+  return exports.getChange_relative_percent(featureCollection, targetDate, compareDate);
+};
+
+/**
+* computes the new indicator for a relative change in percent compared to number of previous days
+* internally tests are run, e.g. if a previous day is available or not 
+* {@linkcode NOTE: if the indicator value for compareDate is '0' then the resulting value will be st as NoData value ('null')}
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfDay the number of days to subtract from the submitted reference date
+* @returns {Map.<string, number>} returns the map of all input features that have both timestamps and whose relative changeValues were successfully converted to a number. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.changeRelative_n_day_percent = function(featureCollection, targetDate, numberOfDay){
+  var compareDate = exports.getSubstractNDaysDate_asString(targetDate, numberOfDay);
+
+  return exports.getChange_relative_percent(featureCollection, targetDate, compareDate);
+};
