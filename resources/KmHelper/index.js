@@ -1094,7 +1094,7 @@ exports.dissolve = function (featureCollection_geoJSON, propertyName){
     var geomType = feature.geometry.type;
 
     if (geomType !== geomTypeSample){
-      KmHelper.throwError("Dissolve cannot be executed as the feature collection contains features with different geometry types. The conflicting types are " + geomType + " and " + geomTypeSample);
+      exports.throwError("Dissolve cannot be executed as the feature collection contains features with different geometry types. The conflicting types are " + geomType + " and " + geomTypeSample);
     }
   });
 
@@ -1566,7 +1566,7 @@ exports.isochrones_byTime = async function (startingPoints, vehicleType, travelT
           // increment featureIndex
           featureIndex++;
           if(featureIndex % logProgressIndexSeparator === 0){
-              KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
+              exports.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
           }
 
         // reset temp vars
@@ -1722,7 +1722,7 @@ exports.isochrones_byDistance = async function (startingPoints, vehicleType, tra
           // increment featureIndex
           featureIndex++;
           if(featureIndex % logProgressIndexSeparator === 0){
-              KmHelper.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
+              exports.log("PROGRESS: Computed isochrones for '" + featureIndex + "' of total '" + startingPoints.length + "' starting points.");
           }
 
         // reset temp vars
@@ -2961,9 +2961,9 @@ exports.getSubstractNMonthsDate_asString = function(referenceDateString, numberO
 
   var refDate = new Date(referenceDateString);
 
-  var newDate = refDate.setMonth(refDate.getMonth - Number(numberOfMonths));
+  refDate.setMonth(refDate.getMonth - Number(numberOfMonths));
 
-  return exports.formatDateAsString(newDate);
+  return exports.formatDateAsString(refDate);
 };
 
 /**
@@ -2978,9 +2978,9 @@ exports.getSubstractNDaysDate_asString = function(referenceDateString, numberOfD
 
   var refDate = new Date(referenceDateString);
 
-  var newDate = refDate.setDate(refDate.getDate - Number(numberOfDays));
+  refDate.setDate(refDate.getDate - Number(numberOfDays));
 
-  return exports.formatDateAsString(newDate);
+  return exports.formatDateAsString(refDate);
 };
 
 /**
@@ -2995,9 +2995,9 @@ exports.getSubstractNYearsDate_asString = function(referenceDateString, numberOf
 
   var refDate = new Date(referenceDateString);
 
-  var newDate = refDate.setFullYear(refDate.getFullYear() - Number(numberOfYears));
+  refDate.setFullYear(refDate.getFullYear() - Number(numberOfYears));
 
-  return exports.formatDateAsString(newDate);
+  return exports.formatDateAsString(refDate);
 };
 
 /**
@@ -3012,14 +3012,14 @@ exports.getSubstractNYearsDate_asString = function(referenceDateString, numberOf
  */
 exports.getChange_absolute = function(featureCollection, targetDate, compareDate){
   // get a map object with id-value pairs for the featureCollection 
-  var indicator_idValueMap_targetDate = KmHelper.getIndicatorIdValueMap(featureCollection, targetDate);
+  var indicator_idValueMap_targetDate = exports.getIndicatorIdValueMap(featureCollection, targetDate);
 
   // map for compareDate can be null 
-  var indicator_idValueMap_compareDate = KmHelper.getIndicatorIdValueMap(featureCollection, compareDate);
+  var indicator_idValueMap_compareDate = exports.getIndicatorIdValueMap(featureCollection, compareDate);
 
   // return empty map, if no value exists for the compare date
-  if(indicator_idValueMap_compareDate == null || indicator_idValueMap_compareDate.size() == 0){
-    return new Map();
+  if(indicator_idValueMap_compareDate == null || indicator_idValueMap_compareDate.size == 0){
+    exports.throwError("Change computation cannot be performed as compare date does not exist within data");
   }
 
   var resultMap = new Map();
@@ -3049,14 +3049,14 @@ exports.getChange_absolute = function(featureCollection, targetDate, compareDate
  */
 exports.getChange_relative_percent = function(featureCollection, targetDate, compareDate){
   // get a map object with id-value pairs for the featureCollection 
-  var indicator_idValueMap_targetDate = KmHelper.getIndicatorIdValueMap(featureCollection, targetDate);
+  var indicator_idValueMap_targetDate = exports.getIndicatorIdValueMap(featureCollection, targetDate);
 
   // map for compareDate can be null 
-  var indicator_idValueMap_compareDate = KmHelper.getIndicatorIdValueMap(featureCollection, compareDate);
+  var indicator_idValueMap_compareDate = exports.getIndicatorIdValueMap(featureCollection, compareDate);
 
   // return empty map, if no value exists for the compare date
-  if(indicator_idValueMap_compareDate == null || indicator_idValueMap_compareDate.size() == 0){
-    return new Map();
+  if(indicator_idValueMap_compareDate == null || indicator_idValueMap_compareDate.size == 0){
+    exports.throwError("Change computation cannot be performed as compare date does not exist within data");
   }
 
   var resultMap = new Map();
@@ -3228,7 +3228,15 @@ exports.trend_consecutive_nYears = function(featureCollection, targetDate, numbe
   var resultMap = new Map();
 
   for (const feature of featureCollection) {
-    resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), exports.computeTrend(feature, dates));
+    var trend = exports.computeTrend(feature, dates);
+    if(trend && !exports.isNoDataValue(trend)){
+      resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), trend);
+    }
+    
+  }
+
+  if(resultMap.size == 0){
+    exports.throwError("Trend computation resulted in NoData for each feature.");
   }
 
   return resultMap;
@@ -3339,7 +3347,15 @@ exports.continuity_consecutive_nYears = function(featureCollection, targetDate, 
   var resultMap = new Map();
 
   for (const feature of featureCollection) {
-    resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), exports.computeContinuity(feature, dates));
+    var continuity = exports.computeContinuity(feature, dates);
+    if(continuity && !exports.isNoDataValue(continuity)){
+      resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), continuity);
+    }
+    
+  }
+
+  if(resultMap.size == 0){
+    exports.throwError("Continuity computation resulted in NoData for each feature.");
   }
 
   return resultMap;
