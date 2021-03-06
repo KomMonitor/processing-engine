@@ -3190,6 +3190,11 @@ exports.changeRelative_n_days_percent = function(featureCollection, targetDate, 
 * @function
 */
 exports.changeAbsolute_referenceDate = function(featureCollection, targetDate, referenceDate){
+
+  if (new Date(targetDate) <= new Date(referenceDate)){
+    exports.throwError("Change computation for fixed reference date does not allow targetDate being <= referenceDate. Values were: targetDate '" + targetDate +"' and referenceDate '" + referenceDate + "'");
+  }
+
   return exports.getChange_absolute(featureCollection, targetDate, referenceDate);
 };
 
@@ -3204,6 +3209,10 @@ exports.changeAbsolute_referenceDate = function(featureCollection, targetDate, r
 * @function
 */
 exports.changeRelative_referenceDate_percent = function(featureCollection, targetDate, referenceDate){
+  if (new Date(targetDate) <= new Date(referenceDate)){
+    exports.throwError("Change computation for fixed reference date does not allow targetDate being <= referenceDate. Values were: targetDate '" + targetDate +"' and referenceDate '" + referenceDate + "'");
+  }
+  
   return exports.getChange_relative_percent(featureCollection, targetDate, referenceDate);
 };
 
