@@ -3212,12 +3212,12 @@ exports.changeRelative_referenceDate_percent = function(featureCollection, targe
   if (new Date(targetDate) <= new Date(referenceDate)){
     exports.throwError("Change computation for fixed reference date does not allow targetDate being <= referenceDate. Values were: targetDate '" + targetDate +"' and referenceDate '" + referenceDate + "'");
   }
-  
+
   return exports.getChange_relative_percent(featureCollection, targetDate, referenceDate);
 };
 
 /**
-* computes the new indicator as trend for five prior consecutive years;
+* computes the new indicator as trend for prior consecutive years;
 * internally tests are run, e.g. if a previous year is available or not 
 * @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
 * @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
@@ -3226,11 +3226,81 @@ exports.changeRelative_referenceDate_percent = function(featureCollection, targe
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
 */
-exports.trend_consecutive_nYears = function(featureCollection, targetDate, numberOfYears){
+exports.trend_consecutive_n_years = function(featureCollection, targetDate, numberOfYears){
   var dates = [];
 
   for(var index=numberOfYears - 1; index >= 1; index++){
     dates.push(exports.getSubstractNYearsDate_asString(targetDate, index));
+  }
+  dates.push(targetDate);
+
+  var resultMap = new Map();
+
+  for (const feature of featureCollection) {
+    var trend = exports.computeTrend(feature, dates);
+    if(trend && !exports.isNoDataValue(trend)){
+      resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), trend);
+    }
+    
+  }
+
+  if(resultMap.size == 0){
+    exports.throwError("Trend computation resulted in NoData for each feature.");
+  }
+
+  return resultMap;
+};
+
+/**
+* computes the new indicator as trend for prior consecutive months;
+* internally tests are run, e.g. if a previous month is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfMonths the number of prior consecutive months for which the trend shall be computed
+* @returns {Map.<string, number>} returns the map of all input features whose trend value were successfully computed. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.trend_consecutive_n_months = function(featureCollection, targetDate, numberOfMonths){
+  var dates = [];
+
+  for(var index=numberOfMonths - 1; index >= 1; index++){
+    dates.push(exports.getSubstractNMonthsDate_asString(targetDate, index));
+  }
+  dates.push(targetDate);
+
+  var resultMap = new Map();
+
+  for (const feature of featureCollection) {
+    var trend = exports.computeTrend(feature, dates);
+    if(trend && !exports.isNoDataValue(trend)){
+      resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), trend);
+    }
+    
+  }
+
+  if(resultMap.size == 0){
+    exports.throwError("Trend computation resulted in NoData for each feature.");
+  }
+
+  return resultMap;
+};
+
+/**
+* computes the new indicator as trend for prior consecutive days;
+* internally tests are run, e.g. if a previous day is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfDays the number of prior consecutive days for which the trend shall be computed
+* @returns {Map.<string, number>} returns the map of all input features whose trend value were successfully computed. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.trend_consecutive_n_days = function(featureCollection, targetDate, numberOfDays){
+  var dates = [];
+
+  for(var index=numberOfDays - 1; index >= 1; index++){
+    dates.push(exports.getSubstractNDaysDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
@@ -3277,14 +3347,14 @@ exports.computeTrend = function(feature, dates){
     return null;
   }
 
-  var yearsArray = [];
+  var timeAxisArray = [];
 
-  for (const date of dates) {
-    yearsArray.push((new Date(date)).getFullYear());
+  for (let index = 0; index < dates.length; index++) {
+    timeAxisArray.push(index + 1);
   }
 
   // compute linear regression slope
-  var linearRegressionSlope = exports.computeLinearRegressionSlope(indicatorValueArray, yearsArray);
+  var linearRegressionSlope = exports.computeLinearRegressionSlope(indicatorValueArray, timeAxisArray);
   var trend_percent = 100 * (linearRegressionSlope / exports.getIndicatorValue(feature, dates[0]));
   return trend_percent;
 };
@@ -3336,7 +3406,7 @@ exports.computeLinearRegressionSlope = function(indicatorValueArray, yearsArray)
 
 
 /**
-* computes the new indicator as continuity for five prior consecutive years (Pearson correlation);
+* computes the new indicator as continuity for prior consecutive years (Pearson correlation);
 * internally tests are run, e.g. if a previous year is available or not 
 * @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
 * @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
@@ -3345,11 +3415,81 @@ exports.computeLinearRegressionSlope = function(indicatorValueArray, yearsArray)
 * @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
 * @function
 */
-exports.continuity_consecutive_nYears = function(featureCollection, targetDate, numberOfYears){
+exports.continuity_consecutive_n_years = function(featureCollection, targetDate, numberOfYears){
   var dates = [];
 
   for(var index=numberOfYears - 1; index >= 1; index++){
     dates.push(exports.getSubstractNYearsDate_asString(targetDate, index));
+  }
+  dates.push(targetDate);
+
+  var resultMap = new Map();
+
+  for (const feature of featureCollection) {
+    var continuity = exports.computeContinuity(feature, dates);
+    if(continuity && !exports.isNoDataValue(continuity)){
+      resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), continuity);
+    }
+    
+  }
+
+  if(resultMap.size == 0){
+    exports.throwError("Continuity computation resulted in NoData for each feature.");
+  }
+
+  return resultMap;
+};
+
+/**
+* computes the new indicator as continuity for prior consecutive months (Pearson correlation);
+* internally tests are run, e.g. if a previous month is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfMonths the number of prior consecutive months for which the continuity shall be computed
+* @returns {Map.<string, number>} returns the map of all input features whose continuity value were successfully computed. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.continuity_consecutive_n_months = function(featureCollection, targetDate, numberOfMonths){
+  var dates = [];
+
+  for(var index=numberOfMonths - 1; index >= 1; index++){
+    dates.push(exports.getSubstractNMonthsDate_asString(targetDate, index));
+  }
+  dates.push(targetDate);
+
+  var resultMap = new Map();
+
+  for (const feature of featureCollection) {
+    var continuity = exports.computeContinuity(feature, dates);
+    if(continuity && !exports.isNoDataValue(continuity)){
+      resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), continuity);
+    }
+    
+  }
+
+  if(resultMap.size == 0){
+    exports.throwError("Continuity computation resulted in NoData for each feature.");
+  }
+
+  return resultMap;
+};
+
+/**
+* computes the new indicator as continuity for prior consecutive days (Pearson correlation);
+* internally tests are run, e.g. if a previous day is available or not 
+* @param {FeatureCollection} featureCollection - a valid GeoJSON FeatureCollection, whose features must contain a {@linkcode properties} attribute storing the indicator time series according to KomMonitor's data model
+* @param {string} targetDate the reference/target date in the string format {@linkcode YYYY-MM-DD}, e.g. {@linkcode 2018-01-01} 
+* @param {number} numberOfDays the number of prior consecutive days for which the continuity shall be computed
+* @returns {Map.<string, number>} returns the map of all input features whose continuity value were successfully computed. responseMap.size may be smaller than featureCollection.features.size, if featureCollection contains boolean value items or items whose Number-conversion result in Number.NaN
+* @memberof API_HELPER_METHODS_STATISTICAL_OPERATIONS
+* @function
+*/
+exports.continuity_consecutive_n_days = function(featureCollection, targetDate, numberOfDays){
+  var dates = [];
+
+  for(var index=numberOfDays - 1; index >= 1; index++){
+    dates.push(exports.getSubstractNDaysDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
@@ -3396,14 +3536,14 @@ exports.computeContinuity = function(feature, dates){
     return null;
   }
 
-  var yearsArray = [];
+  var timeAxisArray = [];
 
-  for (const date of dates) {
-    yearsArray.push((new Date(date)).getFullYear());
+  for (let index = 0; index < dates.length; index++) {
+    timeAxisArray.push(index + 1);
   }
 
   // compute pearson correlation
-  return exports.computePearsonCorrelation(indicatorValueArray, yearsArray);
+  return exports.computePearsonCorrelation(indicatorValueArray, timeAxisArray);
 };
 
 /**
