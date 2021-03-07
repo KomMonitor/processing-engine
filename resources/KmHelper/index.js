@@ -686,7 +686,9 @@ exports.setIndicatorValue = function (feature, targetDate, value){
 
   if (typeof value != 'number'){
     console.log("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
-    exports.throwError("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
+    console.log("Affected has ID : " + exports.getSpatialUnitFeatureIdValue(feature) + " and NAME : " + exports.getSpatialUnitFeatureNameValue(feature));
+    // exports.throwError("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
+    return exports.setIndicatorValue_asNoData(feature, targetDate);
   }
 
   var targetDateWithPrefix;
@@ -744,7 +746,7 @@ exports.setIndicatorValues_fromIdValueMap = function (targetFeatureCollection, t
   for (var feature of targetFeatureCollection.features) {
     var featureId = exports.getSpatialUnitFeatureIdValue(feature);
 
-    if(indicatorIdValueMap.has(featureId)){
+    if(indicatorIdValueMap.has(featureId) && ! exports.isNoDataValue(indicatorIdValueMap.get(featureId)) && ! Number.isNaN(indicatorIdValueMap.get(featureId))){
       feature = exports.setIndicatorValue(feature, targetDate, indicatorIdValueMap.get(featureId));
     }
     else{
@@ -3229,14 +3231,14 @@ exports.changeRelative_referenceDate_percent = function(featureCollection, targe
 exports.trend_consecutive_n_years = function(featureCollection, targetDate, numberOfYears){
   var dates = [];
 
-  for(var index=numberOfYears - 1; index >= 1; index++){
+  for(var index=numberOfYears - 1; index >= 1; index--){
     dates.push(exports.getSubstractNYearsDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
   var resultMap = new Map();
 
-  for (const feature of featureCollection) {
+  for (const feature of featureCollection.features) {
     var trend = exports.computeTrend(feature, dates);
     if(trend && !exports.isNoDataValue(trend)){
       resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), trend);
@@ -3264,14 +3266,14 @@ exports.trend_consecutive_n_years = function(featureCollection, targetDate, numb
 exports.trend_consecutive_n_months = function(featureCollection, targetDate, numberOfMonths){
   var dates = [];
 
-  for(var index=numberOfMonths - 1; index >= 1; index++){
+  for(var index=numberOfMonths - 1; index >= 1; index--){
     dates.push(exports.getSubstractNMonthsDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
   var resultMap = new Map();
 
-  for (const feature of featureCollection) {
+  for (const feature of featureCollection.features) {
     var trend = exports.computeTrend(feature, dates);
     if(trend && !exports.isNoDataValue(trend)){
       resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), trend);
@@ -3299,14 +3301,14 @@ exports.trend_consecutive_n_months = function(featureCollection, targetDate, num
 exports.trend_consecutive_n_days = function(featureCollection, targetDate, numberOfDays){
   var dates = [];
 
-  for(var index=numberOfDays - 1; index >= 1; index++){
+  for(var index=numberOfDays - 1; index >= 1; index--){
     dates.push(exports.getSubstractNDaysDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
   var resultMap = new Map();
 
-  for (const feature of featureCollection) {
+  for (const feature of featureCollection.features) {
     var trend = exports.computeTrend(feature, dates);
     if(trend && !exports.isNoDataValue(trend)){
       resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), trend);
@@ -3337,7 +3339,7 @@ exports.computeTrend = function(feature, dates){
   // build array of indicator values corresponding to dates array
   for (const date of dates) {
     var indicatorValue = exports.getIndicatorValue(feature, date);
-    if (indicatorValue && ! exports.isNoDataValue && ! Number.isNaN(indicatorValue)){
+    if (indicatorValue && ! exports.isNoDataValue(indicatorValue) && ! Number.isNaN(indicatorValue)){
       indicatorValueArray.push(indicatorValue);
     }
   }
@@ -3353,10 +3355,21 @@ exports.computeTrend = function(feature, dates){
     timeAxisArray.push(index + 1);
   }
 
-  // compute linear regression slope
-  var linearRegressionSlope = exports.computeLinearRegressionSlope(indicatorValueArray, timeAxisArray);
-  var trend_percent = 100 * (linearRegressionSlope / exports.getIndicatorValue(feature, dates[0]));
-  return trend_percent;
+  try {
+    // compute linear regression slope
+    var linearRegressionSlope = exports.computeLinearRegressionSlope(indicatorValueArray, timeAxisArray);
+    var firstYearValue = Number(exports.getIndicatorValue(feature, dates[0]));
+    if(firstYearValue === 0){
+      return null;
+    }
+    var trend_percent = 100 * (linearRegressionSlope / firstYearValue);
+    return trend_percent;
+  } catch (error) {
+    exports.log("Error during trend computation for feature with ID: " + exports.getSpatialUnitFeatureIdValue(feature) + " and NAME: " + exports.getSpatialUnitFeatureNameValue(feature) ); 
+    exports.log("Error was: " + error);
+    exports.log("Returning null");
+    return null;
+  }
 };
 
 /**
@@ -3386,19 +3399,23 @@ exports.computeLinearRegressionSlope = function(indicatorValueArray, yearsArray)
   var sumAB = 0;
   var sumA2 = 0;
 
-  for(var i=0; i<indicatorValueArray; i++) {
+  for(var i=0; i<indicatorValueArray.length; i++) {
 
     if(indicatorValueArray[i] && yearsArray[i]){
       var a_NextValue = indicatorValueArray[i] - A_mean;
       var b_NextValue = yearsArray[i] - B_mean;
 
-      sumAB += Number(a_NextValue * b_NextValue);
-      sumA2 += Number(a_NextValue * a_NextValue);
+      sumAB = sumAB + Number(a_NextValue * b_NextValue);
+      sumA2 = sumA2 + Number(a_NextValue * a_NextValue);
 
     }
   }
 
-  var answer = sumAB / sumA2;
+  if(sumA2 === 0){
+    return null;
+  }
+
+  var answer = Number(sumAB / sumA2);
 
   return answer;
 
@@ -3418,14 +3435,14 @@ exports.computeLinearRegressionSlope = function(indicatorValueArray, yearsArray)
 exports.continuity_consecutive_n_years = function(featureCollection, targetDate, numberOfYears){
   var dates = [];
 
-  for(var index=numberOfYears - 1; index >= 1; index++){
+  for(var index=numberOfYears - 1; index >= 1; index--){
     dates.push(exports.getSubstractNYearsDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
   var resultMap = new Map();
 
-  for (const feature of featureCollection) {
+  for (const feature of featureCollection.features) {
     var continuity = exports.computeContinuity(feature, dates);
     if(continuity && !exports.isNoDataValue(continuity)){
       resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), continuity);
@@ -3453,14 +3470,14 @@ exports.continuity_consecutive_n_years = function(featureCollection, targetDate,
 exports.continuity_consecutive_n_months = function(featureCollection, targetDate, numberOfMonths){
   var dates = [];
 
-  for(var index=numberOfMonths - 1; index >= 1; index++){
+  for(var index=numberOfMonths - 1; index >= 1; index--){
     dates.push(exports.getSubstractNMonthsDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
   var resultMap = new Map();
 
-  for (const feature of featureCollection) {
+  for (const feature of featureCollection.features) {
     var continuity = exports.computeContinuity(feature, dates);
     if(continuity && !exports.isNoDataValue(continuity)){
       resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), continuity);
@@ -3488,14 +3505,14 @@ exports.continuity_consecutive_n_months = function(featureCollection, targetDate
 exports.continuity_consecutive_n_days = function(featureCollection, targetDate, numberOfDays){
   var dates = [];
 
-  for(var index=numberOfDays - 1; index >= 1; index++){
+  for(var index=numberOfDays - 1; index >= 1; index--){
     dates.push(exports.getSubstractNDaysDate_asString(targetDate, index));
   }
   dates.push(targetDate);
 
   var resultMap = new Map();
 
-  for (const feature of featureCollection) {
+  for (const feature of featureCollection.features) {
     var continuity = exports.computeContinuity(feature, dates);
     if(continuity && !exports.isNoDataValue(continuity)){
       resultMap.set(exports.getSpatialUnitFeatureIdValue(feature), continuity);
@@ -3526,7 +3543,7 @@ exports.computeContinuity = function(feature, dates){
   // build array of indicator values corresponding to dates array
   for (const date of dates) {
     var indicatorValue = exports.getIndicatorValue(feature, date);
-    if (indicatorValue && ! exports.isNoDataValue && ! Number.isNaN(indicatorValue)){
+    if (indicatorValue && ! exports.isNoDataValue(indicatorValue) && ! Number.isNaN(indicatorValue)){
       indicatorValueArray.push(indicatorValue);
     }
   }
@@ -3574,21 +3591,26 @@ exports.computePearsonCorrelation = function(valueArray_A, valueArray_B){
   var sumA2 = 0;
   var sumB2 = 0;
 
-  for(var i=0; i<valueArray_A; i++) {
+  for(var i=0; i<valueArray_A.length; i++) {
 
     if(valueArray_A[i] && valueArray_B[i]){
       var a_NextValue = valueArray_A[i] - A_mean;
       var b_NextValue = valueArray_B[i] - B_mean;
 
-      sumAB += Number(a_NextValue * b_NextValue);
-      sumA2 += Number(a_NextValue * a_NextValue);
-      sumB2 += Number(b_NextValue * b_NextValue);
+      sumAB = sumAB + Number(a_NextValue * b_NextValue);
+      sumA2 = sumA2 + Number(a_NextValue * a_NextValue);
+      sumB2 = sumB2 + Number(b_NextValue * b_NextValue);
 
     }
   }
 
   var square = Math.sqrt(sumA2 * sumB2);
-  var answer = sumAB / square;
+
+  if(square === 0){
+    return null;
+  }
+
+  var answer = Number(sumAB / square);
 
   return answer;
 
