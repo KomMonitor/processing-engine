@@ -1,6 +1,6 @@
 {
   "name": "kommonitor-processing-engine",
-  "version": "0.9.5",
+  "version": "1.0.0",
   "description": "KomMonitor processing engine that performs indicator computation based on base indicators or other spatial resources.",
   "main": "index.js",
   "scripts": {
