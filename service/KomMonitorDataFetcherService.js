@@ -197,7 +197,8 @@ exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
             spatialUnit_geoJSON = await exports.fetchSpatialUnitById(baseUrlPath, spatialUnitId, targetDate);
           }
           catch(error){
-            throw error;
+            // throw error;
+            console.error("Error while fetching spatial unit for target date '" + targetDate + "'. Error was \n" + error);
           }
 
           spatialUnitsMap.set(spatialUnitMetadata, spatialUnit_geoJSON);
