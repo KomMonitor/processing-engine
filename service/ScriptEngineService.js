@@ -23,9 +23,9 @@
   }
 
   function startTmpDirWatching(dir){
-    // scan the directory /tmp/ every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)
-    console.log(`scan the directory '${dir}' every 15 minutes and delete every containing file that is older than 2 hours (3600000 milliseconds)`);
-    var fileWatcher = new FileCleaner(dir, 3600000,  '* */15 * * * *', {
+    // scan the directory /tmp/ each day at 0 hours and delete every containing file that is older than 1 week hours (302400000 milliseconds)
+    console.log(`scan the directory '${dir}' each day at 0 hours and delete every containing file that is older than 1 week (302400000 milliseconds)`);
+    var fileWatcher = new FileCleaner(dir, 302400000,  '* * 0 * * *', {
       start: true
     });
   }
