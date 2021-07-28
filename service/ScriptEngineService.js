@@ -80,10 +80,7 @@
   // this code will be executed when such a job is started
   defaultComputationQueue.process(async (job) => {
 
-    
-
-
-
+    progressHelper.clearLogs_defaultComputation();
     
     KmHelper.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
 
@@ -143,6 +140,9 @@
   // register process function to execute customizableIndicatorComputation jobs
   // this code will be executed when such a job is started
   customizedComputationQueue.process(async (job) => {
+
+    progressHelper.clearLogs_customComputation;
+
     KmHelper.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
 
     // throw Error("Error");
@@ -376,8 +376,8 @@ var toSwaggerJobOverviewArray_customized  = function(beeQueueJobs){
       swaggerJob.progress = jobProgress.progress;
       swaggerJob.logs = jobProgress.logs;
     } catch (error) {
-      KmHelper.logError("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
-      KmHelper.logError("Error was: " + error);
+      console.error("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
+      console.error("Error was: " + error);
     }
     swaggerJob.jobData = beeQueueJob.data;
     swaggerJob.jobData.error = undefined;
