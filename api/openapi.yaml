@@ -344,14 +344,10 @@ components:
           type: string
           description: the computed target indicator for the target spatial unit as
             valid GeoJSON string.
-        errorLogs:
+        logs:
           type: array
           items:
-            type: string
-        infoLogs:
-          type: array
-          items:
-            type: string
+            $ref: '#/components/schemas/LogType'
         jobData:
           $ref: '#/components/schemas/CustomizableIndicatorComputationInputType'
       description: status information about the execution of the target indicator.
@@ -377,8 +373,14 @@ components:
           - baseIndicatorIds
         result_geoJSON: result_geoJSON
         progress: 0.8008281904610115
-        errorLogs: ["error"]
-        infoLogs: ["info"]
+        logs: [{
+          message: "info log",
+          type: "INFO"
+        },
+        {
+          message: "error log",
+          type: "ERROR"
+        }]
         status: waiting
     DefaultIndicatorComputationInputType:
       required:
@@ -484,14 +486,10 @@ components:
         result_url:
           type: string
           description: the full URL to the freshly computed and persisted indicator.
-        errorLogs:
+        logs:
           type: array
           items:
-            type: string
-        infoLogs:
-          type: array
-          items:
-            type: string
+            $ref: '#/components/schemas/LogType'
         jobData:
           $ref: '#/components/schemas/DefaultIndicatorComputationInputType'
       description: status information about the default execution of the target indicator.
@@ -519,9 +517,26 @@ components:
           - {}
           - {}
         progress: 0.8008281904610115
-        errorLogs: ["error"]
-        infoLogs: ["info"]
+        logs: [{
+          message: "info log",
+          type: "INFO"
+        },
+        {
+          message: "error log",
+          type: "ERROR"
+        }]
         status: waiting
+    LogType:
+      type: object
+      properties:
+        message:
+          type: "string"
+          description: "log message"
+        type: 
+          type: "string"
+          enum:
+            - "INFO"
+            - "ERROR"    
     FeedbackMailInputType:
       required:
       - body

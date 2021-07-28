@@ -4,10 +4,8 @@ var fs = require("fs");
 
 // collect log Messages and write them to progress file every once in a while
 let logArray_defaultComputation = [];
-let errorLogArray_defaultComputation = [];
 
 let logArray_customComputation = [];
-let errorLogArray_customComputation = [];
 
 exports.persistJobProgress = function(jobId, jobType, progress){
 
@@ -15,17 +13,14 @@ exports.persistJobProgress = function(jobId, jobType, progress){
     "jobId": jobId,
     "jobType": jobType,
     "progress": progress,
-    "infoLogs": [],
-    "errorLogs": []
+    "logs": [],
   }
 
   if(jobType == "defaultComputation"){
-    object.infoLogs = logArray_defaultComputation;
-    object.errorLogs = errorLogArray_defaultComputation;    
+    object.logs = logArray_defaultComputation; 
   }
   else{
-    object.infoLogs = logArray_customComputation;
-    object.errorLogs = errorLogArray_customComputation;    
+    object.logs = logArray_customComputation;   
   }
 
   fs.writeFileSync("./tmp/progress_" + jobType + "_" + jobId + ".json", ""+ JSON.stringify(object));
@@ -42,42 +37,36 @@ exports.readJobProgress = function(jobId, jobType){
 
 exports.clearLogs_defaultComputation = function(){
   logArray_defaultComputation = [];
-  errorLogArray_defaultComputation = [];
 };
 
 exports.clearLogs_customComputation = function(){
   logArray_customComputation = [];
-  errorLogArray_customComputation = [];
 };
 
 exports.addInfoLog_defaultComputation = function(log){
-  logArray_defaultComputation.push(log);
+  logArray_defaultComputation.push({
+    message: log,
+    type: "INFO"
+  });
 };
 
 exports.addErrorLog_defaultComputation = function(log){
-  errorLogArray_defaultComputation.push(log);
+  logArray_defaultComputation.push({
+    message: log,
+    type: "ERROR"
+  });
 };
 
 exports.addInfoLog_customComputation = function(log){
-  logArray_customComputation.push(log);
+  logArray_customComputation.push({
+    message: log,
+    type: "INFO"
+  });
 };
 
 exports.addErrorLog_customComputation = function(log){
-  errorLogArray_customComputation.push(log);
-};
-
-exports.getInfoLogs_defaultComputation = function(){
-  return logArray_customComputation;
-};
-
-exports.getErrorLogs_defaultComputation = function(){
-  return errorLogArray_customComputation;
-};
-
-exports.getInfoLogs_defaultComputation = function(){
-  return logArray_customComputation;
-};
-
-exports.getErrorLogs_defaultComputation = function(){
-  return errorLogArray_customComputation;
+  logArray_customComputation.push({
+    message: log,
+    type: "ERROR"
+  });
 };

@@ -264,8 +264,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.status = job.status;
         let jobProgress = progressHelper.readJobProgress(job.id, "customizedComputation");
         response.progress = jobProgress.progress;
-        response.errorLogs = jobProgress.errorLogs;
-        response.infoLogs = jobProgress.infoLogs;
+        response.logs = jobProgress.logs;
         var tmpFilePath = job.data.result;
 
         if (tmpFilePath)
@@ -375,8 +374,7 @@ var toSwaggerJobOverviewArray_customized  = function(beeQueueJobs){
     try {
       let jobProgress = progressHelper.readJobProgress(beeQueueJob.id, "customizedComputation");
       swaggerJob.progress = jobProgress.progress;
-      swaggerJob.errorLogs = jobProgress.errorLogs;
-      swaggerJob.infoLogs = jobProgress.infoLogs;
+      swaggerJob.logs = jobProgress.logs;
     } catch (error) {
       KmHelper.logError("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
       KmHelper.logError("Error was: " + error);
@@ -399,8 +397,7 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
     try {
       let jobProgress = progressHelper.readJobProgress(beeQueueJob.id, "defaultComputation");
       swaggerJob.progress = jobProgress.progress;
-      swaggerJob.errorLogs = jobProgress.errorLogs;
-      swaggerJob.infoLogs = jobProgress.infoLogs;
+      swaggerJob.logs = jobProgress.logs;
     } catch (error) {
       KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
       KmHelper.logError("Error was: " + error);
@@ -447,8 +444,7 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.status = job.status;
         let jobProgress = progressHelper.readJobProgress(job.id, "defaultComputation");
         response.progress = jobProgress.progress;
-        response.errorLogs = jobProgress.errorLogs;
-        response.infoLogs = jobProgress.infoLogs;
+        response.logs = jobProgress.logs;
 
         response.result_urls = job.data.result;
         response.jobData = job.data;
