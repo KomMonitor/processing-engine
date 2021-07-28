@@ -328,13 +328,14 @@ components:
             computation.
         status:
           type: string
-          description: "the current status of execution. Possible values are ACCEPTED,\
-            \ RUNNING, FINISHED, ERROR."
+          description: "the current status of execution. Possible values are waiting,\
+            \ active, succeeded, failed, delayed."
           enum:
-          - ACCEPTED
-          - RUNNING
-          - FINISHED
-          - ERROR
+          - waiting
+          - active
+          - succeeded
+          - failed
+          - delayed
         progress:
           type: number
           description: the progress of indicator computation in percent.
@@ -343,10 +344,14 @@ components:
           type: string
           description: the computed target indicator for the target spatial unit as
             valid GeoJSON string.
-        error:
-          type: string
-          description: an error message if an error occured during indicator computation.
-            It is only included in the response object if an error occured.
+        errorLogs:
+          type: array
+          items:
+            type: string
+        infoLogs:
+          type: array
+          items:
+            type: string
         jobData:
           $ref: '#/components/schemas/CustomizableIndicatorComputationInputType'
       description: status information about the execution of the target indicator.
@@ -372,8 +377,9 @@ components:
           - baseIndicatorIds
         result_geoJSON: result_geoJSON
         progress: 0.8008281904610115
-        error: error
-        status: ACCEPTED
+        errorLogs: ["error"]
+        infoLogs: ["info"]
+        status: waiting
     DefaultIndicatorComputationInputType:
       required:
       - defaultProcessProperties
@@ -463,13 +469,14 @@ components:
             computation for all applicable spatial units.
         status:
           type: string
-          description: "the current status of execution. Possible values are ACCEPTED,\
-            \ RUNNING, FINISHED, ERROR."
+          description: "the current status of execution. Possible values are waiting,\
+            \ active, succeeded, failed, delayed."
           enum:
-          - ACCEPTED
-          - RUNNING
-          - FINISHED
-          - ERROR
+          - waiting
+          - active
+          - succeeded
+          - failed
+          - delayed
         progress:
           type: number
           description: the progress of indicator computation in percent.
@@ -477,10 +484,14 @@ components:
         result_url:
           type: string
           description: the full URL to the freshly computed and persisted indicator.
-        error:
-          type: string
-          description: an error message if an error occured during indicator computation.
-            It is only included in the response object if an error occured.
+        errorLogs:
+          type: array
+          items:
+            type: string
+        infoLogs:
+          type: array
+          items:
+            type: string
         jobData:
           $ref: '#/components/schemas/DefaultIndicatorComputationInputType'
       description: status information about the default execution of the target indicator.
@@ -508,8 +519,9 @@ components:
           - {}
           - {}
         progress: 0.8008281904610115
-        error: error
-        status: ACCEPTED
+        errorLogs: ["error"]
+        infoLogs: ["info"]
+        status: waiting
     FeedbackMailInputType:
       required:
       - body

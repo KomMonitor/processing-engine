@@ -112,7 +112,7 @@
         });
 
         // job.data.progress = 5;
-        progressHelper.persistProgress(job.id, "defaultComputation", 5);
+        progressHelper.persistJobProgress(job.id, "defaultComputation", 5);
         KmHelper.log("Successfully parsed request input parameters");
 
         KmHelper.log("Start indicator computation to persit the results within KomMonitor data management service.");
@@ -123,7 +123,7 @@
 
         KmHelper.log("saving job, which was enriched with resulting URLs: " + job.data.result);
         // job.data.progress = 100;
-        progressHelper.persistProgress(job.id, "defaultComputation", 100);
+        progressHelper.persistJobProgress(job.id, "defaultComputation", 100);
 
         KmHelper.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
 
@@ -200,7 +200,7 @@
         });
 
         // job.data.progress = 5;
-        progressHelper.persistProgress(job.id, "customizedComputation", 5);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 5);
         KmHelper.log("Successfully parsed request input parameters.");
         KmHelper.log("Start indicator computation.");
 
@@ -218,7 +218,7 @@
         job.data.result = tmpFilePath;
         // job.data.result = geoJSON;
         // job.data.progress = 100;
-        progressHelper.persistProgress(job.id, "customizedComputation", 100);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 100);
 
         KmHelper.log(`Job execution successful. CustomizableIndicatorComputation job with ID ` + job.id + ` finished`);
         resolve(job.data.result);
@@ -262,14 +262,15 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         var response = {};
         response.jobId = job.id;
         response.status = job.status;
-        response.progress = progressHelper.readProgress(job.id, "customizedComputation");
-
+        let jobProgress = progressHelper.readJobProgress(job.id, "customizedComputation");
+        response.progress = jobProgress.progress;
+        response.errorLogs = jobProgress.errorLogs;
+        response.infoLogs = jobProgress.infoLogs;
         var tmpFilePath = job.data.result;
 
         if (tmpFilePath)
           response.result_geoJSON_base64 = fs.readFileSync(tmpFilePath, 'utf8');
 
-        response.error = job.data.error;
         response.jobData = job.data;
         response.jobData.error = undefined;
         response.jobData.result = undefined;
@@ -338,12 +339,12 @@ exports.getCustomizableIndicatorComputationJobOverview = async function() {
  */
 var getCustomizedIndicatorJobs = function(statusType){
   if (statusType === "succeeded" || statusType === "failed"){
-    return customizedComputationQueue.getJobs(statusType, {size: 100000}).then((jobs) => {
+    return customizedComputationQueue.getJobs(statusType, {size: 1000}).then((jobs) => {
       return jobs;
     });
   }
   else{
-    return customizedComputationQueue.getJobs(statusType, {start: 0, end: 100000}).then((jobs) => {
+    return customizedComputationQueue.getJobs(statusType, {start: 0, end: 1000}).then((jobs) => {
       return jobs;
     });
   }
@@ -355,12 +356,12 @@ var getCustomizedIndicatorJobs = function(statusType){
  */
 var getDefaultIndicatorJobs = function(statusType){
   if (statusType === "succeeded" || statusType === "failed"){
-    return defaultComputationQueue.getJobs(statusType, {size: 100000}).then((jobs) => {
+    return defaultComputationQueue.getJobs(statusType, {size: 1000}).then((jobs) => {
       return jobs;
     });
   }
   else{
-    return defaultComputationQueue.getJobs(statusType, {start: 0, end: 100000}).then((jobs) => {
+    return defaultComputationQueue.getJobs(statusType, {start: 0, end: 1000}).then((jobs) => {
       return jobs;
     });
   }
@@ -372,12 +373,14 @@ var toSwaggerJobOverviewArray_customized  = function(beeQueueJobs){
     swaggerJob.jobId = beeQueueJob.id;
     swaggerJob.status = beeQueueJob.status;
     try {
-      swaggerJob.progress = progressHelper.readProgress(beeQueueJob.id, "customizedComputation"); 
+      let jobProgress = progressHelper.readJobProgress(beeQueueJob.id, "customizedComputation");
+      swaggerJob.progress = jobProgress.progress;
+      swaggerJob.errorLogs = jobProgress.errorLogs;
+      swaggerJob.infoLogs = jobProgress.infoLogs;
     } catch (error) {
       KmHelper.logError("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
       KmHelper.logError("Error was: " + error);
     }
-    swaggerJob.error = beeQueueJob.data.error;
     swaggerJob.jobData = beeQueueJob.data;
     swaggerJob.jobData.error = undefined;
     swaggerJob.jobData.result = undefined;
@@ -394,12 +397,14 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
     swaggerJob.jobId = beeQueueJob.id;
     swaggerJob.status = beeQueueJob.status;
     try {
-      swaggerJob.progress = progressHelper.readProgress(beeQueueJob.id, "defaultComputation"); 
+      let jobProgress = progressHelper.readJobProgress(beeQueueJob.id, "defaultComputation");
+      swaggerJob.progress = jobProgress.progress;
+      swaggerJob.errorLogs = jobProgress.errorLogs;
+      swaggerJob.infoLogs = jobProgress.infoLogs;
     } catch (error) {
       KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
       KmHelper.logError("Error was: " + error);
     }
-    swaggerJob.error = beeQueueJob.data.error;
     swaggerJob.jobData = beeQueueJob.data;
     swaggerJob.jobData.error = undefined;
     swaggerJob.jobData.result = undefined;
@@ -440,9 +445,12 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         var response = {};
         response.jobId = jobId;
         response.status = job.status;
-        response.progress = progressHelper.readProgress(job.id, "defaultComputation");;
+        let jobProgress = progressHelper.readJobProgress(job.id, "defaultComputation");
+        response.progress = jobProgress.progress;
+        response.errorLogs = jobProgress.errorLogs;
+        response.infoLogs = jobProgress.infoLogs;
+
         response.result_urls = job.data.result;
-        response.error = job.data.error;
         response.jobData = job.data;
         response.jobData.error = undefined;
         response.jobData.result = undefined;

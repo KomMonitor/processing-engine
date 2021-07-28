@@ -103,9 +103,9 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
     var lowestSpatialUnitForComputationName;
     try{
       scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, scriptId);
-      progressHelper.persistProgress(job.id, "defaultComputation", 20);
+      progressHelper.persistJobProgress(job.id, "defaultComputation", 20);
       targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetIndicatorId);
-      progressHelper.persistProgress(job.id, "defaultComputation", 40);
+      progressHelper.persistJobProgress(job.id, "defaultComputation", 40);
       lowestSpatialUnitForComputationName = targetIndicatorMetadata.lowestSpatialUnitForComputation;
     }
     catch(error){
@@ -158,7 +158,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
           resultingIndicatorsMap.set(metadataObject_lowestUnit_string, indicatorGeoJson_lowestSpatialUnit); 
         }
 
-        progressHelper.persistProgress(job.id, "defaultComputation", 70);
+        progressHelper.persistJobProgress(job.id, "defaultComputation", 70);
 
         // after computing the indicator for the lowest spatial unit
         // we can now aggregate the result to all remaining superior units!
@@ -186,7 +186,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
       KmHelper.logError("Catched Error while calling indicator computation method from custom script. Error is: " + error);
     }
 
-    progressHelper.persistProgress(job.id, "defaultComputation", 80);
+    progressHelper.persistJobProgress(job.id, "defaultComputation", 80);
 
     // after computing the indicator for every spatial unit
     // send PUT requests against KomMonitor data management API to persist results permanently
@@ -200,7 +200,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
       throw error;
     }
 
-    progressHelper.persistProgress(job.id, "defaultComputation", 90);
+    progressHelper.persistJobProgress(job.id, "defaultComputation", 90);
 
     return resultArray;
   }
@@ -218,9 +218,9 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
     var targetIndicatorMetadata;
     try{
       scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, scriptId);
-      progressHelper.persistProgress(job.id, "defaultComputation", 20);
+      progressHelper.persistJobProgress(job.id, "defaultComputation", 20);
       targetIndicatorMetadata = await KomMonitorDataFetcher.fetchIndicatorMetadataById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetIndicatorId);
-      progressHelper.persistProgress(job.id, "defaultComputation", 40);
+      progressHelper.persistJobProgress(job.id, "defaultComputation", 40);
 
     }
     catch(error){
@@ -261,7 +261,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
       } 
     }
 
-    progressHelper.persistProgress(job.id, "defaultComputation", 80);
+    progressHelper.persistJobProgress(job.id, "defaultComputation", 80);
 
     try{
       // if error occured then clean up temp files and temp node module
@@ -286,7 +286,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
       throw error;
     }
 
-    progressHelper.persistProgress(job.id, "defaultComputation", 90);
+    progressHelper.persistJobProgress(job.id, "defaultComputation", 90);
 
     return resultArray;
   }
@@ -375,16 +375,16 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
       try{
         scriptCodeAsByteArray = await KomMonitorDataFetcher.fetchScriptCodeById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, scriptId);
         // job.data.progress = 20;
-        progressHelper.persistProgress(job.id, "customizedComputation", 20);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 20);
         baseIndicatorsMap = await KomMonitorDataFetcher.fetchIndicatorsByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, baseIndicatorIds, targetDate, targetSpatialUnitId);
         // job.data.progress = 30;
-        progressHelper.persistProgress(job.id, "customizedComputation", 30);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 30);
         georesourcesMap = await KomMonitorDataFetcher.fetchGeoresourcesByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, georesourceIds, targetDate);
         // job.data.progress = 40;
-        progressHelper.persistProgress(job.id, "customizedComputation", 40);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 40);
         targetSpatialUnit_geoJSON = await KomMonitorDataFetcher.fetchSpatialUnitById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetSpatialUnitId, targetDate);
         // job.data.progress = 50;
-        progressHelper.persistProgress(job.id, "customizedComputation", 50);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 50);
       }
       catch(error){
         KmHelper.logError("Error while fetching resources from dataManagement API for customizedIndicatorComputation. Error is: " + error);
@@ -399,7 +399,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
 
 
       // job.data.progress = 60;
-      progressHelper.persistProgress(job.id, "customizedComputation", 60);
+      progressHelper.persistJobProgress(job.id, "customizedComputation", 60);
 
       //execute script to compute indicator
       var responseGeoJson;
@@ -407,7 +407,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
         responseGeoJson = await nodeModuleForIndicator.computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndicatorsMap, georesourcesMap, customProcessProperties);
 
         // job.data.progress = 90;
-        progressHelper.persistProgress(job.id, "customizedComputation", 90);
+        progressHelper.persistJobProgress(job.id, "customizedComputation", 90);
 
         delete require.cache[require.resolve('../tmp/tmp.js')];
 

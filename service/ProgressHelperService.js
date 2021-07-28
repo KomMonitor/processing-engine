@@ -9,7 +9,7 @@ let errorLogArray_defaultComputation = [];
 let logArray_customComputation = [];
 let errorLogArray_customComputation = [];
 
-exports.persistProgress = function(jobId, jobType, progress){
+exports.persistJobProgress = function(jobId, jobType, progress){
 
   let object = {
     "jobId": jobId,
@@ -32,12 +32,12 @@ exports.persistProgress = function(jobId, jobType, progress){
   return;
 }
 
-exports.readProgress = function(jobId, jobType){
+exports.readJobProgress = function(jobId, jobType){
   var fileString = fs.readFileSync("./tmp/progress_" + jobType + "_" + jobId + ".json", 'utf8');
 
   let object = JSON.parse(fileString);
 
-  return object.progress;
+  return object;
 }
 
 exports.clearLogs_defaultComputation = function(){
