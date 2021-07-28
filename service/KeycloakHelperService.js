@@ -4,6 +4,8 @@ const fs = require("fs");
 
 // init methode, die die keycloak config ausliest!
 
+const KmHelper = require("../resources/KmHelper");
+
 var keycloakTargetURL = undefined;
 var keycloakUser = undefined;
 var keycloakUserPassword = undefined;
@@ -66,7 +68,7 @@ const requestKeycloakToken = async function () {
       // called asynchronously if an error occurs
       // or server returns response with an error status.
       //$scope.error = response.statusText;
-      console.error("Error while requesting auth bearer token from keycloak. Error is: \n" + error);
+      KmHelper.logError("Error while requesting auth bearer token from keycloak. Error is: \n" + error);
       throw error;
     })
 };

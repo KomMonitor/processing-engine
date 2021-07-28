@@ -104,9 +104,9 @@ async function computeIndicator(targetDate, targetSpatialUnit_geoJSON, baseIndic
 function aggregateIndicator(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON){
   // aggregate indicator
   if (!aggregationTypeEnum.includes(aggregationType)){
-    console.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
+    KmHelper.log("Unknown parameter value for 'aggregationType' was specified for aggregation logic. Parameter value was '" + aggregationType +
       "'. Allowed values are: " + aggregationTypeEnum);
-    console.log("Will fallback to using AVERAGE aggregation logic.");
+    KmHelper.log("Will fallback to using AVERAGE aggregation logic.");
     return aggregate_average(targetDate, targetSpatialUnit_geoJSON, indicator_geoJSON);
   }
   else if(aggregationType === "SUM"){

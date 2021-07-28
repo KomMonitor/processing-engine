@@ -7,6 +7,8 @@
  const encryptionHelper = require("./EncryptionHelperService");
  const keycloakHelper = require("./KeycloakHelperService");
 
+ const KmHelper = require("../resources/KmHelper");
+
  const simplifyGeometryParameterName = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_NAME;
  const simplifyGeometryParameterValue = process.env.GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE;
  const simplifyGeometriesParameterQueryString = simplifyGeometryParameterName + "=" + simplifyGeometryParameterValue;
@@ -20,7 +22,7 @@
  * returns script code of a NodeJS module as string
  **/
 exports.fetchScriptCodeById = async function(baseUrlPath, scriptId) {
-  console.log("fetching script code from KomMonitor data management API for id " + scriptId);
+  KmHelper.log("fetching script code from KomMonitor data management API for id " + scriptId);
 
   var config = await keycloakHelper.getKeycloakAxiosConfig();
 
@@ -32,7 +34,7 @@ exports.fetchScriptCodeById = async function(baseUrlPath, scriptId) {
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching script code. Error was: " + error);
+      KmHelper.logError("Error when fetching script code. Error was: " + error);
       throw error;
     });
 }
@@ -47,7 +49,7 @@ exports.fetchScriptCodeById = async function(baseUrlPath, scriptId) {
  * returns spatial unit as GeoJSON string
  **/
 exports.fetchSpatialUnitById = async function(baseUrlPath, spatialUnitId, targetDate) {
-  console.log("fetching spatial unit from KomMonitor data management API for id " + spatialUnitId + " and targetDate " + targetDate);
+  KmHelper.log("fetching spatial unit from KomMonitor data management API for id " + spatialUnitId + " and targetDate " + targetDate);
 
   var config = await keycloakHelper.getKeycloakAxiosConfig();
 
@@ -63,7 +65,7 @@ exports.fetchSpatialUnitById = async function(baseUrlPath, spatialUnitId, target
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching spatial unit. Error was: " + error);
+      KmHelper.logError("Error when fetching spatial unit. Error was: " + error);
       throw error;
     });
 }
@@ -77,7 +79,7 @@ exports.fetchSpatialUnitById = async function(baseUrlPath, spatialUnitId, target
  * returns spatial units metadata entries as an array
  **/
 exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
-  console.log("fetching available spatial units metadata from KomMonitor data management API for targetDate " + targetDate);
+  KmHelper.log("fetching available spatial units metadata from KomMonitor data management API for targetDate " + targetDate);
 
   var config = await keycloakHelper.getKeycloakAxiosConfig();
 
@@ -93,7 +95,7 @@ exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching spatial units metadata. Error was: " + error);
+      KmHelper.logError("Error when fetching spatial units metadata. Error was: " + error);
       throw error;
     });
 }
@@ -107,7 +109,7 @@ exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
  * returns spatial units as a map containing all units, wheres key='metadata object holding all metadata properties' and value='features as GeoJSON string'
  **/
   async function fetchAvailableSpatialUnits(baseUrlPath, targetDate) {
-    console.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
+    KmHelper.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
 
     var year = targetDateHelper.getYearFromTargetDate(targetDate);
     var month = targetDateHelper.getMonthFromTargetDate(targetDate);
@@ -165,7 +167,7 @@ exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
    * returns spatial units as a map containing all units, wheres key='metadata object holding all metadata properties' and value='features as GeoJSON string'
    **/
      exports.fetchTargetSpatialUnitAndHigher = async function(baseUrlPath, targetDate, targetSpatialUnitName) {
-      console.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
+      KmHelper.log("fetching available spatial units from KomMonitor data management API for targetDate " + targetDate);
 
       var year = targetDateHelper.getYearFromTargetDate(targetDate);
       var month = targetDateHelper.getMonthFromTargetDate(targetDate);
@@ -198,7 +200,7 @@ exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
           }
           catch(error){
             // throw error;
-            console.error("Error while fetching spatial unit for target date '" + targetDate + "'. Error was \n" + error);
+            KmHelper.logError("Error while fetching spatial unit for target date '" + targetDate + "'. Error was \n" + error);
           }
 
           spatialUnitsMap.set(spatialUnitMetadata, spatialUnit_geoJSON);
@@ -230,7 +232,7 @@ exports.fetchAvailableSpatialUnits = fetchAvailableSpatialUnits;
  * returns georesource as GeoJSON string
  **/
 exports.fetchGeoresourceById = async function(baseUrlPath, georesourceId, targetDate) {
-  console.log("fetching georesource from KomMonitor data management API for id " + georesourceId + " and targetDate " + targetDate);
+  KmHelper.log("fetching georesource from KomMonitor data management API for id " + georesourceId + " and targetDate " + targetDate);
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
@@ -246,17 +248,9 @@ exports.fetchGeoresourceById = async function(baseUrlPath, georesourceId, target
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching georesource. Error was: " + error);
-      console.log("Send back empty FeatureCollection of georesource");
-      // throw error;
-      // return empty set of georesources as FeatureCollection
-      // e.g. for a daily indicator if some time periods do not have any valid georesource, then we send back an empty set of resources
-      var emptyFeatureCollection = {
-        "type" : "FeatureCollection",
-        "features" : []
-      };
-
-      return emptyFeatureCollection;
+      KmHelper.logError("Error when fetching georesource. Error was: " + error);
+      KmHelper.logError("Send back empty FeatureCollection of georesource");
+      throw error;
     });
 };
 
@@ -269,7 +263,7 @@ exports.fetchGeoresourceById = async function(baseUrlPath, georesourceId, target
  * returns georesource metadata
  **/
 exports.fetchGeoresourceMetadataById = async function(baseUrlPath, georesourceId) {
-  console.log("fetching georesource metadata from KomMonitor data management API for id " + georesourceId);
+  KmHelper.log("fetching georesource metadata from KomMonitor data management API for id " + georesourceId);
 
   var config = await keycloakHelper.getKeycloakAxiosConfig();
 
@@ -281,7 +275,7 @@ exports.fetchGeoresourceMetadataById = async function(baseUrlPath, georesourceId
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching georesource metadata. Error was: " + error);
+      KmHelper.logError("Error when fetching georesource metadata. Error was: " + error);
       throw error;
     });
 }
@@ -296,7 +290,7 @@ exports.fetchGeoresourceMetadataById = async function(baseUrlPath, georesourceId
  * returns georesources as a map containing all georesources, wheres key='meaningful name of the georesource' and value='georesource as GeoJSON string'
  **/
 exports.fetchGeoresourcesByIds = async function(baseUrlPath, georesourceIds, targetDate) {
-  console.log("fetching georesources from KomMonitor data management API as a map object");
+  KmHelper.log("fetching georesources from KomMonitor data management API as a map object");
 
   var georesourcesMap = new Map();
 
@@ -336,7 +330,7 @@ exports.fetchGeoresourcesByIds = async function(baseUrlPath, georesourceIds, tar
  * returns indicator as GeoJSON string
  **/
 exports.fetchIndicatorById = async function(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId) {
-  console.log("fetching indicator from KomMonitor data management API for id " + indicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
+  KmHelper.log("fetching indicator from KomMonitor data management API for id " + indicatorId + " and targetDate " + targetDate + " and targetSpatialUnitId " + targetSpatialUnitId);
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
@@ -352,7 +346,7 @@ exports.fetchIndicatorById = async function(baseUrlPath, indicatorId, targetDate
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching indicator. Error was: " + error);
+      KmHelper.logError("Error when fetching indicator. Error was: " + error);
       throw error;
     });
 }
@@ -366,9 +360,9 @@ exports.fetchIndicatorById = async function(baseUrlPath, indicatorId, targetDate
  * returns indicator metadata
  **/
 exports.fetchIndicatorMetadataById = async function(baseUrlPath, indicatorId) {
-  console.log("fetching indicator metadata from KomMonitor data management API for id " + indicatorId);
+  KmHelper.log("fetching indicator metadata from KomMonitor data management API for id " + indicatorId);
 
-  console.log("Perform GET request against: " + baseUrlPath + "/indicators/" + indicatorId);
+  KmHelper.log("Perform GET request against: " + baseUrlPath + "/indicators/" + indicatorId);
 
   var config = await keycloakHelper.getKeycloakAxiosConfig();
 
@@ -377,13 +371,13 @@ exports.fetchIndicatorMetadataById = async function(baseUrlPath, indicatorId) {
     .then(response => {
       // response.data should be the respective indicator metadata JSON object
       response = encryptionHelper.decryptAPIResponseIfRequired(response);
-      console.log("got indicatorMetadata response object: " + response);
-      console.log("Response has status: " + response.status);
-      console.log("Response has data: " + response.data);
+      KmHelper.log("got indicatorMetadata response object: " + response);
+      KmHelper.log("Response has status: " + response.status);
+      KmHelper.log("Response has data: " + response.data);
       return response.data;
     })
     .catch(error => {
-      console.log("Error when fetching indicator metadata. Error was: " + error);
+      KmHelper.logError("Error when fetching indicator metadata. Error was: " + error);
       throw error;
     });
 }
@@ -399,7 +393,7 @@ exports.fetchIndicatorMetadataById = async function(baseUrlPath, indicatorId) {
  * returns indicators as a map containing all indicators, wheres key='meaningful name of the indicator' and value='indicator as GeoJSON string'
  **/
 exports.fetchIndicatorsByIds = async function(baseUrlPath, indicatorIds, targetDate, targetSpatialUnitId) {
-  console.log("fetching indicators from KomMonitor data management API as a map object");
+  KmHelper.log("fetching indicators from KomMonitor data management API as a map object");
 
   var indicatorsMap = new Map();
 
@@ -409,11 +403,11 @@ exports.fetchIndicatorsByIds = async function(baseUrlPath, indicatorIds, targetD
       var indicator_geojsonString;
       try{
         indicatorMetadata = await exports.fetchIndicatorMetadataById(baseUrlPath, indicatorId);
-        console.log("Fetched indicatorMetadata: " + indicatorMetadata);
+        KmHelper.log("Fetched indicatorMetadata: " + indicatorMetadata);
         indicator_geojsonString = await exports.fetchIndicatorById(baseUrlPath, indicatorId, targetDate, targetSpatialUnitId);
       }
       catch (error){
-        console.log("Something went wrong when featching indicators by Ids. Error message: " + error.message);
+        KmHelper.logError("Something went wrong when featching indicators by Ids. Error message: " + error.message);
         throw error;
       }
       var indicatorName = indicatorMetadata.indicatorName;

@@ -57,7 +57,7 @@ module.exports.postCustomizableIndicatorComputation = function postCustomizableI
       utils.writeLocationHeader(res, responseWithLocationHeader);
     })
     .catch(function (response) {
-      console.log("ERROR: response object: " + response);
+      console.error("ERROR: response object: " + response);
 
       var errorResponseWithLocationHeader = utils.respondWithLocationHeader(500, response);
       utils.writeLocationHeader(res, errorResponseWithLocationHeader);
@@ -78,7 +78,7 @@ module.exports.postDefaultIndicatorComputation = function postDefaultIndicatorCo
     })
     .catch(function (response) {
 
-      console.log("ERROR: response object: " + response);
+      console.error("ERROR: response object: " + response);
 
       var errorResponseWithLocationHeader = utils.respondWithLocationHeader(500, response);
       utils.writeLocationHeader(res, errorResponseWithLocationHeader);

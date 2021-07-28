@@ -27,7 +27,7 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
   var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(lowestSpatialUnitKey);
 
   // elements of remainingSpatialUnits are map items where key='metadata object holding all metadata properties' and value='features as GeoJSON string'
-  console.log("start to aggregate indicators for upper spatial unit hierarchy levels.");
+  KmHelper.log("start to aggregate indicators for upper spatial unit hierarchy levels.");
 
   for (const spatialUnitEntry of remainingSpatialUnits) {
 
@@ -41,19 +41,19 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
     var targetSpatialUnitId = spatialUnitEntry[0].spatialUnitId;
 
     var targetSpatialUnitGeoJson;
-    console.log("fetch spatialUnit as geoJSON with id " + targetSpatialUnitId + " for targetDate " + targetDate + " from dataManagement API for defaultIndicatorComputation.");
+    KmHelper.log("fetch spatialUnit as geoJSON with id " + targetSpatialUnitId + " for targetDate " + targetDate + " from dataManagement API for defaultIndicatorComputation.");
 
     try{
       targetSpatialUnitGeoJson = await KomMonitorDataFetcher.fetchSpatialUnitById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetSpatialUnitId, targetDate);
     }
     catch(error){
-      console.error("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " within dataManagement API for defaultIndicatorComputation. Error is: " + error);
-      console.error("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
-      console.log("Remaining spatial unit computation will continue.");  
+      KmHelper.logError("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
+      KmHelper.logError("Remaining spatial unit computation will continue.");  
     }
 
     //TODO FIXME use direct lower spatial unit instead of lowest for better performance?
-    console.log("Aggregating indicator on targetSpatialUnit with id " + targetSpatialUnitId);
+    KmHelper.log("Aggregating indicator on targetSpatialUnit with id " + targetSpatialUnitId);
 
     if(targetSpatialUnitGeoJson){
       var indicatorGeoJSONForSpatialUnit;
@@ -61,9 +61,9 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
         indicatorGeoJSONForSpatialUnit = nodeModuleForIndicator.aggregateIndicator(targetDate, targetSpatialUnitGeoJson, indicatorOnLowestSpatialUnit_geoJson_copy);
       }
       catch(error){
-        console.error("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
-        console.error("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
-        console.log("Remaining spatial unit computation will continue."); 
+        KmHelper.logError("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
+        KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
+        KmHelper.logError("Remaining spatial unit computation will continue."); 
       }
 
       if(resultingIndicatorsMap.has(metadataObject_string)){
@@ -109,7 +109,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
       lowestSpatialUnitForComputationName = targetIndicatorMetadata.lowestSpatialUnitForComputation;
     }
     catch(error){
-      console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
       throw error;
     }      
 
@@ -139,7 +139,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
         baseIndicatorsMap_lowestSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, baseIndicatorIds, targetDate, lowestSpatialUnit[0].spatialUnitId);
       }
       catch(error){
-        console.error("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+        KmHelper.logError("Error while fetching baseIndicators for lowestSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
         throw error;
       }
       
@@ -166,12 +166,12 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
           resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnit[0], targetDate, nodeModuleForIndicator);
         }
         catch(error){
-          console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
+          KmHelper.logError("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
           throw error;
         }
       }
       catch(error){
-        console.error("Error while calling indicator computation method from custom script. Error is: " + error);
+        KmHelper.logError("Error while calling indicator computation method from custom script. Error is: " + error);
       }
     }
 
@@ -183,7 +183,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
       fs.unlinkSync("./tmp/tmp.js");
     }
     catch (error){
-      console.error("Catched Error while calling indicator computation method from custom script. Error is: " + error);
+      KmHelper.logError("Catched Error while calling indicator computation method from custom script. Error is: " + error);
     }
 
     progressHelper.persistProgress(job.id, "defaultComputation", 80);
@@ -196,7 +196,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
 
     }
     catch(error){
-      console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
       throw error;
     }
 
@@ -205,7 +205,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
     return resultArray;
   }
   catch(err) {
-      console.log("Error during execution of defaultIndicatorComputation with error: " + err);
+      KmHelper.logError("Error during execution of defaultIndicatorComputation with error: " + err);
       throw err;
   }
 }
@@ -224,7 +224,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
 
     }
     catch(error){
-      console.log("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while fetching resources from dataManagement API for defaultIndicatorComputation. Error is: " + error);
       throw error;
     }      
 
@@ -252,12 +252,12 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
           resultingIndicatorsMap = await computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, georesourcesMap, baseIndicatorIds, defaultProcessProperties, resultingIndicatorsMap, targetDate, nodeModuleForIndicator);
         }
         catch(error){
-          console.error("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
+          KmHelper.logError("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
           throw error;
         }
       }
       catch(error){
-        console.error("Error while calling indicator computation method from custom script. Error is: " + error);      
+        KmHelper.logError("Error while calling indicator computation method from custom script. Error is: " + error);      
       } 
     }
 
@@ -271,7 +271,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
       fs.unlinkSync("./tmp/tmp.js");
     }
     catch (error){
-      console.error("Catched Error while removing temp indicator computation module. Error is: " + error);
+      KmHelper.logError("Catched Error while removing temp indicator computation module. Error is: " + error);
     }
 
     // after computing the indicator for every spatial unit
@@ -282,7 +282,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
 
     }
     catch(error){
-      console.error("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while persisting computed indicators for all spatialUnits within dataManagement API for defaultIndicatorComputation. Error is: " + error);
       throw error;
     }
 
@@ -291,7 +291,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
     return resultArray;
   }
   catch(err) {
-      console.log("Error during execution of defaultIndicatorComputation with error: " + err);
+      KmHelper.logError("Error during execution of defaultIndicatorComputation with error: " + err);
       throw err;
   }
 }
@@ -312,9 +312,9 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
       baseIndicatorsMap_nextSpatialUnit = await KomMonitorDataFetcher.fetchIndicatorsByIds(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, baseIndicatorIds, targetDate, nextSpatialUnit[0].spatialUnitId);
     }
     catch(error){
-      console.error("Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
-      console.error("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
-      console.log("Remaining spatial unit computation will continue.");      
+      KmHelper.logError("Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
+      KmHelper.logError("Remaining spatial unit computation will continue.");      
     }
 
     if(baseIndicatorsMap_nextSpatialUnit){
@@ -333,8 +333,8 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
         }    
       }
       catch(error){
-        console.error("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
-        console.log("Remaining spatial unit computation will continue.");
+        KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
+        KmHelper.logError("Remaining spatial unit computation will continue.");
       } 
     }      
 
@@ -387,7 +387,7 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
         progressHelper.persistProgress(job.id, "customizedComputation", 50);
       }
       catch(error){
-        console.log("Error while fetching resources from dataManagement API for customizedIndicatorComputation. Error is: " + error);
+        KmHelper.logError("Error while fetching resources from dataManagement API for customizedIndicatorComputation. Error is: " + error);
         throw error;
       }
 
@@ -423,15 +423,15 @@ async function executeCustomizedComputation(job, scriptId, targetDate, baseIndic
           fs.unlinkSync("./tmp/tmp.js");
         }
         catch (error){
-          console.error("Catched Error while calling indicator computation method from custom script. Error is: " + error);
+          KmHelper.logError("Catched Error while calling indicator computation method from custom script. Error is: " + error);
         }
-        console.error("Error while calling indicator computation method from custom script. Error is: " + error);
+        KmHelper.logError("Error while calling indicator computation method from custom script. Error is: " + error);
       }
 
       return responseGeoJson;
     }
     catch(err) {
-        console.log("Error during execution of customizedIndicatorComputation with error: " + err);
+        KmHelper.logError("Error during execution of customizedIndicatorComputation with error: " + err);
         throw err;
     }
 }

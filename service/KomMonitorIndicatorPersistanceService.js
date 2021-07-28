@@ -6,6 +6,8 @@
  const targetDateHelper = require("./TargetDateHelperService");
  const keycloakHelper = require("./KeycloakHelperService");
 
+ const KmHelper = require("../resources/KmHelper");
+
  const indicator_date_prefix = "DATE_";
 
  function buildPutRequestBody(targetDates, targetSpatialUnitId, indicatorGeoJson){
@@ -43,7 +45,7 @@
 // }
   
   var indicatorFeatures = indicatorGeoJson.features;
-  console.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
+  KmHelper.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
   var putRequestBody = {};
   putRequestBody.applicableSpatialUnit = targetSpatialUnitId;
   putRequestBody.indicatorValues = new Array();
@@ -64,7 +66,7 @@
         }
   
         if(indicatorFeature.properties[targetDateWithPrefix] == undefined || Number.isNaN(indicatorFeature.properties[targetDateWithPrefix])){
-          console.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties[process.env.FEATURE_NAME_PROPERTY_NAME]);
+          KmHelper.log("Input contains NaN or UNDEFINED values as indicator value. Will set its value to 'null' for NoData. The feature has featureName: " + indicatorFeature.properties[process.env.FEATURE_NAME_PROPERTY_NAME]);
           indicatorFeature.properties[targetDateWithPrefix] = null;
         }
       
@@ -78,7 +80,7 @@
     putRequestBody.indicatorValues.push(indicatorValueObject);
   }
 
-  console.log("Number of produced PUT request body features: " + putRequestBody.indicatorValues.length);
+  KmHelper.log("Number of produced PUT request body features: " + putRequestBody.indicatorValues.length);
 
   return putRequestBody;
  }
@@ -153,7 +155,7 @@ function chunkArray(array, chunk_size){
 async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
   var targetSpatialUnitId = targetSpatialUnitMetadata.spatialUnitId;
   var targetSpatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
-  console.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetSpatialUnitId " + targetSpatialUnitId + " and targetDates " + targetDates );
+  KmHelper.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetSpatialUnitId " + targetSpatialUnitId + " and targetDates " + targetDates );
 
   var putRequestBody = buildPutRequestBody(targetDates, targetSpatialUnitName, indicatorGeoJson);
 
@@ -168,7 +170,7 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
         config)
     .then(response => {
       // response.data should be the respective GeoJSON as String
-      console.log("Received response code " + response.status);
+      KmHelper.log("Received response code " + response.status);
       if (response.status == 200){
         var resultObject = {};
         resultObject.indicatorId = targetIndicatorId;
@@ -185,7 +187,7 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
         throw Error("Error when persisting indicator. Response code " + response.status + ". Status text: " + response.statusText);
     })
     .catch(error => {
-      console.log("Error when PUTing indicator. Error was: " + error);
+      KmHelper.logError("Error when PUTing indicator. Error was: " + error);
       throw error;
     });
 }
@@ -203,7 +205,7 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
  * returns array of URLs pointing to created resources
  **/
 exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, indicatorSpatialUnitsMap) {
-  console.log("Sending PUT requests to persist indicators within KomMonitor data management API");
+  KmHelper.log("Sending PUT requests to persist indicators within KomMonitor data management API");
 
   var responseArray = new Array();
 

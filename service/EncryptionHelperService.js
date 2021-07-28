@@ -2,6 +2,8 @@
 
 const CryptoJS = require("crypto-js");
 
+const KmHelper = require("../resources/KmHelper");
+
 var isBase64 = function (str) {
   var notBase64 = /[^A-Z0-9+\/=]/i;
   const isString = (typeof str === 'string' || str instanceof String);
@@ -83,7 +85,7 @@ exports.decryptAPIResponseIfRequired = function (response) {
 
       return response;
     } catch (error) {
-      console.error(error);
+      KmHelper.logError(error);
       return response;
     }
   }

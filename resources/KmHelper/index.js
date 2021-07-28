@@ -50,6 +50,9 @@ const jStat = require('jStat').jStat;
 const axios = require("axios");
 
 
+const ProgressHelperService = require("../../service/ProgressHelperService");
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // CONSTANTS DEFINITION                                                                                                                                     //
@@ -125,7 +128,7 @@ const maxLocationsForORSRequest = 200;
 exports.getBaseIndicatorByName = function (indicatorName, baseIndicatorsMap){
   var baseIndicatorCandidate = baseIndicatorsMap.get(indicatorName);
   if(baseIndicatorCandidate === null || baseIndicatorCandidate === undefined){
-    console.log("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
+    exports.log("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
     exports.throwError("Tried to aquire a baseIndicator with name '" + indicatorName + "', but the baseIndicatorsMap does not contain such an entry");
   }
   return baseIndicatorCandidate;
@@ -143,7 +146,7 @@ exports.getBaseIndicatorByName = function (indicatorName, baseIndicatorsMap){
 exports.getBaseIndicatorById = function (indicatorId, baseIndicatorsMap){
   var baseIndicatorCandidate = baseIndicatorsMap.get(indicatorId);
   if(baseIndicatorCandidate === null || baseIndicatorCandidate === undefined){
-    console.log("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
+    exports.log("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
     exports.throwError("Tried to aquire a baseIndicator with name '" + indicatorId + "', but the baseIndicatorsMap does not contain such an entry");
   }
   return baseIndicatorCandidate;
@@ -161,7 +164,7 @@ exports.getBaseIndicatorById = function (indicatorId, baseIndicatorsMap){
 exports.getGeoresourceByName = function (georesourceName, georesourcesMap){
   var georesourceCandidate = georesourcesMap.get(georesourceName);
   if(georesourceCandidate === null || georesourceCandidate === undefined){
-    console.log("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
+    exports.log("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
     exports.throwError("Tried to aquire a georesource with name '" + georesourceName + "', but the georesourcesMap does not contain such an entry");
   }
   return georesourceCandidate;
@@ -179,7 +182,7 @@ exports.getGeoresourceByName = function (georesourceName, georesourcesMap){
 exports.getGeoresourceById = function (georesourceId, georesourcesMap){
   var georesourceCandidate = georesourcesMap.get(georesourceId);
   if(georesourceCandidate === null || georesourceCandidate === undefined){
-    console.log("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
+    exports.log("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
     exports.throwError("Tried to aquire a georesource with id '" + georesourceId + "', but the georesourcesMap does not contain such an entry");
   }
   return georesourceCandidate;
@@ -316,6 +319,22 @@ exports.getSpatialUnitFeatureNameValue = function (feature){
 */
 exports.log = function (logMessage){
   console.log(logMessage);
+
+  ProgressHelperService.addInfoLog_customComputation(logMessage);
+  ProgressHelperService.addInfoLog_defaultComputation(logMessage);
+};
+
+/**
+* Logs a custom error message (i.e. to console).
+* @param {string} logMessage - message that shall be logged.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.logError = function (logMessage){
+  console.error(logMessage);
+
+  ProgressHelperService.addErrorLog_customComputation(logMessage);
+  ProgressHelperService.addErrorLog_defaultComputation(logMessage);
 };
 
 /**
@@ -568,12 +587,12 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
       resultArray.push(indicatorValue);
     }
     else{
-      console.log("A feature did not contain an indicator value for the targetDate " + targetDate + ". Feature was: " + feature);
+      exports.log("A feature did not contain an indicator value for the targetDate " + targetDate + ". Feature was: " + feature);
     }
   }
 
   if(! (resultArray.length > 0)){
-    console.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
+    exports.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
     return null;
   }
 
@@ -607,12 +626,12 @@ exports.getIndicatorIdValueMap = function (featureCollection, targetDate){
       resultMap.set(featureId, indicatorValue);
     }
     else{
-      console.log("A feature did not contain an indicator value for the targetDate " + targetDate + ". Feature was: " + feature);
+      exports.log("A feature did not contain an indicator value for the targetDate " + targetDate + ". Feature was: " + feature);
     }
   }
 
   if(! (resultMap.size > 0)){
-    console.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
+    exports.log("No feature of the featureCollection contains an indicator value for the specified targetDate " + targetDate + ". Thus return null.");
     return null;
   }
 
@@ -635,7 +654,7 @@ exports.getIndicatorValueArray_fromIdValueMap = function (indicatorIdValueMap){
       resultArray.push(value);
     }
     else{
-      console.log("A feature from indicator id value map did not contain an indicator value. Feature has ID: " + key);
+      exports.log("A feature from indicator id value map did not contain an indicator value. Feature has ID: " + key);
     }    
   });
 
@@ -661,12 +680,12 @@ exports.getPropertyValueArray = function (featureCollection, propertyName){
       resultArray.push(propertyValue);
     }
     else{
-      console.log("A feature did not contain a property value for the propertyName " + propertyName + ". Feature was: " + feature);
+      exports.log("A feature did not contain a property value for the propertyName " + propertyName + ". Feature was: " + feature);
     }
   }
 
   if(! (resultArray.length > 0)){
-    console.log("No feature of the featureCollection contains a property value for the specified propertyName " + propertyName + ". Thus return null.");
+    exports.log("No feature of the featureCollection contains a property value for the specified propertyName " + propertyName + ". Thus return null.");
     return null;
   }
 
@@ -685,8 +704,8 @@ exports.getPropertyValueArray = function (featureCollection, propertyName){
 exports.setIndicatorValue = function (feature, targetDate, value){
 
   if (typeof value != 'number'){
-    console.log("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
-    console.log("Affected has ID : " + exports.getSpatialUnitFeatureIdValue(feature) + " and NAME : " + exports.getSpatialUnitFeatureNameValue(feature));
+    exports.log("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
+    exports.log("Affected has ID : " + exports.getSpatialUnitFeatureIdValue(feature) + " and NAME : " + exports.getSpatialUnitFeatureNameValue(feature));
     // exports.throwError("The submitted value is not a valid number. Indicator values must be numeric though. The submitted value was: " + value);
     return exports.setIndicatorValue_asNoData(feature, targetDate);
   }
@@ -1193,7 +1212,7 @@ exports.distance_waypath_kilometers = async function (point_A, point_B, vehicleT
 
   var ors_route_GET_request = openrouteservice_url + "/routes?" + "profile=" + vehicleString + "&coordinates=" + coordinatesString + constantParameterString;
 
-  console.log("Query OpenRouteService with following routing request: " + ors_route_GET_request);
+  exports.log("Query OpenRouteService with following routing request: " + ors_route_GET_request);
 
   var routingResult = await executeOrsQuery(ors_route_GET_request);
 
@@ -1348,7 +1367,7 @@ exports.distance_matrix_kilometers = async function (locations, sourceIndices, d
     "optimized": true
   };
 
-  console.log("Query OpenRouteService matix endpoint ('" + openrouteservice_url + "/matrix" + "') with following matrix POST request: " + matrixPostBody);
+  exports.log("Query OpenRouteService matix endpoint ('" + openrouteservice_url + "/matrix" + "') with following matrix POST request: " + matrixPostBody);
 
   var matrix = await axios.post(openrouteservice_url + "/matrix", matrixPostBody)
     .then(response => {
@@ -1356,7 +1375,7 @@ exports.distance_matrix_kilometers = async function (locations, sourceIndices, d
       return response.data;
     })
     .catch(error => {
-      console.log("Error while executing OpenRouteService POST request. Error was: " + error);
+      exports.log("Error while executing OpenRouteService POST request. Error was: " + error);
       throw error;
     });
 
@@ -1489,7 +1508,7 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
     "optimized": true
   };
 
-  console.log("Query OpenRouteService matix endpoint ('" + openrouteservice_url + "/matrix" + "') with following matrix POST request: " + matrixPostBody);
+  exports.log("Query OpenRouteService matix endpoint ('" + openrouteservice_url + "/matrix" + "') with following matrix POST request: " + matrixPostBody);
 
   var matrix = await axios.post(openrouteservice_url + "/matrix", matrixPostBody)
     .then(response => {
@@ -1497,7 +1516,7 @@ exports.duration_matrix_seconds = async function (locations, sourceIndices, dest
       return response.data;
     })
     .catch(error => {
-      console.log("Error while executing OpenRouteService POST request. Error was: " + error);
+      exports.log("Error while executing OpenRouteService POST request. Error was: " + error);
       throw error;
     });
 
@@ -1645,7 +1664,7 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
   }
 
   if (! deactivateLog){
-      console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+      exports.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
   }
 
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
@@ -1653,7 +1672,7 @@ var computeIsochrones_byTime = async function (startingPoints, vehicleType, trav
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1 && dissolve){
   if(! deactivateLog){
-  console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+  exports.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
   }
   isochronesResult = exports.dissolve(isochronesResult, "value");
   }
@@ -1792,7 +1811,7 @@ var computeIsochrones_byDistance = async function (startingPoints, vehicleType, 
             }
 
   if (! deactivateLog){
-      console.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
+      exports.log("Query OpenRouteService with following isochrones request: " + ors_isochrones_GET_request);
   }
 
   var isochronesResult = await executeOrsQuery(ors_isochrones_GET_request);
@@ -1800,7 +1819,7 @@ var computeIsochrones_byDistance = async function (startingPoints, vehicleType, 
   // dissolve isochrones if multiple starting points were used
   if (startingPoints.length > 1  && dissolve){
     if (! deactivateLog){
-        console.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
+        exports.log("Dissolving isochrones from multiple starting points. Set property 'value' to group equal isochrones.");
     }
 
     isochronesResult = exports.dissolve(isochronesResult, "value");
@@ -1816,7 +1835,7 @@ function executeOrsQuery(ors_route_GET_request){
       return response.data;
     })
     .catch(error => {
-      console.log("Error while executing OpenRouteService GET request. Error was: " + error);
+      exports.log("Error while executing OpenRouteService GET request. Error was: " + error);
       throw error;
     });
 };
@@ -2128,7 +2147,7 @@ exports.hasMultiPolygon = function (featureCollection_geoJSON){
 exports.transformMultiPolygonsToPolygons = function (featureCollection_geoJSON){
 
   while(exports.hasMultiPolygon(featureCollection_geoJSON)){
-    console.log("Replace MultiPolygon features by Polygons");
+    exports.log("Replace MultiPolygon features by Polygons");
     featureCollection_geoJSON = exports.replaceMultiPolygonsByPolygons(featureCollection_geoJSON);
   }
 

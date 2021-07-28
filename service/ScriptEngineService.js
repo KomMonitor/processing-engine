@@ -6,6 +6,8 @@
 
   var FileCleaner = require('cron-file-cleaner').FileCleaner;
 
+  const KmHelper = require("../resources/KmHelper");
+
   const tmpDir = './tmp/';
 
   if (fs.existsSync(tmpDir)) {
@@ -51,33 +53,39 @@
   });
 
   customizedComputationQueue.on('succeeded', (job, result) => {
-    console.log(`Job ${job.id} succeeded.`);
+    KmHelper.log(`Job ${job.id} succeeded.`);
   });
 
   customizedComputationQueue.on('retrying', (job, err) => {
-    console.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
+    KmHelper.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
   });
 
   customizedComputationQueue.on('failed', (job, err) => {
-    console.log(`Job ${job.id} failed with error ${err.message}`);
+    KmHelper.log(`Job ${job.id} failed with error ${err.message}`);
   });
 
   defaultComputationQueue.on('succeeded', (job, result) => {
-    console.log(`Job ${job.id} succeeded.`);
+    KmHelper.log(`Job ${job.id} succeeded.`);
   });
 
   defaultComputationQueue.on('retrying', (job, err) => {
-    console.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
+    KmHelper.log(`Job ${job.id} failed with error ${err.message} but is being retried!`);
   });
 
   defaultComputationQueue.on('failed', (job, err) => {
-    console.log(`Job ${job.id} failed with error ${err.message}`);
+    KmHelper.log(`Job ${job.id} failed with error ${err.message}`);
   });
 
   // register process function to execute defaultIndicatorComputation jobs
   // this code will be executed when such a job is started
   defaultComputationQueue.process(async (job) => {
-    console.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
+
+    
+
+
+
+    
+    KmHelper.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
 
     return new Promise(async function(resolve, reject) {
       try{
@@ -91,39 +99,39 @@
         var defaultProcessProperties = job.data.defaultProcessProperties;
         var useAggregationForHigherSpatialUnits = job.data.useAggregationForHigherSpatialUnits;
 
-        console.log(`Submitted job data scriptId: ` + scriptId);
-        console.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
-        console.log(`Submitted job data targetDates array: ` + targetDates);
-        console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
-        console.log(`Submitted job data georesourceIds: ` + georesourceIds);
-        console.log(`Number of submitted job data defaultProcessProperties: ` + defaultProcessProperties.length);
-        console.log(`Submitted job data useAggregationForHigherSpatialUnits: ` + useAggregationForHigherSpatialUnits);
+        KmHelper.log(`Submitted job data scriptId: ` + scriptId);
+        KmHelper.log(`Submitted job data targetIndicatorId: ` + targetIndicatorId);
+        KmHelper.log(`Submitted job data targetDates array: ` + targetDates);
+        KmHelper.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
+        KmHelper.log(`Submitted job data georesourceIds: ` + georesourceIds);
+        KmHelper.log(`Number of submitted job data defaultProcessProperties: ` + defaultProcessProperties.length);
+        KmHelper.log(`Submitted job data useAggregationForHigherSpatialUnits: ` + useAggregationForHigherSpatialUnits);
 
         defaultProcessProperties.forEach(function(property) {
-          console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
+          KmHelper.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and default value '" + property.value + "'");
         });
 
         // job.data.progress = 5;
         progressHelper.persistProgress(job.id, "defaultComputation", 5);
-        console.log("Successfully parsed request input parameters");
+        KmHelper.log("Successfully parsed request input parameters");
 
-        console.log("Start indicator computation to persit the results within KomMonitor data management service.");
+        KmHelper.log("Start indicator computation to persit the results within KomMonitor data management service.");
         var resultArray = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties, useAggregationForHigherSpatialUnits);
 
-        console.log("attaching result to job");
+        KmHelper.log("attaching result to job");
         job.data.result = resultArray;
 
-        console.log("saving job, which was enriched with resulting URLs: " + job.data.result);
+        KmHelper.log("saving job, which was enriched with resulting URLs: " + job.data.result);
         // job.data.progress = 100;
         progressHelper.persistProgress(job.id, "defaultComputation", 100);
 
-        console.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
+        KmHelper.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
 
         resolve(resultArray);
       }
       catch(error){
-        console.error("Error while executing defaultIndicatorComputation. " + error);
-        console.error(error.stack);
+        KmHelper.logError("Error while executing defaultIndicatorComputation. " + error);
+        KmHelper.logError(error.stack);
         job.data.error = error.message;
         reject(error);
       }
@@ -135,7 +143,7 @@
   // register process function to execute customizableIndicatorComputation jobs
   // this code will be executed when such a job is started
   customizedComputationQueue.process(async (job) => {
-    console.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
+    KmHelper.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
 
     // throw Error("Error");
 
@@ -180,31 +188,31 @@
         var targetSpatialUnitId = job.data.targetSpatialUnitId;
         var customProcessProperties = job.data.customProcessProperties;
 
-        console.log(`Submitted job data scriptId: ` + scriptId);
-        console.log(`Submitted job data targetDate: ` + targetDate);
-        console.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
-        console.log(`Submitted job data georesourceIds: ` + georesourceIds);
-        console.log(`Submitted job data targetSpatialUnitId: ` + targetSpatialUnitId);
-        console.log(`Number of submitted job data customProcessProperties: ` + customProcessProperties.length);
+        KmHelper.log(`Submitted job data scriptId: ` + scriptId);
+        KmHelper.log(`Submitted job data targetDate: ` + targetDate);
+        KmHelper.log(`Submitted job data baseIndicatorIds: ` + baseIndicatorIds);
+        KmHelper.log(`Submitted job data georesourceIds: ` + georesourceIds);
+        KmHelper.log(`Submitted job data targetSpatialUnitId: ` + targetSpatialUnitId);
+        KmHelper.log(`Number of submitted job data customProcessProperties: ` + customProcessProperties.length);
 
         customProcessProperties.forEach(function(property) {
-          console.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and value '" + property.value + "'");
+          KmHelper.log("Submitted process property with name '" + property.name + "', dataType '" + property.dataType + "' and value '" + property.value + "'");
         });
 
         // job.data.progress = 5;
         progressHelper.persistProgress(job.id, "customizedComputation", 5);
-        console.log("Successfully parsed request input parameters.");
-        console.log("Start indicator computation.");
+        KmHelper.log("Successfully parsed request input parameters.");
+        KmHelper.log("Start indicator computation.");
 
         var geoJSON = await ScriptExecutionHelper.executeCustomizedComputation(job, scriptId, targetDate, baseIndicatorIds, georesourceIds, targetSpatialUnitId, customProcessProperties);
 
         // TODO maybe it is better to store responseGeoJson on disk and only save the path to that resource within job.data.result
-        console.log("encode result as Base64 String and attach it to job");
+        KmHelper.log("encode result as Base64 String and attach it to job");
         let buff = new Buffer(JSON.stringify(geoJSON));
         let base64data = buff.toString('base64');
 
         var tmpFilePath = "./tmp/tmpGeoJSON_jobid_" + job.id + ".geojson";
-        console.log("save GeoJSON to tmp file for later retrieval: " + tmpFilePath);
+        KmHelper.log("save GeoJSON to tmp file for later retrieval: " + tmpFilePath);
         fs.writeFileSync(tmpFilePath, base64data);
 
         job.data.result = tmpFilePath;
@@ -212,12 +220,12 @@
         // job.data.progress = 100;
         progressHelper.persistProgress(job.id, "customizedComputation", 100);
 
-        console.log(`Job execution successful. CustomizableIndicatorComputation job with ID ` + job.id + ` finished`);
+        KmHelper.log(`Job execution successful. CustomizableIndicatorComputation job with ID ` + job.id + ` finished`);
         resolve(job.data.result);
       }
       catch(error){
-        console.error("Error while executing customizedIndicatorComputation. " + error);
-        console.error(error.stack);
+        KmHelper.logError("Error while executing customizedIndicatorComputation. " + error);
+        KmHelper.logError(error.stack);
         job.data.error = error.message;
         reject(error);
       }
@@ -233,13 +241,13 @@
  * returns List
  **/
 exports.getCustomizableIndicatorComputation = function(jobId) {
-  console.log("getCustomizableIndicatorComputation was called for jobId " + jobId);
+  KmHelper.log("getCustomizableIndicatorComputation was called for jobId " + jobId);
 
   return new Promise(function(resolve, reject) {
 
     customizedComputationQueue.getJob(jobId)
       .then((job) => {
-        console.log(`Job has status ${job.status}`);
+        KmHelper.log(`Job has status ${job.status}`);
 
         // response model
         //
@@ -267,15 +275,15 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.jobData.result = undefined;
 
 
-        console.log("returning response object for job with id " + job.id + ". It has status " + job.status + "");
-        // console.log(response);
+        KmHelper.log("returning response object for job with id " + job.id + ". It has status " + job.status + "");
+        // KmHelper.log(response);
 
         resolve(response);
       })
       .catch((error) => {
 
-        console.error("Job not found. Will respond with error object");
-        console.error(error.stack);
+        KmHelper.logError("Job not found. Will respond with error object");
+        KmHelper.logError(error.stack);
 
         var response = {};
         response.jobId = jobId;
@@ -285,8 +293,8 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";
         swaggerJob.jobData = undefined;
 
-        console.log("returning following response object for job with id " + jobId);
-        console.log(response);
+        KmHelper.log("returning following response object for job with id " + jobId);
+        KmHelper.log(response);
 
         reject(response);
       });
@@ -366,8 +374,8 @@ var toSwaggerJobOverviewArray_customized  = function(beeQueueJobs){
     try {
       swaggerJob.progress = progressHelper.readProgress(beeQueueJob.id, "customizedComputation"); 
     } catch (error) {
-      console.error("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
-      console.error("Error was: " + error);
+      KmHelper.logError("Error while fetching progress for customized computation job with id " + beeQueueJob.id);
+      KmHelper.logError("Error was: " + error);
     }
     swaggerJob.error = beeQueueJob.data.error;
     swaggerJob.jobData = beeQueueJob.data;
@@ -388,8 +396,8 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
     try {
       swaggerJob.progress = progressHelper.readProgress(beeQueueJob.id, "defaultComputation"); 
     } catch (error) {
-      console.error("Error while fetching progress for default computation job with id " + beeQueueJob.id);
-      console.error("Error was: " + error);
+      KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
+      KmHelper.logError("Error was: " + error);
     }
     swaggerJob.error = beeQueueJob.data.error;
     swaggerJob.jobData = beeQueueJob.data;
@@ -411,13 +419,13 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
  **/
 exports.getDefaultIndicatorComputation = function(jobId) {
 
-  console.log("getDefaultIndicatorComputation was called for jobId " + jobId);
+  KmHelper.log("getDefaultIndicatorComputation was called for jobId " + jobId);
 
   return new Promise(function(resolve, reject) {
 
     defaultComputationQueue.getJob(jobId)
       .then((job) => {
-        console.log(`Job has status ${job.status}`);
+        KmHelper.log(`Job has status ${job.status}`);
 
         // response model
         //
@@ -439,15 +447,15 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.jobData.error = undefined;
         response.jobData.result = undefined;
 
-        console.log("returning following response object for job with id ${job.id}");
-        console.log(response);
+        KmHelper.log("returning following response object for job with id ${job.id}");
+        KmHelper.log(response);
 
         resolve(response);
       })
       .catch((error) => {
 
-        console.error("Job not found. Will respond with error object");
-        console.error(error.stack);
+        KmHelper.logError("Job not found. Will respond with error object");
+        KmHelper.logError(error.stack);
 
         var response = {};
         response.jobId = jobId;
@@ -456,8 +464,8 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         response.result_urls = undefined;
         response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";        
 
-        console.log("returning following response object for job with id " + jobId);
-        console.log(response);
+        KmHelper.log("returning following response object for job with id " + jobId);
+        KmHelper.log(response);
 
         reject(response);
       });
@@ -504,7 +512,7 @@ exports.getDefaultIndicatorComputationJobOverview = async function() {
  * no response value expected for this operation
  **/
 exports.postCustomizableIndicatorComputation = function(scriptInput) {
-  console.log("postCustomizableIndicatorComputation was called");
+  KmHelper.log("postCustomizableIndicatorComputation was called");
 
   // use bee-queue to create a new queue and new job to execute the script
   return new Promise(function(resolve, reject) {
@@ -512,11 +520,11 @@ exports.postCustomizableIndicatorComputation = function(scriptInput) {
 
     job.save()
       .then((job) => {
-        console.log("Created new job to execute customizableIndicatorComputation with jobId " + job.id);
+        KmHelper.log("Created new job to execute customizableIndicatorComputation with jobId " + job.id);
         resolve(job.id);
       })
       .catch((error) => {
-        console.error("Error while creating customizableIndicatorComputation job.");
+        KmHelper.logError("Error while creating customizableIndicatorComputation job.");
         reject(error);
       });
   });
@@ -532,7 +540,7 @@ exports.postCustomizableIndicatorComputation = function(scriptInput) {
  **/
 exports.postDefaultIndicatorComputation = function(scriptInput) {
 
-  console.log("postDefaultIndicatorComputation was called");
+  KmHelper.log("postDefaultIndicatorComputation was called");
 
   // use bee-queue to create a new queue and new job to execute the script
   return new Promise(function(resolve, reject) {
@@ -540,11 +548,11 @@ exports.postDefaultIndicatorComputation = function(scriptInput) {
 
     job.save()
       .then((job) => {
-        console.log("Created new job to execute defaultIndicatorComputation with jobId " + job.id);
+        KmHelper.log("Created new job to execute defaultIndicatorComputation with jobId " + job.id);
         resolve(job.id);
       })
       .catch((error) => {
-        console.error("Error while creating defaultIndicatorComputation job.");
+        KmHelper.logError("Error while creating defaultIndicatorComputation job.");
         reject(error);
       });
   });
