@@ -28,15 +28,14 @@
     "crypto-js": "^4.0.0",
     "docdash": "^1.1.0",
     "dotenv": "^6.0.0",
-    "express": "^4.16.4",
     "jStat": "^1.7.1",
     "js-yaml": "^3.3.0",
     "keycloak-js": "10.0.1",
     "kmhelper": "file:resources/KmHelper",
     "nodemailer": "^6.6.0",
+    "oas3-tools": "^2.2.3",
     "querystring": "^0.2.0",
-    "serve-static": "^1.13.2",
-    "swagger-tools": "^0.10.4"
+    "serve-static": "^1.13.2"
   },
   "devDependencies": {
     "@release-it/keep-a-changelog": "^2.2.2",
