@@ -20,6 +20,7 @@ var path = require('path');
 var http = require('http');
 var oas3Tools = require('oas3-tools');
 
+var express = require('express');
 var cors = require('cors');
 var serveStatic = require('serve-static');
 
@@ -35,7 +36,11 @@ var options = {
 };
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
-var app = expressAppConfig.getApp();
+
+var openApiApp = expressAppConfig.getApp();
+
+
+const app = express();
 
 app.use(bodyParser.json({limit:'50mb'}));
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
@@ -45,9 +50,18 @@ const corsOptions = {
   exposedHeaders: ['Access-Control-Allow-Origin','Location','Connection','Content-Type','Date','Transfer-Encoding','Origin','X-Requested-With', 'Accept'],
   origin: "*"
 };
-app.use(cors(corsOptions));
+
 // app.use(cors());
 app.use(serveStatic("docs"));
+
+// Add headers
+app.use(/.*/, cors(corsOptions));
+
+for (let i = 2; i < openApiApp._router.stack.length; i++) {
+    app._router.stack.push(openApiApp._router.stack[i])
+}
+
+
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {
