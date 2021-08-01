@@ -302,6 +302,34 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
 };
 
 /**
+ * retrieve health information about existing customizable indicator computation jobs and their processing queue.
+ * retrieve health information about existing customizable indicator computation jobs and their processing queue
+ *
+ * returns HealthType
+ **/
+ exports.getCustomizableIndicatorComputationHealth = async function() {
+  console.log("Called health endpoint for custom jobs.");
+
+  let status = customizedComputationQueue.isRunning();
+
+  let queueJobNumbers = await customizedComputationQueue.checkHealth();
+
+  console.log("Called health endpoint for custom job queue. Result is: \n" + JSON.stringify(queueJobNumbers));
+
+  let health = {
+    "queueStatus": status ? "READY" : "NOT READY",
+    "newestJobId": queueJobNumbers.newestJob,
+    "waitingJobs": queueJobNumbers.waiting,
+    "activeJobs": queueJobNumbers.active,
+    "delayedJobs": queueJobNumbers.delayed,
+    "succeededJobs": queueJobNumbers.succeeded,
+    "failedJobs": queueJobNumbers.failed
+  };
+
+  return health;
+};
+
+/**
  * retrieve status information about existing customizable indicator computation jobs.
  * retrieve status information about existing customizable indicator computation jobs.
  *
@@ -330,6 +358,34 @@ exports.getCustomizableIndicatorComputationJobOverview = async function() {
     var jobOverviewArray = toSwaggerJobOverviewArray_customized(allJobs);
 
     return jobOverviewArray;
+};
+
+/**
+ * retrieve health information about existing default indicator computation jobs and their processing queue.
+ * retrieve health information about existing default indicator computation jobs and their processing queue
+ *
+ * returns HealthType
+ **/
+ exports.getDefaultIndicatorComputationHealth = async function() {
+  console.log("Called health endpoint for default jobs.");
+
+  let status = defaultComputationQueue.isRunning();
+
+  let queueJobNumbers = await defaultComputationQueue.checkHealth();
+
+  console.log("Called health endpoint for default job queue. Result is: \n" + JSON.stringify(queueJobNumbers));
+
+  let health = {
+    "queueStatus": status ? "READY" : "NOT READY",
+    "newestJobId": queueJobNumbers.newestJob,
+    "waitingJobs": queueJobNumbers.waiting,
+    "activeJobs": queueJobNumbers.active,
+    "delayedJobs": queueJobNumbers.delayed,
+    "succeededJobs": queueJobNumbers.succeeded,
+    "failedJobs": queueJobNumbers.failed
+  };
+
+  return health;
 };
 
 /**

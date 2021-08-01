@@ -13,6 +13,16 @@ module.exports.getCustomizableIndicatorComputation = function getCustomizableInd
     });
 };
 
+module.exports.getCustomizableIndicatorComputationHealth = function getCustomizableIndicatorComputationHealth (req, res, next) {
+  ScriptEngine.getCustomizableIndicatorComputationHealth()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.getCustomizableIndicatorComputationJobOverview = function getCustomizableIndicatorComputationJobOverview (req, res, next) {
   ScriptEngine.getCustomizableIndicatorComputationJobOverview()
     .then(function (response) {
@@ -25,6 +35,16 @@ module.exports.getCustomizableIndicatorComputationJobOverview = function getCust
 
 module.exports.getDefaultIndicatorComputation = function getDefaultIndicatorComputation (req, res, next, jobId) {
   ScriptEngine.getDefaultIndicatorComputation(jobId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.getDefaultIndicatorComputationHealth = function getDefaultIndicatorComputationHealth (req, res, next) {
+  ScriptEngine.getDefaultIndicatorComputationHealth()
     .then(function (response) {
       utils.writeJson(res, response);
     })

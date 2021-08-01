@@ -110,6 +110,21 @@ paths:
           content: {}
       x-swagger-router-controller: ScriptEngine
       x-codegen-request-body-name: script-input
+  /script-engine/customizableIndicatorComputation/health:
+    get:
+      tags:
+      - script-engine
+      summary: retrieve health information about existing customizable indicator computation jobs and their processing queue.
+      description: retrieve health information about existing customizable indicator computation jobs and their processing queue
+      operationId: getCustomizableIndicatorComputationHealth
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthType'
+      x-swagger-router-controller: ScriptEngine
   /script-engine/customizableIndicatorComputation/{jobId}:
     get:
       tags:
@@ -197,6 +212,21 @@ paths:
           content: {}
       x-swagger-router-controller: ScriptEngine
       x-codegen-request-body-name: script-input
+  /script-engine/defaultIndicatorComputation/health:
+    get:
+      tags:
+      - script-engine
+      summary: retrieve health information about existing default indicator computation jobs and their processing queue.
+      description: retrieve health information about existing default indicator computation jobs and their processing queue
+      operationId: getDefaultIndicatorComputationHealth
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthType'
+      x-swagger-router-controller: ScriptEngine
   /script-engine/defaultIndicatorComputation/{jobId}:
     get:
       tags:
@@ -562,6 +592,38 @@ components:
         subject: subject
         body: body
         recipientMail: recipientMail
+    HealthType:
+      type: object
+      properties:
+        queueStatus:
+          type: string
+          description: general status of processing queue (is it ready to accept jobs)
+          enum:
+            - "READY"
+            - "NOT READY"
+        newestJobId:
+          type: string
+          description: newest job id
+        waitingJobs: 
+          type: number
+          format: int32
+          description: number of jobs within status waiting
+        activeJobs: 
+          type: number
+          format: int32
+          description: number of jobs within status active
+        delayedJobs: 
+          type: number
+          format: int32
+          description: number of jobs within status delayed
+        succeededJobs: 
+          type: number
+          format: int32
+          description: number of jobs within status succeeded
+        failedJobs: 
+          type: number
+          format: int32
+          description: number of jobs within status failed
   responses:
     UnauthorizedError:
       description: API key is missing or invalid
