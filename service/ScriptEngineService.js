@@ -114,10 +114,10 @@
         KmHelper.log("Successfully parsed request input parameters");
 
         KmHelper.log("Start indicator computation to persit the results within KomMonitor data management service.");
-        var resultArray = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties, useAggregationForHigherSpatialUnits);
+        var resultUrl = await ScriptExecutionHelper.executeDefaultComputation(job, scriptId, targetIndicatorId, targetDates, baseIndicatorIds, georesourceIds, defaultProcessProperties, useAggregationForHigherSpatialUnits);
 
         KmHelper.log("attaching result to job");
-        job.data.result = resultArray;
+        job.data.result = resultUrl;
 
         KmHelper.log("saving job, which was enriched with resulting URLs: " + job.data.result);
         // job.data.progress = 100;
@@ -125,7 +125,7 @@
 
         KmHelper.log(`Job execution successful. DefaultIndicatorComputation job with ID ${job.id} finished`);
 
-        resolve(resultArray);
+        resolve(resultUrl);
       }
       catch(error){
         KmHelper.logError("Error while executing defaultIndicatorComputation. " + error);

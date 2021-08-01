@@ -192,9 +192,9 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
 
     // after computing the indicator for every spatial unit
     // send PUT requests against KomMonitor data management API to persist results permanently
-    var resultArray;
+    var resultUrl;
     try{
-      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+      resultUrl = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
 
     }
     catch(error){
@@ -204,7 +204,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
 
     progressHelper.persistJobProgress(job.id, "defaultComputation", 90);
 
-    return resultArray;
+    return resultUrl;
   }
   catch(err) {
       KmHelper.logError("Error during execution of defaultIndicatorComputation with error: " + err);
@@ -278,9 +278,9 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
 
     // after computing the indicator for every spatial unit
     // send PUT requests against KomMonitor data management API to persist results permanently
-    var resultArray;
+    var resultUrl;
     try{
-      resultArray = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+      resultUrl = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
 
     }
     catch(error){
@@ -290,7 +290,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
 
     progressHelper.persistJobProgress(job.id, "defaultComputation", 90);
 
-    return resultArray;
+    return resultUrl;
   }
   catch(err) {
       KmHelper.logError("Error during execution of defaultIndicatorComputation with error: " + err);

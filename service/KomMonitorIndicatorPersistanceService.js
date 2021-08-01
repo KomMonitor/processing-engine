@@ -126,7 +126,7 @@ exports.putIndicatorById = async function(baseUrlPath, targetIndicatorId, target
       }
       else{
         var tmpResultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
-        resultObject.targetDates = targetDates; 
+        // resultObject.targetDates = targetDates; 
       }
     }
     return resultObject;
@@ -175,12 +175,12 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
       KmHelper.log("Received response code " + response.status);
       if (response.status == 200){
         var resultObject = {};
-        resultObject.indicatorId = targetIndicatorId;
-        resultObject.indicatorName = targetIndicatorName;
-        resultObject.spatialUnitId = targetSpatialUnitId;
-        resultObject.spatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
-        resultObject.targetDates = targetDates;
-        resultObject.urlToPersistedResource = baseUrlPath + "/indicators/" + targetIndicatorId + "/" + targetSpatialUnitId;
+        // resultObject.indicatorId = targetIndicatorId;
+        // resultObject.indicatorName = targetIndicatorName;
+        // resultObject.spatialUnitId = targetSpatialUnitId;
+        // resultObject.spatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
+        // resultObject.targetDates = targetDates;
+        resultObject = baseUrlPath + "/indicators/" + targetIndicatorId + "/" + targetSpatialUnitId;
 
         return resultObject;
       }
@@ -209,15 +209,14 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
 exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, indicatorSpatialUnitsMap) {
   KmHelper.log("Sending PUT requests to persist indicators within KomMonitor data management API");
 
-  var responseArray = new Array();
+  var resultUrl = "";
 
   // var iterator = indicatorSpatialUnitsMap[Symbol.iterator]();
 
   // for (let indicatorSpatialUnitsEntry of iterator) {
   for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
     try{
-      var resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
-      responseArray.push(resultUrl);
+      resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
 
       progressHelper.addSuccessfulSpatialUnitIntegration(targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
     }
@@ -227,5 +226,5 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
     }
   }
 
-  return responseArray;
+  return resultUrl;
 }
