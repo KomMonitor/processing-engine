@@ -522,6 +522,10 @@ components:
             $ref: '#/components/schemas/LogType'
         jobData:
           $ref: '#/components/schemas/DefaultIndicatorComputationInputType'
+        spatialUnitIntegrationSummary:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpatialUnitIntegrationSummaryType'
       description: status information about the default execution of the target indicator.
       example:
         jobId: jobId
@@ -624,6 +628,34 @@ components:
           type: number
           format: int32
           description: number of jobs within status failed
+    SpatialUnitIntegrationSummaryType:
+      type: object
+      properties:
+        spatialUnitId:
+          type: string
+        spatialUnitName:
+          type: string
+        numberOfIntegratedIndicatorFeatures: 
+          type: number
+          format: int32
+        numberOfIntegratedTargetDates: 
+          type: number
+          format: int32
+        integratedTargetDates:
+          type: array
+          items:
+            type: string
+            format: date
+        errorOccurred:
+          $ref: "#/components/schemas/ErrorType"
+    ErrorType:
+      type: object
+      properties:
+        code:
+          type: number
+          format: int32
+        message:
+          type: string
   responses:
     UnauthorizedError:
       description: API key is missing or invalid

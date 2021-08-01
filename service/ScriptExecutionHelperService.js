@@ -22,9 +22,9 @@ function identifyLowestSpatialUnit(allSpatialUnits, lowestSpatialUnitForComputat
 
 }
 
-async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnitKey, targetDate, nodeModuleForIndicator){
+async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, metadataObject_lowestUnit_string, targetDate, nodeModuleForIndicator){
   // first entry of resultingIndicatorsMap contains the computed indicator for the lowest spatial unit
-  var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(lowestSpatialUnitKey);
+  var indicatorOnLowestSpatialUnit_geoJson = resultingIndicatorsMap.get(metadataObject_lowestUnit_string);
 
   // elements of remainingSpatialUnits are map items where key='metadata object holding all metadata properties' and value='features as GeoJSON string'
   KmHelper.log("start to aggregate indicators for upper spatial unit hierarchy levels.");
@@ -47,9 +47,10 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
       targetSpatialUnitGeoJson = await KomMonitorDataFetcher.fetchSpatialUnitById(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_GET, targetSpatialUnitId, targetDate);
     }
     catch(error){
-      KmHelper.logError("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " within dataManagement API for defaultIndicatorComputation. Error is: " + error);
+      KmHelper.logError("Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " from dataManagement API for defaultIndicatorComputation. Error is: " + error);
       KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
-      KmHelper.logError("Remaining spatial unit computation will continue.");  
+      KmHelper.logError("Remaining spatial unit computation will continue."); 
+      progressHelper.addFailedSpatialUnitIntegration(spatialUnitEntry[0], "Error while fetching spatialUnit with id " + targetSpatialUnitId + " for targetDate " + targetDate + " from dataManagement API", error); 
     }
 
     //TODO FIXME use direct lower spatial unit instead of lowest for better performance?
@@ -64,6 +65,7 @@ async function appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialU
         KmHelper.logError("Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId + ". Error is: " + error);
         KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + targetSpatialUnitId);
         KmHelper.logError("Remaining spatial unit computation will continue."); 
+        progressHelper.addFailedSpatialUnitIntegration(spatialUnitEntry[0], "Error while aggregating indicator for targetSpatialUnit with id " + targetSpatialUnitId, error);
       }
 
       if(resultingIndicatorsMap.has(metadataObject_string)){
@@ -163,7 +165,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
         // after computing the indicator for the lowest spatial unit
         // we can now aggregate the result to all remaining superior units!
         try{
-          resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, lowestSpatialUnit[0], targetDate, nodeModuleForIndicator);
+          resultingIndicatorsMap = await appendIndicatorsGeoJSONForRemainingSpatialUnits(remainingSpatialUnits, resultingIndicatorsMap, metadataObject_lowestUnit_string, targetDate, nodeModuleForIndicator);
         }
         catch(error){
           KmHelper.logError("Error while processing indicatorComputation for remaining spatialUnits for defaultIndicatorComputation. Error is: " + error);
@@ -315,6 +317,7 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
       KmHelper.logError("Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation. Error is: " + error);
       KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
       KmHelper.logError("Remaining spatial unit computation will continue.");      
+      progressHelper.addFailedSpatialUnitIntegration(nextSpatialUnit[0], "Error while fetching baseIndicators for nextSpatialUnit from dataManagement API for defaultIndicatorComputation", error);
     }
 
     if(baseIndicatorsMap_nextSpatialUnit){
@@ -335,6 +338,7 @@ async function computeIndicatorsGeoJSONForAllSpatialUnits(allSpatialUnits, geore
       catch(error){
         KmHelper.logError("Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId + ". Error is: " + error);
         KmHelper.logError("Remaining spatial unit computation will continue.");
+        progressHelper.addFailedSpatialUnitIntegration(nextSpatialUnit[0], "Error while computing indicator for targetSpatialUnit with id " + nextSpatialUnit[0].spatialUnitId, error);
       } 
     }      
 

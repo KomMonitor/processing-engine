@@ -81,6 +81,7 @@
   defaultComputationQueue.process(async (job) => {
 
     progressHelper.clearLogs_defaultComputation();
+    progressHelper.clearSpatialUnitIntegration();
     
     KmHelper.log(`Processing defaultIndicatorComputation job with id ${job.id}`);
 
@@ -141,7 +142,7 @@
   // this code will be executed when such a job is started
   customizedComputationQueue.process(async (job) => {
 
-    progressHelper.clearLogs_customComputation;
+    progressHelper.clearLogs_customComputation();
 
     KmHelper.log(`Processing customizedIndicatorComputation job with id ${job.id}`);
 
@@ -262,9 +263,15 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         var response = {};
         response.jobId = job.id;
         response.status = job.status;
-        let jobProgress = progressHelper.readJobProgress(job.id, "customizedComputation");
-        response.progress = jobProgress.progress;
-        response.logs = jobProgress.logs;
+        try {
+          let jobProgress = progressHelper.readJobProgress(job.id, "customizedComputation");
+          response.progress = jobProgress.progress;
+          response.logs = jobProgress.logs;
+        } catch (error) {
+          KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
+          KmHelper.logError("Error was: " + error);
+        }
+
         var tmpFilePath = job.data.result;
 
         if (tmpFilePath)
@@ -454,6 +461,7 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
       let jobProgress = progressHelper.readJobProgress(beeQueueJob.id, "defaultComputation");
       swaggerJob.progress = jobProgress.progress;
       swaggerJob.logs = jobProgress.logs;
+      swaggerJob.spatialUnitIntegrationSummary = jobProgress.spatialUnitIntegration;
     } catch (error) {
       KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
       KmHelper.logError("Error was: " + error);
@@ -498,10 +506,16 @@ exports.getDefaultIndicatorComputation = function(jobId) {
         var response = {};
         response.jobId = jobId;
         response.status = job.status;
-        let jobProgress = progressHelper.readJobProgress(job.id, "defaultComputation");
-        response.progress = jobProgress.progress;
-        response.logs = jobProgress.logs;
-
+        try {
+          let jobProgress = progressHelper.readJobProgress(job.id, "defaultComputation");
+          response.progress = jobProgress.progress;
+          response.logs = jobProgress.logs;
+          response.spatialUnitIntegrationSummary = jobProgress.spatialUnitIntegration;
+        } catch (error) {
+          KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
+          KmHelper.logError("Error was: " + error);
+        }
+        
         response.result_urls = job.data.result;
         response.jobData = job.data;
         response.jobData.error = undefined;

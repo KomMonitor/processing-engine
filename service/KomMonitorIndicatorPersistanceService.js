@@ -3,6 +3,8 @@
  // axios os used to execute HTTP requests in a Promise-based manner
  const axios = require("axios");
 
+ const progressHelper = require('./ProgressHelperService');
+
  const targetDateHelper = require("./TargetDateHelperService");
  const keycloakHelper = require("./KeycloakHelperService");
 
@@ -216,8 +218,11 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
     try{
       var resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
       responseArray.push(resultUrl);
+
+      progressHelper.addSuccessfulSpatialUnitIntegration(targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
     }
     catch(error){
+      progressHelper.addFailedSpatialUnitIntegration(JSON.parse(indicatorSpatialUnitsEntry[0]), "Error while integrating computed indicator data into database", error);
       throw error;
     }
   }

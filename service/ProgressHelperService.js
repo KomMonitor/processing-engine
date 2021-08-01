@@ -7,6 +7,8 @@ let logArray_defaultComputation = [];
 
 let logArray_customComputation = [];
 
+let spatialUnitIntegration = [];
+
 exports.persistJobProgress = function(jobId, jobType, progress){
 
   let object = {
@@ -14,7 +16,8 @@ exports.persistJobProgress = function(jobId, jobType, progress){
     "jobType": jobType,
     "progress": progress,
     "logs": [],
-  }
+    "spatialUnitIntegration": spatialUnitIntegration
+  };
 
   if(jobType == "defaultComputation"){
     object.logs = logArray_defaultComputation; 
@@ -68,5 +71,50 @@ exports.addErrorLog_customComputation = function(log){
   logArray_customComputation.push({
     message: log,
     type: "ERROR"
+  });
+};
+
+exports.clearSpatialUnitIntegration = function(){
+  spatialUnitIntegration = [];
+};
+
+exports.addSuccessfulSpatialUnitIntegration = function(targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
+  spatialUnitIntegration.push({
+    "spatialUnitId": targetSpatialUnitMetadata.spatialUnitId,
+    "spatialUnitName": targetSpatialUnitMetadata.spatialUnitLevel,
+    "numberOfIntegratedIndicatorFeatures": indicatorGeoJson.features ? indicatorGeoJson.features.length : null,
+    "numberOfIntegratedTargetDates": targetDates.length,
+    "integratedTargetDates": targetDates,
+    "errorOccurred": null
+  });
+};
+
+exports.addFailedSpatialUnitIntegration = function(targetSpatialUnitMetadata, customErrorMessage, error){
+  let errorOccurred = {
+    "message": "",
+    "code": 500
+  };
+  if(customErrorMessage){
+    errorOccurred.message = customErrorMessage + " - ";
+  }
+  errorOccurred.message += error.message;
+    if (error.response) {
+        errorOccurred.code = error.response.status || 500;
+
+        if (error.response.data && error.response.data.error_description) {
+            errorOccurred.message += " - " + error.response.data.error_description;
+        }
+        else if (error.response.data && error.response.data.message) {
+            errorOccurred.message += " - " + error.response.data.message;
+        }
+    }
+
+  spatialUnitIntegration.push({
+    "spatialUnitId": targetSpatialUnitMetadata.spatialUnitId,
+    "spatialUnitName": targetSpatialUnitMetadata.spatialUnitLevel,
+    "numberOfIntegratedIndicatorFeatures": 0,
+    "numberOfIntegratedTargetDates": 0,
+    "integratedTargetDates": null,
+    "errorOccurred": errorOccurred
   });
 };
