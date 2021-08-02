@@ -109,12 +109,27 @@ exports.addFailedSpatialUnitIntegration = function(targetSpatialUnitMetadata, cu
         }
     }
 
-  spatialUnitIntegration.push({
-    "spatialUnitId": targetSpatialUnitMetadata.spatialUnitId,
-    "spatialUnitName": targetSpatialUnitMetadata.spatialUnitLevel,
-    "numberOfIntegratedIndicatorFeatures": 0,
-    "numberOfIntegratedTargetDates": 0,
-    "integratedTargetDates": null,
-    "errorOccurred": errorOccurred
-  });
+  let isDone = false;
+
+  for (let index = 0; index < spatialUnitIntegration.length; index++) {
+    const item = spatialUnitIntegration[index];
+    
+    if (item.spatialUnitId == targetSpatialUnitMetadata.spatialUnitId){
+      item.errorsOccurred.push(errorOccurred);
+      isDone = true;
+    }
+  }
+
+  if(! isDone){
+    spatialUnitIntegration.push({
+      "spatialUnitId": targetSpatialUnitMetadata.spatialUnitId,
+      "spatialUnitName": targetSpatialUnitMetadata.spatialUnitLevel,
+      "numberOfIntegratedIndicatorFeatures": 0,
+      "numberOfIntegratedTargetDates": 0,
+      "integratedTargetDates": null,
+      "errorsOccurred": [errorOccurred]
+    });
+  }
+
+  
 };

@@ -646,8 +646,10 @@ components:
           items:
             type: string
             format: date
-        errorOccurred:
-          $ref: "#/components/schemas/ErrorType"
+        errorsOccurred:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorType"
     ErrorType:
       type: object
       properties:

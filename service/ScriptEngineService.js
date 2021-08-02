@@ -268,7 +268,7 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
           response.progress = jobProgress.progress;
           response.logs = jobProgress.logs;
         } catch (error) {
-          KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
+          KmHelper.logError("Error while fetching progress for default computation job with id " + job.id);
           KmHelper.logError("Error was: " + error);
         }
 
@@ -462,6 +462,7 @@ var toSwaggerJobOverviewArray_default  = function(beeQueueJobs){
       swaggerJob.progress = jobProgress.progress;
       swaggerJob.logs = jobProgress.logs;
       swaggerJob.spatialUnitIntegrationSummary = jobProgress.spatialUnitIntegration;
+      swaggerJob.spatialUnitIntegrationSummary.sort((a, b) => a.numberOfIntegratedIndicatorFeatures - b.numberOfIntegratedIndicatorFeatures);
     } catch (error) {
       KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
       KmHelper.logError("Error was: " + error);
@@ -511,8 +512,9 @@ exports.getDefaultIndicatorComputation = function(jobId) {
           response.progress = jobProgress.progress;
           response.logs = jobProgress.logs;
           response.spatialUnitIntegrationSummary = jobProgress.spatialUnitIntegration;
+          response.spatialUnitIntegrationSummary.sort((a, b) => a.numberOfIntegratedIndicatorFeatures - b.numberOfIntegratedIndicatorFeatures);
         } catch (error) {
-          KmHelper.logError("Error while fetching progress for default computation job with id " + beeQueueJob.id);
+          KmHelper.logError("Error while fetching progress for default computation job with id " + job.id);
           KmHelper.logError("Error was: " + error);
         }
         
