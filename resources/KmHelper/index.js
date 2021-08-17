@@ -3634,3 +3634,60 @@ exports.computePearsonCorrelation = function(valueArray_A, valueArray_B){
   return answer;
 
 };
+
+/**
+ * Computes the intersections of linestrings of a feature collection and a polygon feature
+ * @param {FeatureCollection<LineString>} featureCollection - a valid GeoJSON FeatureCollection
+ * @param {Feature<Polygon>} feature - a valid GeoJSON Feature
+ * @return {FeatureCollection<LineString>} returns the georesource as {@linkcode FeatureCollection<LineString>} 
+ * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+ * @function
+ */
+exports.intersectLineFeatureCollectionByPolygonFeature = function(featureCollection, feature) {
+  var fgp = [];
+  var bboxPoly = turf.bboxPolygon(turf.bbox(feature));
+  for (var i=0; i<featureCollection.features.length;i++) {
+    var lineFeature = featureCollection.features[i];
+    var bboxLine = turf.bboxPolygon(turf.bbox(lineFeature));
+    var ptOnLine = turf.pointOnFeature(lineFeature);
+    var intersectionPt = turf.lineIntersect(lineFeature, feature);
+    if (turf.inside(ptOnLine, feature) && intersectionPt.features.length === 0) {
+      lineFeature.properties = feature.properties;
+      fgp.push(lineFeature);
+      }
+    if (turf.intersect(bboxLine, bboxPoly)) {
+      var slc = turf.lineSplit(lineFeature, feature);
+      if (slc.features.length > 1) {
+        for (var j=0; j<slc.features.length;j++) {
+          var curSlc = slc.features[j];
+          var len = Number(turf.length(curSlc, 'kilometers').toFixed(5));
+          if (len != 0) {
+            var ptMiddle = turf.along(curSlc, len/2, 'kilometers');
+            if (turf.inside(ptMiddle, feature)) {
+              curSlc.properties = feature.properties;
+              fgp.push(curSlc);
+            }
+          } else {
+            break;
+          }
+        }
+      }
+    }
+  }
+  return turf.featureCollection(fgp);
+};
+
+/**
+ * Computes the length of all line segments of a linestring feature collection
+ * @param {FeatureCollection<LineString>} featureCollection - a valid GeoJSON FeatureCollection
+ * @return {number} returns the length of all line segements of the {@linkcode FeatureCollection<LineString>}  
+ * @memberof API_HELPER_METHODS_GEOMETRIC_OPERATIONS
+ * @function
+ */
+exports.summarizeLineSegmentLengths = function(featureCollection) {
+  var arrSegmentLength = [];
+  for (var i=0;i<featureCollection.features.length;i++) {
+    arrSegmentLength.push(turf.length(featureCollection.features[i]));
+  }
+  return exports.sum(arrSegmentLength);
+};
