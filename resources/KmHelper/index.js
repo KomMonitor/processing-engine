@@ -2120,6 +2120,87 @@ exports.overlap = function (feature_A, feature_B){
 };
 
 /**
+* Inspects the submitted GeoJSON FeatureCollection for any features of type {@linkcode MultiLineString}.
+* @param {FeatureCollection<LineString|MultiLineString>} featureCollection_geoJSON - valid GeoJSON FeatureCollection with line geometries
+* @returns {boolean} returns {@linkcode true}, if the featureCollection contains any features of type {@linkcode MultiLineString}; {@linkcode false} otherwise
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.hasMultiLineString = function (featureCollection_geoJSON){
+  for (var feature of featureCollection_geoJSON.features){
+    if (feature.geometry.type === "MultiLineString"){
+      return true;
+    }
+  }
+
+  return false;
+};
+
+/**
+* Inspects the submitted GeoJSON FeatureCollection for any features of type {@linkcode MultiLineString} and replaces them by the individual features of type {@linkcode LineString}.
+* @param {FeatureCollection<LineString|MultiLineString>} featureCollection_geoJSON - valid GeoJSON FeatureCollection with line geometries (MultiLineStrings will be transformed to multiple lines).
+* @returns {Object} the GeoJSON FeatureCollection without any features of type {@linkcode MultiLineString}. It may have an increased number of total features,
+* if any {@linkcode MultiLineString} was replaced by its individual features of type {@linkcode LineString}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.transformMultiLineStringToLineStrings = function (featureCollection_geoJSON){
+
+  while(exports.hasMultiLineString(featureCollection_geoJSON)){
+    exports.log("Replace MultiLineString features by LineStrings");
+    featureCollection_geoJSON = exports.replaceMultiLineStringsByLineStrings(featureCollection_geoJSON);
+  }
+
+  return featureCollection_geoJSON;
+};
+
+/**
+* Replaces any feature of type {@linkcode MultiLineString} of the submitted featureCollection by the individual features of type {@linkcode LineString}.
+* @param {FeatureCollection<LineString|MultiLineString>} featureCollection_geoJSON - valid GeoJSON FeatureCollection with line geometries (MultiLineStrings will be replaced by multiple lines).
+* @returns {FeatureCollection<LineString>} the GeoJSON FeatureCollection where features of type {@linkcode MultiLineString} have been replaced by multiple features of type {@linkcode LineString}.
+* @memberof API_HELPER_METHODS_UTILITY
+* @function
+*/
+exports.replaceMultiLineStringsByLineStrings = function (featureCollection_geoJSON){
+  for (var index=0; index < featureCollection_geoJSON.features.length; index++){
+  	var feature = featureCollection_geoJSON.features[index];
+    var geom=feature.geometry;
+    var props=feature.properties;
+
+     if(geom != undefined){
+  	   if (geom.type === 'MultiLineString'){
+  		   featureCollection_geoJSON.features.splice(index, 1);
+
+         // iterate over each LineString within MultiLineString
+  		  for (var i=0; i < geom.coordinates.length; i++){
+  			  var linestring = {
+  					'type':'Feature',
+  					'geometry':{
+  					   'type':'LineString',
+  					   'coordinates':geom.coordinates[i]
+  						},
+  				    'properties': props}; // set properties from MultiLineString as we do not know better
+
+  			  // append LineString to features
+  			  featureCollection_geoJSON.features.push(linestring);
+  		  }
+
+        // as we removed a feature, we must set the index back by 1
+        index --;
+  		}
+     }
+     else{
+       // simply remove the strange feature which contains no geometry
+  		featureCollection_geoJSON.features.splice(index, 1);
+      // as we removed a feature, we must set the index back by 1
+      index --;
+     }
+   };
+
+   return featureCollection_geoJSON;
+};
+
+/**
 * Inspects the submitted GeoJSON FeatureCollection for any features of type {@linkcode MultiPolygon}.
 * @param {FeatureCollection<Polygon|MultiPolygon>} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries
 * @returns {boolean} returns {@linkcode true}, if the featureCollection contains any features of type {@linkcode MultiPolygon}; {@linkcode false} otherwise
@@ -2155,7 +2236,7 @@ exports.transformMultiPolygonsToPolygons = function (featureCollection_geoJSON){
 };
 
 /**
-* Replces any feature of type {@linkcode MultiPolygon} of the submitted featureCollection by the individual features of type {@linkcode Polygon}.
+* Replaces any feature of type {@linkcode MultiPolygon} of the submitted featureCollection by the individual features of type {@linkcode Polygon}.
 * @param {FeatureCollection<Polygon|MultiPolygon>} featureCollection_geoJSON - valid GeoJSON FeatureCollection with polygonal geometries (MultiPolygons will be replaced by multiple polygons).
 * @returns {FeatureCollection<Polygon>} the GeoJSON FeatureCollection where features of type {@linkcode MultiPolygon} have been replaced by multiple features of type {@linkcode Polygon}.
 * @memberof API_HELPER_METHODS_UTILITY
@@ -3652,19 +3733,20 @@ exports.intersectLineFeatureCollectionByPolygonFeature = function(featureCollect
     var ptOnLine = turf.pointOnFeature(lineFeature);
     var intersectionPt = turf.lineIntersect(lineFeature, feature);
     if (turf.inside(ptOnLine, feature) && intersectionPt.features.length === 0) {
-      lineFeature.properties = feature.properties;
       fgp.push(lineFeature);
       }
-    if (turf.intersect(bboxLine, bboxPoly)) {
+    if (exports.intersects(bboxLine, bboxPoly) === true) {
       var slc = turf.lineSplit(lineFeature, feature);
+      slc.features.forEach(function(feature) {
+        feature.properties = lineFeature.properties;
+      });
       if (slc.features.length > 1) {
         for (var j=0; j<slc.features.length;j++) {
           var curSlc = slc.features[j];
-          var len = Number(turf.length(curSlc, 'kilometers').toFixed(5));
+          var len = Number(turf.length(curSlc, {units:'kilometers'}).toFixed(5));
           if (len != 0) {
-            var ptMiddle = turf.along(curSlc, len/2, 'kilometers');
+            var ptMiddle = turf.along(curSlc, len/2, {units:'kilometers'});
             if (turf.inside(ptMiddle, feature)) {
-              curSlc.properties = feature.properties;
               fgp.push(curSlc);
             }
           } else {
