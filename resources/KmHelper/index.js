@@ -3732,20 +3732,28 @@ exports.intersectLineFeatureCollectionByPolygonFeature = function(featureCollect
     var bboxLine = turf.bboxPolygon(turf.bbox(lineFeature));
     var ptOnLine = turf.pointOnFeature(lineFeature);
     var intersectionPt = turf.lineIntersect(lineFeature, feature);
+    // identify lines which are completely within a polygon
     if (turf.inside(ptOnLine, feature) && intersectionPt.features.length === 0) {
       fgp.push(lineFeature);
       }
+    // identify lines which intersect a polygon and split them into sections at the intersection
     if (exports.intersects(bboxLine, bboxPoly) === true) {
       var slc = turf.lineSplit(lineFeature, feature);
+      // make sure each line is a LineString and no MultiLineString
+      slc = exports.transformMultiLineStringToLineStrings(slc);
       slc.features.forEach(function(feature) {
+        // transfer properties of the original line to each section
         feature.properties = lineFeature.properties;
       });
+      // make sure the number of line slices is greater than 1 to exclude intersections which are only line endpoints
       if (slc.features.length > 1) {
         for (var j=0; j<slc.features.length;j++) {
           var curSlc = slc.features[j];
           var len = Number(turf.length(curSlc, {units:'kilometers'}).toFixed(5));
-          if (len != 0) {
+          exports.log("laenge = " + len);
+          if (len !== 0) {
             var ptMiddle = turf.along(curSlc, len/2, {units:'kilometers'});
+            // keep only line slices which are inside the polygon of interest
             if (turf.inside(ptMiddle, feature)) {
               fgp.push(curSlc);
             }
