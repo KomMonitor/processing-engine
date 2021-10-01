@@ -3750,7 +3750,6 @@ exports.intersectLineFeatureCollectionByPolygonFeature = function(featureCollect
         for (var j=0; j<slc.features.length;j++) {
           var curSlc = slc.features[j];
           var len = Number(turf.length(curSlc, {units:'kilometers'}).toFixed(5));
-          exports.log("laenge = " + len);
           if (len !== 0) {
             var ptMiddle = turf.along(curSlc, len/2, {units:'kilometers'});
             // keep only line slices which are inside the polygon of interest
