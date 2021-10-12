@@ -3735,15 +3735,15 @@ exports.intersectLineFeatureCollectionByPolygonFeature = function(featureCollect
     // identify lines which are completely within a polygon
     if (turf.inside(ptOnLine, feature) && intersectionPt.features.length === 0) {
       fgp.push(lineFeature);
-      }
+    }
     // identify lines which intersect a polygon and split them into sections at the intersection
-    if (exports.intersects(bboxLine, bboxPoly) === true) {
+    if (exports.intersects(bboxLine, bboxPoly)) {
       var slc = turf.lineSplit(lineFeature, feature);
       // make sure each line is a LineString and no MultiLineString
       slc = exports.transformMultiLineStringToLineStrings(slc);
-      slc.features.forEach(function(feature) {
+      slc.features.forEach(function(slcFeature) {
         // transfer properties of the original line to each section
-        feature.properties = lineFeature.properties;
+        slcFeature.properties = lineFeature.properties;
       });
       // make sure the number of line slices is greater than 1 to exclude intersections which are only line endpoints
       if (slc.features.length > 1) {
@@ -3756,9 +3756,7 @@ exports.intersectLineFeatureCollectionByPolygonFeature = function(featureCollect
             if (turf.inside(ptMiddle, feature)) {
               fgp.push(curSlc);
             }
-          } else {
-            break;
-          }
+          } 
         }
       }
     }
