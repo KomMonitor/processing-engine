@@ -3494,16 +3494,16 @@ exports.computeLinearRegressionSlope = function(indicatorValueArray, yearsArray)
     return null;
   }
 
-  var A_mean = exports.mean(indicatorValueArray);
-  var B_mean = exports.mean(yearsArray);
+  var A_mean = exports.mean(yearsArray);
+  var B_mean =  exports.mean(indicatorValueArray);
   var sumAB = 0;
   var sumA2 = 0;
 
   for(var i=0; i<indicatorValueArray.length; i++) {
 
     if(indicatorValueArray[i] && yearsArray[i]){
-      var a_NextValue = indicatorValueArray[i] - A_mean;
-      var b_NextValue = yearsArray[i] - B_mean;
+      var a_NextValue = yearsArray[i] - A_mean;
+      var b_NextValue = indicatorValueArray[i] - B_mean;
 
       sumAB = sumAB + Number(a_NextValue * b_NextValue);
       sumA2 = sumA2 + Number(a_NextValue * a_NextValue);
