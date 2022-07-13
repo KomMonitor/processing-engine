@@ -19,7 +19,7 @@
   "private": true,
   "dependencies": {
     "@turf/turf": "^5.1.6",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "bee-queue": "^1.4.0",
     "body-parser": "^1.19.0",
     "connect": "^3.2.0",
@@ -33,15 +33,15 @@
     "js-yaml": "^3.3.0",
     "keycloak-js": "10.0.1",
     "kmhelper": "file:resources/KmHelper",
-    "nodemailer": "^6.6.0",
+    "nodemailer": "^6.7.7",
     "oas3-tools": "^2.2.3",
     "querystring": "^0.2.0",
     "serve-static": "^1.13.2"
   },
   "devDependencies": {
     "@release-it/keep-a-changelog": "^2.2.2",
-    "jsdoc": "^3.6.4",
-    "jshint": "^2.11.0",
+    "jsdoc": "^3.6.10",
+    "jshint": "^2.13.5",
     "license-checker": "^25.0.1",
     "npm-license-crawler": "^0.2.1",
     "release-it": "^14.6.2"
