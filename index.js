@@ -28,6 +28,10 @@ var bodyParser = require('body-parser');
 
 var serverPort = process.env.PORT || 8086;
 
+var keycloakHelperService = require("kommonitor-keycloak-helper");
+keycloakHelperService.initKeycloakHelper(process.env.KEYCLOAK_AUTH_SERVER_URL, process.env.KEYCLOAK_REALM, process.env.KEYCLOAK_RESOURCE, process.env.KEYCLOAK_CLIENT_SECRET, process.env.KEYCLOAK_ADMIN_RIGHTS_USER_NAME, process.env.KEYCLOAK_ADMIN_RIGHTS_USER_PASSWORD, process.env.KOMMONITOR_ADMIN_ROLENAME);
+
+
 // swaggerRouter configuration
 var options = {
   routing: {
@@ -50,6 +54,14 @@ const corsOptions = {
   exposedHeaders: ['Access-Control-Allow-Origin','Location','Connection','Content-Type','Date','Transfer-Encoding','Origin','X-Requested-With', 'Accept'],
   origin: "*"
 };
+
+// intercept requests to perform any keycloak protection checks.
+if(JSON.parse(process.env.KEYCLOAK_ENABLED)){
+  app.use(async function(req, res, next) {
+    // intercept requests to perform any keycloak protection checks.
+    await keycloakHelperService.checkKeycloakProtection(req, res, next, "POST");
+  });
+}
 
 // app.use(cors());
 app.use(serveStatic("docs"));

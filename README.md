@@ -39,7 +39,7 @@ This **Processig Engine API** aims to provide REST API functions to trigger and 
 1. **<u>default computation of indicators</u>**: compute a target indicator for a target timestamp on the lowest spatial unit available, automatically aggregate the results to all superior spatial units (i.e. from building blocks to quarters, to city districts, etc.) and persist the results for each spatial unit within the **KomMonitor Data Management** component. Hence this function shall be used to semi-automatically continue the timeseries for computable target indicators. This implies that all base data (base indicators and georesources used within the computation process) have available data for the target timestamp.  
 2. **<u>customized indicator computation</u>**: in contrast to the **default computation of indicators** the **customized** computation only computes the result for a target indicator for a dedicated single target spatial unit and target timestamp. Furthermore, the result will not be persisted within the **KomMonitor Data Management** component, but will only be available temporarily (i.e. 2 hours). This function is meant for expert users, who want to try out a different set of process parameters to tweak the indicator computation. Indicator computation might offer certain adjustable process parameters (i.e. maximum distances for buffer/isochrone calculation, filter values, etc.) within this context. For **default computation** (continuation of timeseries) each process parameter has a *default value*. In the **customizable indicator computation** users can change the process parameters to *individual values*, compute the **customized** indicator and compare the result with the **original default computation**.
 
-The described REST operations are specified using [Swagger/OpenAPI v2](https://swagger.io). The corresponding ```swagger.yaml``` containing the REST API specification is located at ```api/swagger.yaml```. To inspect the REST API you may use the online [Swagger Editor](https://editor.swagger.io/) or, having access to a running instance of the **KomMonitor Processing Engine REST API** simply navigate to ```<pathToDeyployedInstance>/docs```, e.g. ```localhost:8086/docs```.
+The described REST operations are specified using [Swagger/OpenAPI v3](https://swagger.io). The corresponding ```openapi.yaml``` containing the REST API specification is located at ```api/openapi.yaml```. To inspect the REST API you may use the online [Swagger Editor](https://editor.swagger.io/) or, having access to a running instance of the **KomMonitor Processing Engine REST API** simply navigate to ```<pathToDeyployedInstance>/docs```, e.g. ```localhost:8086/docs```.
 
 The service is implemented as a NodeJS server application. The custom scripts to compute indicators have to be implemented in JavaScript. Please read the section [Indicator Script Development](#indicator-script-development) to get an idea on how to write such indicator computation scripts based on a *script template* and a Node *helper module* offering several helper methods.
 
@@ -47,48 +47,62 @@ The service is implemented as a NodeJS server application. The custom scripts to
 KomMonitor Processing Engine requires 
    - a running instance of KomMonitor **Data Management** for main data retrieval and indicator data modification with results of indicator computation jobs
    - a running instance of **Open Route Service** in oder to compute on-the-fly reachability isochrones and distance matrices during indicator computaton (only relevant if associated computation methods will be really used).
-   - an optional and configurable connection to a running **Keycloak** server, if role-based data access is activated via configuration of KomMonitor stack
+   - Since version 2.0.0 KomMonitor Client Config service requires **Keycloak** for authenticated access to POST requests. Only KomMonitor administrators   shall be allowed to call the POST endpoints of this service. Within the Keycloak realm the **client-config** component must be integrated as a realm client with access type ***confidential*** so that a keycloak secret can be retrieved and configured.
 
 ## Installation / Building Information
-Being a NodeJS server project, installation and building of the service is as simple as calling ```npm install``` to get all the node module dependencies and run `npm start`. This will start the service with default configuration on `localhost:8086`. Even Docker images can be acquired with ease, as described below. However, depending on your environment configuration aspects have to be adjusted first.
+Being a NodeJS server project, installation and building of the service is as simple as calling ```npm install``` to get all the node module dependencies, then configure the service by adjusting the variables in ``` env.js ``` and eventually run `npm start`. This will start the service per default on `localhost:8086`. Even Docker images can be acquired with ease, as described below. However, depending on your environment configuration aspects have to be adjusted first.
 
 ### Configuration
-Similar to other **KomMonitor** components, some settings are required, especially to adjust connection details to other linked services to your local environment. This NodeJS app makes use of `dotenv` module, which parses a file called `.env` located at project root when starting the app to populate its properties to app components. The project already contains several examples named `.env-*`, however, the `.env` file must be updated with the correct settings, as only this file is consumed at startup.
+Similar to other **KomMonitor** components, some settings are required, especially to adjust connection details to other linked services to your local environment. This NodeJS app makes use of `dotenv` module, which parses a file called `.env` located at project root when starting the app to populate its properties to app components.
 
 #### .env - Configure Deployment Details of other Services
 The central configuration file is located at [.env](./.env). Several important aspects must match your target environment when deploying the service. These are:
 
 ```yml
 
-REDIS_HOST=redis    # use docker name if possible; else IP 
-REDIS_PORT=6379     # running redis port
+# server port
+PORT=8086
+# redis connection details
+REDIS_HOST=localhost
+REDIS_PORT=6379
 
-KOMMONITOR_DATA_MANAGEMENT_URL=http://kommonitor-data-management:8085/management    # URL to Data Management service; use docker name and port if possible
-GEOMETRY_SIMPLIFICATION_PARAMETER_NAME=simplifyGeometries   # paramter to query geometries from Data Management component 
-GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE=original     # values are ["original", "weak", "medium", "strong"] from weak to strong the geometries are more simplified (reducing size)
-FEATURE_ID_PROPERTY_NAME=ID# KomMonitor wide setting, which property contains feature ID values - best not be changed
-FEATURE_NAME_PROPERTY_NAME=NAME   # KomMonitor wide setting, which property contains feature NAME values - best not be changed
+# KomMonitor Data Management API connection details
+KOMMONITOR_DATA_MANAGEMENT_URL=http://localhost:8085/management
+# optional geometry simplification (a feature of Data Management API)
+GEOMETRY_SIMPLIFICATION_PARAMETER_NAME=simplifyGeometries
+# allowed values and meaning:
+# ["original" --> no simplification; "weak" --> weak simplification,
+# "medium" --> medium simplification; "strong" --> string simplification]
+GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE=original
+# connection details to Open Route Service instance (required for routing and
+# isochrone as well as distance matrix computation)
 
-OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de    # URL to Open Route Service instance (currently version 5 is supported)
+OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de
 
-DISABLE_LOGS=false   # optionally diable any console log
+# necessary property names internally specified by KomMonitor data structure
+# DO NOT CHANGE THEM AS THIS WILL BREAK PROGRAM
+FEATURE_ID_PROPERTY_NAME=ID
+FEATURE_NAME_PROPERTY_NAME=NAME
+DISABLE_LOGS=false
 
-MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST=45   # setting to split up computed indicator results import/update requests; each request has the specified maximum number of indicator timestamps 
+# maximum number of target dates wihtin a single PUT request to KomMonitor data management component
+# a larger number increases request payload and request processing time (default is 45) 
+MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST=45
+# encryption information that - if activated - must be set equally within all relevant components (data-management, processing engine, scheduler, web-client)
 
 ENCRYPTION_ENABLED=false       # enable/disable encrypted data retrieval from Data Management service
 ENCRYPTION_PASSWORD=password   # shared secret for data encryption must be set equally within all supporting components
 ENCRYPTION_IV_LENGTH_BYTE=16   # length of random initialization vector for encryption algorithm - must be set equally within all supporting components
 
-KEYCLOAK_ENABLED=false    # enable/disable role-based data access using Keycloak
-KEYCLOAK_REALM=kommonitor  # Keycloak realm name
-KEYCLOAK_AUTH_SERVER_URL=https://keycloak.fbg-hsbo.de/auth/  # Keycloak URL ending with "/auth/"
-KEYCLOAK_SSL_REQUIRED=external   # Keycloak SSL setting; ["external", "none"]; default "external"
-KEYCLOAK_RESOURCE=kommonitor-processing-engine # Keycloak client/resource name
-KEYCLOAK_PUBLIC_CLIENT=true      # Keycloak setting is public client - should be true
-KEYCLOAK_CONFIDENTIAL_PORT=0     # Keycloak setting confidential port - default is 0
-KEYCLOAK_ADMIN_RIGHTS_USER_NAME=processor    # Keycloak internal user name within kommonitor-realm that has administrator role associated in order to grant rigths to fetch all data 
-KEYCLOAK_ADMIN_RIGHTS_USER_PASSWORD=processor   # Keycloak internal user password within kommonitor-realm that has administrator role associated in order to grant rigths to fetch all data
-
+# keycloak information
+KEYCLOAK_ENABLED=true # enable/disable keycloak 
+KEYCLOAK_REALM=kommonitor # keycloak realm name
+KEYCLOAK_AUTH_SERVER_URL=http://localhost:8080/auth/ # keycloak target URL inlcuding /auth/
+KEYCLOAK_RESOURCE=kommonitor-processing-engine # keycloak client name
+KEYCLOAK_CLIENT_SECRET=keycloak-secret # keycloak client secret using access type confidential
+KOMMONITOR_ADMIN_ROLENAME=kommonitor-creator # name of kommonitor admin role within keycloak - default is 'kommonitor-creator'
+KEYCLOAK_ADMIN_RIGHTS_USER_NAME=processor # name of a keycloak/kommonitor user that has the kommonitor admin role
+KEYCLOAK_ADMIN_RIGHTS_USER_PASSWORD=processor # password of a keycloak/kommonitor user that has the kommonitor admin role
 
 ```
 
@@ -115,7 +129,7 @@ The exemplar [docker-compose.yml](./docker-compose.yml) file specifies only a su
 
 ### Exemplar docker-compose File with explanatory comments
 
-Only contains subset of whole KomMonitor stack to focus on the config parameters of this component
+Only contains subset of whole KomMonitor stack to focus on the config parameters of this component. Only contains subset of whole KomMonitor stack to focus on the config parameters of this component. See separate [KomMonitor docker repository](https://github.com/KomMonitor/docker) for full information on launching all KomMonitor components via docker.
 
 ```yml
 
@@ -161,15 +175,15 @@ services:
        - ENCRYPTION_ENABLED=false       # enable/disable encrypted data retrieval from Data Management service
        - ENCRYPTION_PASSWORD=password   # shared secret for data encryption - must be set equally within all supporting components
        - ENCRYPTION_IV_LENGTH_BYTE=16   # length of random initialization vector for encryption algorithm - must be set equally within all supporting components
-       - KEYCLOAK_ENABLED=false                                       # enable/disable role-based data access using Keycloak
+       - KEYCLOAK_ENABLED=true                                       # enable/disable role-based data access using Keycloak
        - KEYCLOAK_REALM=kommonitor                                    # Keycloak realm name
        - KEYCLOAK_AUTH_SERVER_URL=https://keycloak.fbg-hsbo.de/auth/  # Keycloak URL ending with "/auth/"
-       - KEYCLOAK_SSL_REQUIRED=external                               # Keycloak SSL setting; ["external", "none"]; default "external"
        - KEYCLOAK_RESOURCE=kommonitor-processing-engine               # Keycloak client/resource name
-       - KEYCLOAK_PUBLIC_CLIENT=true                                  # Keycloak setting is public client - should be true
-       - KEYCLOAK_CONFIDENTIAL_PORT=0                                 # Keycloak setting confidential port - default is 0
+       - KEYCLOAK_CLIENT_SECRET=keycloak-secret                       # keycloak client secret using access type confidential
+       - KOMMONITOR_ADMIN_ROLENAME=kommonitor-creator                 # name of kommonitor admin role within keycloak - default is 'kommonitor-creator'
        - KEYCLOAK_ADMIN_RIGHTS_USER_NAME=processor                    # Keycloak internal user name within kommonitor-realm that has administrator role associated in order to grant rigths to fetch all data 
        - KEYCLOAK_ADMIN_RIGHTS_USER_PASSWORD=processor                # Keycloak internal user password within kommonitor-realm that has administrator role associated in order to grant rigths to fetch all data
+
 
     # database container; must use PostGIS database
     # database is not required to run in docker - will be configured in Data Management component

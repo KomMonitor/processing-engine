@@ -6,7 +6,7 @@
  const progressHelper = require('./ProgressHelperService');
 
  const targetDateHelper = require("./TargetDateHelperService");
- const keycloakHelper = require("./KeycloakHelperService");
+ const keycloakHelper = require("kommonitor-keycloak-helper");
 
  const KmHelper = require("../resources/KmHelper");
 
@@ -161,7 +161,7 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
 
   var putRequestBody = buildPutRequestBody(targetDates, targetSpatialUnitName, indicatorGeoJson);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
   config.headers["Content-Type"] = "application/json";
   config.maxContentLength = Infinity;
   config.maxBodyLength = Infinity;

@@ -33,6 +33,7 @@
     "js-yaml": "^3.3.0",
     "keycloak-js": "10.0.1",
     "kmhelper": "file:resources/KmHelper",
+    "kommonitor-keycloak-helper": "git+https://github.com/KomMonitor/keycloak-helper.git",
     "nodemailer": "^6.7.7",
     "oas3-tools": "^2.2.3",
     "querystring": "^0.2.0",

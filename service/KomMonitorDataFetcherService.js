@@ -5,7 +5,7 @@
 
  const targetDateHelper = require("./TargetDateHelperService");
  const encryptionHelper = require("./EncryptionHelperService");
- const keycloakHelper = require("./KeycloakHelperService");
+ const keycloakHelper = require("kommonitor-keycloak-helper");
 
  const KmHelper = require("../resources/KmHelper");
 
@@ -24,7 +24,7 @@
 exports.fetchScriptCodeById = async function(baseUrlPath, scriptId) {
   KmHelper.log("fetching script code from KomMonitor data management API for id " + scriptId);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   //GET /process-scripts/{scriptId}/scriptCode
   return await axios.get(baseUrlPath + "/process-scripts/" + scriptId + "/scriptCode", config)
@@ -51,7 +51,7 @@ exports.fetchScriptCodeById = async function(baseUrlPath, scriptId) {
 exports.fetchSpatialUnitById = async function(baseUrlPath, spatialUnitId, targetDate) {
   KmHelper.log("fetching spatial unit from KomMonitor data management API for id " + spatialUnitId + " and targetDate " + targetDate);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
@@ -81,7 +81,7 @@ exports.fetchSpatialUnitById = async function(baseUrlPath, spatialUnitId, target
 exports.fetchSpatialUnitsMetadata = async function(baseUrlPath, targetDate) {
   KmHelper.log("fetching available spatial units metadata from KomMonitor data management API for targetDate " + targetDate);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   var year = targetDateHelper.getYearFromTargetDate(targetDate);
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
@@ -238,7 +238,7 @@ exports.fetchGeoresourceById = async function(baseUrlPath, georesourceId, target
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   //GET /georesources/{georesouceId}/{year}/{month}/{day}
   return await axios.get(baseUrlPath + "/georesources/" + georesourceId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString, config)
@@ -265,7 +265,7 @@ exports.fetchGeoresourceById = async function(baseUrlPath, georesourceId, target
 exports.fetchGeoresourceMetadataById = async function(baseUrlPath, georesourceId) {
   KmHelper.log("fetching georesource metadata from KomMonitor data management API for id " + georesourceId);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   //GET /georesources/{georesouceId}
   return await axios.get(baseUrlPath + "/georesources/" + georesourceId, config)
@@ -336,7 +336,7 @@ exports.fetchIndicatorById = async function(baseUrlPath, indicatorId, targetDate
   var month = targetDateHelper.getMonthFromTargetDate(targetDate);
   var day = targetDateHelper.getDayFromTargetDate(targetDate);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   //GET /indicators/{indicatorId}/{targetSpatialUnitId}/{year}/{month}/{day}
   return await axios.get(baseUrlPath + "/indicators/" + indicatorId + "/" + targetSpatialUnitId + "/" + year + "/" + month + "/" + day + "?" + simplifyGeometriesParameterQueryString, config)
@@ -364,7 +364,7 @@ exports.fetchIndicatorMetadataById = async function(baseUrlPath, indicatorId) {
 
   KmHelper.log("Perform GET request against: " + baseUrlPath + "/indicators/" + indicatorId);
 
-  var config = await keycloakHelper.getKeycloakAxiosConfig();
+  var config = await keycloakHelper.requestAccessToken();
 
   //GET /indicators/{indicatorId}
   return await axios.get(baseUrlPath + "/indicators/" + indicatorId, config)
