@@ -131,7 +131,8 @@
         KmHelper.logError("Error while executing defaultIndicatorComputation. " + error);
         KmHelper.logError(error.stack);
         job.data.error = error.message;
-        reject(error);
+        // reject(error);
+        throw error;
       }
 
     });
@@ -228,7 +229,8 @@
         KmHelper.logError("Error while executing customizedIndicatorComputation. " + error);
         KmHelper.logError(error.stack);
         job.data.error = error.message;
-        reject(error);
+        // reject(error);
+        throw error;
       }
 
     });
