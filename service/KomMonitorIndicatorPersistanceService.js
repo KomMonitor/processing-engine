@@ -6,7 +6,9 @@
  const progressHelper = require('./ProgressHelperService');
 
  const targetDateHelper = require("./TargetDateHelperService");
- const keycloakHelper = require("kommonitor-keycloak-helper");
+ var keycloakHelper = require("kommonitor-keycloak-helper");
+ keycloakHelper.initKeycloakHelper(process.env.KEYCLOAK_AUTH_SERVER_URL, process.env.KEYCLOAK_REALM, process.env.KEYCLOAK_RESOURCE, process.env.KEYCLOAK_CLIENT_SECRET, process.env.KEYCLOAK_ADMIN_RIGHTS_USER_NAME, process.env.KEYCLOAK_ADMIN_RIGHTS_USER_PASSWORD, process.env.KOMMONITOR_ADMIN_ROLENAME);
+
 
  const KmHelper = require("../resources/KmHelper");
 
