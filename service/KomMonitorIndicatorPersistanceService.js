@@ -14,7 +14,30 @@
 
  const indicator_date_prefix = "DATE_";
 
- function buildPutRequestBody(targetDates, targetSpatialUnitId, indicatorGeoJson){
+ function getAllowedRoles(targetSpatialUnitId, applicableSpatialUnitsArray){
+    /*
+      applicableSpatialUnitsArray has entries that look like:
+      {
+        "allowedRoles": [
+          "string"
+        ],
+        "spatialUnitId": "string",
+        "spatialUnitName": "string",
+        "userPermissions": [
+          "creator"
+        ]
+      }
+    */
+
+  for (const applicableSpatialUnit of applicableSpatialUnitsArray) {
+    if (applicableSpatialUnit.spatialUnitId == targetSpatialUnitId || applicableSpatialUnit.spatialUnitName == targetSpatialUnitId){
+      return applicableSpatialUnit.allowedRoles;
+    }
+  }
+    throw new Error("Error while locating applicable spatial unit role mapping for current indicator and spatial unit " + targetSpatialUnitId);
+ }
+
+ function buildPutRequestBody(targetDates, targetSpatialUnitId, indicatorGeoJson, targetIndicatorMetadata){
    // the request body has follwing structure:
 // {
 //   "indicatorValues": [
@@ -45,13 +68,20 @@
 //       ]
 //     }
 //   ],
-//   "applicableSpatialUnit": "applicableSpatialUnit"
+//   "applicableSpatialUnit": "applicableSpatialUnit",
+//  "allowedRoles": [
+//    "string"
+//  ]
 // }
   
   var indicatorFeatures = indicatorGeoJson.features;
   KmHelper.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
+
+  let allowedRolesArray = getAllowedRoles(targetSpatialUnitId, targetIndicatorMetadata.applicableSpatialUnits);
   var putRequestBody = {};
   putRequestBody.applicableSpatialUnit = targetSpatialUnitId;
+  putRequestBody.allowedRoles = allowedRolesArray;
+
   putRequestBody.indicatorValues = new Array();
 
   // now for each element of inputFeatures create object and append to array
@@ -93,20 +123,19 @@
  * send PUT request against KomMonitor DataManagement API to update indicator for targetDate. This persists the submitted indicator values permanently.
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance. It has to be appended with the path to update indicator
- * targetIndicatorId String unique identifier of the indicator
- * targetIndicatorName String name of the indicator
+ * targetIndicatorMetadata metadata object of target indicator
  * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
  * targetSpatialUnitMetadata Object target spatial unit metadata object
  * indicatorGeoJson Object GeoJson object of the indicator spatial features.
  *
  * returns URL pointing to created resource
  **/
-exports.putIndicatorById = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson) {
+exports.putIndicatorById = async function(baseUrlPath, targetIndicatorMetadata, targetDates, targetSpatialUnitMetadata, indicatorGeoJson) {
 
   var maxNumberOfTargetDatesPerRequest = Number(process.env.MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST);
 
   if(targetDates && targetDates.length < maxNumberOfTargetDatesPerRequest){
-    return await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson);
+    return await buildAndExecutePutRequest(baseUrlPath, targetIndicatorMetadata, targetDates, targetSpatialUnitMetadata, indicatorGeoJson);
   }
   else{
     // split up to multiple requsts
@@ -124,10 +153,10 @@ exports.putIndicatorById = async function(baseUrlPath, targetIndicatorId, target
     var resultObject;
     for (const targetDates_chunked of chunkedTargetDatesArray) {
       if(!resultObject){
-        resultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
+        resultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorMetadata, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
       }
       else{
-        var tmpResultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
+        var tmpResultObject = await buildAndExecutePutRequest(baseUrlPath, targetIndicatorMetadata, targetDates_chunked, targetSpatialUnitMetadata, indicatorGeoJson);
         // resultObject.targetDates = targetDates; 
       }
     }
@@ -156,12 +185,15 @@ function chunkArray(array, chunk_size){
   return results;
 }
 
-async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
+async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorMetadata, targetDates, targetSpatialUnitMetadata, indicatorGeoJson){
   var targetSpatialUnitId = targetSpatialUnitMetadata.spatialUnitId;
   var targetSpatialUnitName = targetSpatialUnitMetadata.spatialUnitLevel;
+  var targetIndicatorId = targetIndicatorMetadata.indicatorId;
+  var targetIndicatorName = targetIndicatorMetadata.indicatorName;
+
   KmHelper.log("Sending PUT request against KomMonitor data management API for indicatorId " + targetIndicatorId + " and targetSpatialUnitId " + targetSpatialUnitId + " and targetDates " + targetDates );
 
-  var putRequestBody = buildPutRequestBody(targetDates, targetSpatialUnitName, indicatorGeoJson);
+  var putRequestBody = buildPutRequestBody(targetDates, targetSpatialUnitName, indicatorGeoJson, targetIndicatorMetadata);
 
   var config = await keycloakHelper.requestAccessToken();
   config.headers["Content-Type"] = "application/json";
@@ -201,14 +233,13 @@ async function buildAndExecutePutRequest(baseUrlPath, targetIndicatorId, targetI
  * send PUT request against KomMonitor DataManagement API to update indicators according to spatialUnitIds
  *
  * baseUrlPath String starting URL path of running KomMonitor DataManagement API instance.
- * targetIndicatorId String unique identifier of the indicator
- * targetIndicatorName String name of the indicator
+ * targetIndicatorMetadata metadata object of target indicator
  * targetDate String targetDate according to pattern YEAR-MONTH-DAY, whereas month and day may take values between 1-12 and 1-31 respectively
  * indicatorSpatialUnitsMap Map map of indicator entries, where key="targetSpatialUnitMetadataObject_asString" and value="indicatorGeoJson"
  *
  * returns array of URLs pointing to created resources
  **/
-exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, indicatorSpatialUnitsMap) {
+exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicatorMetadata, targetDates, indicatorSpatialUnitsMap) {
   KmHelper.log("Sending PUT requests to persist indicators within KomMonitor data management API");
 
   var resultUrl = "";
@@ -218,7 +249,7 @@ exports.putIndicatorForSpatialUnits = async function(baseUrlPath, targetIndicato
   // for (let indicatorSpatialUnitsEntry of iterator) {
   for (const indicatorSpatialUnitsEntry of indicatorSpatialUnitsMap){
     try{
-      resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorId, targetIndicatorName, targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
+      resultUrl = await exports.putIndicatorById(baseUrlPath, targetIndicatorMetadata, targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
 
       progressHelper.addSuccessfulSpatialUnitIntegration(targetDates, JSON.parse(indicatorSpatialUnitsEntry[0]), indicatorSpatialUnitsEntry[1]);
     }

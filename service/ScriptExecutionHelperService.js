@@ -194,7 +194,7 @@ async function executeDefaultComputation_withAggregationToHigherSpatialUnits (jo
     // send PUT requests against KomMonitor data management API to persist results permanently
     var resultUrl;
     try{
-      resultUrl = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+      resultUrl = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorMetadata, targetDates, resultingIndicatorsMap);
 
     }
     catch(error){
@@ -280,7 +280,7 @@ async function executeDefaultComputation_withIndividualComputationPerSpatialUnit
     // send PUT requests against KomMonitor data management API to persist results permanently
     var resultUrl;
     try{
-      resultUrl = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorId, targetIndicatorMetadata.indicatorName, targetDates, resultingIndicatorsMap);
+      resultUrl = await KomMonitorIndicatorPersister.putIndicatorForSpatialUnits(process.env.KOMMONITOR_DATA_MANAGEMENT_URL_CRUD, targetIndicatorMetadata, targetDates, resultingIndicatorsMap);
 
     }
     catch(error){
