@@ -34,7 +34,7 @@ services:
        - GEOMETRY_SIMPLIFICATION_PARAMETER_VALUE=original            # values are ["original", "weak", "medium", "strong"] from weak to strong the geometries are more simplified (reducing size)
        - FEATURE_ID_PROPERTY_NAME=ID       # KomMonitor wide setting, which property contains feature ID values - best not be changed
        - FEATURE_NAME_PROPERTY_NAME=NAME   # KomMonitor wide setting, which property contains feature NAME values - best not be changed
-       - OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de    # URL to Open Route Service instance (currently version 5 is supported)
+       - OPEN_ROUTE_SERVICE_URL=https://ors5.fbg-hsbo.de    # URL to Open Route Service instance (not limited to ORS version 5)
        - DISABLE_LOGS=false          # optionally diable any console log
        - MAX_NUMBER_OF_TARGET_DATES_PER_PUT_REQUEST=45   # setting to split up computed indicator results import/update requests; each request has the specified maximum number of indicator timestamps 
        - ENCRYPTION_ENABLED=false       # enable/disable encrypted data retrieval from Data Management service
