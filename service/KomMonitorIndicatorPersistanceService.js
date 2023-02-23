@@ -14,7 +14,7 @@
 
  const indicator_date_prefix = "DATE_";
 
- function getAllowedRoles(targetSpatialUnitId, applicableSpatialUnitsArray){
+ function getAllowedRoles(targetSpatialUnitId, targetIndicatorMetadata){
     /*
       applicableSpatialUnitsArray has entries that look like:
       {
@@ -29,12 +29,15 @@
       }
     */
 
-  for (const applicableSpatialUnit of applicableSpatialUnitsArray) {
+  for (const applicableSpatialUnit of targetIndicatorMetadata.applicableSpatialUnits) {
     if (applicableSpatialUnit.spatialUnitId == targetSpatialUnitId || applicableSpatialUnit.spatialUnitName == targetSpatialUnitId){
       return applicableSpatialUnit.allowedRoles;
     }
   }
-    throw new Error("Error while locating applicable spatial unit role mapping for current indicator and spatial unit " + targetSpatialUnitId);
+
+    // if code reaches this place then allowedRoles cannot be determined. That might be because the spatial unit does not exist yet!
+    // then fallback to allowedRoles of indicator metadata object
+    return targetIndicatorMetadata.allowedRoles;
  }
 
  function buildPutRequestBody(targetDates, targetSpatialUnitId, indicatorGeoJson, targetIndicatorMetadata){
@@ -77,7 +80,7 @@
   var indicatorFeatures = indicatorGeoJson.features;
   KmHelper.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
 
-  let allowedRolesArray = getAllowedRoles(targetSpatialUnitId, targetIndicatorMetadata.applicableSpatialUnits);
+  let allowedRolesArray = getAllowedRoles(targetSpatialUnitId, targetIndicatorMetadata);
   var putRequestBody = {};
   putRequestBody.applicableSpatialUnit = targetSpatialUnitId;
   putRequestBody.allowedRoles = allowedRolesArray;
