@@ -42,48 +42,52 @@
 
  function buildPutRequestBody(targetDates, targetSpatialUnitId, indicatorGeoJson, targetIndicatorMetadata){
    // the request body has follwing structure:
-// {
-//   "indicatorValues": [
-//     {
-//       "spatialReferenceKey": "spatialReferenceKey",
-//       "valueMapping": [
-//         {
-//           "indicatorValue": 0.8008282,
-//           "timestamp": "2000-01-23"
-//         },
-//         {
-//           "indicatorValue": 0.8008282,
-//           "timestamp": "2000-01-23"
-//         }
-//       ]
-//     },
-//     {
-//       "spatialReferenceKey": "spatialReferenceKey",
-//       "valueMapping": [
-//         {
-//           "indicatorValue": 0.8008282,
-//           "timestamp": "2000-01-23"
-//         },
-//         {
-//           "indicatorValue": 0.8008282,
-//           "timestamp": "2000-01-23"
-//         }
-//       ]
-//     }
-//   ],
-//   "applicableSpatialUnit": "applicableSpatialUnit",
-//  "allowedRoles": [
-//    "string"
-//  ]
-// }
+   // must be the respective properties of the corresponding spatial unit! not the indicator metadata values!
+
+   // if the current spatial unit is not joined to the indicator yet, then init with settings from indicator metadata
+  //  {
+  //   "permissions": [
+  //     "string"
+  //   ],
+  //   "applicableSpatialUnit": "string",
+  //   "indicatorValues": [
+  //     {
+  //       "spatialReferenceKey": "string",
+  //       "valueMapping": [
+  //         {
+  //           "indicatorValue": 0,
+  //           "timestamp": "2025-02-11"
+  //         }
+  //       ]
+  //     }
+  //   ],
+  //   "isPublic": true,
+  //   "ownerId": "string"
+  // }
   
   var indicatorFeatures = indicatorGeoJson.features;
   KmHelper.log("Number of input features for PUT indicator request: " + indicatorFeatures.length);
 
-  let allowedRolesArray = getAllowedRoles(targetSpatialUnitId, targetIndicatorMetadata);
-  var putRequestBody = {};
-  putRequestBody.applicableSpatialUnit = targetSpatialUnitId;
-  putRequestBody.allowedRoles = allowedRolesArray;
+  let applicableSpatialUnitEntry;
+  for (const applicableSpatialUnit of targetIndicatorMetadata.applicableSpatialUnits) {
+    if (applicableSpatialUnit.spatialUnitId == targetSpatialUnitId || applicableSpatialUnit.spatialUnitName == targetSpatialUnitId){
+      applicableSpatialUnitEntry = applicableSpatialUnit;
+      break;
+    }
+  }
+
+  // data model since mandant upgrade
+  // if not yet avaible the settings for a new spatial unit will be taken from metadata object
+  let permissions = applicableSpatialUnitEntry ? applicableSpatialUnitEntry.permissions : targetIndicatorMetadata.permissions;
+  let isPublic = applicableSpatialUnitEntry ? applicableSpatialUnitEntry.isPublic : targetIndicatorMetadata.isPublic;  
+  let ownerId = applicableSpatialUnitEntry ? applicableSpatialUnitEntry.ownerId : targetIndicatorMetadata.ownerId;
+
+  var putRequestBody = {
+    applicableSpatialUnit: targetSpatialUnitId,
+    permissions: permissions,
+    isPublic: isPublic,
+    ownerId: ownerId
+  };
 
   putRequestBody.indicatorValues = new Array();
 
