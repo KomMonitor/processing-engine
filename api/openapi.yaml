@@ -19,7 +19,41 @@ servers:
 tags:
 - name: script-engine
   description: Execute scripts
+- name: kobotoolbox
+  description: kobotoolbox
 paths:
+  /kobotoolbox/lap-bochum/noise-places:
+    get:
+      tags:
+      - kobotoolbox
+      summary: dummy
+      description: dummy
+      operationId: getKoboData_lap_noiseplaces
+      responses:
+        "200":
+          description: OK
+          content:
+            application/octed-stream:
+              schema:
+                type: string
+                format: byte        
+      x-swagger-router-controller: Kobotoolbox
+  /kobotoolbox/lap-bochum/quiet-places:
+    get:
+      tags:
+      - kobotoolbox
+      summary: dummy
+      description: dummy
+      operationId: getKoboData_lap_quietplaces
+      responses:
+        "200":
+          description: OK
+          content:
+            application/octed-stream:
+              schema:
+                type: string
+                format: byte           
+      x-swagger-router-controller: Kobotoolbox
   /feedback-mail:
     post:
       tags:
