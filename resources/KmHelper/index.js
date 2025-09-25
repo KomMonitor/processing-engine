@@ -583,7 +583,7 @@ exports.getIndicatorValueArray = function (featureCollection, targetDate){
   for (var feature of featureCollection.features){
     var indicatorValue = feature.properties[targetDateWithPrefix];
 
-    if(indicatorValue){
+    if(indicatorValue !== undefined && indicatorValue !== null){
       resultArray.push(indicatorValue);
     }
     else{
@@ -622,7 +622,7 @@ exports.getIndicatorIdValueMap = function (featureCollection, targetDate){
     var indicatorValue = feature.properties[targetDateWithPrefix];
     var featureId = exports.getSpatialUnitFeatureIdValue(feature);
 
-    if(indicatorValue){      
+    if(indicatorValue !== undefined && indicatorValue !== null){      
       resultMap.set(featureId, indicatorValue);
     }
     else{
