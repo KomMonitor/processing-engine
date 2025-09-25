@@ -466,7 +466,7 @@ exports.getPropertyValue = function (feature, propertyName){
 
   var value = feature.properties[propertyName];
 
-  if(value){
+  if(value !== undefined && value !== null){
     return value;
   }
   else{
@@ -650,7 +650,7 @@ exports.getIndicatorValueArray_fromIdValueMap = function (indicatorIdValueMap){
   var resultArray = [];
 
   indicatorIdValueMap.forEach(function(value, key, map){
-    if(value){
+    if(value !== undefined && value !== null){
       resultArray.push(value);
     }
     else{
