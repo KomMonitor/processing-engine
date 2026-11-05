@@ -300,7 +300,6 @@ exports.getCustomizableIndicatorComputation = function(jobId) {
         response.progress = undefined;
         response.result_geoJSON_base64 = undefined;
         response.error = "Job with ID " + jobId + " was not found or an error ocurred during job status query.";
-        swaggerJob.jobData = undefined;
 
         KmHelper.log("returning following response object for job with id " + jobId);
         KmHelper.log(response);
