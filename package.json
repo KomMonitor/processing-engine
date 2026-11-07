@@ -34,7 +34,7 @@
     "jStat": "^1.8.6",
     "keycloak-js": "10.0.1",
     "kmhelper": "file:resources/KmHelper",
-    "kommonitor-keycloak-helper": "^1.1.0",
+    "kommonitor-keycloak-helper": "github:KomMonitor/keycloak-helper#master",
     "oas3-tools": "^2.2.3",
     "querystring": "^0.2.1",
     "serve-static": "^1.16.3"
