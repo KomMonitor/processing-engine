@@ -55,9 +55,6 @@
     "oas3-tools": {
       "body-parser": "^1.20.9",
       "multer": "^2.5.0"
-    },
-    "kommonitor-keycloak-helper": {
-      "axios": "^1.21.0"
     }
   }
 }
