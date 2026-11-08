@@ -20,38 +20,6 @@ tags:
 - name: script-engine
   description: Execute scripts
 paths:
-  /feedback-mail:
-    post:
-      tags:
-      - feedback-mail
-      summary: Send Feedback Mail.
-      description: Send Feedback Mail.
-      operationId: postFeedbackMail
-      requestBody:
-        description: details necessary to send the mail
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FeedbackMailInputType'
-        required: true
-      responses:
-        "200":
-          description: OK
-          content: {}
-        "401":
-          description: API key is missing or invalid
-          headers:
-            WWW_Authenticate:
-              style: simple
-              explode: false
-              schema:
-                type: string
-          content: {}
-        "405":
-          description: Invalid input
-          content: {}
-      x-swagger-router-controller: FeedbackMail
-      x-codegen-request-body-name: mail-input
   /script-engine/customizableIndicatorComputation:
     get:
       tags:
@@ -571,31 +539,6 @@ components:
           enum:
             - "INFO"
             - "ERROR"    
-    FeedbackMailInputType:
-      required:
-      - body
-      - recipientMail
-      - subject
-      type: object
-      properties:
-        recipientMail:
-          type: string
-          description: the mail address of the recipient.
-        body:
-          type: string
-          description: the mail message body.
-        subject:
-          type: string
-          description: the mail subject.
-        attachment:
-          type: string
-          description: an optional attachment as Base64 encoded String.
-      description: input details for feedback mail.
-      example:
-        attachment: attachment
-        subject: subject
-        body: body
-        recipientMail: recipientMail
     HealthType:
       type: object
       properties:
